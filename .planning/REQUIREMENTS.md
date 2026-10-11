@@ -1,8 +1,9 @@
 # Requirements
 
 - JSON-01: Versioned typed page/text/table/cell/figure JSON; true blanks distinguished from unknowns.
-- DIRECT-01: AnyDoc first, automatic difficult-page routing to Vision.
-- AGENT-01: Actual FastAgent extraction and review, explicit configured providers.
+- DIRECT-01: AnyDoc first, agent chooses original-page and region Vision after direct extraction.
+- AGENT-01: Native FastAgent skill loading and tool loops for extraction/review, explicit configured providers.
+- PLUGIN-01: Versioned Agent Plugin 1.0 manifests, portable skills and bundled local MCP tools.
 - REVIEW-01: Independent context; source-image audit of all 11 categories and independent row/column counts.
 - REPAIR-01: Defects lead to bounded automatic repair; no silent fixes/manual edits.
 - STATE-01: Durable drafts, reviews, errors, source identity, resumable verified pages and finite run deadlines.

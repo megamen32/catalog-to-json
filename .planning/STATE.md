@@ -1,3 +1,3 @@
 # State
 
-2026-10-11: Implementation and 7 focused unit checks prepared. Real native FastAgent/GLM pipeline probe in progress. Completion requires accepted source-page output and a live defective-candidate rejection. MiniMax remains a configured optional reviewer until quota is checked.
+2026-10-11: Replaced structured response calls with native FastAgent skill agents and catalog MCP tools. Nine unit/integration checks pass, including native MCP image roundtrip and invalid/contradictory-save feedback. Real page-78 tool-loop and adversarial reviewer acceptance remain required. MiniMax quota remains to be rechecked.

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "catalog-to-json"
-version = "0.1.0"
+version = "1.0.0"
 description = "PDF catalogs to reviewed JSON with AnyDoc and FastAgent Vision"
 requires-python = ">=3.12"
 license = "MIT"
@@ -12,6 +12,7 @@ dependencies = ["fast-agent-mcp==0.10.43", "firecrawl-anydoc==0.2.4", "pymupdf>=
 
 [project.scripts]
 catalog-json = "catalog_json.cli:main"
+catalog-json-mcp = "catalog_json.tools:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/catalog_json"]
@@ -19,3 +20,9 @@ packages = ["src/catalog_json"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"skills" = "catalog_json/skills"
+
+[dependency-groups]
+dev = ["pytest>=8,<10"]

@@ -24,4 +24,4 @@ anthropic:
 
 Use an explicit compatible model ID, for example `--reviewer anthropic.MiniMax-M3`, after checking availability and Vision support on your account. There is no automatic quota fallback or rerouting to a paid provider.
 
-Runs are sequential, with default 90-second per-call and 180-second total job deadlines, and one repair round. `--pages 78`, `--pages 1,3-5` and `--pages all` select input. Interrupted runs retain artifacts; `--resume` reuses accepted unchanged pages. Use bounded subsets to process long catalogs. Model output truncation, schema failure, timeout and incomplete review never count as accepted.
+Each FastAgent worker gets a fresh context, up to 16 tool/model turns, and its own catalog MCP process. Runs are sequential, with default 90-second per-worker and 180-second total job deadlines, and one repair round. `--pages 78`, `--pages 1,3-5` and `--pages all` select input. Interrupted runs retain artifacts; `--resume` reuses accepted unchanged pages. Use bounded subsets to process long catalogs. Model output truncation, schema failure, timeout and incomplete review never count as accepted.
