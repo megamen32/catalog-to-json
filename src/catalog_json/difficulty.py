@@ -92,7 +92,7 @@ def scan_catalogs(sources, output, per_catalog=3, anchors=None, deadline=180):
     previous = {}
     if checkpoint.exists():
         for line in checkpoint.read_text().splitlines():
-            r = json.loads(line); previous[(r['source_sha256'], r['page'], r.get('detector_sha256'))] = r
+            r = json.loads(line); previous[(r['source_sha256'], r['page'], r.get('detector_sha256'),r.get('pymupdf_version'))] = r
     records = []; started = time.monotonic(); complete = True
     for source in paths:
         digest = hashlib.sha256(source.read_bytes()).hexdigest()
@@ -100,7 +100,7 @@ def scan_catalogs(sources, output, per_catalog=3, anchors=None, deadline=180):
             for number in range(1, len(doc) + 1):
                 if time.monotonic() - started >= deadline:
                     complete = False; break
-                r = previous.get((digest, number, detector_sha256))
+                r = previous.get((digest, number, detector_sha256,pymupdf.VersionBind))
                 if r is None:
                     r = {'source': source.name, 'source_sha256': digest,
                          'source_path': str(source), 'page': number,
