@@ -20,3 +20,15 @@ def test_selection_includes_anchor_and_varied_catalogs():
     assert ('a.pdf',7) in {(r['source'],r['page']) for r in picked}
     assert len([r for r in picked if r['source']=='a.pdf'])==2
     assert any(r['source']=='b.pdf' for r in picked)
+
+
+def test_changed_detector_does_not_reuse_stale_inventory(tmp_path,monkeypatch):
+    """Fast unit: corpus ranking cache must follow the detector revision. Expected <1 s, max 5 s."""
+    import catalog_json.difficulty as module
+    source=tmp_path/'sample.pdf'
+    with pymupdf.open() as d:d.new_page();d.save(source)
+    monkeypatch.setattr(module,'page_features',lambda page:{'score':1,'tags':[]})
+    first=module.scan_catalogs([source],tmp_path/'out')
+    monkeypatch.setattr(module,'page_features',lambda page:{'score':2,'tags':[]})
+    second=module.scan_catalogs([source],tmp_path/'out')
+    assert first['pages'][0]['score']==1 and second['pages'][0]['score']==2

@@ -1,6 +1,7 @@
 """Local PDF complexity inventory; heuristic ranks are never quality scores."""
 import hashlib
 import json
+import inspect
 import math
 import re
 import time
@@ -86,11 +87,12 @@ def scan_catalogs(sources, output, per_catalog=3, anchors=None, deadline=180):
     paths = [Path(s).resolve() for s in sources]
     if len({p.name for p in paths}) != len(paths):
         raise ValueError('Catalog filenames must be unique in an inventory')
+    detector_sha256=hashlib.sha256(inspect.getsource(page_features).encode()).hexdigest()
     checkpoint = output / 'inventory.jsonl'
     previous = {}
     if checkpoint.exists():
         for line in checkpoint.read_text().splitlines():
-            r = json.loads(line); previous[(r['source_sha256'], r['page'])] = r
+            r = json.loads(line); previous[(r['source_sha256'], r['page'], r.get('detector_sha256'))] = r
     records = []; started = time.monotonic(); complete = True
     for source in paths:
         digest = hashlib.sha256(source.read_bytes()).hexdigest()
@@ -98,18 +100,18 @@ def scan_catalogs(sources, output, per_catalog=3, anchors=None, deadline=180):
             for number in range(1, len(doc) + 1):
                 if time.monotonic() - started >= deadline:
                     complete = False; break
-                r = previous.get((digest, number))
+                r = previous.get((digest, number, detector_sha256))
                 if r is None:
                     r = {'source': source.name, 'source_sha256': digest,
                          'source_path': str(source), 'page': number,
-                         'source_page_count': len(doc), **page_features(doc[number - 1])}
+                         'source_page_count': len(doc), 'detector_sha256':detector_sha256, 'pymupdf_version':pymupdf.VersionBind, **page_features(doc[number - 1])}
                     with checkpoint.open('a', encoding='utf-8') as f:
                         f.write(json.dumps(r, ensure_ascii=False) + '\n')
                 r={**r,'source':source.name,'source_path':str(source)}
                 records.append(r)
         if not complete: break
     result = {'schema_version': '1.0', 'complete': complete,
-              'scanned_pages': len(records), 'catalogs': len(paths),
+              'scanned_pages': len(records), 'catalogs': len(paths), 'detector_sha256':detector_sha256,
               'ranking_method': 'heuristic structural complexity; requires visual curation',
               'pages': records,
               'candidates': select_cases(records, per_catalog, anchors) if complete else []}
