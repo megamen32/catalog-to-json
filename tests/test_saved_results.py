@@ -43,3 +43,12 @@ def test_source_document_and_page_are_both_filtered():
     assert page.tables[0].rows[0].cells[1].value=='1600'
     assert meta['selected_characteristics']==1
     with pytest.raises(ValueError):import_page(p,c,[],'doc',0)
+
+
+def test_compacted_body_rows_keep_original_evidence_coordinates():
+    """Fast unit: preserve provenance across header offsets/gaps. Expected <1 s, max 5 s."""
+    p,c=records();c[0]['source_evidence_reference']['row']=2
+    other=dict(c[0],source_evidence_reference={'table_id':'t1','row':4,'column':1})
+    _,meta=import_page(p,c+[other],[],'doc',2)
+    assert meta['table_coordinates'][0]['source_rows_in_candidate_order']==[2,4]
+    assert meta['table_coordinates'][0]['source_value_columns_in_candidate_order']==[1]

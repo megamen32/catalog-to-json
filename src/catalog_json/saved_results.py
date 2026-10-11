@@ -28,7 +28,7 @@ def import_page(products,characteristics,families,document_id,page):
                 and type(e.get('column')) is int and e['column']>0):
             groups[e['table_id']].append(record)
         else:unlocated+=1
-    tables=[];uncertainties=[]
+    tables=[];uncertainties=[];table_coordinates=[]
     natural=lambda s:[(1,int(p)) if p.isdigit() else (0,p) for p in re.split(r'(\d+)',s)]
     for table_id,records in sorted(groups.items(),key=lambda item:natural(item[0])):
         coordinates=defaultdict(list)
@@ -73,6 +73,10 @@ def import_page(products,characteristics,families,document_id,page):
                 cells.append(Cell(column_id=f'c{ci}',value=value,state=state))
             rows.append(Row(cells=cells))
         tables.append(Table(id=table_id,title=table_id,columns=columns,rows=rows))
+        table_coordinates.append({'table_id':table_id,'source_rows_in_candidate_order':row_ids,
+            'source_value_columns_in_candidate_order':list(range(1,max_column+1)),
+            'candidate_identity_column':0,
+            'identity_method':'matching product observations, otherwise reported product name; no source/gold recovery'})
     relevant_families=[f for f in families if f.get('source_document_id')==document_id and page in f.get('physical_pages',[])]
     texts=list(dict.fromkeys(f['description_raw'] for f in relevant_families if f.get('description_raw')))
     labels={str(c['printed_page_label']) for c in selected if c.get('printed_page_label') is not None}
@@ -86,6 +90,7 @@ def import_page(products,characteristics,families,document_id,page):
               'tokens':None,'cost':None,'source_binding':'external document ID and physical page; PDF hash not supplied',
               'document_id':document_id,'physical_page':page,'selected_characteristics':len(selected),
               'unlocated_characteristics':unlocated,'conflicting_coordinates':conflicts,
+              'table_coordinates':table_coordinates,
               'unsupported_coverage':['drawing_structure','source_merge_geometry']}
     return content,metadata
 

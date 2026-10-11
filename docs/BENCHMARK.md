@@ -47,6 +47,9 @@ This adapter preserves reported product identities, table coordinates, composite
 units, blank states and Unicode values. It never repairs them from the PDF or gold, never
 expands merged values, and marks missing/conflicting coordinates unknown. Raw JSONL inputs
 remain the authoritative evidence; their hashes and the adapter hash accompany the import.
+Candidate rows use compact body indices. `table_coordinates` maps them back to reported
+source row indices, including header offsets and gaps, and records the source value-column
+order. The identity column is built only from reported product observations or names.
 Unlocated characteristics are counted separately and retained in the raw input, not guessed
 into cells. Drawing structure and merge geometry are not represented by this format.
 `import.json` labels the stage `imported_result`, with unverified runtime and unknown model,
