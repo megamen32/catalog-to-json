@@ -46,3 +46,16 @@ def test_native_mcp_image_roundtrip(tmp_path):
                 result=await client.call_tool('get_json_schema',{'kind':'page'})
                 assert not result.is_error
     asyncio.run(asyncio.wait_for(run(),20))
+
+
+def test_json_exports_keep_units_qualifiers_and_full_page(tmp_path):
+    """Fast unit: exports must not drop header conditions or drawings; expected <1 s, max 5 s."""
+    from catalog_json.schema import Figure,TextBlock
+    from catalog_json.export import to_html,to_xlsx
+    from openpyxl import load_workbook
+    d=content();d.tables[0].columns[0].label='Масса';d.tables[0].columns[0].unit='кг';d.tables[0].columns[0].qualifier='не более'
+    d.figures=[Figure(title='Вид А',description='Высота Н±2',labels=['Н±2'])];d.text_blocks=[TextBlock(kind='footer',text='Контакты')]
+    catalog={'complete_for_selection':True,'pages':[{'pdf_page':1,'status':'accepted','content':d.model_dump()}]}
+    to_html(catalog,tmp_path/'page.html');html=(tmp_path/'page.html').read_text();assert 'не более' in html and 'кг' in html and 'Н±2' in html
+    to_xlsx(catalog,tmp_path/'page.xlsx');book=load_workbook(tmp_path/'page.xlsx');assert book['Стр 1 таб 1']['A1'].value=='Масса, кг; не более'
+    assert any('Н±2' in str(row) for row in book['Текст и чертежи'].values)

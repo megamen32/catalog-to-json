@@ -135,6 +135,7 @@ def server(context):
     @mcp.tool()
     def load_skill() -> str:
         """Read the registered native skill for this worker role before extracting/reviewing."""
+        if context.page is not None:context.log(context.page,'load_skill')
         return (SKILLS/f'catalog-{context.role.replace("extractor","extract").replace("reviewer","review")}'/'SKILL.md').read_text()
     @mcp.tool()
     def get_json_schema(kind: str='page') -> dict:
