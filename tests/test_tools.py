@@ -132,3 +132,15 @@ def test_observer_can_repair_own_error_only_after_new_source_view(tmp_path):
     r.render(1,[0,0,1,1]);assert r.correct_observation(1,content().model_dump_json(),'Fresh source image shows correct value')['saved']
     assert json.loads((r.work(1)/'source-observation-0.json').read_text())['tables'][0]['rows'][0]['cells'][0]['value']==999
     assert not r.read(1,'page')['independent_comparison']
+
+
+def test_source_grid_expands_only_geometry_backed_merge(tmp_path):
+    """Focused integration: distinguish empty from merged without guessing; expected <1 s, max 5 s."""
+    from catalog_json.grid import table_grids
+    with pymupdf.open() as d:
+        p=d.new_page(width=300,height=300)
+        p.draw_line((30,60),(270,60));p.draw_line((30,120),(150,120));p.draw_line((30,180),(270,180))
+        p.insert_text((50,90),'row1');p.insert_text((50,150),'row2');p.insert_text((200,120),'100')
+        result=table_grids(p,[.09,.19,.91,.61]);table=result['tables'][0]
+        assert table['expanded_rows']==[['row1','100'],['row2','100']]
+        assert table['merged_cells'][0]['covered_rows']==[0,1] and not table['unknown_cells']

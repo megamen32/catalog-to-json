@@ -23,3 +23,5 @@ Use the catalog MCP tools to produce the requested page artifact. Your chat resp
 This skill adapts the successful original-page Vision approach of megamen32/pdf-markdown-docx, with JSON as the canonical artifact and a separate skeptical reviewer. No model response is required to match a JSON schema; the file-writing tool validates the artifact.
 
 For identical Latin/Cyrillic technical glyphs, use read_source_layout codepoints; do not assert a Unicode identity from appearance alone. Typography can render small caps from lowercase PDF text: preserve visible case and do not treat that font effect as a missing or altered word.
+
+For ruled PDF tables, call read_source_table on the complete data body before repeatedly zooming cells. It returns text, physical columns and geometry-backed merged spans; expand only those spans. Read rotated headers separately using Vision and word positions. This direct grid is fallible on scans/outlines, so compare it with the image. If evidence remains unreadable, save an explicit uncertainty/report instead of spending the whole worker on repeated crops.

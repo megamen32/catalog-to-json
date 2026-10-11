@@ -149,7 +149,7 @@ class CatalogTools:
                 if box and not (box[0]<=(rect[0]+rect[2])/2<=box[2] and box[1]<=(rect[1]+rect[3])/2<=box[3]):continue
                 word={'text':text,'box':rect}
                 if len(text)<=12 and any(c in 'ABCEHKMOPTXYАВСЕНКМОРТХУ' for c in text):
-                    word['codepoints']=[f'{c}: U+{ord(c):04X}' for c in text if c.isalpha()]
+                    word['codepoints']=[f'{c}: U+{ord(c):04X}' for c in text if c.isalnum()]
                 result.append(word)
         self.log(page,'read_source_layout',box=box)
         return {'words':result,'note':'Original PDF text and normalized positions, not an interpreted table. Outlined/scanned labels need Vision.'}
@@ -200,6 +200,14 @@ def server(context):
     def view_region(page: int,box: list[float],rotation: int=0):
         """Zoom a chosen source region. box=[left,top,right,bottom], fractions 0..1. rotation clockwise degrees 0/90/180/270."""
         return context.render(page,box,rotation)
+    @mcp.tool()
+    def read_source_table(page: int,box: list[float]) -> dict:
+        """Extract a selected table BODY directly from PDF text/vector geometry. Returns expanded rows, true geometry-backed merge spans and column positions. Choose normalized box; inspect headers separately."""
+        from .grid import table_grids
+        context.work(page)
+        with pymupdf.open(context.source) as doc:result=table_grids(doc[page-1],box)
+        context.log(page,'read_source_table',box=box)
+        return result
     @mcp.tool()
     def read_source_layout(page: int,box: list[float]|None=None) -> dict:
         """Read original text-layer words with normalized positions. Use to resolve column alignment or identical Latin/Cyrillic glyphs; diagrams still need Vision."""
