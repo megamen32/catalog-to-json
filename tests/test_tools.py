@@ -24,7 +24,8 @@ def test_save_requires_inspection_and_returns_errors(tmp_path):
     bad=t.save(1,'{"title":1}','page')
     assert not bad['saved'] and bad['validation_errors']
     assert t.save(1,content().model_dump_json(),'page')['saved']
-    r=CatalogTools(t.source,t.output,role='reviewer');r.render(1);r.read(1,'page')
+    r=CatalogTools(t.source,t.output,role='reviewer');r.render(1)
+    assert r.save(1,content().model_dump_json(),'observation')['saved'];r.read(1,'page')
     incomplete=review();incomplete.checks.pop()
     assert not r.save(1,incomplete.model_dump_json(),'review')['saved']
     assert not r.save(1,content().model_dump_json(),'page')['saved']
@@ -87,3 +88,25 @@ def test_interrupted_review_resumes_without_reextracting(tmp_path):
     workers.fail=False
     final=asyncio.run(convert(source,out,[1],workers,resume=True))
     assert final['complete_for_selection'] and workers.calls==['extractor','reviewer','reviewer']
+
+
+def test_false_pass_cannot_override_independent_values(tmp_path):
+    """Fast unit: a confident judge must not certify mismatching cells; expected <1 s, max 5 s."""
+    import pytest
+    source=pdf(tmp_path);out=tmp_path/'out'
+    t=CatalogTools(source,out);t.render(1);t.direct(1);bad=content();bad.tables[0].rows[0].cells[0].value=999
+    assert t.save(1,bad.model_dump_json(),'page')['saved']
+    r=CatalogTools(source,out,role='reviewer');r.render(1)
+    with pytest.raises(ValueError):r.read(1,'page')
+    assert r.save(1,content().model_dump_json(),'observation')['saved']
+    disclosed=r.read(1,'page');assert disclosed['independent_comparison'][0]['source_observation']==80
+    refused=r.save(1,review().model_dump_json(),'review');assert not refused['saved'] and refused['differences']
+    assert not r.save(1,bad.model_dump_json(),'observation')['saved']
+
+
+def test_independent_audit_catches_shift_and_missing_tolerance():
+    """Fast unit: same dimensions/counts don't hide shifted values or diagram loss; expected <1 s, max 5 s."""
+    from catalog_json.audit import compare_source
+    from catalog_json.schema import Figure
+    a=content();b=content();a.figures=[Figure(title='View',description='',labels=['H±2'])];b.figures=[Figure(title='View',description='H',labels=['H'])]
+    assert any(d['path']=='figures[0].labels' for d in compare_source(a,b))

@@ -7,8 +7,9 @@ import time
 import pymupdf
 from pydantic import ValidationError
 from mcp.server.mcpserver import MCPServer, Image
-from .schema import PageContent, Review, CHECKS
+from .schema import PageContent, Review, Issue, CHECKS
 from .direct import inspect_page
+from .audit import compare_source
 
 SKILLS = Path(__file__).parent / 'skills'
 if not SKILLS.exists():
@@ -74,6 +75,8 @@ class CatalogTools:
         return data
 
     def read(self,page,kind):
+        if self.role=='reviewer' and kind=='page' and 'save_source_observation' not in self.seen.get(page,set()):
+            raise ValueError('First independently inspect the original and save_source_observation BEFORE seeing the candidate')
         filename=f'candidate-{self.attempt}.json' if kind=='page' else f'review-{self.attempt}.json'
         path=self.work(page)/filename
         if not path.exists():
@@ -81,27 +84,41 @@ class CatalogTools:
             if not alternatives:raise ValueError(f'No {kind} artifact saved')
             path=alternatives[-1]
         self.log(page,'read_page_json' if kind=='page' else 'read_review',file=path.name)
-        return json.loads(path.read_text())
+        data=json.loads(path.read_text())
+        if self.role=='reviewer' and kind=='page':
+            observed=PageContent.model_validate_json((self.work(page)/f'source-observation-{self.attempt}.json').read_text())
+            return {'candidate':data,'independent_comparison':compare_source(observed,PageContent.model_validate(data))}
+        return data
 
     def save(self,page,json_text,kind):
         work=self.work(page)
         expected='extractor' if kind=='page' else 'reviewer'
         if self.role!=expected:return {'saved':False,'error':f'{self.role} cannot write {kind} artifacts'}
-        required={'view_page','extract_direct'} if kind=='page' else {'view_page','read_page_json'}
+        required={'view_page','extract_direct'} if kind=='page' else {'view_page'} if kind=='observation' else {'view_page','read_page_json','save_source_observation'}
         with pymupdf.open(self.source) as doc:
             rotated=any(abs(line.get('dir',(1,0))[1])>.05 for block in doc[page-1].get_text('dict')['blocks'] for line in block.get('lines',[]))
         if rotated:required.add('view_region')
         missing=required-self.seen.get(page,set())
         if missing:return {'saved':False,'error':'Inspect the actual source before saving','missing_tools':sorted(missing)}
+        if kind=='observation' and 'read_page_json' in self.seen.get(page,set()):return {'saved':False,'error':'Source observations are frozen after candidate disclosure; start a fresh review to reinspect'}
         try:
-            model=(PageContent if kind=='page' else Review).model_validate_json(json_text)
-            if kind=='review' and model.verdict=='pass' and not model.accepts(PageContent.model_validate(self.read(page,'page'))):
+            model=(PageContent if kind in ('page','observation') else Review).model_validate_json(json_text)
+            if kind=='review':
+                disclosed=self.read(page,'page')
+                if model.verdict=='pass' and disclosed['independent_comparison']:
+                    return {'saved':False,'error':'Independent source observations contradict the claimed pass. Report ALL differences and any additional findings.', 'differences':disclosed['independent_comparison']}
+            if kind=='review' and model.verdict!='pass':
+                existing={issue.path for issue in model.issues}
+                for diff in disclosed['independent_comparison']:
+                    if diff['path'] not in existing:
+                        model.issues.append(Issue(severity='error',path=diff['path'],message='Независимая запись оригинала: '+json.dumps(diff['source_observation'],ensure_ascii=False)+'; в кандидате: '+json.dumps(diff['candidate'],ensure_ascii=False)))
+            if kind=='review' and model.verdict=='pass' and not model.accepts(PageContent.model_validate(disclosed['candidate'])):
                 return {'saved':False,'error':'Claimed pass contradicts checks, issues, counts or candidate uncertainties; submit revise/uncertain or complete the review'}
         except ValidationError as exc:
             return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False))}
-        filename=f'candidate-{self.attempt}.json' if kind=='page' else f'review-{self.attempt}.json'
+        filename=f'candidate-{self.attempt}.json' if kind=='page' else f'source-observation-{self.attempt}.json' if kind=='observation' else f'review-{self.attempt}.json'
         write_json(work/filename,model.model_dump())
-        self.log(page,'save_page_json' if kind=='page' else 'save_review',file=filename,sha256=hashlib.sha256((work/filename).read_bytes()).hexdigest())
+        self.log(page,'save_page_json' if kind=='page' else 'save_source_observation' if kind=='observation' else 'save_review',file=filename,sha256=hashlib.sha256((work/filename).read_bytes()).hexdigest())
         return {'saved':True,'file':str(work/filename)}
 
     def section(self,page,section,index,json_text):
@@ -176,6 +193,10 @@ def server(context):
             """Assemble saved sections into complete page JSON and validate it. Use same attempt; all indices contiguous."""
             return context.finalize(page,title,printed_page,source_notes,uncertainties)
     else:
+        @mcp.tool()
+        def save_source_observation(page: int,json_text: str) -> dict:
+            """Save independent complete source-page transcription (PageContent schema) BEFORE reading candidate. Frozen after candidate disclosure."""
+            return context.save(page,json_text,'observation')
         @mcp.tool()
         def save_review(page: int,json_text: str) -> dict:
             """Save strict source-grounded review. Incomplete or contradictory claimed passes return errors."""
