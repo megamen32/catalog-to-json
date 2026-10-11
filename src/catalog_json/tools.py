@@ -206,7 +206,7 @@ class CatalogTools:
 
 
 def server(context):
-    mcp=MCPServer('catalog-tools',version='1.0.2',log_level='ERROR')
+    mcp=MCPServer('catalog-tools',version='1.1.0',log_level='ERROR')
     @mcp.tool()
     def open_catalog(source_path: str,output_directory: str) -> dict:
         """Open a user-specified local PDF and separate output folder. Not needed in an assigned CLI job."""

@@ -10,3 +10,4 @@ __pycache__/
 *.pdf
 *.xlsx
 output/
+.agents/shared-session/knowledge/*.lock

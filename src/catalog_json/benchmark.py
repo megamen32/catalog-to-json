@@ -84,7 +84,7 @@ def label_present(alternatives, content):
         if literal(label) in labels: return True
         # Allow prose punctuation/spacing, never H±20 for H±2 or D12 for D1.
         parts = [re.escape(c) for c in label if not c.isspace() and c not in ',.']
-        pattern = r'(?<!\w)' + r'[\s,.]*'.join(parts) + r'(?!\w)'
+        pattern = r'(?<!\w)' + r'[\s,.()]*'.join(parts) + r'(?!\w)'
         if any(re.search(pattern, description) for description in descriptions): return True
     return False
 
@@ -166,7 +166,7 @@ def score_file(fixture, candidate):
     result = score_content(case, PageContent.model_validate(data))
     result.update(fixture_sha256=hashlib.sha256(fixture.read_bytes()).hexdigest(),
                   candidate_sha256=hashlib.sha256(candidate.read_bytes()).hexdigest(),
-                  source_binding=binding)
+                  source_binding=binding,grader_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
     return result
 
 

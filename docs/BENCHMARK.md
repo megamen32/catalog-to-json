@@ -40,3 +40,28 @@ Scores distinguish literal cell accuracy, numeric-equivalent accuracy, true blan
 Coverage is explicit: this initial scorer does not grade all prose, reading order, or diagram relationships. A perfect score on verified assertions does not mean the entire page is perfect. Reuse results only with matching source, fixture, model, project revision and artifact hashes. Run multiple fresh repeats before interpreting differences as stable model performance.
 
 Additional projects need thin deterministic adapters to the page schema. Keep their raw outputs; no extra LLM may repair or normalize an arm during scoring. Adapter selection awaits the user's project links.
+
+## Project/model matrix
+
+`catalog-json benchmark run suite.json --output .tmp/benchmark/experiment-1` dispatches one isolated command-adapter run per project, model, case and repeat. `--resume` reuses matching completed artifacts and regrades them without another model call. Failed runs and interrupted runs with unknown completion are retained without replay; use a deliberately new repeat/experiment for a new invocation.
+
+A manifest has this shape (paths relative to the manifest):
+
+```json
+{
+  "cases": [{"id": "page78", "source": "catalog.pdf", "page": 78, "fixture": "gold/page78.json"}],
+  "projects": [{
+    "id": "catalog-to-json", "version": "pinned-project-revision",
+    "cwd": "/path/to/catalog-to-json",
+    "command": [".venv/bin/catalog-json", "benchmark", "extract", "{source}", "--page", "{page}", "--model", "{model}", "--config", "/path/to/fast-agent.yaml", "--output", "{run_dir}/result"],
+    "artifact": "result/page-0078/candidate-0.json",
+    "model_receipt": "result/run.json", "stage": "first_pass"
+  }],
+  "models": ["zai.glm-5.3-flash?reasoning=low", "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium"],
+  "repeats": 1, "timeout_seconds": 300, "deadline_seconds": 900
+}
+```
+
+Commands are argv arrays, executed without a shell. The selected model must be passed explicitly through `{model}`. When a runtime receipt is supplied, the runner checks the actual adapter-reported model, source hash and page before grading. Each adapter must emit the canonical page JSON; project-specific parsing is deterministic and versioned, with the original output retained. Never introduce an additional LLM during normalization. Project/model receipts are isolated from the golden fixture. The runner records source revisions, command-file hashes, statuses, elapsed time, artifact hashes and grader/fixture hashes. Unsupported or invalid output is a failed arm, not a passing parse.
+
+The initial scorer accepts punctuation differences such as `d1, 4 отв.` and `d1 (4 отв.)` while retaining numeric bounds; it still rejects `H=2` or `H±20` for `H±2`. This is label coverage, not a semantic judgment of the full drawing description.

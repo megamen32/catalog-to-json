@@ -45,3 +45,10 @@ def test_unknown_is_not_a_true_blank_and_extra_tables_are_not_ignored():
 def test_tolerance_two_does_not_match_twenty():
     c=candidate();c.figures[0].labels=['H±20'];c.figures[0].description='Height H±20'
     assert score_content(fixture(),c)['metrics']['figure_labels']['correct']==0
+
+
+def test_hole_count_parentheses_are_not_an_omission():
+    """Fast unit: punctuation must not create a false diagram-label defect. Expected <1 s, max 5 s."""
+    case=fixture();case.figure_labels=[['d1 4 отв']]
+    c=candidate();c.figures[0].labels=['d1','4 отв.'];c.figures[0].description='Отверстия d1 (4 отв.).'
+    assert score_content(case,c)['metrics']['figure_labels']['correct']==1

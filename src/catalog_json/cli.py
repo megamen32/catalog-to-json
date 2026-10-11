@@ -34,9 +34,16 @@ def main():
     extract=bs.add_parser('extract',help='Run a fresh first-pass catalog-to-json benchmark arm without reviewer feedback or gold')
     extract.add_argument('input',type=Path);extract.add_argument('--page',type=int,required=True);extract.add_argument('--model',required=True)
     extract.add_argument('--config',type=Path,required=True);extract.add_argument('--output',type=Path,required=True);extract.add_argument('--call-timeout',type=int,default=300)
+    suite=bs.add_parser('run',help='Run a project × model × case command-adapter matrix')
+    suite.add_argument('manifest',type=Path);suite.add_argument('--output',type=Path,required=True);suite.add_argument('--resume',action='store_true')
     args=p.parse_args()
     try:
         if args.command=='benchmark':
+            if args.benchmark_command=='run':
+                from .bench_runner import run_suite
+                result=run_suite(args.manifest,args.output,args.resume)
+                print(json.dumps({'complete':result['complete'],'runs':len(result['runs']),'expected_runs':result['expected_runs'],'completed':sum(r['status']=='completed' for r in result['runs'])},ensure_ascii=False))
+                return 0 if result['complete'] and all(r['status']=='completed' for r in result['runs']) else 2
             if args.benchmark_command=='score':
                 from .benchmark import score_file
                 from .tools import write_json

@@ -1,0 +1,46 @@
+{
+  "entries": {
+    "catalog-benchmark-cli": {
+      "confidence": "verified",
+      "evidence": [
+        "Focused subprocess matrix tests, live inventory of 980 pages and two saved GLM/MiniMax first-pass arms."
+      ],
+      "git_head": "d7f954458060d489a36f94fa243870568837d80c",
+      "key": "catalog-benchmark-cli",
+      "kind": "production-path",
+      "locations": [
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "cf99e62f69eb054fdb09f6576b652fc63a8aec9750dcf4f5391e3fe0f59e20e2",
+          "path": "src/catalog_json/cli.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "ab611b7224661e336ac57006cd018c3a38c8e7d5a939e6c9356c625ab140e54d",
+          "path": "src/catalog_json/difficulty.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "d75111ac31a73edc08cabdb4e9c2268207797769ebff979c12c9e2a6a00b4dc4",
+          "path": "src/catalog_json/benchmark.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "e859370e352f81f46547b387d36fb56d279315dc3262be9eb8c403cea9005e54",
+          "path": "src/catalog_json/bench_runner.py",
+          "symbol": ""
+        }
+      ],
+      "summary": "CLI benchmark scan inventories PDFs; extract runs native first pass; score grades independent facts; run dispatches project/model/case argv adapters with persisted no-replay receipts.",
+      "verified_at": "2026-10-12T01:05:15.130086+03:00"
+    }
+  },
+  "schema_version": 1
+}
