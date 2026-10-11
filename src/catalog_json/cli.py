@@ -24,8 +24,25 @@ def main():
     c=sub.add_parser('convert');c.add_argument('input',type=Path);c.add_argument('--output',type=Path,required=True);c.add_argument('--pages',default='all');c.add_argument('--config',type=Path,required=True)
     c.add_argument('--extractor',default='zai.glm-5.3-flash?reasoning=low');c.add_argument('--reviewer',default='zai.glm-5.3-flash?reasoning=low');c.add_argument('--call-timeout',type=int,default=90);c.add_argument('--max-tokens',type=int,default=16384);c.add_argument('--max-repairs',type=int,default=None,help='Optional repair count for experiments; default: continue until accepted within the run deadline');c.add_argument('--deadline',type=int,default=180);c.add_argument('--resume',action='store_true')
     e=sub.add_parser('export');e.add_argument('input',type=Path);e.add_argument('--format',choices=['html','xlsx'],required=True);e.add_argument('--output',type=Path,required=True);e.add_argument('--allow-unverified',action='store_true')
+    b=sub.add_parser('benchmark');bs=b.add_subparsers(dest='benchmark_command',required=True)
+    scan=bs.add_parser('scan',help='Inventory every PDF page and render complex-page candidates')
+    scan.add_argument('sources',type=Path,nargs='+');scan.add_argument('--output',type=Path,required=True)
+    scan.add_argument('--per-catalog',type=int,default=3);scan.add_argument('--anchor',action='append',default=[],help='filename.pdf:physical_page')
+    scan.add_argument('--deadline',type=int,default=180)
     args=p.parse_args()
     try:
+        if args.command=='benchmark':
+            from .difficulty import scan_catalogs,render_contacts
+            if args.deadline<=0:raise ValueError('Deadline must be positive')
+            anchors=set()
+            for anchor in args.anchor:
+                name,separator,page=anchor.rpartition(':')
+                if not separator:raise ValueError('Anchor must be filename.pdf:physical_page')
+                anchors.add((Path(name).name,int(page)))
+            result=scan_catalogs(args.sources,args.output,args.per_catalog,anchors,args.deadline)
+            contacts=render_contacts(result['candidates'],args.output) if result['complete'] else []
+            print(json.dumps({'scanned_pages':result['scanned_pages'],'complete':result['complete'],'candidates':len(result['candidates']),'contacts':len(contacts)},ensure_ascii=False))
+            return 0 if result['complete'] else 2
         if args.command=='export':
             data=json.loads(args.input.read_text());args.output.parent.mkdir(parents=True,exist_ok=True)
             (to_html if args.format=='html' else to_xlsx)(data,args.output,args.allow_unverified);print(args.output);return 0
