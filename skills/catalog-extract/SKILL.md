@@ -21,3 +21,5 @@ Use the catalog MCP tools to produce the requested page artifact. Your chat resp
 - Keep all tables in source order. Give stable unique IDs. Include source problems separately from unresolved extraction problems.
 
 This skill adapts the successful original-page Vision approach of megamen32/pdf-markdown-docx, with JSON as the canonical artifact and a separate skeptical reviewer. No model response is required to match a JSON schema; the file-writing tool validates the artifact.
+
+For identical Latin/Cyrillic technical glyphs, use read_source_layout codepoints; do not assert a Unicode identity from appearance alone. Typography can render small caps from lowercase PDF text: preserve visible case and do not treat that font effect as a missing or altered word.

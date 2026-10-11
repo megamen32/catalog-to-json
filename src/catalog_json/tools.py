@@ -147,7 +147,10 @@ class CatalogTools:
             for x0,y0,x1,y1,text,*_ in p.get_text('words'):
                 rect=[round(x0/p.rect.width,4),round(y0/p.rect.height,4),round(x1/p.rect.width,4),round(y1/p.rect.height,4)]
                 if box and not (box[0]<=(rect[0]+rect[2])/2<=box[2] and box[1]<=(rect[1]+rect[3])/2<=box[3]):continue
-                result.append({'text':text,'box':rect})
+                word={'text':text,'box':rect}
+                if len(text)<=12 and any(c in 'ABCEHKMOPTXYАВСЕНКМОРТХУ' for c in text):
+                    word['codepoints']=[f'{c}: U+{ord(c):04X}' for c in text if c.isalpha()]
+                result.append(word)
         self.log(page,'read_source_layout',box=box)
         return {'words':result,'note':'Original PDF text and normalized positions, not an interpreted table. Outlined/scanned labels need Vision.'}
 
