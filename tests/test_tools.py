@@ -66,3 +66,24 @@ def test_bundled_skills_native_discovery():
     from fast_agent.skills.registry import SkillRegistry
     from catalog_json.tools import SKILLS
     assert {m.name for m in SkillRegistry(directories=[SKILLS]).load_manifests()}=={'catalog-extract','catalog-review'}
+
+
+def test_interrupted_review_resumes_without_reextracting(tmp_path):
+    """Focused integration: don't repeat extraction after a review timeout; expected <1 s, max 5 s."""
+    from catalog_json.pipeline import convert
+    from catalog_json.tools import write_json
+    class Workers:
+        extractor=reviewer='test-model';contract_digest='test-contract';fail=True;calls=[]
+        async def run(self,role,source,out,page,attempt,feedback=False):
+            self.calls.append(role)
+            if role=='reviewer':
+                if self.fail:raise TimeoutError('review interrupted')
+                return review()
+            t=CatalogTools(source,out,page=page,attempt=attempt);t.render(page);t.direct(page)
+            assert t.save(page,content().model_dump_json(),'page')['saved']
+            return content()
+    workers=Workers();source=pdf(tmp_path);out=tmp_path/'output'
+    first=asyncio.run(convert(source,out,[1],workers));assert first['pages'][0]['status']=='failed'
+    workers.fail=False
+    final=asyncio.run(convert(source,out,[1],workers,resume=True))
+    assert final['complete_for_selection'] and workers.calls==['extractor','reviewer','reviewer']
