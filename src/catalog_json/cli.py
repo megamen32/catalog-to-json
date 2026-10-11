@@ -29,9 +29,24 @@ def main():
     scan.add_argument('sources',type=Path,nargs='+');scan.add_argument('--output',type=Path,required=True)
     scan.add_argument('--per-catalog',type=int,default=3);scan.add_argument('--anchor',action='append',default=[],help='filename.pdf:physical_page')
     scan.add_argument('--deadline',type=int,default=180)
+    score=bs.add_parser('score',help='Score a saved artifact against an independent private fixture')
+    score.add_argument('--fixture',type=Path,required=True);score.add_argument('--candidate',type=Path,required=True);score.add_argument('--output',type=Path,required=True)
+    extract=bs.add_parser('extract',help='Run a fresh first-pass catalog-to-json benchmark arm without reviewer feedback or gold')
+    extract.add_argument('input',type=Path);extract.add_argument('--page',type=int,required=True);extract.add_argument('--model',required=True)
+    extract.add_argument('--config',type=Path,required=True);extract.add_argument('--output',type=Path,required=True);extract.add_argument('--call-timeout',type=int,default=300)
     args=p.parse_args()
     try:
         if args.command=='benchmark':
+            if args.benchmark_command=='score':
+                from .benchmark import score_file
+                from .tools import write_json
+                result=score_file(args.fixture,args.candidate);write_json(args.output,result)
+                print(json.dumps({'output':str(args.output),'metrics':result['metrics'],'all_verified_checks_passed':result['all_verified_checks_passed']},ensure_ascii=False));return 0
+            if args.benchmark_command=='extract':
+                from .benchmark import extract_native
+                if args.call_timeout<=0:raise ValueError('Timeout must be positive')
+                result=asyncio.run(extract_native(args.input,args.page,args.output,args.config,args.model,args.call_timeout))
+                print(json.dumps({k:result[k] for k in ('status','project','stage','model','elapsed_seconds')},ensure_ascii=False));return 0 if result['status']=='completed' else 2
             from .difficulty import scan_catalogs,render_contacts
             if args.deadline<=0:raise ValueError('Deadline must be positive')
             anchors=set()

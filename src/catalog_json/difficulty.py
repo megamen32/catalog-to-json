@@ -105,6 +105,7 @@ def scan_catalogs(sources, output, per_catalog=3, anchors=None, deadline=180):
                          'source_page_count': len(doc), **page_features(doc[number - 1])}
                     with checkpoint.open('a', encoding='utf-8') as f:
                         f.write(json.dumps(r, ensure_ascii=False) + '\n')
+                r={**r,'source':source.name,'source_path':str(source)}
                 records.append(r)
         if not complete: break
     result = {'schema_version': '1.0', 'complete': complete,
