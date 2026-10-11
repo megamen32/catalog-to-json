@@ -22,7 +22,7 @@ def main():
     p=argparse.ArgumentParser(description='PDF catalogs → AnyDoc + FastAgent Vision → reviewed JSON')
     sub=p.add_subparsers(dest='command',required=True)
     c=sub.add_parser('convert');c.add_argument('input',type=Path);c.add_argument('--output',type=Path,required=True);c.add_argument('--pages',default='all');c.add_argument('--config',type=Path,required=True)
-    c.add_argument('--extractor',default='zai.glm-5.3-flash?reasoning=low');c.add_argument('--reviewer',default='zai.glm-5.3-flash?reasoning=low');c.add_argument('--call-timeout',type=int,default=90);c.add_argument('--max-tokens',type=int,default=16384);c.add_argument('--max-repairs',type=int,choices=[0,1,2,3,4],default=1);c.add_argument('--deadline',type=int,default=180);c.add_argument('--resume',action='store_true')
+    c.add_argument('--extractor',default='zai.glm-5.3-flash?reasoning=low');c.add_argument('--reviewer',default='zai.glm-5.3-flash?reasoning=low');c.add_argument('--call-timeout',type=int,default=90);c.add_argument('--max-tokens',type=int,default=16384);c.add_argument('--max-repairs',type=int,default=None,help='Optional repair count for experiments; default: continue until accepted within the run deadline');c.add_argument('--deadline',type=int,default=180);c.add_argument('--resume',action='store_true')
     e=sub.add_parser('export');e.add_argument('input',type=Path);e.add_argument('--format',choices=['html','xlsx'],required=True);e.add_argument('--output',type=Path,required=True);e.add_argument('--allow-unverified',action='store_true')
     args=p.parse_args()
     try:

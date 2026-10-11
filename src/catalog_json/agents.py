@@ -15,7 +15,7 @@ from .models import register_model_capabilities
 
 
 class AgentPair:
-    def __init__(self,config: Path,extractor: str,reviewer: str,timeout=90,max_tokens=16384,max_iterations=36):
+    def __init__(self,config: Path,extractor: str,reviewer: str,timeout=90,max_tokens=16384,max_iterations=9999):
         register_model_capabilities()
         self.skills={m.name:m for m in SkillRegistry(directories=[SKILLS]).load_manifests()}
         if set(self.skills)!={'catalog-extract','catalog-review'}:raise RuntimeError('Bundled native skills were not discovered')

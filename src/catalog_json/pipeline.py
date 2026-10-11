@@ -1,6 +1,7 @@
 import asyncio
 import hashlib
 import json
+from itertools import count as attempts
 import time
 from pathlib import Path
 import pymupdf
@@ -8,7 +9,8 @@ from .tools import write_json
 from .schema import PageContent,Review
 
 
-async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=1,resume=False,deadline_seconds=180):
+async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=None,resume=False,deadline_seconds=180):
+    if max_repairs is not None and max_repairs<0:raise ValueError('max_repairs must be nonnegative or None')
     source=source.resolve();out=out.resolve();out.mkdir(parents=True,exist_ok=True)
     digest=hashlib.sha256(source.read_bytes()).hexdigest()
     job={'schema_version':'1.0','source':{'filename':source.name,'sha256':digest},'selection':pages,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'pages':[],'complete_for_selection':False,'catalog_complete':False}
@@ -40,9 +42,9 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=1,r
             return seconds
         try:
             start_attempt=previous.get('next_attempt',0) if previous else 0
-            if previous and start_attempt>max_repairs:
+            if previous and max_repairs is not None and start_attempt>max_repairs:
                 record={**previous,'pdf_page':n,'cache_key':key}
-            for attempt in range(start_attempt,max_repairs+1):
+            for attempt in (attempts(start_attempt) if max_repairs is None else range(start_attempt,max_repairs+1)):
                 record['next_attempt']=attempt
                 cached=work/f'candidate-{attempt}.json'
                 if previous and previous.get('next_stage')=='reviewer' and cached.exists():

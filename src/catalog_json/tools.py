@@ -81,7 +81,7 @@ class CatalogTools:
         filename=f'candidate-{self.attempt}.json' if kind=='page' else f'review-{self.attempt}.json'
         path=self.work(page)/filename
         if not path.exists():
-            alternatives=sorted(self.work(page).glob('candidate-*.json' if kind=='page' else 'review-*.json'))
+            alternatives=sorted(self.work(page).glob('candidate-*.json' if kind=='page' else 'review-*.json'),key=lambda p:int(p.stem.split('-')[-1]))
             if not alternatives:raise ValueError(f'No {kind} artifact saved')
             path=alternatives[-1]
         if self.role=='reviewer' and kind=='page':self.disclosed.setdefault(page,time.monotonic())
@@ -157,7 +157,7 @@ class CatalogTools:
     def correct_observation(self,page,json_text,reason):
         if self.role!='reviewer' or page not in self.disclosed:return {'saved':False,'error':'Only a reviewer can revise its own observation after comparison'}
         if self.latest_zoom.get(page,0)<=self.disclosed[page]:return {'saved':False,'error':'Reinspect the disputed source with view_region first'}
-        if not reason.strip() or self.corrections.get(page,0)>=2:return {'saved':False,'error':'Explain the source evidence; at most two observation revisions per worker'}
+        if not reason.strip():return {'saved':False,'error':'Explain the source evidence before revising the observation'}
         try:model=PageContent.model_validate_json(json_text)
         except ValidationError as exc:return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False))}
         differences=self.grid_differences(page,model)
@@ -206,7 +206,7 @@ class CatalogTools:
 
 
 def server(context):
-    mcp=MCPServer('catalog-tools',version='1.0.1',log_level='ERROR')
+    mcp=MCPServer('catalog-tools',version='1.0.2',log_level='ERROR')
     @mcp.tool()
     def open_catalog(source_path: str,output_directory: str) -> dict:
         """Open a user-specified local PDF and separate output folder. Not needed in an assigned CLI job."""
@@ -276,7 +276,7 @@ def server(context):
             return context.save(page,json_text,'observation')
         @mcp.tool()
         def correct_source_observation(page: int,json_text: str,reason: str) -> dict:
-            """Revise mistaken source observations only after fresh view_region inspection and a source-grounded reason. Initial blind transcription stays immutable; max two revisions."""
+            """Revise mistaken source observations only after fresh view_region inspection and a source-grounded reason. Initial blind transcription and every revision stay retained; no revision-count limit."""
             return context.correct_observation(page,json_text,reason)
         @mcp.tool()
         def save_review(page: int,json_text: str) -> dict:

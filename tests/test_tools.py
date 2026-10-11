@@ -194,3 +194,35 @@ def test_direct_grid_keeps_merge_when_crop_slightly_cuts_border():
         p.insert_text((50,90),'row1');p.insert_text((50,150),'row2');p.insert_text((200,120),'100')
         result=table_grids(p,[.09,.19,.91,.59]);table=result['tables'][0]
         assert table['expanded_rows']==[['row1','100'],['row2','100']]
+
+
+def test_reviewer_can_revise_observations_more_than_twice(tmp_path):
+    """Fast unit: source-grounded revisions continue until correct. Expected <1 s, max 5 s."""
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out');t.render(1);t.direct(1);t.save(1,content().model_dump_json(),'page')
+    r=CatalogTools(t.source,t.output,role='reviewer');r.render(1);r.save(1,content().model_dump_json(),'observation');r.read(1,'page')
+    for i in range(5):
+        r.render(1,[0,0,1,1]);assert r.correct_observation(1,content().model_dump_json(),f'Fresh inspection {i}')['saved']
+    assert len(list(r.work(1).glob('source-observation-0-revision-*.json')))==5
+
+
+def test_default_repairs_continue_until_accepted(tmp_path):
+    """Focused integration: quality loop has no arbitrary repair count; bounded by deadline. Expected <1 s, max 5 s."""
+    from catalog_json.pipeline import convert
+    class Workers:
+        extractor=reviewer='test-model';contract_digest='test-contract'
+        async def run(self,role,source,out,page,attempt,feedback=False):
+            if role=='extractor':return content()
+            r=review()
+            if attempt<5:r.verdict='revise';r.checks[0].passed=False
+            return r
+    result=asyncio.run(convert(pdf(tmp_path),tmp_path/'out',[1],Workers()))
+    assert result['complete_for_selection'] and len(result['pages'][0]['attempts'])==6
+
+
+def test_repair_reads_latest_artifact_after_tenth_attempt(tmp_path):
+    """Fast unit: unlimited repair counts must not select attempt 9 instead of 10. Expected <1 s, max 5 s."""
+    from catalog_json.tools import write_json
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out',attempt=11)
+    for number in (9,10):
+        d=content();d.title=str(number);write_json(t.work(1)/f'candidate-{number}.json',d.model_dump())
+    assert t.read(1,'page')['title']=='10'
