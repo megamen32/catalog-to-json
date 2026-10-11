@@ -8,7 +8,7 @@ version = "1.0.0"
 description = "PDF catalogs to reviewed JSON with AnyDoc and FastAgent Vision"
 requires-python = ">=3.12"
 license = "MIT"
-dependencies = ["fast-agent-mcp==0.10.43", "firecrawl-anydoc==0.2.4", "pymupdf>=1.28,<2", "openpyxl>=3.1,<4"]
+dependencies = ["fast-agent-mcp==0.10.43", "mcp==2.3.0", "firecrawl-anydoc==0.2.4", "pymupdf>=1.28,<2", "openpyxl>=3.1,<4"]
 
 [project.scripts]
 catalog-json = "catalog_json.cli:main"

@@ -368,6 +368,7 @@ source = { editable = "." }
 dependencies = [
     { name = "fast-agent-mcp" },
     { name = "firecrawl-anydoc" },
+    { name = "mcp" },
     { name = "openpyxl" },
     { name = "pymupdf" },
 ]
@@ -381,6 +382,7 @@ dev = [
 requires-dist = [
     { name = "fast-agent-mcp", specifier = "==0.10.43" },
     { name = "firecrawl-anydoc", specifier = "==0.2.4" },
+    { name = "mcp", specifier = "==2.3.0" },
     { name = "openpyxl", specifier = ">=3.1,<4" },
     { name = "pymupdf", specifier = ">=1.28,<2" },
 ]
