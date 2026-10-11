@@ -25,7 +25,7 @@ def write_json(path, data):
 
 class CatalogTools:
     def __init__(self, source=None, output=None, role='extractor', page=None, attempt=0):
-        self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.source=None;self.output=None
+        self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.disclosed={};self.latest_zoom={};self.corrections={};self.source=None;self.output=None
         if source and output:self.open(source,output)
 
     def open(self,source,output):
@@ -55,11 +55,12 @@ class CatalogTools:
             p=doc[page-1]
             clip=None if box is None else pymupdf.Rect(box[0]*p.rect.width,box[1]*p.rect.height,box[2]*p.rect.width,box[3]*p.rect.height)
             # Images remain bounded even with malformed or very large PDF media boxes.
-            rect=clip or p.rect;scale=min(3.5 if box else 2.5,2400/max(rect.width,rect.height))
+            rect=clip or p.rect;scale=min(6 if box else 2.5,2400/max(rect.width,rect.height))
             pix=p.get_pixmap(matrix=pymupdf.Matrix(scale,scale).prerotate(rotation),clip=clip)
             data=pix.tobytes('png')
         name='source.png' if box is None else 'region-'+hashlib.sha256(json.dumps([box,rotation]).encode()).hexdigest()[:12]+'.png'
         (work/name).write_bytes(data)
+        if box is not None:self.latest_zoom[page]=time.monotonic()
         self.log(page,'view_page' if box is None else 'view_region',box=box,rotation=rotation,image=name)
         return Image(data=data,format='png')
 
@@ -83,10 +84,12 @@ class CatalogTools:
             alternatives=sorted(self.work(page).glob('candidate-*.json' if kind=='page' else 'review-*.json'))
             if not alternatives:raise ValueError(f'No {kind} artifact saved')
             path=alternatives[-1]
+        if self.role=='reviewer' and kind=='page':self.disclosed.setdefault(page,time.monotonic())
         self.log(page,'read_page_json' if kind=='page' else 'read_review',file=path.name)
         data=json.loads(path.read_text())
         if self.role=='reviewer' and kind=='page':
-            observed=PageContent.model_validate_json((self.work(page)/f'source-observation-{self.attempt}.json').read_text())
+            observed_file=self.work(page)/(f'verified-source-observation-{self.attempt}.json' if 'correct_source_observation' in self.seen.get(page,set()) else f'source-observation-{self.attempt}.json')
+            observed=PageContent.model_validate_json(observed_file.read_text())
             return {'candidate':data,'independent_comparison':compare_source(observed,PageContent.model_validate(data))}
         return data
 
@@ -117,9 +120,36 @@ class CatalogTools:
         except ValidationError as exc:
             return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False))}
         filename=f'candidate-{self.attempt}.json' if kind=='page' else f'source-observation-{self.attempt}.json' if kind=='observation' else f'review-{self.attempt}.json'
+        prior=work/filename
+        if prior.exists():write_json(work/'.history'/prior.stem/(hashlib.sha256(prior.read_bytes()).hexdigest()+'.json'),json.loads(prior.read_text()))
         write_json(work/filename,model.model_dump())
         self.log(page,'save_page_json' if kind=='page' else 'save_source_observation' if kind=='observation' else 'save_review',file=filename,sha256=hashlib.sha256((work/filename).read_bytes()).hexdigest())
         return {'saved':True,'file':str(work/filename)}
+
+    def correct_observation(self,page,json_text,reason):
+        if self.role!='reviewer' or page not in self.disclosed:return {'saved':False,'error':'Only a reviewer can revise its own observation after comparison'}
+        if self.latest_zoom.get(page,0)<=self.disclosed[page]:return {'saved':False,'error':'Reinspect the disputed source with view_region first'}
+        if not reason.strip() or self.corrections.get(page,0)>=2:return {'saved':False,'error':'Explain the source evidence; at most two observation revisions per worker'}
+        try:model=PageContent.model_validate_json(json_text)
+        except ValidationError as exc:return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False))}
+        revision=self.corrections.get(page,0)+1;self.corrections[page]=revision
+        work=self.work(page);write_json(work/f'source-observation-{self.attempt}-revision-{revision}.json',{'reason':reason,'content':model.model_dump()})
+        write_json(work/f'verified-source-observation-{self.attempt}.json',model.model_dump())
+        self.log(page,'correct_source_observation',revision=revision,reason=reason)
+        self.disclosed[page]=time.monotonic()
+        return {'saved':True,'revision':revision,'original_blind_observation_retained':True}
+
+    def layout(self,page,box=None):
+        self.work(page)
+        if box is not None and (len(box)!=4 or not all(0<=v<=1 for v in box) or box[0]>=box[2] or box[1]>=box[3]):raise ValueError('Normalized box must be [left,top,right,bottom]')
+        with pymupdf.open(self.source) as doc:
+            p=doc[page-1];result=[]
+            for x0,y0,x1,y1,text,*_ in p.get_text('words'):
+                rect=[round(x0/p.rect.width,4),round(y0/p.rect.height,4),round(x1/p.rect.width,4),round(y1/p.rect.height,4)]
+                if box and not (box[0]<=(rect[0]+rect[2])/2<=box[2] and box[1]<=(rect[1]+rect[3])/2<=box[3]):continue
+                result.append({'text':text,'box':rect})
+        self.log(page,'read_source_layout',box=box)
+        return {'words':result,'note':'Original PDF text and normalized positions, not an interpreted table. Outlined/scanned labels need Vision.'}
 
     def section(self,page,section,index,json_text):
         if self.role!='extractor':return {'saved':False,'error':'Only extractor writes page sections'}
@@ -168,6 +198,10 @@ def server(context):
         """Zoom a chosen source region. box=[left,top,right,bottom], fractions 0..1. rotation clockwise degrees 0/90/180/270."""
         return context.render(page,box,rotation)
     @mcp.tool()
+    def read_source_layout(page: int,box: list[float]|None=None) -> dict:
+        """Read original text-layer words with normalized positions. Use to resolve column alignment or identical Latin/Cyrillic glyphs; diagrams still need Vision."""
+        return context.layout(page,box)
+    @mcp.tool()
     def extract_direct(page: int) -> dict:
         """Run local AnyDoc; return structured candidate, fallible text and reasons for Vision. No credentials or cloud upload."""
         return context.direct(page)
@@ -197,6 +231,10 @@ def server(context):
         def save_source_observation(page: int,json_text: str) -> dict:
             """Save independent complete source-page transcription (PageContent schema) BEFORE reading candidate. Frozen after candidate disclosure."""
             return context.save(page,json_text,'observation')
+        @mcp.tool()
+        def correct_source_observation(page: int,json_text: str,reason: str) -> dict:
+            """Revise mistaken source observations only after fresh view_region inspection and a source-grounded reason. Initial blind transcription stays immutable; max two revisions."""
+            return context.correct_observation(page,json_text,reason)
         @mcp.tool()
         def save_review(page: int,json_text: str) -> dict:
             """Save strict source-grounded review. Incomplete or contradictory claimed passes return errors."""

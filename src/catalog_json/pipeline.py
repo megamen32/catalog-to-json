@@ -14,6 +14,7 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=1,r
     job={'schema_version':'1.0','source':{'filename':source.name,'sha256':digest},'selection':pages,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'pages':[],'complete_for_selection':False,'catalog_complete':False}
     with pymupdf.open(source) as doc:count=len(doc)
     job['source']['page_count']=count;started=time.monotonic()
+    prior_job=json.loads((out/'catalog.json').read_text()) if resume and (out/'catalog.json').exists() else None
     if not pages or len(set(pages))!=len(pages) or any(n<1 or n>count for n in pages):raise ValueError('Page selection is empty, repeated, or out of range')
     for n in pages:
         work=out/f'page-{n:04d}';work.mkdir(exist_ok=True)
@@ -25,6 +26,12 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=1,r
             if prev.get('cache_key')==key:
                 if prev.get('status')=='accepted':job['pages'].append(prev);continue
                 previous=prev
+            elif prior_job and prior_job.get('source',{}).get('sha256')==digest and prior_job.get('models',{}).get('extractor')==agents.extractor:
+                # A changed reviewer/contract must re-audit; a validated source-bound extraction remains a useful candidate.
+                candidates=sorted(work.glob('candidate-*.json'),key=lambda p:int(p.stem.split('-')[-1]))
+                if candidates:
+                    latest=int(candidates[-1].stem.split('-')[-1])
+                    previous={'next_stage':'reviewer','next_attempt':latest}
         # Incomplete runs keep their artifacts, but are never silently reused as accepted.
         record={'pdf_page':n,'cache_key':key,'status':'pending','attempts':[]}
         def remaining():

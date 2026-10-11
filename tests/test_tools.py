@@ -121,3 +121,14 @@ def test_minimax_preview_keeps_images_and_adaptive_reasoning():
     assert p is not None and 'image/png' in p.tokenizes
     assert p.reasoning=='anthropic_thinking' and p.reasoning_effort_spec.allowed_efforts==['low','medium','high','xhigh','max']
     assert not p.anthropic_thinking_disable_supported
+
+
+def test_observer_can_repair_own_error_only_after_new_source_view(tmp_path):
+    """Fast unit: keep independence without freezing a mistaken observer forever; expected <1 s, max 5 s."""
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out');t.render(1);t.direct(1);assert t.save(1,content().model_dump_json(),'page')['saved']
+    r=CatalogTools(t.source,t.output,role='reviewer');r.render(1);wrong=content();wrong.tables[0].rows[0].cells[0].value=999
+    assert r.save(1,wrong.model_dump_json(),'observation')['saved'];r.read(1,'page')
+    assert not r.correct_observation(1,content().model_dump_json(),'Checked source')['saved']
+    r.render(1,[0,0,1,1]);assert r.correct_observation(1,content().model_dump_json(),'Fresh source image shows correct value')['saved']
+    assert json.loads((r.work(1)/'source-observation-0.json').read_text())['tables'][0]['rows'][0]['cells'][0]['value']==999
+    assert not r.read(1,'page')['independent_comparison']
