@@ -1,5 +1,6 @@
 import asyncio
 import json
+import hashlib
 from pathlib import Path
 from fast_agent import FastAgent
 from fast_agent.mcp.prompt import Prompt
@@ -12,6 +13,7 @@ REVIEW = """You are a hostile document extraction auditor. Compare the supplied 
 class AgentPair:
     def __init__(self, config: Path, extractor: str, reviewer: str, timeout: int = 90, max_tokens: int = 16384):
         self.fast=FastAgent("catalog-to-json",config_path=str(config),parse_cli_args=False,quiet=True,isolated=True)
+        self.contract_digest=hashlib.sha256((EXTRACT+REVIEW+json.dumps(PageContent.model_json_schema(),sort_keys=True)+json.dumps(Review.model_json_schema(),sort_keys=True)).encode()).hexdigest()
         self.timeout=timeout;self.max_tokens=max_tokens;self.extractor=extractor;self.reviewer=reviewer;self.last_response=None
         self.fast.agent(name="extractor",instruction=EXTRACT,model=extractor,servers=[],use_history=False)(lambda: None)
         self.fast.agent(name="reviewer",instruction=REVIEW,model=reviewer,servers=[],use_history=False)(lambda: None)
@@ -19,19 +21,19 @@ class AgentPair:
     async def call(self,role,schema,text,image: Path):
         async with self.fast.run() as agents:
             result,message=await asyncio.wait_for(agents[role].structured(
-                Prompt.user(text,image),schema,
+                Prompt.user(text+"\nExact required JSON Schema (follow enum values and field names literally):\n"+json.dumps(schema.model_json_schema(),ensure_ascii=False),*(image if isinstance(image,list) else [image])),schema,
                 request_params=RequestParams(maxTokens=self.max_tokens,use_history=False,max_iterations=1,structured_tool_policy="no_tools",streaming_timeout=self.timeout)),timeout=self.timeout)
-            self.last_response={"role":role,"stop_reason":str(message.stop_reason or ""),"text":"\n".join(block.text for block in message.content if getattr(block,"type",None)=="text")}
+            self.last_response={"role":role,"stop_reason":str(message.stop_reason or ""),"channels":{k:[b.text for b in v if getattr(b,"type",None)=="text"] for k,v in (message.channels or {}).items() if k in {"fast-agent-usage","fast-agent-timing"}},"text":"\n".join(block.text for block in message.content if getattr(block,"type",None)=="text")}
             if result is None:raise RuntimeError(f"{role}: no complete schema-valid response")
             stop=str(message.stop_reason or "")
             if any(x in stop.lower() for x in ["max_token","length"]):raise RuntimeError(f"{role}: truncated response")
             return result
 
     async def extract(self,image,hint,feedback=None):
-        text="Extract this original catalog page. AnyDoc hint (may be wrong):\n"+hint
+        text="Extract this original catalog page. Extra images are zooms of the SAME page, not additional pages. AnyDoc hint (may be wrong):\n"+hint
         if feedback is not None:text+="\nPrevious candidate and reviewer defects; fix them against image:\n"+json.dumps(feedback,ensure_ascii=False)
         return await self.call("extractor",PageContent,text,image)
 
     async def review(self,image,content):
-        text="Audit every part against the original. Required checks: "+", ".join(sorted(CHECKS))+"\nCandidate:\n"+content.model_dump_json()
+        text="Audit every part against the original. Extra images are zooms of ONE page; do not count them as duplicate content. Required checks: "+", ".join(sorted(CHECKS))+"\nCandidate:\n"+content.model_dump_json()
         return await self.call("reviewer",Review,text,image)

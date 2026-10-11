@@ -13,8 +13,9 @@ class TextBlock(Model):
 class Column(Model):
     id: str
     label: str
-    unit: str | None = None
+    unit: str | None = Field(default=None,description="Only the original physical unit symbol; never include не менее/не более here")
     group: str | None = None
+    qualifier: str | None = None
 
 class Cell(Model):
     column_id: str
@@ -60,8 +61,8 @@ class PageContent(Model):
     text_blocks: list[TextBlock]
     tables: list[Table]
     figures: list[Figure]
-    source_notes: list[str] = Field(default_factory=list)
-    uncertainties: list[str] = Field(default_factory=list)
+    source_notes: list[str] = Field(default_factory=list,description="Visible source typos/ambiguities copied literally, not an extraction failure")
+    uncertainties: list[str] = Field(default_factory=list,description="Only unresolved missing/illegible extraction evidence; do not put faithful source typos here")
 
 class Issue(Model):
     severity: Literal["error", "warning"]

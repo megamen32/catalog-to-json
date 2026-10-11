@@ -25,7 +25,7 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=1,r
     if not pages or len(set(pages))!=len(pages) or any(n<1 or n>len(doc) for n in pages):raise ValueError("Page selection is empty, repeated, or out of range")
     for n in pages:
         work=out/f"page-{n:04d}";work.mkdir(exist_ok=True)
-        key={"source_sha256":digest,"page":n,"models":job["models"],"schema":"1.0","max_repairs":max_repairs}
+        key={"source_sha256":digest,"page":n,"models":job["models"],"schema":"1.0","max_repairs":max_repairs,"contract":getattr(agents,"contract_digest",None)}
         keyhash=hashlib.sha256(json.dumps(key,sort_keys=True).encode()).hexdigest()
         receipt=work/'result.json'
         if resume and receipt.exists():
@@ -37,6 +37,9 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=1,r
             page=doc[n-1];single=pymupdf.open();single.insert_pdf(doc,from_page=n-1,to_page=n-1)
             pdf_bytes=single.tobytes();(work/'source.pdf').write_bytes(pdf_bytes)
             image=work/'source.png';page.get_pixmap(matrix=pymupdf.Matrix(2.5,2.5)).save(image)
+            images=[image]
+            for label,region in [('top',pymupdf.Rect(0,0,page.rect.width,page.rect.height*.55)),('bottom',pymupdf.Rect(0,page.rect.height*.45,page.rect.width,page.rect.height))]:
+                tile=work/f'zoom-{label}.png';page.get_pixmap(matrix=pymupdf.Matrix(3,3),clip=region).save(tile);images.append(tile)
             candidate,hint,reasons=inspect_page(page,pdf_bytes)
             (work/'anydoc.md').write_text(hint)
             record.update(route="vision" if reasons else "anydoc",routing_reasons=reasons)
@@ -45,11 +48,12 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=1,r
                 if seconds<=0:raise TimeoutError("Job deadline exhausted; retained checkpoint")
                 return seconds
             if reasons:
-                candidate=await asyncio.wait_for(agents.extract(image,hint),remaining())
+                candidate=await asyncio.wait_for(agents.extract(images,hint),remaining())
+            if getattr(agents,'last_response',None):write_json(work/'extract-model-response.json',agents.last_response)
             assert candidate is not None
             for attempt in range(max_repairs+1):
                 write_json(work/f'candidate-{attempt}.json',candidate.model_dump())
-                report=await asyncio.wait_for(agents.review(image,candidate),remaining())
+                report=await asyncio.wait_for(agents.review(images,candidate),remaining())
                 write_json(work/f'review-{attempt}.json',report.model_dump())
                 record['attempts'].append({"candidate":f"candidate-{attempt}.json","review":f"review-{attempt}.json"})
                 if report.accepts(candidate):
@@ -57,7 +61,7 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=1,r
                 record.update(status="needs_review",content=candidate.model_dump(),review=report.model_dump())
                 if attempt<max_repairs:
                     record['route']='vision'
-                    candidate=await asyncio.wait_for(agents.extract(image,hint,{"candidate":candidate.model_dump(),"review":report.model_dump()}),remaining())
+                    candidate=await asyncio.wait_for(agents.extract(images,hint,{"candidate":candidate.model_dump(),"review":report.model_dump()}),remaining())
         except Exception as exc:
             if getattr(agents,"last_response",None):write_json(work/"last-model-response.json",agents.last_response)
             record.update(status="failed",error=f"{type(exc).__name__}: {exc}")
