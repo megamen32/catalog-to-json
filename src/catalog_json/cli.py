@@ -36,9 +36,16 @@ def main():
     extract.add_argument('--config',type=Path,required=True);extract.add_argument('--output',type=Path,required=True);extract.add_argument('--call-timeout',type=int,default=300)
     suite=bs.add_parser('run',help='Run a project × model × case command-adapter matrix')
     suite.add_argument('manifest',type=Path);suite.add_argument('--output',type=Path,required=True);suite.add_argument('--resume',action='store_true')
+    saved=bs.add_parser('import-jsonl',help='Import supplied saved results deterministically, without calling or claiming a model run')
+    for name in ('products','characteristics','families'):saved.add_argument('--'+name,type=Path,required=True)
+    saved.add_argument('--document-id',required=True);saved.add_argument('--page',type=int,required=True);saved.add_argument('--output',type=Path,required=True)
     args=p.parse_args()
     try:
         if args.command=='benchmark':
+            if args.benchmark_command=='import-jsonl':
+                from .saved_results import import_jsonl
+                result=import_jsonl(args.products,args.characteristics,args.families,args.document_id,args.page,args.output)
+                print(json.dumps(result,ensure_ascii=False));return 0
             if args.benchmark_command=='run':
                 from .bench_runner import run_suite
                 result=run_suite(args.manifest,args.output,args.resume)

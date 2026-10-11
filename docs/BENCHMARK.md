@@ -27,6 +27,33 @@ This native adapter runs only first-pass extraction, without reviewer feedback, 
 
 ## Score saved artifacts
 
+External result archives can join the comparison even when their executable is unavailable:
+
+```bash
+catalog-json benchmark import-jsonl \
+  --products products.jsonl --characteristics characteristics.jsonl \
+  --families families.jsonl --document-id src03 --page 78 \
+  --output .tmp/benchmark/external-page-78
+```
+
+This adapter preserves reported product identities, table coordinates, composite headers,
+units, blank states and Unicode values. It never repairs them from the PDF or gold, never
+expands merged values, and marks missing/conflicting coordinates unknown. Raw JSONL inputs
+remain the authoritative evidence; their hashes and the adapter hash accompany the import.
+Unlocated characteristics are counted separately and retained in the raw input, not guessed
+into cells. Drawing structure and merge geometry are not represented by this format.
+`import.json` labels the stage `imported_result`, with unverified runtime and unknown model,
+time, tokens and cost. A sender's description of a model belongs in a separate witness note.
+Do not call an import a fresh model run, or compare its import duration with extraction time.
+
+The positional cell scorer also reports shape differences. An imported transposed or
+collapsed table must not be treated as an equivalent table merely because some numbers
+are present. For cross-format comparisons, additionally verify product identity, the exact
+parameter/qualifier and its unit together. A value-only score is not a semantic fact score.
+Selected partial assertions are not whole-page ground truth. Source typos must be retained
+with notes; visually identical alphabet choices should be reported separately from numeric
+or engineering errors. Report family-level coverage when multiple cases share one template.
+
 ```bash
 catalog-json benchmark score --fixture .tmp/benchmark/case-78.json \
   --candidate .tmp/benchmark/glm-repeat-1/page-0078/candidate-0.json \
