@@ -9,3 +9,7 @@ The installed public-release MCP initializes, discovers bundled skills, returns 
 Per owner instruction, source-observation corrections and automatic repair have no default count limit. Fresh source evidence and retained revisions remain mandatory. Timeouts preserve checkpoints rather than certify a result. Prior false acceptance was invalidated; independent observation, direct merge geometry and save-time comparisons now guard the actual tool path.
 
 The full 980-page input set has not been processed: only the requested comparison sample was selected. No user data or credentials are published.
+
+## Benchmark extension, 2026-10-12
+
+Benchmark core v1.1.0 delivered: full 980-page structural inventory, 15 visually curated stress cases, independent page-78 fact scoring and project/model command matrix. Two fresh native model profiles have saved quantitative results and explicit coverage limits. Additional real project comparison is pending the promised repository links; fourteen further selected pages are unannotated. See quick/20261012-catalog-benchmark/SUMMARY.md.

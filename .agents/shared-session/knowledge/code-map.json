@@ -3,9 +3,9 @@
     "catalog-benchmark-cli": {
       "confidence": "verified",
       "evidence": [
-        "Focused subprocess matrix tests, live inventory of 980 pages and two saved GLM/MiniMax first-pass arms."
+        "34 focused checks; live inventory of 980 pages; frozen GLM/MiniMax first-pass runs; CLI dispatch and resume of captured outputs."
       ],
-      "git_head": "d7f954458060d489a36f94fa243870568837d80c",
+      "git_head": "171a80d68558a8f27c6981a1f68ddc1b7b2e2f05",
       "key": "catalog-benchmark-cli",
       "kind": "production-path",
       "locations": [
@@ -19,7 +19,7 @@
         {
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "ab611b7224661e336ac57006cd018c3a38c8e7d5a939e6c9356c625ab140e54d",
+          "observed_sha256": "60a2189da420b101f8bd62b990762336e36460fd5744e1d0573c5e5c444684f9",
           "path": "src/catalog_json/difficulty.py",
           "symbol": ""
         },
@@ -39,7 +39,7 @@
         }
       ],
       "summary": "CLI benchmark scan inventories PDFs; extract runs native first pass; score grades independent facts; run dispatches project/model/case argv adapters with persisted no-replay receipts.",
-      "verified_at": "2026-10-12T01:05:15.130086+03:00"
+      "verified_at": "2026-10-12T01:31:43.107595+03:00"
     }
   },
   "schema_version": 1
