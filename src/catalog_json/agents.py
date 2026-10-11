@@ -21,7 +21,7 @@ class AgentPair:
             result,message=await asyncio.wait_for(agents[role].structured(
                 Prompt.user(text,image),schema,
                 request_params=RequestParams(maxTokens=self.max_tokens,use_history=False,max_iterations=1,structured_tool_policy="no_tools",streaming_timeout=self.timeout)),timeout=self.timeout)
-            self.last_response={"role":role,"stop_reason":str(message.stop_reason or ""),"text":message.last_text() or ""}
+            self.last_response={"role":role,"stop_reason":str(message.stop_reason or ""),"text":"\n".join(block.text for block in message.content if getattr(block,"type",None)=="text")}
             if result is None:raise RuntimeError(f"{role}: no complete schema-valid response")
             stop=str(message.stop_reason or "")
             if any(x in stop.lower() for x in ["max_token","length"]):raise RuntimeError(f"{role}: truncated response")
