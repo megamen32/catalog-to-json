@@ -182,3 +182,15 @@ def test_exhausted_resume_retains_review_and_content(tmp_path):
     final=asyncio.run(convert(source,out,[1],w,max_repairs=0,resume=True))
     assert final['pages'][0]['status']=='needs_review' and final['pages'][0]['content']==first['pages'][0]['content']
     assert final['pages'][0]['review']==first['pages'][0]['review'] and w.calls==['extractor','reviewer']
+
+
+def test_direct_grid_keeps_merge_when_crop_slightly_cuts_border():
+    """Focused integration: approximate agent crops must not lose spanning cells. Expected <1 s, max 5 s."""
+    from catalog_json.grid import table_grids
+    with pymupdf.open() as d:
+        p=d.new_page(width=300,height=300)
+        p.draw_line((30,60),(270,60));p.draw_line((30,120),(150,120))
+        p.draw_line((30,180),(150,180));p.draw_line((150,180),(270,180))
+        p.insert_text((50,90),'row1');p.insert_text((50,150),'row2');p.insert_text((200,120),'100')
+        result=table_grids(p,[.09,.19,.91,.59]);table=result['tables'][0]
+        assert table['expanded_rows']==[['row1','100'],['row2','100']]

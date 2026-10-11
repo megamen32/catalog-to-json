@@ -9,8 +9,28 @@ def table_grids(page,box):
     if len(box)!=4 or not all(0<=v<=1 for v in box) or box[0]>=box[2] or box[1]>=box[3]:raise ValueError('Normalized box must be [left,top,right,bottom]')
     width,height=page.rect.width,page.rect.height
     clip=pymupdf.Rect(box[0]*width,box[1]*height,box[2]*width,box[3]*height)
+    # A hand-chosen crop may cut the outer line of a merged cell by a few
+    # pixels. Include nearby full-width rules, preserving the requested area.
+    drawings=page.get_drawings();rules=[];segments={}
+    for drawing in drawings:
+        for item in drawing['items']:
+            if item[0]=='l':
+                a,b=item[1:]
+                if abs(a.y-b.y)<.2 and min(a.x,b.x)<clip.x1 and max(a.x,b.x)>clip.x0:
+                    segments.setdefault(round(a.y,1),[]).append((min(a.x,b.x),max(a.x,b.x)))
+    # PDF writers often emit a full table border as one segment per column.
+    for y,parts in segments.items():
+        joined=[]
+        for left,right in sorted(parts):
+            if joined and left<=joined[-1][1]+1:joined[-1][1]=max(joined[-1][1],right)
+            else:joined.append([left,right])
+        if any(right-left>=clip.width*.5 for left,right in joined):rules.append(y)
+    above=[y for y in rules if clip.y0-height*.02<=y<=clip.y0]
+    below=[y for y in rules if clip.y1<=y<=clip.y1+height*.02]
+    if above:clip.y0=max(0,max(above)-.2)
+    if below:clip.y1=min(height,min(below)+.2)
     xs=set()
-    for drawing in page.get_drawings():
+    for drawing in drawings:
         for item in drawing['items']:
             if item[0]!='l':continue
             a,b=item[1:]
@@ -52,4 +72,4 @@ def table_grids(page,box):
                        'row_ranges':[[round(y0/height,4),round(y1/height,4)] for y0,y1 in row_ranges],
                        'merged_cells':[{'owner':[r,c],'covered_rows':rows,'box':[round(cells[r][c][0]/width,4),round(cells[r][c][1]/height,4),round(cells[r][c][2]/width,4),round(cells[r][c][3]/height,4)]} for (r,c),rows in covered.items()],
                        'unknown_cells':unknown})
-    return {'tables':tables,'note':'Direct text-layer data; vertical bounds inferred from vector lines. Use a body-only box and inspect the image. Empty text may be a scan/outline, not a true blank. Headers and diagrams need separate inspection.'}
+    return {'tables':tables,'effective_box':[round(clip.x0/width,4),round(clip.y0/height,4),round(clip.x1/width,4),round(clip.y1/height,4)],'note':'Direct text-layer data; vertical bounds inferred from vector lines. Use a body-only box and inspect the image. Empty text may be a scan/outline, not a true blank. Headers and diagrams need separate inspection.'}

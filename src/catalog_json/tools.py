@@ -96,11 +96,20 @@ class CatalogTools:
     def grid_differences(self,page,model):
         differences=[]
         for grid in self.grids.get(page,[]):
-            matches=[(i,t) for i,t in enumerate(model.tables) if len(t.rows)==grid['row_count'] and len(t.columns)==grid['column_count']]
+            matches=[]
+            for i,t in enumerate(model.tables):
+                if len(t.columns)!=grid['column_count']:continue
+                offset=grid['row_count']-len(t.rows)
+                if offset<0 or offset>3:continue
+                if offset:
+                    names=['' if r.cells[0].value is None else str(r.cells[0].value) for r in t.rows]
+                    if names!=[row[0] for row in grid['expanded_rows'][offset:]]:continue
+                matches.append((i,t,offset))
             # Shape alone is ambiguous when a page has repeated identical layouts.
-            if len(matches)!=1 or grid['unknown_cells']:continue
-            ti,table=matches[0]
-            for ri,(row,expected) in enumerate(zip(table.rows,grid['expanded_rows'])):
+            if len(matches)!=1:continue
+            ti,table,offset=matches[0]
+            if any(c['row']>=offset for c in grid['unknown_cells']):continue
+            for ri,(row,expected) in enumerate(zip(table.rows,grid['expanded_rows'][offset:])):
                 cells={c.column_id:c for c in row.cells}
                 for ci,column in enumerate(table.columns):
                     cell=cells[column.id];want=expected[ci]
@@ -197,7 +206,7 @@ class CatalogTools:
 
 
 def server(context):
-    mcp=MCPServer('catalog-tools',version='1.0.0',log_level='ERROR')
+    mcp=MCPServer('catalog-tools',version='1.0.1',log_level='ERROR')
     @mcp.tool()
     def open_catalog(source_path: str,output_directory: str) -> dict:
         """Open a user-specified local PDF and separate output folder. Not needed in an assigned CLI job."""
