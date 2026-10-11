@@ -41,9 +41,13 @@ def compare_source(observed: PageContent,candidate: PageContent):
     all_text=text_key(' '.join(b.text for b in candidate.text_blocks))
     for i,block in enumerate(observed.text_blocks):
         if text_key(block.text) not in all_text:add(f'text_blocks[source={i}]',block.text,'missing or changed wording')
-    if len(observed.figures)!=len(candidate.figures):add('figures',len(observed.figures),len(candidate.figures))
-    for i,(sf,cf) in enumerate(zip(observed.figures,candidate.figures)):
-        combined=figure_key(cf.description+' '+' '.join(cf.labels))
+    # One source drawing can legitimately be represented as several views or
+    # one combined figure. Compare labels across figures, retaining numeric bounds.
+    labels=[figure_key(label) for f in candidate.figures for label in f.labels]
+    descriptions=[figure_key(f.description) for f in candidate.figures]
+    for i,sf in enumerate(observed.figures):
         for label in sf.labels:
-            if figure_key(label) not in combined:add(f'figures[{i}].labels',label,'missing or changed label/tolerance')
+            key=figure_key(label)
+            if key not in labels and not any(re.search(re.escape(key)+r'(?![0-9])',d) for d in descriptions):
+                add(f'figures[{i}].labels',label,'missing or changed label/tolerance')
     return differences

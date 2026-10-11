@@ -25,7 +25,7 @@ def write_json(path, data):
 
 class CatalogTools:
     def __init__(self, source=None, output=None, role='extractor', page=None, attempt=0):
-        self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.disclosed={};self.latest_zoom={};self.corrections={};self.source=None;self.output=None
+        self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.disclosed={};self.latest_zoom={};self.corrections={};self.grids={};self.source=None;self.output=None
         if source and output:self.open(source,output)
 
     def open(self,source,output):
@@ -93,6 +93,22 @@ class CatalogTools:
             return {'candidate':data,'independent_comparison':compare_source(observed,PageContent.model_validate(data))}
         return data
 
+    def grid_differences(self,page,model):
+        differences=[]
+        for grid in self.grids.get(page,[]):
+            matches=[(i,t) for i,t in enumerate(model.tables) if len(t.rows)==grid['row_count'] and len(t.columns)==grid['column_count']]
+            # Shape alone is ambiguous when a page has repeated identical layouts.
+            if len(matches)!=1 or grid['unknown_cells']:continue
+            ti,table=matches[0]
+            for ri,(row,expected) in enumerate(zip(table.rows,grid['expanded_rows'])):
+                cells={c.column_id:c for c in row.cells}
+                for ci,column in enumerate(table.columns):
+                    cell=cells[column.id];want=expected[ci]
+                    actual='' if cell.value is None else str(cell.value)
+                    if actual!=want or cell.state!=('blank' if want=='' else 'value'):
+                        differences.append({'path':f'tables[{ti}].rows[{ri}].cells[column={ci}]','direct_value':want,'candidate_value':cell.value,'merged_spans':grid['merged_cells']})
+        return differences
+
     def save(self,page,json_text,kind):
         work=self.work(page)
         expected='extractor' if kind=='page' else 'reviewer'
@@ -106,6 +122,9 @@ class CatalogTools:
         if kind=='observation' and 'read_page_json' in self.seen.get(page,set()):return {'saved':False,'error':'Source observations are frozen after candidate disclosure; start a fresh review to reinspect'}
         try:
             model=(PageContent if kind in ('page','observation') else Review).model_validate_json(json_text)
+            if kind in ('page','observation'):
+                differences=self.grid_differences(page,model)
+                if differences:return {'saved':False,'error':'Saved table contradicts the directly inspected PDF grid. Reinspect source/merge spans and preserve expanded_rows; use a fresh Vision-only context for genuinely unreliable grids.','direct_grid_differences':differences}
             if kind=='review':
                 disclosed=self.read(page,'page')
                 if model.verdict=='pass' and disclosed['independent_comparison']:
@@ -132,6 +151,8 @@ class CatalogTools:
         if not reason.strip() or self.corrections.get(page,0)>=2:return {'saved':False,'error':'Explain the source evidence; at most two observation revisions per worker'}
         try:model=PageContent.model_validate_json(json_text)
         except ValidationError as exc:return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False))}
+        differences=self.grid_differences(page,model)
+        if differences:return {'saved':False,'error':'Correction contradicts inspected direct grid/merge geometry','direct_grid_differences':differences}
         revision=self.corrections.get(page,0)+1;self.corrections[page]=revision
         work=self.work(page);write_json(work/f'source-observation-{self.attempt}-revision-{revision}.json',{'reason':reason,'content':model.model_dump()})
         write_json(work/f'verified-source-observation-{self.attempt}.json',model.model_dump())
@@ -206,6 +227,8 @@ def server(context):
         from .grid import table_grids
         context.work(page)
         with pymupdf.open(context.source) as doc:result=table_grids(doc[page-1],box)
+        for grid in result['tables']:
+            if grid not in context.grids.setdefault(page,[]):context.grids[page].append(grid)
         context.log(page,'read_source_table',box=box)
         return result
     @mcp.tool()

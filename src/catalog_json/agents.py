@@ -22,7 +22,7 @@ class AgentPair:
         self.config=config.resolve();self.extractor=extractor;self.reviewer=reviewer
         self.timeout=timeout;self.max_tokens=max_tokens;self.max_iterations=max_iterations
         instructions=''.join(p.read_text() for p in sorted(SKILLS.glob('*/SKILL.md')))
-        self.contract_digest=hashlib.sha256(('tool-agent-v2-independent-observer'+Path(__file__).read_text()+instructions+json.dumps(PageContent.model_json_schema(),sort_keys=True)+json.dumps(Review.model_json_schema(),sort_keys=True)).encode()).hexdigest()
+        self.contract_digest=hashlib.sha256(('tool-agent-v2-independent-observer'+''.join(Path(__file__).with_name(name).read_text() for name in ('agents.py','tools.py','audit.py','grid.py','models.py'))+instructions+json.dumps(PageContent.model_json_schema(),sort_keys=True)+json.dumps(Review.model_json_schema(),sort_keys=True)).encode()).hexdigest()
 
     async def run(self,role,source,out,page,attempt,feedback=False):
         runtime=out/f'page-{page:04d}'/f'agent-{role}-{attempt}';runtime.mkdir(parents=True,exist_ok=True)

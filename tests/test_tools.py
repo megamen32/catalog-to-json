@@ -144,3 +144,24 @@ def test_source_grid_expands_only_geometry_backed_merge(tmp_path):
         result=table_grids(p,[.09,.19,.91,.61]);table=result['tables'][0]
         assert table['expanded_rows']==[['row1','100'],['row2','100']]
         assert table['merged_cells'][0]['covered_rows']==[0,1] and not table['unknown_cells']
+
+
+def test_figure_grouping_preserves_labels_without_false_omission():
+    """Fast unit: grouped views remain complete; reject lost numeric tolerances. Expected <1 s, max 5 s."""
+    from catalog_json.audit import compare_source
+    from catalog_json.schema import Figure
+    a=content();b=content()
+    a.figures=[Figure(title='Elevation',description='',labels=['H±2']),Figure(title='Plan',description='',labels=['D1'])]
+    b.figures=[Figure(title='Combined views',description='',labels=['H±2','D1'])]
+    assert not compare_source(a,b)
+    b.figures[0].labels=['H±20','D1']
+    assert compare_source(a,b)
+
+
+def test_direct_grid_rejects_false_blank_observation(tmp_path):
+    """Fast unit: reviewer cannot erase a directly confirmed merge. Expected <1 s, max 5 s."""
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out',role='reviewer');t.render(1)
+    t.grids[1]=[{'row_count':1,'column_count':1,'expanded_rows':[['80']],'unknown_cells':[], 'merged_cells':[]}]
+    wrong=content();wrong.tables[0].rows[0].cells[0].value=None;wrong.tables[0].rows[0].cells[0].state='blank'
+    refused=t.save(1,wrong.model_dump_json(),'observation')
+    assert not refused['saved'] and refused['direct_grid_differences']

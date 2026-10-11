@@ -21,3 +21,7 @@ Call `save_review` with independently observed counts. The tool refuses a claime
 For identical Latin/Cyrillic technical glyphs, use read_source_layout codepoints; do not assert a Unicode identity from appearance alone. Typography can render small caps from lowercase PDF text: preserve visible case and do not treat that font effect as a missing or altered word.
 
 For ruled PDF tables, call read_source_table on the complete data body before repeatedly zooming cells. It returns text, physical columns and geometry-backed merged spans; expand only those spans. Read rotated headers separately using Vision and word positions. This direct grid is fallible on scans/outlines, so compare it with the image. If evidence remains unreadable, save an explicit uncertainty/report instead of spending the whole worker on repeated crops.
+
+Use expanded_rows as the direct table body, never raw_rows (raw nulls can be covered portions of a merged cell). The grid's merged_cells explicitly lists the row spans. A value centered on the middle row of a three-row physical merge belongs to ALL three rows. Do not infer blanks from the position of its printed text. Saved observations/candidates are checked against the inspected direct grid. If a grid appears unreliable, report uncertainty rather than inventing a competing exact value.
+
+A combined figure describing several original views is valid if every view, label, hole count and tolerance remains represented. Differences in the number of JSON figure objects alone are not omissions. Separate Unicode facts from visual typography.
