@@ -59,3 +59,10 @@ def test_json_exports_keep_units_qualifiers_and_full_page(tmp_path):
     to_html(catalog,tmp_path/'page.html');html=(tmp_path/'page.html').read_text();assert 'не более' in html and 'кг' in html and 'Н±2' in html
     to_xlsx(catalog,tmp_path/'page.xlsx');book=load_workbook(tmp_path/'page.xlsx');assert book['Стр 1 таб 1']['A1'].value=='Масса, кг; не более'
     assert any('Н±2' in str(row) for row in book['Текст и чертежи'].values)
+
+
+def test_bundled_skills_native_discovery():
+    """Fast unit: prevent silently running without the user's native skill; expected <1 s, max 5 s."""
+    from fast_agent.skills.registry import SkillRegistry
+    from catalog_json.tools import SKILLS
+    assert {m.name for m in SkillRegistry(directories=[SKILLS]).load_manifests()}=={'catalog-extract','catalog-review'}
