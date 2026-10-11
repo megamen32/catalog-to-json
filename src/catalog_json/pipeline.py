@@ -40,6 +40,8 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=1,r
             return seconds
         try:
             start_attempt=previous.get('next_attempt',0) if previous else 0
+            if previous and start_attempt>max_repairs:
+                record={**previous,'pdf_page':n,'cache_key':key}
             for attempt in range(start_attempt,max_repairs+1):
                 record['next_attempt']=attempt
                 cached=work/f'candidate-{attempt}.json'

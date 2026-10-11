@@ -165,3 +165,20 @@ def test_direct_grid_rejects_false_blank_observation(tmp_path):
     wrong=content();wrong.tables[0].rows[0].cells[0].value=None;wrong.tables[0].rows[0].cells[0].state='blank'
     refused=t.save(1,wrong.model_dump_json(),'observation')
     assert not refused['saved'] and refused['direct_grid_differences']
+
+
+def test_exhausted_resume_retains_review_and_content(tmp_path):
+    """Focused integration: resume must not replace a rejected useful draft with pending. Expected <1 s, max 5 s."""
+    from catalog_json.pipeline import convert
+    class Workers:
+        extractor=reviewer='test-model';contract_digest='test-contract';calls=[]
+        async def run(self,role,source,out,page,attempt,feedback=False):
+            self.calls.append(role)
+            if role=='reviewer':
+                r=review();r.verdict='revise';r.checks[0].passed=False;return r
+            return content()
+    w=Workers();source=pdf(tmp_path);out=tmp_path/'out'
+    first=asyncio.run(convert(source,out,[1],w,max_repairs=0));assert first['pages'][0]['status']=='needs_review'
+    final=asyncio.run(convert(source,out,[1],w,max_repairs=0,resume=True))
+    assert final['pages'][0]['status']=='needs_review' and final['pages'][0]['content']==first['pages'][0]['content']
+    assert final['pages'][0]['review']==first['pages'][0]['review'] and w.calls==['extractor','reviewer']
