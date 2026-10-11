@@ -110,3 +110,14 @@ def test_independent_audit_catches_shift_and_missing_tolerance():
     from catalog_json.schema import Figure
     a=content();b=content();a.figures=[Figure(title='View',description='',labels=['H±2'])];b.figures=[Figure(title='View',description='H',labels=['H'])]
     assert any(d['path']=='figures[0].labels' for d in compare_source(a,b))
+
+
+def test_minimax_preview_keeps_images_and_adaptive_reasoning():
+    """Fast unit: prevent FastAgent silently stripping a supported model's image; expected <1 s, max 5 s."""
+    from catalog_json.models import register_model_capabilities
+    from fast_agent.llm.model_database import ModelDatabase
+    register_model_capabilities()
+    p=ModelDatabase.get_model_params('anthropic.MiniMax-M3.1-Flash-Preview?reasoning=low')
+    assert p is not None and 'image/png' in p.tokenizes
+    assert p.reasoning=='anthropic_thinking' and p.reasoning_effort_spec.allowed_efforts==['low','medium','high','xhigh','max']
+    assert not p.anthropic_thinking_disable_supported
