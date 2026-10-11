@@ -48,6 +48,7 @@ class BenchmarkCase(Model):
     tables: list[GoldTable]
     headers: list[HeaderAssertion] = Field(default_factory=list)
     figure_labels: list[list[str]] = Field(default_factory=list)
+    forbidden_figure_labels: list[list[str]] = Field(default_factory=list)
 
     @model_validator(mode='after')
     def valid_assertions(self):
@@ -55,7 +56,7 @@ class BenchmarkCase(Model):
         for h in self.headers:
             if h.table >= len(self.tables) or h.column >= len(self.tables[h.table].rows[0]):
                 raise ValueError('Header assertion outside golden table')
-        if any(not labels or any(not label.strip() for label in labels) for labels in self.figure_labels):
+        if any(not labels or any(not label.strip() for label in labels) for labels in self.figure_labels + self.forbidden_figure_labels):
             raise ValueError('Figure assertions require nonempty source-grounded alternatives')
         return self
 
@@ -138,18 +139,28 @@ def score_content(case, content):
     for alternatives in case.figure_labels:
         passed = label_present(alternatives, content); figure_correct += passed
         if not passed: differences.append({'category': 'figure_label', 'expected_alternatives': alternatives})
+    # Check declared labels, not prose that may mention a label's absence.
+    declared = {literal(label) for figure in content.figures for label in figure.labels}
+    forbidden_absent = 0
+    for alternatives in case.forbidden_figure_labels:
+        found = sorted(declared.intersection(literal(label) for label in alternatives))
+        forbidden_absent += not found
+        if found: differences.append({'category': 'invented_figure_label', 'source_absent_alternatives': alternatives, 'observed': found})
     metrics = {'cells_literal': metric(literal_correct, expected_cells),
                'cells_numeric_equivalent': metric(numeric_correct, expected_cells),
                'blank_cells': metric(blank_correct, blank_total),
                'merged_cells': metric(merged_correct, merged_total),
                'header_assertions': metric(header_correct, len(case.headers)),
-               'figure_labels': metric(figure_correct, len(case.figure_labels))}
+               'figure_labels': metric(figure_correct, len(case.figure_labels)),
+               'forbidden_label_absence': metric(forbidden_absent, len(case.forbidden_figure_labels))}
     shape_ok = structure['expected_tables'] == structure['observed_tables'] and all(t['expected_rows'] == t['observed_rows'] and t['expected_columns'] == t['observed_columns'] for t in structure['tables'])
     return {'schema_version': '1.0', 'case_id': case.id, 'metrics': metrics, 'structure': structure,
             'all_verified_checks_passed': shape_ok and not differences,
             'coverage': {'full_page_ground_truth': False, 'text_blocks_scored': False,
                          'diagram_relationships_scored': False,
-                         'header_assertions': len(case.headers), 'figure_label_assertions': len(case.figure_labels)},
+                         'header_assertions': len(case.headers), 'figure_label_assertions': len(case.figure_labels),
+                         'forbidden_declared_label_assertions': len(case.forbidden_figure_labels),
+                         'all_invented_labels_scored': False},
             'differences': differences}
 
 

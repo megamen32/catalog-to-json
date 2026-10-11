@@ -52,3 +52,19 @@ def test_hole_count_parentheses_are_not_an_omission():
     case=fixture();case.figure_labels=[['d1 4 отв']]
     c=candidate();c.figures[0].labels=['d1','4 отв.'];c.figures[0].description='Отверстия d1 (4 отв.).'
     assert score_content(case,c)['metrics']['figure_labels']['correct']==1
+
+
+def test_invented_declared_label_does_not_pass_positive_only_checks():
+    """Fast unit: source-absent declared labels must be detected. Expected <1 s, max 5 s."""
+    case=fixture();case.forbidden_figure_labels=[['H2','Н2'],['А-А','A-A']]
+    c=candidate();c.figures[0].labels.extend(['Н2','A-A'])
+    result=score_content(case,c)
+    assert result['metrics']['forbidden_label_absence']['correct']==0
+    assert not result['all_verified_checks_passed']
+    assert [d['category'] for d in result['differences']].count('invented_figure_label')==2
+
+
+def test_description_of_absent_label_is_not_a_declared_invention():
+    case=fixture();case.forbidden_figure_labels=[['H2']]
+    c=candidate();c.figures[0].description='Source has H±2; no H2 label.'
+    assert score_content(case,c)['metrics']['forbidden_label_absence']['correct']==1

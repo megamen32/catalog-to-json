@@ -14,6 +14,13 @@ This inventories every physical PDF page, saves resumable records and renders ca
 
 ## Compare fresh model outputs
 
+Optional `forbidden_figure_labels` assertions list labels independently confirmed absent
+from a source, with explicit glyph alternatives. They catch invented *declared* drawing
+labels in addition to missing required labels. This is a selected negative checklist,
+not detection of every possible hallucination. Descriptions and diagram relationships
+remain outside that metric. Include source qualifiers and frequency conditions in header
+assertions; a matching number without its printed condition is insufficient.
+
 ```bash
 catalog-json benchmark extract catalog-a.pdf --page 78 \
   --model 'zai.glm-5.3-flash?reasoning=low' \
