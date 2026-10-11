@@ -12,7 +12,7 @@ REVIEW = """You are a hostile document extraction auditor. Compare the supplied 
 class AgentPair:
     def __init__(self, config: Path, extractor: str, reviewer: str, timeout: int = 90, max_tokens: int = 16384):
         self.fast=FastAgent("catalog-to-json",config_path=str(config),parse_cli_args=False,quiet=True,isolated=True)
-        self.timeout=timeout;self.max_tokens=max_tokens;self.extractor=extractor;self.reviewer=reviewer
+        self.timeout=timeout;self.max_tokens=max_tokens;self.extractor=extractor;self.reviewer=reviewer;self.last_response=None
         self.fast.agent(name="extractor",instruction=EXTRACT,model=extractor,servers=[],use_history=False)(lambda: None)
         self.fast.agent(name="reviewer",instruction=REVIEW,model=reviewer,servers=[],use_history=False)(lambda: None)
 
@@ -21,6 +21,7 @@ class AgentPair:
             result,message=await asyncio.wait_for(agents[role].structured(
                 Prompt.user(text,image),schema,
                 request_params=RequestParams(maxTokens=self.max_tokens,use_history=False,max_iterations=1,structured_tool_policy="no_tools",streaming_timeout=self.timeout)),timeout=self.timeout)
+            self.last_response={"role":role,"stop_reason":str(message.stop_reason or ""),"text":message.last_text() or ""}
             if result is None:raise RuntimeError(f"{role}: no complete schema-valid response")
             stop=str(message.stop_reason or "")
             if any(x in stop.lower() for x in ["max_token","length"]):raise RuntimeError(f"{role}: truncated response")

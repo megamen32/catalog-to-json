@@ -59,6 +59,7 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=1,r
                     record['route']='vision'
                     candidate=await asyncio.wait_for(agents.extract(image,hint,{"candidate":candidate.model_dump(),"review":report.model_dump()}),remaining())
         except Exception as exc:
+            if getattr(agents,"last_response",None):write_json(work/"last-model-response.json",agents.last_response)
             record.update(status="failed",error=f"{type(exc).__name__}: {exc}")
         write_json(receipt,record);job['pages'].append(record)
         write_json(out/'catalog.json',job)
