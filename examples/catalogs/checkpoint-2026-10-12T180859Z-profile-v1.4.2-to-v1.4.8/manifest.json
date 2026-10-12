@@ -1,0 +1,86 @@
+{
+  "checkpoint_utc": "2026-10-12T180859Z",
+  "status": "incomplete",
+  "all_catalogues_complete": false,
+  "accepted_pages": 93,
+  "source_pages": 980,
+  "selection": "best measured extractor1.4.2; fixed reviewer1.4.8; combined pipeline not independently benchmarked",
+  "catalogues": [
+    {
+      "id": "opn",
+      "source_sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+      "source_page_count": 60,
+      "accepted_pages": 55,
+      "json": "opn.json",
+      "json_sha256": "656dbfde5ede2e0d32dc7ec03c38b19d435473ac3cf655e1533beecb42c11654",
+      "wide_tables": 50,
+      "wide_literal_values_reopened_exact": true,
+      "excel": "opn-accepted-partial.xlsx",
+      "excel_sha256": "3e3bff440c357ef8f99bc9149f588d42efdea9232f0256980c6cd6d65b5f26a4",
+      "exported_cells": 3268,
+      "excel_reopened_exact": true
+    },
+    {
+      "id": "isolators",
+      "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+      "source_page_count": 162,
+      "accepted_pages": 38,
+      "json": "isolators.json",
+      "json_sha256": "c1dd29a4c577dc6dae7ec45f45f475947e425a5ca8a3281424473398ff75d74e",
+      "wide_tables": 23,
+      "wide_literal_values_reopened_exact": true,
+      "excel": "isolators-accepted-partial.xlsx",
+      "excel_sha256": "1281877520c49fbfc5027a155011cc3533da7ed751a947d758f3356b7962eb8c",
+      "exported_cells": 1708,
+      "excel_reopened_exact": true
+    },
+    {
+      "id": "small",
+      "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+      "source_page_count": 228,
+      "accepted_pages": 0,
+      "json": "small.json",
+      "json_sha256": "e7ec7e4149cc92ae8b0be177270466d32f8763faf8570dcabb322ea82131ffa5"
+    },
+    {
+      "id": "armature",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+      "source_page_count": 314,
+      "accepted_pages": 0,
+      "json": "armature.json",
+      "json_sha256": "83e8cdeec9502e550abe745c56b2356154c5139b4bed527bf4c1a2e1eb85f26c"
+    },
+    {
+      "id": "innovations",
+      "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+      "source_page_count": 216,
+      "accepted_pages": 0,
+      "json": "innovations.json",
+      "json_sha256": "e8dcb4809f1934d687bcfc5bb4e52b8fa91235dc196ef411e3f88f0d2223b17b"
+    }
+  ],
+  "independent_visual_audit": {
+    "scope": "OPN physical pages27,47,48 only; rest of the complete catalogues not yet audited",
+    "accepted_artifact_bindings": [
+      {
+        "page": 47,
+        "attempt": 3,
+        "candidate_sha256": "b10f560e178fdffa6d46dfe43cb45a2471e30509732223a957b26625cb736f53",
+        "review_sha256": "29aa35cb80c0c7ed4c8ad680590e4c6c1c614f911640a310afe58efe70c9c693"
+      },
+      {
+        "page": 48,
+        "attempt": 3,
+        "candidate_sha256": "41f2459ef12a9ea05ccbb3f5b91ff070f8922c95a68376c14cb48e8be1a1d7a2",
+        "review_sha256": "a6b8a022b17f4c1f7caff890af8c6e5eb294875c4f650a950308de5f7ec66819"
+      },
+      {
+        "page": 27,
+        "attempt": 5,
+        "candidate_sha256": "0d8f2a29f3d9cba9ad9dbe996d608f6b3242c85d67faf95b25798eaf490fbbd7",
+        "review_sha256": "c8aae63f312fd44a062080b91a1fba1ffca705ea7f85c3c8311a24a53c5823bd"
+      }
+    ],
+    "whole_catalogue_acceptance": false
+  }
+}
