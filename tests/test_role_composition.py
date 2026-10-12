@@ -79,3 +79,28 @@ def test_declared_legacy_program_cannot_label_another_agent_runtime(monkeypatch,
     adapter,component,_=fixture(monkeypatch,tmp_path);component['legacy_program']={**component['legacy_program'],'source_code_sha256':'another-core'}
     with pytest.raises(ValueError,match='Legacy agent program'):
         with bridge.composed_runtime(adapter,tmp_path/'descriptor'):pass
+
+
+def test_delivery_continuation_profile_keeps_exact_declared_agent_and_fixed_tools(monkeypatch,tmp_path):
+    """Fast unit: explicit143 continuation composition is a new producer, not15; <1s/max5s."""
+    adapter,component,actual=fixture(monkeypatch,tmp_path);component['profile_version']='1.4.22'
+    with bridge.composed_runtime(adapter,tmp_path/'descriptor'):
+        assert adapter.program_version()['package_version']=='1.4.22'
+        assert adapter.program_version()['components']['agent_logic']==component['legacy_program']
+        assert adapter.program_version()['components']['catalog_tools']==actual['program']
+
+
+def test_continuation_profile_cannot_claim_single_generation142(tmp_path):
+    """Fast unit: refuse a misleading delivery profile before any runtime/provider call; <1s/max5s."""
+    descriptor=tmp_path/'descriptor.json'
+    descriptor.write_text(json.dumps({'schema_version':'1.0','profile_version':'1.4.22','role':'extractor',
+        'legacy_program':{'package_version':'1.4.2'},'file_sha256':{}}))
+    with pytest.raises(ValueError,match='continuation profile'):bridge.fixed_component(descriptor)
+
+
+def test_continuation_profile_refuses_unfixed_native_tools(tmp_path):
+    """Fast unit: new continuation cannot restore the known destructive finalizer; <1s/max5s."""
+    descriptor=tmp_path/'descriptor.json'
+    descriptor.write_text(json.dumps({'schema_version':'1.0','profile_version':'1.4.22','role':'extractor',
+        'legacy_program':{'package_version':'1.4.3'},'program':{'package_version':'1.4.2'},'file_sha256':{}}))
+    with pytest.raises(ValueError,match='fixed catalog tools'):bridge.fixed_component(descriptor)

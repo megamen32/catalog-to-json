@@ -8,13 +8,18 @@ import subprocess
 import sys
 
 PROFILE_VERSION='1.4.15'
+SUPPORTED_PROFILES={PROFILE_VERSION,'1.4.22'}
 
 def digest(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 def fixed_component(path):
     data=json.loads(Path(path).read_text())
-    if data.get('schema_version')!='1.0' or data.get('profile_version')!=PROFILE_VERSION or data.get('role')!='extractor':
+    if data.get('schema_version')!='1.0' or data.get('profile_version') not in SUPPORTED_PROFILES or data.get('role')!='extractor':
         raise ValueError('Unsupported catalog tool composition descriptor')
+    if data['profile_version']=='1.4.22' and data.get('legacy_program',{}).get('package_version')!='1.4.3':
+        raise ValueError('Delivery continuation profile requires the declared1.4.3 agent runtime')
+    if data['profile_version']=='1.4.22' and data.get('program',{}).get('package_version')!='1.4.8':
+        raise ValueError('Delivery continuation profile requires the declared1.4.8 fixed catalog tools')
     for filename,expected in data['file_sha256'].items():
         if digest(filename)!=expected:raise ValueError('Pinned catalog composition input changed')
     result=subprocess.run([data['python'],'-c',"import json,hashlib;from catalog_json.provenance import program_version;from catalog_json.schema import PageContent,Review;print(json.dumps({'program':program_version(),'schemas':{c.__name__:hashlib.sha256(json.dumps(c.model_json_schema(),sort_keys=True).encode()).hexdigest() for c in (PageContent,Review)}}))"],capture_output=True,text=True,timeout=10,check=True)
@@ -43,7 +48,7 @@ def composed_runtime(adapter,descriptor):
                 'catalog_server_bridge_sha256':digest(component['server_bridge']),'role_worker_bridge_sha256':digest(component['role_worker']),'composition_bridge_sha256':bridge_sha,'delivery_adapter_sha256':adapter_sha}
     def program():
         parts=components()
-        return {'package_version':PROFILE_VERSION,'git_revision':None,'dirty':None,
+        return {'package_version':component.get('profile_version',PROFILE_VERSION),'git_revision':None,'dirty':None,
                 'source_code_sha256':hashlib.sha256(json.dumps(parts,sort_keys=True).encode()).hexdigest(),
                 'python_version':parts['agent_logic']['python_version'],'components':parts}
     class ComposedPair(old_pair):
