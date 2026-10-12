@@ -72,8 +72,15 @@ def test_delivery_only_accepted_reuse_requires_unchanged_current_audit(tmp_path)
     assert not compatible_accepted_profile(tmp_path,{**missing,'candidate_producer':{**origin,'artifact_sha256':'wrong'}},agents,'source',1)
     assert not compatible_accepted_profile(tmp_path,{**missing,'candidate_producer':{**origin,'status':'producer_unknown'}},agents,'source',1)
     assert not compatible_accepted_profile(tmp_path,{**missing,'candidate_sha256':'wrong'},agents,'source',1)
-    audit=tmp_path/'external-audit.json';audit.write_text('new original-source lead')
+    audit=tmp_path/'external-audit.json';audit.write_text(json.dumps({'source_sha256':'source','pdf_page':1,'findings':['new original-source lead']}))
     assert not compatible_accepted_profile(tmp_path,old,agents,'source',1)
     event={**events[-1],'tool':'read_external_audit','sha256':hashlib.sha256(audit.read_bytes()).hexdigest()};events.insert(-1,event);log.write_text(''.join(json.dumps(e)+'\n' for e in events))
     assert compatible_accepted_profile(tmp_path,old,agents,'source',1)
-    audit.write_text('changed lead');assert not compatible_accepted_profile(tmp_path,old,agents,'source',1)
+    # Exact native consumption of an explicit source rejection cannot turn
+    # rejected bytes into reusable acceptance, even without the redundant hash.
+    audit.write_text(json.dumps({'source_sha256':'source','pdf_page':1,'findings':['source-confirmed defect'],
+                                'rejected_candidate_sha256':[digests['extractor']]}))
+    events.insert(-1,{**event,'sha256':hashlib.sha256(audit.read_bytes()).hexdigest()});log.write_text(''.join(json.dumps(e)+'\n' for e in events))
+    assert not compatible_accepted_profile(tmp_path,old,agents,'source',1)
+    assert not compatible_accepted_profile(tmp_path,missing,agents,'source',1)
+    audit.write_text(json.dumps({'source_sha256':'source','pdf_page':1,'findings':['changed lead']}));assert not compatible_accepted_profile(tmp_path,old,agents,'source',1)

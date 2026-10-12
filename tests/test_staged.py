@@ -517,3 +517,97 @@ def test_bound_repair_feedback_survives_scheduler_resume_without_rechecking_same
     assert result['complete']
     if new_audit:assert calls[:3]==[('reviewer',1,0),('extractor',1,1),('reviewer',1,1)]
     else:assert calls==[('extractor',1,1),('reviewer',1,1)]
+
+
+def test_source_confirmed_rejected_bytes_cannot_be_reaccepted_by_model_pass(tmp_path):
+    """Focused integration: exact source-audited bad bytes require native repair; <1s/max5s."""
+    queue=manifest(tmp_path);calls=[]
+    async def call(agents,role,source,out,page,attempt):
+        calls.append((role,page,attempt));work=out/f'page-{page:04d}'
+        value=PageContent(title=f'{page}:{attempt}',text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        path=work/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json');write_json(path,value.model_dump())
+        if role=='extractor' and page==1 and attempt==0:
+            write_json(work/'external-audit.json',{'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'pdf_page':page,
+                       'findings':[{'problem':'Confirmed invented figure description'}],
+                       'rejected_candidate_sha256':[hashlib.sha256(path.read_bytes()).hexdigest()]})
+        return value
+    result=asyncio.run(staged_batch(queue,tmp_path/'out',Agents(),deadline_seconds=1,call=call))
+    assert result['complete'] and calls.count(('extractor',1,1))==1
+    record=json.loads((tmp_path/'out/test/page-0001/result.json').read_text())
+    assert record['status']=='accepted' and record['next_attempt']==1
+    assert record['attempts'][0]['source_audit_rejected'] is True
+    assert 'source_audit_rejection' not in record
+    # The native model report remains truthful; the parent recorded its own veto.
+    assert json.loads((tmp_path/'out/test/page-0001/review-0.json').read_text())['verdict']=='pass'
+
+
+@pytest.mark.parametrize('change',['source','page','page_bool','digest','not_list','empty_findings'])
+def test_source_rejection_constraint_requires_exact_source_page_and_valid_hashes(tmp_path,change):
+    """Fast unit: wrong/malformed curated source constraint checkpoints, never silently applies; <1s/max5s."""
+    from catalog_json.staged import source_audit_rejection
+    data={'source_sha256':'a'*64,'pdf_page':1,'findings':[{'problem':'Source-confirmed defect'}],'rejected_candidate_sha256':['b'*64]}
+    if change=='source':data['source_sha256']='c'*64
+    if change=='page':data['pdf_page']=2
+    if change=='page_bool':data['pdf_page']=True
+    if change=='digest':data['rejected_candidate_sha256']=['not-a-sha']
+    if change=='not_list':data['rejected_candidate_sha256']='b'*64
+    if change=='empty_findings':data['findings']=[]
+    write_json(tmp_path/'external-audit.json',data)
+    with pytest.raises(ValueError):source_audit_rejection(tmp_path,'a'*64,1,'b'*64)
+
+
+def test_source_rejection_changes_only_exact_curated_candidate(tmp_path):
+    """Fast unit: a repaired hash still requires normal review; ordinary leads do not reject bytes; <1s/max5s."""
+    from catalog_json.staged import source_audit_rejection
+    assert source_audit_rejection(tmp_path,'a'*64,1,'b'*64) is None
+    audit=tmp_path/'external-audit.json';data={'source_sha256':'a'*64,'pdf_page':1,'findings':[{'problem':'Source-confirmed defect'}]}
+    write_json(audit,data);assert source_audit_rejection(tmp_path,'a'*64,1,'b'*64) is None
+    data['rejected_candidate_sha256']=['b'*64];write_json(audit,data)
+    assert source_audit_rejection(tmp_path,'a'*64,1,'b'*64)['candidate_sha256']=='b'*64
+    assert source_audit_rejection(tmp_path,'a'*64,1,'c'*64) is None
+
+
+def test_hot_source_rejection_repairs_exact_bytes_without_replaying_passing_review(tmp_path,monkeypatch):
+    """Focused integration: a late verified defect routes to repair while other admitted calls finish; <1s/max5s."""
+    from catalog_json import staged
+    calls=[];changed=False
+    monkeypatch.setattr(staged,'reviewed_audit_digest',lambda item,agents: staged.external_audit_digest(item['work']))
+    async def call(agents,role,source,out,page,attempt):
+        nonlocal changed
+        calls.append((role,page,attempt));work=out/f'page-{page:04d}'
+        if role=='reviewer' and page==2 and not changed:
+            changed=True;first=out/'page-0001';candidate=first/'candidate-0.json'
+            write_json(first/'external-audit.json',{'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'pdf_page':1,
+                       'findings':[{'problem':'Confirmed original-source error'}],
+                       'rejected_candidate_sha256':[hashlib.sha256(candidate.read_bytes()).hexdigest()]})
+            await asyncio.sleep(.03)
+        value=PageContent(title=f'{page}:{attempt}',text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        write_json(work/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump());return value
+    result=asyncio.run(staged_batch(manifest(tmp_path),tmp_path/'out',Agents(),deadline_seconds=1,call=call))
+    assert result['complete'] and calls.count(('reviewer',1,0))==1
+    assert ('extractor',1,1) in calls and ('reviewer',1,1) in calls
+
+
+def test_rejected_passing_candidate_resume_repairs_without_duplicate_review(tmp_path):
+    """Focused integration: bound native pass is retained but cannot waive curated source defect; <1s/max5s."""
+    import time,uuid
+    queue=manifest(tmp_path);out=tmp_path/'out';calls=[];pause=True
+    async def call(agents,role,source,directory,page,attempt):
+        calls.append((role,page,attempt));work=directory/f'page-{page:04d}'
+        if pause and role=='extractor' and page==1 and attempt==1:await asyncio.sleep(10)
+        began=time.time();sha=hashlib.sha256(source.read_bytes()).hexdigest()
+        value=PageContent(title=f'{page}:{attempt}',text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        path=work/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json');write_json(path,value.model_dump());digest=hashlib.sha256(path.read_bytes()).hexdigest()
+        if role=='extractor' and page==1 and attempt==0:
+            write_json(work/'external-audit.json',{'source_sha256':sha,'pdf_page':1,'findings':[{'problem':'Confirmed source defect'}],'rejected_candidate_sha256':[digest]})
+        event={'tool':'save_page_json' if role=='extractor' else 'save_review','role':role,'page':page,'attempt':attempt,'source_sha256':sha,'model':getattr(agents,role),'contract_sha256':agents.contract_digest,'sha256':digest,'time':time.time()}
+        with (work/'tools.jsonl').open('a') as stream:
+            if role=='reviewer' and (work/'external-audit.json').exists():stream.write(json.dumps({**event,'tool':'read_external_audit','sha256':hashlib.sha256((work/'external-audit.json').read_bytes()).hexdigest()})+'\n')
+            stream.write(json.dumps(event)+'\n')
+        write_json(work/'calls'/uuid.uuid4().hex/'result.json',{'status':'completed','execution':{'program':{'package_version':'synthetic','source_code_sha256':'verified-program'},'source_sha256':sha,'physical_page':page,'attempt':attempt,'role':role,'model':getattr(agents,role),'contract_sha256':agents.contract_digest,'artifact_sha256':digest,'started_at':began,'finished_at':time.time()}})
+        return value
+    assert not asyncio.run(staged_batch(queue,out,Agents(),deadline_seconds=.06,call=call))['complete']
+    first=json.loads((out/'test/page-0001/result.json').read_text());assert first['next_attempt']==1 and first['review']['verdict']=='pass'
+    pause=False;calls.clear()
+    assert asyncio.run(staged_batch(queue,out,Agents(),deadline_seconds=1,call=call,resume=True,resume_compatible_profile=True))['complete']
+    assert calls==[('extractor',1,1),('reviewer',1,1)]

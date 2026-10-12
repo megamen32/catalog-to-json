@@ -179,7 +179,31 @@ def compatible_reviewed_profile(work,old,agents,source_sha256,page,attempt):
 
 def compatible_accepted_profile(work,old,agents,source_sha256,page):
     if old.get('status')!='accepted' or type(old.get('next_attempt')) is not int:return False
-    return compatible_reviewed_profile(work,old,agents,source_sha256,page,old['next_attempt'])
+    if not compatible_reviewed_profile(work,old,agents,source_sha256,page,old['next_attempt']):return False
+    digest=hashlib.sha256((work/f"candidate-{old['next_attempt']}.json").read_bytes()).hexdigest()
+    return source_audit_rejection(work,source_sha256,page,digest) is None
+
+
+def source_audit_rejection(work,source_sha256,page,candidate_sha256):
+    """An explicit independent source finding can veto only its exact audited bytes.
+
+    This is a parent decision, not an alteration of the native model's report.
+    Different bytes still require all ordinary source and review checks.
+    """
+    path=work/'external-audit.json'
+    if not path.exists():return None
+    raw=path.read_bytes();audit=json.loads(raw)
+    if not isinstance(audit,dict):raise ValueError('Invalid independent source audit')
+    if 'rejected_candidate_sha256' not in audit:return None
+    hashes=audit['rejected_candidate_sha256']
+    if (audit.get('source_sha256')!=source_sha256 or type(audit.get('pdf_page')) is not int or audit['pdf_page']!=page or
+            not isinstance(hashes,list) or not hashes or
+            any(not isinstance(h,str) or re.fullmatch(r'[0-9a-f]{64}',h) is None for h in hashes) or
+            not isinstance(audit.get('findings'),list) or not audit['findings']):
+        raise ValueError('Rejected candidate hashes require exact source/page and nonempty independent findings')
+    if candidate_sha256 not in hashes:return None
+    return {'candidate_sha256':candidate_sha256,'audit_sha256':hashlib.sha256(raw).hexdigest(),
+            'reason':'Independent source audit rejects these exact candidate bytes; native source-bound repair is required'}
 
 
 def external_audit_digest(work):
@@ -319,6 +343,11 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                 record.update(content=candidate[1].model_dump(),next_attempt=candidate[0],status='awaiting_review')
                 record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,role_contract(agents,'extractor'))
                 record['candidate_sha256']=record['candidate_producer']['artifact_sha256']
+                rejection=source_audit_rejection(work,digest,page,record['candidate_sha256'])
+                if rejection:
+                    record.update(status='needs_review',next_attempt=candidate[0]+1,source_audit_rejection=rejection,
+                                  attempts=[dict(a) for a in old.get('attempts',[])])
+                    enqueue_extraction(item,repair=True);continue
                 if (resume_compatible_profile and old.get('status')!='accepted' and
                         type(old.get('next_attempt')) is int and old.get('next_attempt')==candidate[0]+1 and
                         compatible_reviewed_profile(work,old,agents,digest,page,candidate[0])):
@@ -406,12 +435,17 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                     r['candidate_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.extractor,role_contract(agents,'extractor'))
                 else:
                     candidate=PageContent.model_validate(r['content']);r['review']=artifact.model_dump()
-                    r['attempts'].append({'candidate':f'candidate-{attempt}.json','review':f'review-{attempt}.json'})
+                    rejection=source_audit_rejection(item['work'],r['source_sha256'],r['pdf_page'],r['candidate_sha256'])
+                    r['attempts'].append({'candidate':f'candidate-{attempt}.json','review':f'review-{attempt}.json',
+                                         'source_audit_rejected':rejection is not None})
                     path=item['work']/f'review-{attempt}.json';r['review_sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
                     r['review_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.reviewer,role_contract(agents,'reviewer'))
-                    if artifact.accepts(candidate):
-                        r['status']='accepted';item['reviewed_audit']=reviewed_audit_digest(item,agents)
-                    else:r.update(status='needs_review',next_attempt=attempt+1);enqueue_extraction(item,repair=True)
+                    if artifact.accepts(candidate) and rejection is None:
+                        r['status']='accepted';r.pop('source_audit_rejection',None);item['reviewed_audit']=reviewed_audit_digest(item,agents)
+                    else:
+                        if rejection:r['source_audit_rejection']=rejection
+                        else:r.pop('source_audit_rejection',None)
+                        r.update(status='needs_review',next_attempt=attempt+1);enqueue_extraction(item,repair=True)
             except asyncio.CancelledError:
                 r['status']='awaiting_review' if role=='reviewer' and 'content' in r else 'pending'
                 raise
@@ -437,8 +471,14 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                 for item in pending.values():
                     r=item['record']
                     if r['status']=='accepted' and external_audit_digest(item['work'])!=item['reviewed_audit']:
-                        r.update(status='awaiting_review',external_audit_changed_at=datetime.now(timezone.utc).isoformat())
-                        enqueue_review(item,audit=True);save(item)
+                        rejection=source_audit_rejection(item['work'],r['source_sha256'],r['pdf_page'],r['candidate_sha256'])
+                        r['external_audit_changed_at']=datetime.now(timezone.utc).isoformat()
+                        if rejection:
+                            r.update(status='needs_review',next_attempt=r['next_attempt']+1,source_audit_rejection=rejection)
+                            enqueue_extraction(item,repair=True)
+                        else:
+                            r['status']='awaiting_review';enqueue_review(item,audit=True)
+                        save(item)
                 if all(i['record']['status']=='accepted' for i in pending.values()):break
                 await asyncio.sleep(.1)
     except TimeoutError:pass
