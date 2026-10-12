@@ -42,7 +42,7 @@ class ProviderGate:
     """Finite configured capacity with provider-wide pacing after rate limits."""
     def __init__(self,limit,retry_delay,initial=None):
         self.maximum=limit;self.limit=min(limit,initial) if initial is not None else limit;self.retry_delay=retry_delay
-        self.active=0;self.cooldown=0;self.operator_not_before=0;self.rate_limit_count=0;self.rate_limit_waves=0;self.successes=0
+        self.active=0;self.cooldown=0;self.operator_not_before=0;self.rate_limit_count=0;self.rate_limit_waves=0;self.backoff_streak=0;self.clean_successes=0;self.successes=0
         self.condition=asyncio.Condition();self.waiters=deque()
 
     async def __aenter__(self):
@@ -64,14 +64,19 @@ class ProviderGate:
 
     async def rate_limited(self):
         async with self.condition:
-            self.rate_limit_count+=1;self.successes=0;now=time.monotonic()
+            self.rate_limit_count+=1;self.successes=0;self.clean_successes=0;now=time.monotonic()
             if now>=self.cooldown:
-                self.rate_limit_waves+=1;self.limit=max(1,self.limit//2)
-                self.cooldown=now+min(900,self.retry_delay*2**min(self.rate_limit_waves-1,5))
+                self.rate_limit_waves+=1;self.backoff_streak+=1;self.limit=max(1,self.limit//2)
+                self.cooldown=now+min(900,self.retry_delay*2**min(self.backoff_streak-1,5))
             self.condition.notify_all()
 
-    async def succeeded(self):
+    async def succeeded(self,rate_limit_count=None):
         async with self.condition:
+            # A recovered SDK retry is a completed artifact, not evidence of clean capacity.
+            if rate_limit_count is not None and rate_limit_count!=self.rate_limit_count:
+                self.successes=0;self.clean_successes=0;return
+            self.clean_successes=min(4,self.clean_successes+1)
+            if self.clean_successes==4:self.backoff_streak=0
             self.successes+=1
             if self.successes>=max(4,self.limit*2):self.limit=min(self.maximum,self.limit+1);self.successes=0
             self.condition.notify_all()
@@ -84,18 +89,18 @@ class ProviderGate:
         """Restore admission only; native active calls were checkpointed/cleaned."""
         maximum=state.get('configured_maximum');limit=state.get('current_limit')
         signals=state.get('rate_limit_count',0);waves=state.get('rate_limit_waves',0)
-        remaining=state.get('backoff_remaining_seconds',0)
-        if (any(type(n) is not int for n in (maximum,limit,signals,waves)) or
-                not 1<=limit<=maximum<=16 or not 0<=waves<=signals or
+        remaining=state.get('backoff_remaining_seconds',0);streak=state.get('backoff_streak',waves);clean=state.get('clean_successes',0)
+        if (any(type(n) is not int for n in (maximum,limit,signals,waves,streak,clean)) or
+                not 1<=limit<=maximum<=16 or not 0<=streak<=waves<=signals or not 0<=clean<=4 or (clean==4 and streak!=0) or
                 type(remaining) not in (int,float) or not 0<=remaining<=900):
             raise ValueError('Invalid provider pacing checkpoint')
-        self.limit=min(self.maximum,limit);self.rate_limit_count=signals;self.rate_limit_waves=waves
+        self.limit=min(self.maximum,limit);self.rate_limit_count=signals;self.rate_limit_waves=waves;self.backoff_streak=streak;self.clean_successes=clean
         self.cooldown=time.monotonic()+max(0,remaining-max(0,elapsed))
 
     def snapshot(self):
         return {'configured_maximum':self.maximum,'current_limit':self.limit,
                 'active_calls':self.active,'waiting_calls':len(self.waiters),'rate_limit_count':self.rate_limit_count,
-                'rate_limit_waves':self.rate_limit_waves,
+                'rate_limit_waves':self.rate_limit_waves,'backoff_streak':self.backoff_streak,'clean_successes':self.clean_successes,
                 'operator_not_before_unix':self.operator_not_before,
                 'operator_hold_remaining_seconds':max(0,round(self.operator_not_before-time.time(),3)),
                 'backoff_remaining_seconds':max(0,round(self.cooldown-time.monotonic(),3))}
@@ -369,8 +374,9 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                         history=item['work']/'review-history'/hashlib.sha256(previous.read_bytes()).hexdigest();history.mkdir(parents=True,exist_ok=True);shutil.copy2(previous,history/previous.name)
                 async with provider_slots[providers[role]]:
                     r['status']='extracting' if role=='extractor' else 'reviewing';save(item)
+                    rate_before=provider_slots[providers[role]].rate_limit_count
                     artifact=await call(agents,role,item['source'],item['out'],r['pdf_page'],attempt)
-                await provider_slots[providers[role]].succeeded()
+                await provider_slots[providers[role]].succeeded(rate_limit_count=rate_before)
                 failures=0
                 if role=='extractor':
                     r.update(content=artifact.model_dump(),status='awaiting_review');review.put_nowait(item)

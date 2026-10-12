@@ -83,3 +83,18 @@ current external audit match exactly. It continues extractor repair at the next
 attempt instead of paying for a duplicate review of the same candidate. Changed
 or newly supplied audit leads still require a fresh reviewer. This reuse never
 turns an unresolved report into acceptance.
+
+Retry diagnostics retain lifetime signal and wave counts. The exponential delay
+uses a separate consecutive `backoff_streak`, reset after four native completions
+with no intervening provider429. Successful SDK retries do not count as clean
+recovery. Existing cooldown and in-flight calls are preserved on resume; legacy
+checkpoints conservatively retain their former streak until clean recovery.
+
+An experimental extractor composition is explicit: `ops/role-worker.py` accepts
+`--catalog-runtime private-component.json`. The descriptor binds the actual
+legacy agent program and skill root, fixed tool interpreter/program/schema, and
+file hashes. Only the worker-generated catalog MCP command changes; the original
+agent logic, native skill text, parser configuration and frozen inputs remain
+intact. The receipt records both components and a new combined producer/contract.
+This route has its own benchmark identity and inherits no older accuracy score.
+The unchanged measured route remains available without this option.
