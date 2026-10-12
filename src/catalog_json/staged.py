@@ -41,13 +41,13 @@ class ProviderGate:
     """Finite configured capacity with provider-wide pacing after rate limits."""
     def __init__(self,limit,retry_delay,initial=None):
         self.maximum=limit;self.limit=min(limit,initial) if initial is not None else limit;self.retry_delay=retry_delay
-        self.active=0;self.cooldown=0;self.rate_limit_count=0;self.rate_limit_waves=0;self.successes=0
+        self.active=0;self.cooldown=0;self.operator_not_before=0;self.rate_limit_count=0;self.rate_limit_waves=0;self.successes=0
         self.condition=asyncio.Condition()
 
     async def __aenter__(self):
         async with self.condition:
             while True:
-                delay=self.cooldown-time.monotonic()
+                delay=max(self.cooldown-time.monotonic(),self.operator_not_before-time.time())
                 if self.active<self.limit and delay<=0:self.active+=1;return self
                 try:await asyncio.wait_for(self.condition.wait(),delay) if delay>0 else await self.condition.wait()
                 except TimeoutError:pass
@@ -69,6 +69,10 @@ class ProviderGate:
             if self.successes>=max(4,self.limit*2):self.limit=min(self.maximum,self.limit+1);self.successes=0
             self.condition.notify_all()
 
+    async def hold_until(self,not_before):
+        async with self.condition:
+            self.operator_not_before=not_before;self.condition.notify_all()
+
     def restore(self,state,elapsed=0):
         """Restore admission only; native active calls were checkpointed/cleaned."""
         maximum=state.get('configured_maximum');limit=state.get('current_limit')
@@ -85,7 +89,25 @@ class ProviderGate:
         return {'configured_maximum':self.maximum,'current_limit':self.limit,
                 'active_calls':self.active,'rate_limit_count':self.rate_limit_count,
                 'rate_limit_waves':self.rate_limit_waves,
+                'operator_not_before_unix':self.operator_not_before,
+                'operator_hold_remaining_seconds':max(0,round(self.operator_not_before-time.time(),3)),
                 'backoff_remaining_seconds':max(0,round(self.cooldown-time.monotonic(),3))}
+
+
+def operator_holds(path,agents,providers):
+    if path is None or not Path(path).exists():return {},None
+    raw=Path(path).read_bytes();data=json.loads(raw)
+    if not isinstance(data,dict) or data.get('schema_version')!='1.0' or not isinstance(data.get('providers'),dict):
+        raise ValueError('Invalid provider hold file')
+    result={}
+    for name,hold in data['providers'].items():
+        if name not in set(providers.values()) or not isinstance(hold,dict):raise ValueError('Unknown held provider')
+        models={getattr(agents,role) for role,provider in providers.items() if provider==name}
+        until=hold.get('not_before_unix')
+        if hold.get('model') not in models:raise ValueError('Provider hold belongs to another model')
+        if type(until) not in (int,float) or not 0<=until<=time.time()+86400:raise ValueError('Provider hold must be a finite Unix deadline within 24 hours')
+        result[name]=until
+    return result,hashlib.sha256(raw).hexdigest()
 
 
 def role_contract(agents,role):
@@ -210,7 +232,7 @@ def validated_candidate(work,source_sha256,page,extractor,contract_sha256=None):
     return None
 
 
-async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=False,seed=None,call=isolated_call,retry_delay=30,extractor_workers=1,reviewer_workers=1,initial_provider_concurrency=None,resume_compatible_profile=False):
+async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=False,seed=None,call=isolated_call,retry_delay=30,extractor_workers=1,reviewer_workers=1,initial_provider_concurrency=None,resume_compatible_profile=False,provider_holds=None):
     if any(type(n) is not int or n<1 or n>16 for n in (extractor_workers,reviewer_workers)):
         raise ValueError('Role workers must be integers from 1 to 16; choose them within the measured job budget')
     if initial_provider_concurrency is not None and (type(initial_provider_concurrency) is not int or not 1<=initial_provider_concurrency<=16):
@@ -290,16 +312,26 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             for name,state in pacing_state.get('method',{}).get('provider_pacing',{}).items():
                 if name in provider_slots:provider_slots[name].restore(state,time.time()-pacing_modified)
 
+    holds_digest=None
+
     def snapshot():
         for cat in catalogs:
             records=[pending[cat['id'],n]['record'] for n in range(1,cat['pages']+1)]
             accepted=sum(r['status']=='accepted' for r in records)
             cat.update(accepted_pages=accepted,draft_pages=sum('content' in r for r in records),status='complete' if accepted==cat['pages'] else 'running')
             write_json(Path(cat['output']),{'schema_version':'1.0','stage':'reviewed_conversion','tested_program':version,'source':{'filename':Path(cat['source']).name,'sha256':cat['source_sha256'],'page_count':cat['pages']},'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'pages':records,'catalog_complete':accepted==cat['pages'],'complete_for_selection':accepted==cat['pages']})
-        state={'schema_version':'1.0','tested_program':version,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'contract_sha256':agents.contract_digest,'workflow_sha256':workflow,'method':{'separate_provider_queues':True,'concurrency_per_provider':max(role_counts.values()),'role_workers':role_counts,'provider_pacing':{name:slot.snapshot() for name,slot in provider_slots.items()},'call_timeout_seconds':agents.timeout,'max_tokens':agents.max_tokens,'max_repairs':None,'deadline_seconds':deadline_seconds},'catalogs':catalogs,'complete':all(c['status']=='complete' for c in catalogs),'elapsed_seconds':round(time.monotonic()-started,3)}
+        state={'schema_version':'1.0','tested_program':version,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'contract_sha256':agents.contract_digest,'workflow_sha256':workflow,'method':{'separate_provider_queues':True,'concurrency_per_provider':max(role_counts.values()),'role_workers':role_counts,'provider_pacing':{name:slot.snapshot() for name,slot in provider_slots.items()},'operator_holds_sha256':holds_digest,'call_timeout_seconds':agents.timeout,'max_tokens':agents.max_tokens,'max_repairs':None,'deadline_seconds':deadline_seconds},'catalogs':catalogs,'complete':all(c['status']=='complete' for c in catalogs),'elapsed_seconds':round(time.monotonic()-started,3)}
         write_json(output/'batch.json',state);return state
 
     def save(item):write_json(item['work']/'result.json',item['record']);snapshot()
+
+
+    async def refresh_holds():
+        nonlocal holds_digest
+        holds,digest=operator_holds(provider_holds,agents,providers)
+        if digest!=holds_digest:
+            for name,slot in provider_slots.items():await slot.hold_until(holds.get(name,0))
+            holds_digest=digest;snapshot()
 
     async def worker(role,queue):
         failures=0
@@ -344,10 +376,11 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             finally:
                 r['elapsed_seconds']+=round(time.monotonic()-began,3);r.pop('active_role',None);save(item);queue.task_done()
 
-    snapshot();workers=[asyncio.create_task(worker(role,extract if role=='extractor' else review)) for role,n in role_counts.items() for _ in range(n)];interrupted=False
+    await refresh_holds();snapshot();workers=[asyncio.create_task(worker(role,extract if role=='extractor' else review)) for role,n in role_counts.items() for _ in range(n)];interrupted=False
     try:
         async with asyncio.timeout(deadline_seconds):
             while True:
+                await refresh_holds()
                 # A new, changed or removed independent source lead reopens only
                 # the affected accepted page. Retain its exact extractor bytes.
                 for item in pending.values():

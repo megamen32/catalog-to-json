@@ -108,3 +108,34 @@ def test_resume_gate_retains_saturated_limit_and_cooldown_without_active_calls()
     assert 44<gate.snapshot()['backoff_remaining_seconds']<=45
     reduced=ProviderGate(2,30);reduced.restore({'configured_maximum':8,'current_limit':5,'rate_limit_count':1,'rate_limit_waves':1,'backoff_remaining_seconds':0},elapsed=0)
     assert reduced.limit==2
+
+
+def test_operator_quota_hold_paces_future_admission_but_keeps_other_provider_running():
+    """Focused integration: account quota pauses only future calls; <1s/max5s."""
+    import time
+    async def run():
+        a=ProviderGate(8,.01);b=ProviderGate(8,.01);await a.hold_until(time.time()+.04)
+        admitted=[]
+        async def first():
+            async with a:admitted.append('held')
+        waiter=asyncio.create_task(first());await asyncio.sleep(.01)
+        assert not admitted and a.active==0
+        async with b:admitted.append('other')
+        assert admitted==['other']
+        await waiter;assert admitted==['other','held'] and a.active==0
+    asyncio.run(run())
+
+
+def test_operator_hold_rejects_wrong_model_provider_and_nonfinite_deadline(tmp_path):
+    """Fast unit: unbound or malformed operator control cannot govern a model; <1s/max5s."""
+    from types import SimpleNamespace
+    import time,pytest
+    from catalog_json.staged import operator_holds
+    a=SimpleNamespace(extractor='anthropic.test',reviewer='zai.test');providers={'extractor':'anthropic','reviewer':'zai'};p=tmp_path/'holds.json'
+    hold={'schema_version':'1.0','providers':{'anthropic':{'model':a.extractor,'not_before_unix':time.time()+60}}};p.write_text(json.dumps(hold))
+    assert operator_holds(p,a,providers)[0]['anthropic']>time.time()
+    for model,until in [('other',time.time()+60),(a.extractor,float('nan')),(a.extractor,True),(a.extractor,time.time()+90000)]:
+        p.write_text(json.dumps({'schema_version':'1.0','providers':{'anthropic':{'model':model,'not_before_unix':until}}}))
+        with pytest.raises(ValueError):operator_holds(p,a,providers)
+    p.write_text(json.dumps({'schema_version':'1.0','providers':{'unknown':{'model':a.extractor,'not_before_unix':0}}}))
+    with pytest.raises(ValueError):operator_holds(p,a,providers)

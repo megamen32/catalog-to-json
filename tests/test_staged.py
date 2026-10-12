@@ -426,3 +426,16 @@ def test_matching_cache_key_cannot_reuse_unverified_native_review_receipt(tmp_pa
     calls.clear()
     assert asyncio.run(staged_batch(queue,out,Agents(),call=call,resume=True))['complete']
     assert calls==['reviewer']*3
+
+
+def test_operator_quota_hold_expires_job_without_admitting_or_spending_native_call(tmp_path):
+    """Focused integration: hold wait stays outside native timeout and preserves checkpoint; <1s/max5s."""
+    import time
+    queue=manifest(tmp_path);hold=tmp_path/'holds.json';write_json(hold,{'schema_version':'1.0','providers':{'anthropic':{'model':Agents.extractor,'not_before_unix':time.time()+60}}})
+    calls=[]
+    async def call(*args):calls.append(args);raise AssertionError('Held provider must not call native worker')
+    result=asyncio.run(staged_batch(queue,tmp_path/'out',Agents(),deadline_seconds=.04,call=call,provider_holds=hold))
+    assert not result['complete'] and not calls
+    assert result['method']['provider_pacing']['anthropic']['active_calls']==0
+    assert result['method']['provider_pacing']['anthropic']['operator_hold_remaining_seconds']>59
+    assert result['method']['operator_holds_sha256']==hashlib.sha256(hold.read_bytes()).hexdigest()

@@ -57,3 +57,16 @@ the affected accepted page for fresh independent review. The exact extractor
 artifact remains available, and the previous review is archived. A new pass must
 consume the current audit within its verified native review receipt. Independent
 audit leads require source verification; they are not prepared replacement data.
+
+`--provider-holds private-holds.json` applies explicit account-quota deadlines to
+future admissions only. The JSON object has `schema_version:"1.0"` and
+`providers`, keyed by the native provider name. Each entry binds the exact model
+specification to `not_before_unix` (a finite UTC Unix timestamp within24 hours).
+Example: `{"schema_version":"1.0","providers":{"anthropic":{"model":"anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium","not_before_unix":1791817200}}}`.
+Use a freshly verified official usage result; never infer quota exhaustion from
+a generic429 alone. The file is private mutable operator state, not a skill or
+agent input. Changes are hashed in job metadata and reloaded during the run.
+Removing an entry releases only its operator hold; SDK backoff still applies.
+Already admitted calls finish normally, the other provider keeps running, and
+queue waiting remains outside each native call timeout. The whole job deadline
+continues to include waiting. No provider/model fallback is introduced.
