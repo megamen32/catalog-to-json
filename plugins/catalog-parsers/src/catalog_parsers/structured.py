@@ -18,7 +18,7 @@ def html_tables(html):
         for ri, row in enumerate(native_rows):
             ci = 0
             items = row.find_all(['td', 'th'], recursive=False)
-            flags.append(any(c.name == 'th' for c in items))
+            flags.append(row.find_parent('thead') is not None if node.find('thead') else row.find_parent('tbody') is None and any(c.name == 'th' and c.get('scope') != 'row' for c in items))
             for cell in items:
                 while (ri, ci) in cells: ci += 1
                 rs, cs = int(cell.get('rowspan', 1)), int(cell.get('colspan', 1))
@@ -94,3 +94,10 @@ def from_html_blocks(raw, title):
     for i, table in enumerate(out['tables']):table['id'] = f't{i}';table['title'] = f't{i}'
     out['source_notes'].append('Only parser-emitted HTML table geometry is expanded; absent cells are unknown. No benchmark/source-derived repairs. Caption and figure evidence remains in raw JSON.')
     return out
+
+
+def header_levels(head):
+    """Retain absent native MultiIndex levels as null, never literal nan."""
+    import math
+    from numbers import Real
+    return [None if v is None or isinstance(v,Real) and math.isnan(v) else str(v) for v in (head if isinstance(head,tuple) else (head,))]

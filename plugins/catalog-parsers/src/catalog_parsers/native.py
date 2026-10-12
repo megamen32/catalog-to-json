@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import subprocess
 import sys
-from .structured import from_liteparse, from_matrices, from_html_blocks
+from .structured import from_liteparse, from_matrices, from_html_blocks, header_levels
 
 PACKAGES = {'liteparse':'liteparse','img2table':'img2table','camelot-lattice':'camelot-py','camelot-stream':'camelot-py','gmft':'gmft','paddle':'paddleocr','mineru-standard':'mineru','mineru-advanced':'mineru','mineru-basic':'mineru'}
 
@@ -16,7 +16,7 @@ def settings(backend):
     if backend.startswith('camelot'):return {**base,'ocr':False,'flavor':backend.split('-')[1],'parallel':False,'backend':'pdfium'}
     if backend=='gmft':return {**base,'ocr':False,'device':'cpu','enable_multi_header':True,'semantic_spanning_cells':True}
     if backend=='paddle':return {**base,'ocr':True,'lang':'ru','dpi':200,'device':'cpu','enable_mkldnn':False,'page_orientation':True,'textline_orientation':True,'unwarping':False,'formula':False,'seal':False,'chart':False,'region_detection':False}
-    return {**base,'tier':backend.split('-')[1],'ocr_mode':'auto','vlm_engine':'llama-cpp','remote':False,'process_cpu_affinity':2}
+    return {**base,'tier':backend.split('-')[1],'ocr_mode':'auto','vlm_engine':'not-applicable' if backend=='mineru-basic' else 'llama-cpp','vlm_used':backend!='mineru-basic','remote':False,'process_cpu_affinity':2}
 
 
 def convert(source, page, backend, output):
@@ -52,11 +52,11 @@ def convert(source, page, backend, output):
             for crop in detect.extract(doc[page-1]):
                 table=fmt.extract(crop);df=table.df();heads=[];groups=[]
                 for h in df.columns.tolist():
-                    parts=[str(v) for v in h] if isinstance(h,tuple) else [str(h)]
+                    parts=[v for v in header_levels(h) if v not in (None,'')] or ['']
                     heads.append(parts[-1]);groups.append(' '.join(parts[:-1]) or None)
                 values=df.astype(object).where(df.notna(),None).values.tolist()
                 values=[[str(v) if v is not None else None for v in row] for row in values]
-                raw['tables'].append({'crop':crop.to_dict(),'structure':table.to_dict(),'headers':heads,'groups':groups,'data':values})
+                raw['tables'].append({'crop':crop.to_dict(),'structure':table.to_dict(),'native_header_levels':[header_levels(h) for h in df.columns.tolist()],'headers':heads,'groups':groups,'data':values})
         finally:doc.close()
         return raw,from_matrices(raw,'gmft native table formatter')
     if backend=='paddle':
@@ -71,6 +71,8 @@ def convert(source, page, backend, output):
         target=output/'native-middle.json'
         executable=Path(sys.executable).parent/'mineru-kit'
         args=[str(executable),'parse',str(source),'--pages',str(page),'--tier',backend.split('-')[1],'--format','middle_json','--ocr-mode','auto','--output',str(target)]
-        with (output/'native.log').open('w') as log:subprocess.run(args,check=True,stdout=log,stderr=subprocess.STDOUT,timeout=850)
+        import os
+        env={**os.environ,'MINERU_MODEL_VLM_SERVER_URL':'','MINERU_MODEL_VLM_ENGINE':'llama-cpp','MINERU_MODEL_VLM_MAX_CONCURRENCY':'1'}
+        with (output/'native.log').open('w') as log:subprocess.run(args,env=env,check=True,stdout=log,stderr=subprocess.STDOUT,timeout=850)
         raw=json.loads(target.read_text());return raw,from_html_blocks(raw,'MinerU native middle JSON')
     raise ValueError('Unknown native backend')

@@ -12,3 +12,21 @@ def test_html_spans_do_not_turn_missing_cell_into_blank():
 def test_liteparse_padding_does_not_claim_source_blank():
     t=from_liteparse({'pages':[{'blocks':[{'kind':'table','header':[{'text':'Name'},{'text':'Value'}],'rows':[[{'text':'A','bbox':{'width':2,'height':2}},{'text':'','bbox':None}]]}]}]})['tables'][0]
     assert t['rows'][0]['cells'][1]['state']=='unknown'
+
+
+def test_native_thead_with_td_keeps_both_header_rows():
+    t=html_tables('<table><thead><tr><td rowspan="2">Name</td><td>Voltage</td></tr><tr><td>kV</td></tr></thead><tbody><tr><td>A</td><td>10</td></tr></tbody></table>')[0]
+    assert len(t['rows'])==1
+    assert t['columns'][1]['group']=='Voltage'
+    assert t['columns'][1]['label']=='kV'
+
+
+def test_row_headers_in_body_remain_body():
+    t=html_tables('<table><thead><tr><th>Model</th><th>Voltage</th></tr></thead><tbody><tr><th scope="row">A</th><td>10</td></tr><tr><th scope="row">B</th><td>20</td></tr></tbody></table>')[0]
+    assert len(t['rows'])==2
+    assert t['columns'][0]['label']=='Model'
+
+
+def test_missing_multiindex_level_stays_null():
+    from catalog_parsers.structured import header_levels
+    assert header_levels((float('nan'),'Name'))==[None,'Name']
