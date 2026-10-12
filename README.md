@@ -54,3 +54,5 @@ Independent evaluation: [Catalog Extraction Benchmark](https://github.com/megame
 ## Full catalogue queue
 
 `catalog-json convert-batch queue.json --output output --config fast-agent.config.example.yaml --extractor YOUR_MINIMAX_MODEL --reviewer YOUR_GLM_MODEL --resume` converts every physical page of every source-bound entry in `queue.json`. Its `catalogs` array contains `id`, `source` and `source_sha256`. It records the exact program version, source-code/contract digest, model settings and page/run time, and preserves incomplete checkpoints. Each page must pass independent source review. The default per-agent timeout is 1200 seconds; the finite whole-queue deadline is 24 hours. No conversational transcripts are required.
+
+Готовые альтернативы: [список 24 парсеров, MCP и сервисов](docs/READY-PARSERS.md). Подключение локальных Docling/PyMuPDF4LLM: пакет [Agent Plugin 1.0](plugins/catalog-parsers), пример `fast-agent.parsers.config.example.yaml`. Это необязательные источники структурированных данных для агента; окончательная проверка идёт по оригиналу.

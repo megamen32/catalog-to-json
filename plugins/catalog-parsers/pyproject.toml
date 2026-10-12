@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+[project]
+name = "catalog-parser-tools"
+version = "0.1.0"
+description = "Agent Plugin 1.0 MCP tools for source-bound catalogue parsing"
+requires-python = ">=3.11"
+dependencies = ["mcp>=1.20,<2", "pymupdf4llm==1.28.2"]
+license = "MIT"
+[project.optional-dependencies]
+docling = ["docling==2.137.0", "torch>=2.2", "torchvision>=0.17"]
+[project.scripts]
+catalog-parsers = "catalog_parsers.cli:main"
+catalog-parsers-mcp = "catalog_parsers.server:main"
+[tool.hatch.build.targets.wheel]
+packages = ["src/catalog_parsers"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

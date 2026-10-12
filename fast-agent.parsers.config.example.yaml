@@ -1,0 +1,18 @@
+zai:
+  api_key: "${ZAI_API_KEY}"
+  base_url: "https://api.z.ai/api/coding/paas/v4/"
+# MiniMax is a separate replaceable provider, never an automatic hidden fallback.
+anthropic:
+  api_key: "${MINIMAX_API_KEY}"
+  base_url: "https://api.minimax.io/anthropic"
+mcp:
+  servers: {}
+logger:
+  level: error
+  type: console
+  progress_display: false
+  show_chat: false
+  show_tools: false
+
+agent_plugins:
+  - path: plugins/catalog-parsers

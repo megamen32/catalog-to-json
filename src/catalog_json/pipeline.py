@@ -16,7 +16,7 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=Non
     source=source.resolve();out=out.resolve();out.mkdir(parents=True,exist_ok=True)
     digest=hashlib.sha256(source.read_bytes()).hexdigest()
     version=program_version()
-    method={'stage':'reviewed_conversion','extractor':agents.extractor,'reviewer':agents.reviewer,'call_timeout_seconds':getattr(agents,'timeout',None),'max_tokens':getattr(agents,'max_tokens',None),'max_repairs':max_repairs,'deadline_seconds':deadline_seconds,'resume':resume,'contract_sha256':agents.contract_digest}
+    method={'stage':'reviewed_conversion','extractor':agents.extractor,'reviewer':agents.reviewer,'call_timeout_seconds':getattr(agents,'timeout',None),'max_tokens':getattr(agents,'max_tokens',None),'max_repairs':max_repairs,'deadline_seconds':deadline_seconds,'resume':resume,'contract_sha256':agents.contract_digest,'agent_plugins':getattr(agents,'plugins_provenance',[])}
     job={'tested_program':version,'test_method':method,'started_at':datetime.now(timezone.utc).isoformat(),'schema_version':'1.0','source':{'filename':source.name,'sha256':digest},'selection':pages,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'pages':[],'complete_for_selection':False,'catalog_complete':False}
     with pymupdf.open(source) as doc:count=len(doc)
     job['source']['page_count']=count;started=time.monotonic()
@@ -37,7 +37,7 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=Non
                 candidates=sorted(work.glob('candidate-*.json'),key=lambda p:int(p.stem.split('-')[-1]))
                 if candidates:
                     latest=int(candidates[-1].stem.split('-')[-1])
-                    previous={'next_stage':'reviewer','next_attempt':latest}
+                    previous={**prev,'next_stage':'reviewer','next_attempt':latest}
         # Incomplete runs keep their artifacts, but are never silently reused as accepted.
         page_started=time.monotonic()
         cached=None
@@ -66,6 +66,13 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=Non
                     candidate=await asyncio.wait_for(agents.run('extractor',source,out,n,attempt,feedback=attempt>0),remaining())
                 record.update(content=candidate.model_dump(),status='awaiting_review',next_stage='reviewer')
                 write_json(receipt,record);write_json(out/'catalog.json',{**job,'pages':job['pages']+[record]})
+                prior_review=work/f'review-{attempt}.json'
+                if prior_review.exists():
+                    history=work/'review-history'/hashlib.sha256(prior_review.read_bytes()).hexdigest()
+                    history.mkdir(parents=True,exist_ok=True)
+                    archived=history/prior_review.name
+                    if not archived.exists():archived.write_bytes(prior_review.read_bytes())
+                    record.setdefault('retained_prior_reviews',[]).append(str(archived.relative_to(work)))
                 report=await asyncio.wait_for(agents.run('reviewer',source,out,n,attempt),remaining())
                 record['attempts'].append({'candidate':f'candidate-{attempt}.json','review':f'review-{attempt}.json'})
                 record.update(review=report.model_dump(),status='accepted' if report.accepts(candidate) else 'needs_review')

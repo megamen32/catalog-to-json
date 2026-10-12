@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "catalog-to-json"
-version = "1.2.0"
+version = "1.3.0"
 description = "PDF catalogs to reviewed JSON with AnyDoc and FastAgent Vision"
 requires-python = ">=3.12"
 license = "MIT"

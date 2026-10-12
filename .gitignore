@@ -11,3 +11,5 @@ __pycache__/
 *.xlsx
 output/
 .agents/shared-session/knowledge/*.lock
+
+.catalog-parser-cache/

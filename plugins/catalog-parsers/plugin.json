@@ -1,0 +1,10 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "catalog-parsers",
+  "version": "0.1.0",
+  "description": "Source-bound Docling and PyMuPDF4LLM tools for catalogue extraction, with raw JSON, cache and execution receipts.",
+  "author": {"name": "megamen32"},
+  "repository": "https://github.com/megamen32/catalog-to-json",
+  "license": "MIT",
+  "keywords": ["pdf", "tables", "mcp", "docling", "pymupdf4llm"]
+}

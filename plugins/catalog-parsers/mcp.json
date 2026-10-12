@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "catalog-parsers": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--project",
+        "${PLUGIN_ROOT}",
+        "--extra",
+        "docling",
+        "catalog-parsers-mcp"
+      ],
+      "type": "stdio"
+    }
+  },
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"
+}

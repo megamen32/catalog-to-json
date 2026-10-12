@@ -202,7 +202,7 @@ async def extract_native(source, page, output, config, model, timeout=300):
     agents = AgentPair(Path(config), model, model, timeout=timeout)
     receipt = {'schema_version': '1.0', 'project': 'catalog-to-json', 'project_revision': revision,
                'package_version': importlib.metadata.version('catalog-to-json'),
-               'contract_sha256': agents.contract_digest, 'stage': 'first_pass', 'model': model,
+               'contract_sha256': agents.contract_digest, 'agent_plugins':agents.plugins_provenance, 'stage': 'first_pass', 'model': model,
                'source_sha256': hashlib.sha256(source.read_bytes()).hexdigest(), 'physical_page': page,
                'timeout_seconds': timeout, 'tokens': None, 'cost': None,
                'usage_note': 'Not reported by this adapter; never inferred from elapsed time.'}

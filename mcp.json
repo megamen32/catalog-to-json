@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "catalog": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/megamen32/catalog-to-json@v1.3.0",
+        "catalog-json-mcp"
+      ]
+    },
+    "catalog-review": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/megamen32/catalog-to-json@v1.3.0",
+        "catalog-json-mcp",
+        "--role",
+        "reviewer"
+      ]
+    }
+  }
+}
