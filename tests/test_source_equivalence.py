@@ -50,6 +50,45 @@ def test_semantic_changes_still_block_review(observed,candidate):
     assert compare_source(observed,candidate)
 
 
+@pytest.mark.parametrize('observed,candidate',[
+    (page(label='125А',group='Остающееся напряжение при токе',unit='кВ'),page(label='125A',group='Остающееся напряжение при токе',unit='кВ')),
+    (page(label='Ток',unit='А'),page(label='Ток',unit='A')),
+    (page(label='Напряжение, V',unit=None),page(label='Напряжение',unit='В')),
+    (page(label='Классификационное напряжение, кВ, при классификационном токе 2 мА'),page(label='Классификационное напряжение',qualifier='при классификационном токе 2 мА')),
+    (page(label='Классификационное напряжение',qualifier='при классификационном токе 2 мА'),page(label='Классификационное напряжение, кВ, при классификационном токе 2 mA')),
+    (page(label='Напряжение при токе 125 А'),page(label='125A',group='Напряжение при токе')),
+    (page(label='Напряжение',group='Напряжение при токе 2 мА'),page(label='Напряжение',group='Напряжение при токе 2 mA',qualifier='при токе 2 мА')),
+])
+def test_physical_unit_and_exact_condition_representation_aliases(observed,candidate):
+    """Fast unit: retained OPN27 false refusals, expected<1s/max5s; raw data untouched."""
+    before=observed.model_dump(),candidate.model_dump()
+    assert not compare_source(observed,candidate)
+    assert before==(observed.model_dump(),candidate.model_dump())
+
+
+@pytest.mark.parametrize('observed,candidate',[
+    (page(label='Код изделия 125А'),page(label='Код изделия 125A')),
+    (page(label='Наименование',value='125А'),page(label='Наименование',value='125A')),
+    (page(label='Ток',unit='mA'),page(label='Ток',unit='MA')),
+    (page(label='Напряжение при токе 2 mA'),page(label='Напряжение при токе 2 MA')),
+    (page(label='Параметр при 2 mA',unit=None),page(label='Параметр',unit=None,qualifier='при 2 MA')),
+    (page(label='Параметр не менее 2 mA',unit=None),page(label='Параметр',unit=None,qualifier='не менее 2 MA')),
+    (page(label='Название 125А',unit=None),page(label='Название 125A',unit=None)),
+    (page(label='125А',unit='кг',group='Масса'),page(label='125A',unit='кг',group='Масса')),
+    (page(label='Напряжение при токе 147,5 A'),page(label='Напряжение при токе 14,75 А')),
+    (page(label='Ток 147,5 A',unit='A'),page(label='Ток 14,75 А',unit='А')),
+    (page(label='Напряжение при импульсе 8/20'),page(label='Напряжение при импульсе 8/20 мкс')),
+    (page(label='Напряжение при токе ≤125 А'),page(label='Напряжение при токе ≥125 A')),
+    (page(label='Классификационное напряжение при токе 2 мА'),page(label='Классификационное напряжение',qualifier='при токе 2 мА и температуре 25 °C')),
+    (page(label='Классификационное напряжение',qualifier='при токе 2 мА'),page(label='Классификационное напряжение при токе 2 mA и температуре 25 °C')),
+    (page(label='Классификационное напряжение при токе 2 мА и температуре 25 °C'),page(label='Классификационное напряжение',qualifier='при токе 2 мА')),
+    (page(label='125А',unit=None,group='Напряжение, В'),page(label='125A',unit='A',group='Напряжение, В')),
+    (page(figure='147,5'),page(figure='14,75')),
+])
+def test_unit_aliases_do_not_change_identity_prefix_bounds_or_other_conditions(observed,candidate):
+    assert compare_source(observed,candidate)
+
+
 def test_outlined_diameter_cyrillic_phi_is_not_lost_or_a_product_alias():
     """Fast unit: observed outlined drawing alias must retain number/span; expected<1s/max5s."""
     from catalog_json.schema import Figure
