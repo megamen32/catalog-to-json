@@ -35,3 +35,13 @@ receipt is explicitly `producer_unknown`; `tested_program` names the queue runne
 Source-equivalent seed data is retained as previous-agent feedback. Changed
 contracts require a fresh extractor save and independent review, with the old
 files retained under their original attempt numbers.
+
+`--role-runtimes private-roles.json` explicitly selects independent pinned
+extractor/reviewer runtimes. Both routes declare their actual program metadata,
+contract, config, command prefix and file hashes. An external agent interpreter
+can run `ops/role-worker.py --adapter /installed/delivery/stage_worker.py`: the
+original package owns its AgentPair, tools, prompts and skills; the delivery
+adapter adds receipts and rate-limit observation. The parent retains separate
+role contracts, validates the exact source/model/page/attempt/artifact receipt,
+and caches the combined pair. No route silently falls back to another runtime.
+An individually benchmarked extractor does not certify the combined pipeline.

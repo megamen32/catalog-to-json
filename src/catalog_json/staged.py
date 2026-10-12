@@ -73,13 +73,54 @@ class ProviderGate:
                 'backoff_remaining_seconds':max(0,round(self.cooldown-time.monotonic(),3))}
 
 
+def role_contract(agents,role):
+    return getattr(agents,'role_contracts',{}).get(role,agents.contract_digest)
+
+
+def load_role_runtimes(agents,path):
+    """Explicit pinned native role runtimes; no implicit provider/runtime fallback."""
+    routes=json.loads(Path(path).read_text())
+    if set(routes.get('roles',{}))!={'extractor','reviewer'}:raise ValueError('Provide both explicit role runtimes')
+    for route in routes['roles'].values():
+        if not route.get('contract_sha256') or not route.get('file_sha256') or not route.get('program',{}).get('source_code_sha256'):
+            raise ValueError('Role runtime requires actual program, contract and file pins')
+        for name,digest in route['file_sha256'].items():
+            if hashlib.sha256(Path(name).read_bytes()).hexdigest()!=digest:raise ValueError('Pinned role runtime changed')
+    agents.role_runtimes=routes['roles'];agents.role_contracts={r:v['contract_sha256'] for r,v in routes['roles'].items()}
+    agents.contract_digest=hashlib.sha256(json.dumps(agents.role_contracts,sort_keys=True).encode()).hexdigest()
+    return agents
+
+
+def validate_role_receipt(data,work,path,source_sha256,page,attempt,role,model,contract,program=None):
+    execution=data.get('execution',{});digest=hashlib.sha256(path.read_bytes()).hexdigest() if path.exists() else None
+    expected={'source_sha256':source_sha256,'physical_page':page,'attempt':attempt,'role':role,
+              'model':model,'contract_sha256':contract,'artifact_sha256':digest}
+    if not digest or not execution.get('program') or any(execution.get(k)!=v for k,v in expected.items()):
+        raise RuntimeError('Native role receipt does not match the source-bound saved artifact')
+    if program is not None and execution['program']!=program:raise RuntimeError('Native role producer differs from pinned program')
+    origin=artifact_origin(work,path,source_sha256,page,attempt,role,model,contract)
+    if origin['status']!='receipt_verified':raise RuntimeError('Native role receipt lacks its latest validated save-event')
+    schema=PageContent if role=='extractor' else Review
+    if schema.model_validate(data['artifact']).model_dump()!=schema.model_validate_json(path.read_text()).model_dump():
+        raise RuntimeError('Native worker returned different artifact content')
+    return origin
+
+
 async def isolated_call(agents,role,source,out,page,attempt,worker_command=None):
     call=out/f'page-{page:04d}'/'calls'/uuid.uuid4().hex
     call.mkdir(parents=True);result=call/'result.json'
-    args=[sys.executable,'-m','catalog_json.stage_worker','--config',str(agents.config),'--extractor',agents.extractor,'--reviewer',agents.reviewer,'--role',role,'--source',str(source),'--output',str(out),'--page',str(page),'--attempt',str(attempt),'--timeout',str(agents.timeout),'--max-tokens',str(agents.max_tokens),'--result',str(result)]
-    args=[sys.executable,'-m','catalog_json.supervise','--deadline',str(agents.timeout+10),'--',*(worker_command or args)]
+    route=getattr(agents,'role_runtimes',{}).get(role,{})
+    for name,digest in route.get('file_sha256',{}).items():
+        if hashlib.sha256(Path(name).read_bytes()).hexdigest()!=digest:raise ValueError('Pinned role runtime changed before call')
+    timeout=route.get('timeout',agents.timeout)
+    prefix=route.get('command_prefix',[sys.executable,'-m','catalog_json.stage_worker'])
+    args=[*prefix,'--config',str(route.get('config',agents.config)),'--extractor',agents.extractor,'--reviewer',agents.reviewer,'--role',role,'--source',str(source),'--output',str(out),'--page',str(page),'--attempt',str(attempt),'--timeout',str(timeout),'--max-tokens',str(agents.max_tokens),'--result',str(result)]
+    args=[sys.executable,'-m','catalog_json.supervise','--deadline',str(timeout+10),'--',*(worker_command or args)]
+    environment=dict(__import__('os').environ)
+    for name in route.get('unset_environment',[]):environment.pop(name,None)
+    environment.update(route.get('environment',{}))
     with (call/'worker.log').open('w') as log:
-        process=await asyncio.create_subprocess_exec(*args,stdout=log,stderr=asyncio.subprocess.STDOUT,start_new_session=True)
+        process=await asyncio.create_subprocess_exec(*args,env=environment,stdout=log,stderr=asyncio.subprocess.STDOUT,start_new_session=True)
         tree=OwnedProcessTree(process.pid);watcher=asyncio.create_task(tree.watch())
         rate_seen=set();observer=getattr(agents,'rate_limit_observer',None)
         async def scan_rates():
@@ -88,7 +129,7 @@ async def isolated_call(agents,role,source,out,page,attempt,worker_command=None)
         async def watch_rates():
             while True:await scan_rates();await asyncio.sleep(1)
         rate_watcher=asyncio.create_task(watch_rates())
-        try:await asyncio.wait_for(process.wait(),agents.timeout+30)
+        try:await asyncio.wait_for(process.wait(),timeout+30)
         finally:
             tree.capture();watcher.cancel();rate_watcher.cancel();await asyncio.gather(watcher,rate_watcher,return_exceptions=True)
             await scan_rates()
@@ -96,6 +137,9 @@ async def isolated_call(agents,role,source,out,page,attempt,worker_command=None)
     if not result.exists():raise RuntimeError(f'{role} worker exited {process.returncode} without a validated result; retained {call}')
     data=json.loads(result.read_text())
     if data['status']!='completed':raise RuntimeError(data['error'])
+    if route:
+        artifact=out/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json')
+        validate_role_receipt(data,artifact.parent,artifact,hashlib.sha256(Path(source).read_bytes()).hexdigest(),page,attempt,role,getattr(agents,role),role_contract(agents,role),route.get('program'))
     return (PageContent if role=='extractor' else Review).model_validate(data['artifact'])
 
 
@@ -155,22 +199,22 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             audit=work/'external-audit.json'
             key=hashlib.sha256(json.dumps({'workflow':workflow,'source':digest,'page':page,'contract':agents.contract_digest,'extractor':agents.extractor,'reviewer':agents.reviewer,'audit':hashlib.sha256(audit.read_bytes()).hexdigest() if audit.exists() else None},sort_keys=True).encode()).hexdigest()
             old=json.loads((work/'result.json').read_text()) if (work/'result.json').exists() else {}
-            record={'pdf_page':page,'cache_key':key,'status':'pending','next_attempt':0,'attempts':[],'tested_program':version,'source_sha256':digest,'extractor':agents.extractor,'reviewer':agents.reviewer,'contract_sha256':agents.contract_digest,'elapsed_seconds':0}
+            record={'pdf_page':page,'cache_key':key,'status':'pending','next_attempt':0,'attempts':[],'tested_program':version,'source_sha256':digest,'extractor':agents.extractor,'reviewer':agents.reviewer,'contract_sha256':agents.contract_digest,'role_contracts':{role:role_contract(agents,role) for role in providers},'elapsed_seconds':0}
             if old:record['prior_execution']=old
             item={'id':cid,'source':source,'out':out,'work':work,'record':record};pending[cid,page]=item
             if old.get('cache_key')==key and old.get('status')=='accepted':
-                candidate=validated_candidate(work,digest,page,agents.extractor,agents.contract_digest);report_path=work/f"review-{old['next_attempt']}.json"
+                candidate=validated_candidate(work,digest,page,agents.extractor,role_contract(agents,'extractor'));report_path=work/f"review-{old['next_attempt']}.json"
                 saves=[json.loads(line) for line in (work/'tools.jsonl').read_text().splitlines()] if (work/'tools.jsonl').exists() else []
                 review_hash=hashlib.sha256(report_path.read_bytes()).hexdigest() if report_path.exists() else None
-                if candidate and candidate[0]==old['next_attempt'] and review_hash==old.get('review_sha256') and any(e.get('tool')=='save_review' and e.get('role')=='reviewer' and e.get('model')==agents.reviewer and e.get('source_sha256')==digest and e.get('page')==page and e.get('attempt')==old['next_attempt'] and e.get('sha256')==review_hash for e in saves) and Review.model_validate_json(report_path.read_text()).accepts(candidate[1]):
+                if candidate and candidate[0]==old['next_attempt'] and review_hash==old.get('review_sha256') and artifact_origin(work,report_path,digest,page,old['next_attempt'],'reviewer',agents.reviewer,role_contract(agents,'reviewer'))['source_bound_save'] and Review.model_validate_json(report_path.read_text()).accepts(candidate[1]):
                     record.update(old)
-                    record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,agents.contract_digest)
-                    record['review_producer']=artifact_origin(work,report_path,digest,page,old['next_attempt'],'reviewer',agents.reviewer,agents.contract_digest)
+                    record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,role_contract(agents,'extractor'))
+                    record['review_producer']=artifact_origin(work,report_path,digest,page,old['next_attempt'],'reviewer',agents.reviewer,role_contract(agents,'reviewer'))
                     continue
-            candidate=validated_candidate(work,digest,page,agents.extractor,agents.contract_digest)
+            candidate=validated_candidate(work,digest,page,agents.extractor,role_contract(agents,'extractor'))
             if candidate:
                 record.update(content=candidate[1].model_dump(),next_attempt=candidate[0],status='awaiting_review');review.put_nowait(item)
-                record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,agents.contract_digest)
+                record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,role_contract(agents,'extractor'))
             else:
                 # Unbound legacy output is retained as feedback, never minted as
                 # a new source/model result merely by asking another reviewer.
@@ -208,12 +252,12 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                     r.update(content=artifact.model_dump(),status='awaiting_review');review.put_nowait(item)
                     path=item['work']/f'candidate-{attempt}.json'
                     r['candidate_sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
-                    r['candidate_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.extractor,agents.contract_digest)
+                    r['candidate_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.extractor,role_contract(agents,'extractor'))
                 else:
                     candidate=PageContent.model_validate(r['content']);r['review']=artifact.model_dump()
                     r['attempts'].append({'candidate':f'candidate-{attempt}.json','review':f'review-{attempt}.json'})
                     path=item['work']/f'review-{attempt}.json';r['review_sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
-                    r['review_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.reviewer,agents.contract_digest)
+                    r['review_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.reviewer,role_contract(agents,'reviewer'))
                     if artifact.accepts(candidate):r['status']='accepted'
                     else:r.update(status='needs_review',next_attempt=attempt+1);enqueue_extraction(item,repair=True)
             except asyncio.CancelledError:

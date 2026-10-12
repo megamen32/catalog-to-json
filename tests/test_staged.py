@@ -102,6 +102,33 @@ def test_restoring_superseded_full_bytes_cannot_unlock_resume(tmp_path):
     assert validated_candidate(work,'s',1,'m','c') is None
 
 
+def test_separate_role_contracts_reuse_only_actual_extractor_contract(tmp_path):
+    from catalog_json.tools import CatalogTools
+    from pathlib import Path
+    queue=manifest(tmp_path);out=tmp_path/'out';source=Path(json.loads(queue.read_text())['catalogs'][0]['source'])
+    a=Agents();a.contract_digest='combined';a.role_contracts={'extractor':'extractor-contract','reviewer':'reviewer-contract'}
+    for page in range(1,4):
+        t=CatalogTools(source,out/'test',page=page,model=a.extractor,contract_sha256='extractor-contract');t.render(page);t.direct(page)
+        assert t.save(page,PageContent(title=str(page),text_blocks=[],tables=[],figures=[]).model_dump_json(),'page')['saved']
+    calls=[]
+    async def call(agents,role,source,out,page,attempt):
+        calls.append(role);value=passed();write_json(out/f'page-{page:04d}'/f'review-{attempt}.json',value.model_dump());return value
+    result=asyncio.run(staged_batch(queue,out,a,resume=True,call=call))
+    assert result['complete'] and calls==['reviewer']*3
+    records=json.loads((out/'test/catalog.json').read_text())['pages']
+    assert all(r['candidate_producer']['contract_sha256']=='extractor-contract' and r['review_producer']['contract_sha256']=='reviewer-contract' for r in records)
+
+
+def test_explicit_role_routes_reject_mutated_pins(tmp_path):
+    from catalog_json.staged import load_role_runtimes
+    p=tmp_path/'runtime.py';p.write_text('pinned')
+    route={'program':{'source_code_sha256':'actual'},'contract_sha256':'contract','file_sha256':{str(p):hashlib.sha256(p.read_bytes()).hexdigest()}}
+    path=tmp_path/'routes.json';write_json(path,{'roles':{'extractor':route,'reviewer':route}})
+    a=load_role_runtimes(Agents(),path);assert a.role_contracts=={'extractor':'contract','reviewer':'contract'}
+    p.write_text('changed')
+    with pytest.raises(ValueError,match='Pinned role runtime changed'):load_role_runtimes(Agents(),path)
+
+
 def test_seed_without_catalogue_binding_is_rejected_before_any_provider_call(tmp_path):
     queue=manifest(tmp_path);seed=tmp_path/'seed';(seed/'test/page-0001').mkdir(parents=True)
     async def call(*args):raise AssertionError('No provider call is allowed')

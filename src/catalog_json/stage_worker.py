@@ -59,7 +59,8 @@ def main():
                    'physical_page':args.page,'attempt':args.attempt,'role':args.role,
                    'model':getattr(agents,args.role),'contract_sha256':agents.contract_digest,
                    'artifact_sha256':hashlib.sha256((args.output/f'page-{args.page:04d}'/filename).read_bytes()).hexdigest(),
-                   'started_at':started,'finished_at':time.time(),'provider_rate_limit_events':len(rate_limit_events)}
+                   'started_at':started,'finished_at':time.time(),'provider_rate_limit_events':len(rate_limit_events),
+                   'delivery_adapter_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
         write_json(args.result,{'status':'completed','artifact':artifact.model_dump(),'execution':execution})
         return 0
     except (Exception,SystemExit) as exc:

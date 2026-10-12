@@ -30,6 +30,7 @@ def main():
     batch.add_argument('--extractor-workers',type=int,default=1,help='Finite concurrent extractors in staged mode; default 1, select from measured provider and host capacity')
     batch.add_argument('--reviewer-workers',type=int,default=1,help='Finite concurrent reviewers in staged mode; default 1, independently back off on provider rate limits')
     batch.add_argument('--initial-provider-concurrency',type=int,help='Start each provider at this concurrency, then increase after successful calls up to the role worker maximum; reduce and back off on 429')
+    batch.add_argument('--role-runtimes',type=Path,help='Explicit pinned extractor/reviewer native runtime manifest, with separate contracts and producer receipts')
     batch.add_argument('--seed',type=Path,help='Retain validated candidates from an earlier queue, then independently re-audit them')
     native=sub.add_parser('native-batch',help='Save all directly readable source data as explicitly unreviewed JSON')
     native.add_argument('manifest',type=Path);native.add_argument('--output',type=Path,required=True);native.add_argument('--deadline',type=int,default=3600)
@@ -61,12 +62,14 @@ def main():
             if args.deadline<=0 or args.call_timeout<=0:raise ValueError('Timeouts must be positive')
             agents=AgentPair(args.config,args.extractor,args.reviewer,args.call_timeout,args.max_tokens)
             if args.parallel_stages:
-                from .staged import staged_batch
+                from .staged import staged_batch,load_role_runtimes
+                if args.role_runtimes:load_role_runtimes(agents,args.role_runtimes)
                 result=asyncio.run(staged_batch(args.manifest,args.output,agents,args.deadline,args.resume,args.seed,extractor_workers=args.extractor_workers,reviewer_workers=args.reviewer_workers,initial_provider_concurrency=args.initial_provider_concurrency))
             else:
                 if args.seed:raise ValueError('--seed requires --parallel-stages')
                 if args.extractor_workers!=1 or args.reviewer_workers!=1:raise ValueError('Role worker counts require --parallel-stages')
                 if args.initial_provider_concurrency is not None:raise ValueError('Provider concurrency requires --parallel-stages')
+                if args.role_runtimes:raise ValueError('Role runtimes require --parallel-stages')
                 result=asyncio.run(convert_batch(args.manifest,args.output,agents,args.resume,args.deadline))
             print(json.dumps({'output':str(args.output/'batch.json'),'complete':result['complete'],'catalogs':[{'id':c['id'],'status':c['status'],'accepted_pages':c.get('accepted_pages',0),'pages':c['pages']} for c in result['catalogs']]},ensure_ascii=False))
             return 0 if result['complete'] else 2
