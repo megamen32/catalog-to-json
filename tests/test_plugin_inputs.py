@@ -22,3 +22,4 @@ def test_public_plugin_manifests_describe_the_same_release_version():
     version=tomllib.loads((root/'pyproject.toml').read_text())['project']['version']
     assert json.loads((root/'plugin.json').read_text())['version']==version
     assert json.loads((root/'.claude-plugin/plugin.json').read_text())['version']==version
+    assert json.loads((root/'.codex-plugin/plugin.json').read_text())['version']==version
