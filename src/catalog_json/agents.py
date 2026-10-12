@@ -16,6 +16,22 @@ from .models import register_model_capabilities
 from .plugin_inputs import load_plugins,plugin_servers
 
 
+async def generate_until_saved(agent,task,request_params,completed,deadline=None):
+    """Keep the native context until the tool deliverable exists; caller owns deadline."""
+    prompt=task
+    while True:
+        response=await agent.generate(prompt,request_params=request_params)
+        # Some SDK paths return a cancelled message instead of propagating cancellation.
+        await asyncio.sleep(0)
+        task=asyncio.current_task()
+        if task is not None and task.cancelling():raise asyncio.CancelledError()
+        if deadline is not None and time.monotonic()>=deadline:raise TimeoutError('Native deliverable deadline expired')
+        stop=getattr(response,'stop_reason',None)
+        if str(getattr(stop,'value',stop)).lower().split('.')[-1] in {'cancelled','canceled'}:raise RuntimeError('Native generation cancelled before confirmed delivery')
+        if completed():return response
+        prompt='No successful source-bound artifact save exists for this attempt. Continue the original task in this context, inspect tool feedback, and save the deliverable through the catalog tools. An ordinary chat end is not completion. Do not repeat a long summary.'
+
+
 class AgentPair:
     def __init__(self,config: Path,extractor: str,reviewer: str,timeout=90,max_tokens=16384,max_iterations=9999):
         register_model_capabilities()
@@ -42,6 +58,7 @@ class AgentPair:
             raise RuntimeError(f'FastAgent {role} startup exited with code {exc.code}') from exc
 
     async def _run(self,role,source,out,page,attempt,feedback=False):
+        call_deadline=time.monotonic()+self.timeout
         runtime=out/f'page-{page:04d}'/f'agent-{role}-{attempt}';runtime.mkdir(parents=True,exist_ok=True)
         # Preserve provider settings and env placeholders, never materialize API keys.
         config=yaml.safe_load(self.config.read_text()) or {}
@@ -66,15 +83,19 @@ class AgentPair:
         if feedback:task+=' Read read_page_json and read_review for the prior attempt. Reinspect and fix actual defects, then save a complete new candidate. Do not trust the previous review without source comparison.'
         task+=' Check read_external_audit after inspecting the source (reviewer only after saving independent observations). Verify its source-bound leads before the final save.'
         started=time.time()
+        filename=f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'
+        path=out/f'page-{page:04d}'/filename
+        source_digest=hashlib.sha256(source.read_bytes()).hexdigest()
+        def completed():
+            events_path=path.parent/'tools.jsonl'
+            if not path.exists() or not events_path.exists():return False
+            digest=hashlib.sha256(path.read_bytes()).hexdigest()
+            events=[json.loads(l) for l in events_path.read_text().splitlines()]
+            return any(e.get('time',0)>=started and e.get('role')==role and e.get('attempt')==attempt and e.get('tool')==('save_page_json' if role=='extractor' else 'save_review') and e.get('sha256')==digest and e.get('source_sha256')==source_digest and e.get('page')==page and e.get('model')==getattr(self,role) and e.get('contract_sha256')==self.contract_digest for e in events)
         async with fast.run() as app:
             for server in config['mcp']['servers']:
                 await app.attach_mcp_server(role,server,options=MCPAttachOptions(startup_timeout_seconds=min(60,self.timeout)))
-            message=await asyncio.wait_for(app[role].generate(task,request_params=RequestParams(maxTokens=self.max_tokens,max_iterations=self.max_iterations,use_history=True,parallel_tool_calls=False,streaming_timeout=self.timeout)),self.timeout)
+            message=await asyncio.wait_for(generate_until_saved(app[role],task,RequestParams(maxTokens=self.max_tokens,max_iterations=self.max_iterations,use_history=True,parallel_tool_calls=False,streaming_timeout=self.timeout),completed,deadline=call_deadline),self.timeout)
             write_json(runtime/'response.json',{'role':role,'stop_reason':str(message.stop_reason),'elapsed_seconds':round(time.time()-started,3)})
-        filename=f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'
-        path=out/f'page-{page:04d}'/filename
-        if not path.exists():raise RuntimeError(f'{role} ended ({message.stop_reason}) without saving {filename} through catalog tools')
-        events=[json.loads(l) for l in (path.parent/'tools.jsonl').read_text().splitlines()]
-        saved=any(e['time']>=started and e['role']==role and e['attempt']==attempt and e['tool']==('save_page_json' if role=='extractor' else 'save_review') and e['sha256']==hashlib.sha256(path.read_bytes()).hexdigest() for e in events)
-        if not saved:raise RuntimeError(f'{role} artifact has no matching validated tool save')
+        if not completed():raise RuntimeError(f'{role} artifact has no matching validated tool save')
         return (PageContent if role=='extractor' else Review).model_validate_json(path.read_text())

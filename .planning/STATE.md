@@ -17,3 +17,7 @@ Benchmark core v1.1.0 delivered: full 980-page structural inventory, 15 visually
 ## Current parser routing experiment, 2026-10-12
 
 Full reviewed queue is incomplete and runs on immutable installed1.4.1 with MiniMax extraction and GLM Coding Endpoint review. Native980-page drafts are public unreviewed examples. Frozen30 first-pass comparisons are public in catalog-extraction-benchmark: baseline479/500, extended467/500 under corrected grader0.2.2; no universal winner. Extended did one canonical read on page33, baseline zero; img2table/gmft were available but not invoked. Version1.4.2 changes reading instructions and producer-contract provenance; fresh15-page model comparison pending. See quick/20261012-parser-body-routing.
+
+## Delivery continuation, 2026-10-12
+
+Frozen1.4.2 routing comparison revealed ordinary END_TURN with no file on page26. Its failed attempt remains in the500-fact denominator. Version1.4.3 preserves the native context until a validated tool save or the existing deadline, guarding SDK swallowed cancellation. Independent delta-review and64 tests passed; real source-page canary pending.

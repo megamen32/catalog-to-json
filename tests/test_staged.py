@@ -220,3 +220,68 @@ def test_current_contract_saved_candidate_survives_stale_result_marker(tmp_path)
         write_json(out/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump());return value
     asyncio.run(staged_batch(queue,out,Agents(),resume=True,call=call))
     assert ('extractor',1,0) not in calls and ('reviewer',1,0) in calls
+
+
+def test_end_turn_without_file_continues_until_confirmed_tool_save():
+    """Fast unit: ordinary chat end is not a deliverable; expected1s/max5s."""
+    from catalog_json.agents import generate_until_saved
+    class Model:
+        calls=[]
+        async def generate(self,prompt,request_params):
+            self.calls.append(prompt);return 'ordinary end turn'
+    model=Model()
+    result=asyncio.run(generate_until_saved(model,'original source task',object(),lambda:len(model.calls)==5))
+    assert result=='ordinary end turn' and len(model.calls)==5
+    assert model.calls[0]=='original source task'
+    assert all('save' in p for p in model.calls[1:])
+
+
+def test_missing_deliverable_continuation_still_respects_timeout():
+    """Fast unit: no repair count cap, outer finite deadline remains effective; expected1s/max5s."""
+    from catalog_json.agents import generate_until_saved
+    class Model:
+        async def generate(self,*args,**kwargs):await asyncio.sleep(.01);return 'end'
+    async def run():
+        with pytest.raises(TimeoutError):
+            await asyncio.wait_for(generate_until_saved(Model(),'source',object(),lambda:False),.03)
+    asyncio.run(run())
+
+
+def test_sdk_swallowed_cancellation_cannot_restart_generation():
+    """Fast unit: SDK cancellation-return must retain outer deadline; expected1s/max5s."""
+    from catalog_json.agents import generate_until_saved
+    from types import SimpleNamespace
+    import time
+    class Model:
+        calls=0
+        async def generate(self,*args,**kwargs):
+            self.calls+=1
+            try:await asyncio.sleep(10)
+            except asyncio.CancelledError:return SimpleNamespace(stop_reason='cancelled')
+    async def run():
+        model=Model();started=time.monotonic()
+        with pytest.raises((TimeoutError,asyncio.CancelledError,RuntimeError)):
+            await asyncio.wait_for(generate_until_saved(model,'source',object(),lambda:False,deadline=time.monotonic()+.03),.03)
+        assert model.calls==1 and time.monotonic()-started<.2
+    asyncio.run(run())
+
+
+def test_sdk_uncancelled_return_still_cannot_exceed_absolute_deadline():
+    """Fast unit: SDK uncancel cannot erase elapsed deadline; expected1s/max5s."""
+    from catalog_json.agents import generate_until_saved
+    from types import SimpleNamespace
+    import time
+    class Model:
+        calls=0
+        async def generate(self,*args,**kwargs):
+            self.calls+=1
+            try:await asyncio.sleep(10)
+            except asyncio.CancelledError:
+                asyncio.current_task().uncancel()
+                return SimpleNamespace(stop_reason='end_turn')
+    async def run():
+        model=Model()
+        with pytest.raises(TimeoutError):
+            await asyncio.wait_for(generate_until_saved(model,'source',object(),lambda:False,deadline=time.monotonic()+.03),.03)
+        assert model.calls==1
+    asyncio.run(run())
