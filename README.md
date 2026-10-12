@@ -60,3 +60,5 @@ Independent evaluation: [Catalog Extraction Benchmark](https://github.com/megame
 `catalog-json native-batch queue.json --output native-output` saves directly readable text, words, image coordinates and parsing hints for every page. These JSON files are explicitly unreviewed source evidence, not an accepted catalogue.
 
 Готовые альтернативы: [список 24 парсеров, MCP и сервисов](docs/READY-PARSERS.md). Подключение локальных Docling/PyMuPDF4LLM: пакет [Agent Plugin 1.0](plugins/catalog-parsers), пример `fast-agent.parsers.config.example.yaml`. Это необязательные источники структурированных данных для агента; окончательная проверка идёт по оригиналу.
+
+В1.4.4 parser-plugin0.2.2 выдаёт JSON порциями до12000байт, чтобы FastAgent не вырезал середину длинных ответов. Переход выполняется по возвращённому next_offset. Native MCP/SDK-проверка восстановила весь Docling JSON страницы30 без потери байтов; точность1.4.4 на полном бенчмарке пока не измерена. [Результаты выбора инструментов](https://github.com/megamen32/catalog-extraction-benchmark/tree/main/examples/agent-routing/2026-10-12-body-routing-v1.4.2).

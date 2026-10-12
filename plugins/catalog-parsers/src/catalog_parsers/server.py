@@ -6,6 +6,23 @@ from pathlib import Path
 from mcp.server.fastmcp import FastMCP
 from .parser import parse,available
 
+ARTIFACT_RESPONSE_BYTES=12000  # Below FastAgent 0.10.43's 16000-byte model-history cap.
+
+
+def artifact_chunk(text,offset,length):
+    """Bound the serialized response, not character count; never skip trimmed text."""
+    end=min(len(text),offset+length)
+    def payload(stop):
+        return {'text':text[offset:stop],'total_characters':len(text),'next_offset':stop}
+    low=min(offset,len(text));high=end
+    while low<high:
+        middle=(low+high+1)//2
+        # ASCII escaping is a conservative bound for either MCP JSON serializer.
+        size=len(json.dumps(payload(middle),ensure_ascii=True,indent=2).encode('utf-8'))
+        if size<=ARTIFACT_RESPONSE_BYTES:low=middle
+        else:high=middle-1
+    return payload(low)
+
 
 def build_server(source=None,page=None,cache_root=None):
     mcp=FastMCP('catalog-parsers')
@@ -37,7 +54,7 @@ def build_server(source=None,page=None,cache_root=None):
 
     @mcp.tool()
     def read_parser_artifact(artifact_id:str,kind:str='canonical',offset:int=0,length:int=16000)->dict:
-        """Read actual canonical body rows or raw geometry/spans. inspect_pdf_page alone does not expose body evidence. Continue by next_offset until needed rows are covered; retain original-image verification."""
+        """Read actual canonical body rows or raw geometry/spans in byte-bounded chunks. length is a maximum character request; replies can be shorter to avoid SDK truncation. Always continue by returned next_offset until needed rows are covered; retain original-image verification."""
         if len(artifact_id)!=64 or any(c not in '0123456789abcdef' for c in artifact_id):raise ValueError('Invalid artifact identity')
         if kind not in ['canonical','raw','receipt'] or offset<0 or not 1<=length<=24000:raise ValueError('Invalid chunk selection')
         name={'canonical':'candidate.json','raw':'raw.json','receipt':'receipt.json'}[kind]
@@ -50,7 +67,7 @@ def build_server(source=None,page=None,cache_root=None):
         path=directory/name
         expected=receipt.get({'candidate.json':'candidate_sha256','raw.json':'raw_sha256','native-raw.json':'native_raw_sha256'}.get(name,''))
         if kind!='receipt' and (not expected or hashlib.sha256(path.read_bytes()).hexdigest()!=expected):raise ValueError('Retained artifact digest mismatch')
-        text=path.read_text();return {'text':text[offset:offset+length],'total_characters':len(text),'next_offset':min(len(text),offset+length)}
+        return artifact_chunk(path.read_text(),offset,length)
     return mcp
 
 

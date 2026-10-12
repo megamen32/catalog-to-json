@@ -4,7 +4,7 @@ description: Choose complementary catalogue parsers from measured strengths, pre
 ---
 # Choose evidence for the page
 
-Call parser_capabilities first. Use only explicitly available backends; an unavailable GPU/backend is a reported failure, not permission for a hidden device or provider fallback. All tools are bound to this source and physical page. inspect_pdf_page returns inventory/headers, not body cell values. After any successful parser call, read its canonical rows with read_parser_artifact, following next_offset through every needed row. For disputed blanks/merges also read raw spans. A successful receipt or header inventory is not proof that you have seen body values; keep receipts.
+Call parser_capabilities first. Use only explicitly available backends; an unavailable GPU/backend is a reported failure, not permission for a hidden device or provider fallback. All tools are bound to this source and physical page. inspect_pdf_page returns inventory/headers, not body cell values. After any successful parser call, read its canonical rows with read_parser_artifact, following next_offset through every needed row. Replies are bounded by serialized bytes, so the returned chunk may be shorter than requested length. Advance only by returned next_offset, never by requested length. A shortened SDK result must be retrieved in smaller ranges; do not infer its missing middle. For disputed blanks/merges also read raw spans. A successful receipt or header inventory is not proof that you have seen body values; keep receipts.
 
 ## Measured complementary roles
 
