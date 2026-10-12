@@ -1,0 +1,54 @@
+{
+  "checkpoint_utc": "2026-10-12T123023Z",
+  "status": "incomplete",
+  "all_catalogues_complete": false,
+  "accepted_pages": 9,
+  "source_pages": 980,
+  "selection": "best measured extractor1.4.2; fixed reviewer1.4.8; combined pipeline not independently benchmarked",
+  "catalogues": [
+    {
+      "id": "opn",
+      "source_sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+      "source_page_count": 60,
+      "accepted_pages": 9,
+      "json": "opn.json",
+      "json_sha256": "562c661604d4cdbcdab78948bd9673baa8f2c230cf9f6c83fe8fc9ec94e54a50",
+      "excel": "opn-accepted-partial.xlsx",
+      "excel_sha256": "1649432f7ebe0ac1bc34d0b2503ae57e420defe9bc5dae6b7febb4412bfa81a1",
+      "exported_cells": 260,
+      "excel_reopened_exact": true
+    },
+    {
+      "id": "isolators",
+      "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+      "source_page_count": 162,
+      "accepted_pages": 0,
+      "json": "isolators.json",
+      "json_sha256": "f16fb7cf1ada90f01b36d7537e6caaa2313e0c06b038d05a31f09c77954b06c1"
+    },
+    {
+      "id": "small",
+      "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+      "source_page_count": 228,
+      "accepted_pages": 0,
+      "json": "small.json",
+      "json_sha256": "fb378871860b1f3d9e9fa7620fc9f7a2cc990f279ccd68c20acdbb49bf3ce42d"
+    },
+    {
+      "id": "armature",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+      "source_page_count": 314,
+      "accepted_pages": 0,
+      "json": "armature.json",
+      "json_sha256": "92d60f1ae82db23e93d4efdaebc9014f5d8966c743accddc8413b1d4cde8c606"
+    },
+    {
+      "id": "innovations",
+      "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+      "source_page_count": 216,
+      "accepted_pages": 0,
+      "json": "innovations.json",
+      "json_sha256": "eeef13950b1abd2acaaa95516cb7113fada3634340d88a5461b9917cfe17be52"
+    }
+  ]
+}
