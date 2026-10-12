@@ -11,6 +11,7 @@ from mcp.types import TextContent
 from .schema import PageContent, Review, Issue, CHECKS
 from .direct import inspect_page
 from .audit import compare_source
+from .observation_quotes import branding_quote_evidence
 
 SKILLS = Path(__file__).parent / 'skills'
 if not SKILLS.exists():
@@ -40,7 +41,7 @@ def source_chunk(text,offset,length):
 
 class CatalogTools:
     def __init__(self, source=None, output=None, role='extractor', page=None, attempt=0,model=None,contract_sha256=None):
-        self.model=model;self.contract_sha256=contract_sha256
+        self.model=model;self.contract_sha256=contract_sha256;self.region_evidence={}
         self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.disclosed={};self.latest_zoom={};self.corrections={};self.grids={};self.source_artifacts={};self.region_reads={};self.edit_baselines={};self.invalid_edit_baselines=set();self.source=None;self.output=None
         if source and output:self.open(source,output)
 
@@ -48,7 +49,7 @@ class CatalogTools:
         source=Path(source).resolve();output=Path(output).resolve()
         if output==source or source.parent==output:raise ValueError('Choose a separate output directory')
         with pymupdf.open(source) as doc:count=len(doc)
-        self.source=source;self.source_digest=hashlib.sha256(source.read_bytes()).hexdigest();self.output=output;output.mkdir(parents=True,exist_ok=True);self.seen={};self.source_artifacts={};self.region_reads={};self.edit_baselines={};self.invalid_edit_baselines=set();self.grids={};self.disclosed={};self.latest_zoom={};self.corrections={}
+        self.source=source;self.source_digest=hashlib.sha256(source.read_bytes()).hexdigest();self.output=output;output.mkdir(parents=True,exist_ok=True);self.seen={};self.source_artifacts={};self.region_reads={};self.region_evidence={};self.edit_baselines={};self.invalid_edit_baselines=set();self.grids={};self.disclosed={};self.latest_zoom={};self.corrections={}
         return {'filename':source.name,'page_count':count,'role':self.role,'output':str(output)}
 
     def work(self,page):
@@ -76,7 +77,8 @@ class CatalogTools:
             data=pix.tobytes('png')
         name='source.png' if box is None else 'region-'+hashlib.sha256(json.dumps([box,rotation]).encode()).hexdigest()[:12]+'.png'
         (work/name).write_bytes(data)
-        if box is not None:self.latest_zoom[page]=time.monotonic()
+        if box is not None:
+            self.latest_zoom[page]=time.monotonic();self.region_evidence[(page,tuple(box),rotation)]=self.latest_zoom[page]
         self.log(page,'view_page' if box is None else 'view_region',box=box,rotation=rotation,image=name)
         return Image(data=data,format='png')
 
@@ -178,7 +180,7 @@ class CatalogTools:
                         differences.append({'path':f'tables[{ti}].rows[{ri}].cells[column={ci}]','direct_value':want,'candidate_value':cell.value,'merged_spans':grid['merged_cells']})
         return differences
 
-    def save(self,page,json_text,kind):
+    def save(self,page,json_text,kind,literal_quotes=None):
         work=self.work(page)
         expected='extractor' if kind=='page' else 'reviewer'
         if self.role!=expected:return {'saved':False,'error':f'{self.role} cannot write {kind} artifacts'}
@@ -191,6 +193,12 @@ class CatalogTools:
         if kind=='observation' and 'read_page_json' in self.seen.get(page,set()):return {'saved':False,'error':'Source observations are frozen after candidate disclosure; start a fresh review to reinspect'}
         try:
             model=(PageContent if kind in ('page','observation') else Review).model_validate_json(json_text)
+            if kind=='observation':
+                quotes,errors=branding_quote_evidence(self,page,model,literal_quotes)
+                if errors:
+                    refused=self.source_payload(page,'observation-quotes',{'saved':False,'quote_errors':errors,'quote_evidence':quotes})
+                    if refused.get('paged'):refused.update(saved=False,error='Source observation was NOT saved. Read the retained quote errors before correcting the literal quotes.')
+                    return refused
             if kind in ('page','observation'):
                 differences=self.grid_differences(page,model)
                 if differences:return {'saved':False,'error':'Saved table contradicts the directly inspected PDF grid. Reinspect source/merge spans and preserve expanded_rows; use a fresh Vision-only context for genuinely unreliable grids.','direct_grid_differences':differences}
@@ -211,22 +219,35 @@ class CatalogTools:
         prior=work/filename
         if prior.exists():write_json(work/'.history'/prior.stem/(hashlib.sha256(prior.read_bytes()).hexdigest()+'.json'),json.loads(prior.read_text()))
         write_json(work/filename,model.model_dump())
+        quote_metadata={}
+        if kind=='observation':
+            quote_file=work/f'source-observation-quotes-{self.attempt}.json'
+            if quote_file.exists():write_json(work/'.history'/quote_file.stem/(hashlib.sha256(quote_file.read_bytes()).hexdigest()+'.json'),json.loads(quote_file.read_text()))
+            write_json(quote_file,{'source_sha256':self.source_digest,'physical_page':page,'attempt':self.attempt,'quotes':quotes})
+            quote_metadata={'quote_file':quote_file.name,'quote_sha256':hashlib.sha256(quote_file.read_bytes()).hexdigest()}
         if kind=='page':self.invalid_edit_baselines.discard(page)
-        self.log(page,'save_page_json' if kind=='page' else 'save_source_observation' if kind=='observation' else 'save_review',file=filename,sha256=hashlib.sha256((work/filename).read_bytes()).hexdigest())
+        self.log(page,'save_page_json' if kind=='page' else 'save_source_observation' if kind=='observation' else 'save_review',file=filename,sha256=hashlib.sha256((work/filename).read_bytes()).hexdigest(),**quote_metadata)
         return {'saved':True,'file':str(work/filename)}
 
-    def correct_observation(self,page,json_text,reason):
+    def correct_observation(self,page,json_text,reason,literal_quotes=None):
         if self.role!='reviewer' or page not in self.disclosed:return {'saved':False,'error':'Only a reviewer can revise its own observation after comparison'}
         if self.latest_zoom.get(page,0)<=self.disclosed[page]:return {'saved':False,'error':'Reinspect the disputed source with view_region first'}
         if not reason.strip():return {'saved':False,'error':'Explain the source evidence before revising the observation'}
         try:model=PageContent.model_validate_json(json_text)
         except ValidationError as exc:return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False))}
+        quotes,errors=branding_quote_evidence(self,page,model,literal_quotes,after=self.disclosed[page])
+        if errors:
+            refused=self.source_payload(page,'observation-quotes',{'saved':False,'quote_errors':errors,'quote_evidence':quotes})
+            if refused.get('paged'):refused.update(saved=False,error='Source observation correction was NOT saved. Read the retained quote errors first.')
+            return refused
         differences=self.grid_differences(page,model)
         if differences:return {'saved':False,'error':'Correction contradicts inspected direct grid/merge geometry','direct_grid_differences':differences}
         revision=self.corrections.get(page,0)+1;self.corrections[page]=revision
         work=self.work(page);write_json(work/f'source-observation-{self.attempt}-revision-{revision}.json',{'reason':reason,'content':model.model_dump()})
+        quote_file=work/f'source-observation-quotes-{self.attempt}-revision-{revision}.json'
+        write_json(quote_file,{'source_sha256':self.source_digest,'physical_page':page,'attempt':self.attempt,'quotes':quotes})
         write_json(work/f'verified-source-observation-{self.attempt}.json',model.model_dump())
-        self.log(page,'correct_source_observation',revision=revision,reason=reason)
+        self.log(page,'correct_source_observation',revision=revision,reason=reason,quote_file=quote_file.name,quote_sha256=hashlib.sha256(quote_file.read_bytes()).hexdigest())
         self.disclosed[page]=time.monotonic()
         return {'saved':True,'revision':revision,'original_blind_observation_retained':True}
 
@@ -379,13 +400,13 @@ def server(context):
             return context.finalize(page,title,printed_page,source_notes,uncertainties,preserve_existing)
     else:
         @mcp.tool()
-        def save_source_observation(page: int,json_text: str) -> dict:
-            """Save independent complete source-page transcription (PageContent schema) BEFORE reading candidate. Frozen after candidate disclosure."""
-            return context.save(page,json_text,'observation')
+        def save_source_observation(page: int,json_text: str,literal_quotes: list[dict]|None=None) -> dict:
+            """Save blind PageContent BEFORE candidate. For each branding block supply literal_quotes={block_index,box,visible_quote,basis:text_layer|vision,conflict:null|source_notes text,rotation:0}. View that exact box first. Quote original language; translations/descriptions are not source quotes. Native text and visible quote are retained separately; an actual conflict needs a source note and Vision evidence."""
+            return context.save(page,json_text,'observation',literal_quotes)
         @mcp.tool()
-        def correct_source_observation(page: int,json_text: str,reason: str) -> dict:
+        def correct_source_observation(page: int,json_text: str,reason: str,literal_quotes: list[dict]|None=None) -> dict:
             """Revise mistaken source observations only after fresh view_region inspection and a source-grounded reason. Initial blind transcription and every revision stay retained; no revision-count limit."""
-            return context.correct_observation(page,json_text,reason)
+            return context.correct_observation(page,json_text,reason,literal_quotes)
         @mcp.tool()
         def save_review(page: int,json_text: str) -> dict:
             """Save strict source-grounded review. Incomplete or contradictory claimed passes return errors."""
