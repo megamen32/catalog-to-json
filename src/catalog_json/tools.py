@@ -7,6 +7,7 @@ import time
 import pymupdf
 from pydantic import ValidationError
 from mcp.server.mcpserver import MCPServer, Image
+from mcp.types import TextContent
 from .schema import PageContent, Review, Issue, CHECKS
 from .direct import inspect_page
 from .audit import compare_source
@@ -23,17 +24,31 @@ def write_json(path, data):
     pending.replace(path)
 
 
+SOURCE_RESPONSE_BYTES=12000
+
+
+def source_chunk(text,offset,length):
+    if offset<0 or offset>len(text) or length<1:raise ValueError('Invalid source artifact range')
+    def payload(stop):return {'text':text[offset:stop],'total_characters':len(text),'next_offset':stop}
+    low=offset;high=min(len(text),offset+length)
+    while low<high:
+        middle=(low+high+1)//2
+        if len(json.dumps(payload(middle),ensure_ascii=True,indent=2).encode())<=SOURCE_RESPONSE_BYTES:low=middle
+        else:high=middle-1
+    return payload(low)
+
+
 class CatalogTools:
     def __init__(self, source=None, output=None, role='extractor', page=None, attempt=0,model=None,contract_sha256=None):
         self.model=model;self.contract_sha256=contract_sha256
-        self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.disclosed={};self.latest_zoom={};self.corrections={};self.grids={};self.source=None;self.output=None
+        self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.disclosed={};self.latest_zoom={};self.corrections={};self.grids={};self.source_artifacts={};self.region_reads={};self.source=None;self.output=None
         if source and output:self.open(source,output)
 
     def open(self,source,output):
         source=Path(source).resolve();output=Path(output).resolve()
         if output==source or source.parent==output:raise ValueError('Choose a separate output directory')
         with pymupdf.open(source) as doc:count=len(doc)
-        self.source=source;self.source_digest=hashlib.sha256(source.read_bytes()).hexdigest();self.output=output;output.mkdir(parents=True,exist_ok=True);self.seen={}
+        self.source=source;self.source_digest=hashlib.sha256(source.read_bytes()).hexdigest();self.output=output;output.mkdir(parents=True,exist_ok=True);self.seen={};self.source_artifacts={};self.region_reads={}
         return {'filename':source.name,'page_count':count,'role':self.role,'output':str(output)}
 
     def work(self,page):
@@ -64,6 +79,31 @@ class CatalogTools:
         if box is not None:self.latest_zoom[page]=time.monotonic()
         self.log(page,'view_page' if box is None else 'view_region',box=box,rotation=rotation,image=name)
         return Image(data=data,format='png')
+
+    def region(self,page,box,rotation=0):
+        image=self.render(page,box,rotation)
+        key=(page,tuple(box),rotation)
+        count=self.region_reads.get(key,0)+1;self.region_reads[key]=count
+        if count==1:return image
+        self.log(page,'repeat_region',box=box,rotation=rotation,identical_reads=count)
+        return [image,TextContent(type='text',text='This exact source region is unchanged and has already been viewed. Another identical crop adds no evidence. Compare the already read rows/headers and save completed sections now; explicitly record remaining uncertainty rather than repeating the same inspection. The image remains available and there is no inspection-count limit.')]
+
+    def source_payload(self,page,kind,data):
+        text=json.dumps(data,ensure_ascii=False,indent=2)
+        if len(json.dumps(data,ensure_ascii=True,indent=2).encode())<=SOURCE_RESPONSE_BYTES:return data
+        digest=hashlib.sha256(text.encode()).hexdigest()
+        self.source_artifacts[(page,digest)]=text
+        (self.work(page)/f'source-{kind}-{digest}.json').write_text(text,encoding='utf-8')
+        self.log(page,'source_artifact_created',kind=kind,artifact_id=digest,total_characters=len(text))
+        return {'paged':True,'kind':kind,'artifact_id':digest,'source_sha256':self.source_digest,'physical_page':page,'total_characters':len(text),'sha256':digest,'instruction':'Full source evidence is retained without truncation. Call read_source_artifact(page, artifact_id, offset=0) and follow next_offset to total_characters; chunks include rows, physical merges and headers. Do not infer values from this inventory.'}
+
+    def source_artifact(self,page,artifact_id,offset=0,length=16000):
+        self.work(page)
+        key=(page,artifact_id)
+        if key not in self.source_artifacts:raise ValueError('Unknown artifact for this source/page/tool context')
+        result=source_chunk(self.source_artifacts[key],offset,length)
+        self.log(page,'read_source_artifact',artifact_id=artifact_id,offset=offset,next_offset=result['next_offset'])
+        return result
 
     def direct(self,page):
         work=self.work(page)
@@ -239,7 +279,7 @@ def server(context):
     @mcp.tool(structured_output=False)
     def view_region(page: int,box: list[float],rotation: int=0):
         """Zoom a chosen source region. box=[left,top,right,bottom], fractions 0..1. rotation clockwise degrees 0/90/180/270."""
-        return context.render(page,box,rotation)
+        return context.region(page,box,rotation)
     @mcp.tool()
     def read_source_table(page: int,box: list[float]) -> dict:
         """Extract a selected table BODY directly from PDF text/vector geometry. Returns expanded rows, true geometry-backed merge spans and column positions. Choose normalized box; inspect headers separately."""
@@ -249,11 +289,15 @@ def server(context):
         for grid in result['tables']:
             if grid not in context.grids.setdefault(page,[]):context.grids[page].append(grid)
         context.log(page,'read_source_table',box=box)
-        return result
+        return context.source_payload(page,'table',result)
+    @mcp.tool()
+    def read_source_artifact(page: int,artifact_id: str,offset: int=0,length: int=16000) -> dict:
+        """Read retained native table/layout source evidence in byte-bounded chunks. Follow next_offset until total_characters; offsets count Python characters."""
+        return context.source_artifact(page,artifact_id,offset,length)
     @mcp.tool()
     def read_source_layout(page: int,box: list[float]|None=None) -> dict:
         """Read original text-layer words with normalized positions. Use to resolve column alignment or identical Latin/Cyrillic glyphs; diagrams still need Vision."""
-        return context.layout(page,box)
+        return context.source_payload(page,'layout',context.layout(page,box))
     @mcp.tool()
     def extract_direct(page: int) -> dict:
         """Run local AnyDoc; return structured candidate, fallible text and reasons for Vision. No credentials or cloud upload."""

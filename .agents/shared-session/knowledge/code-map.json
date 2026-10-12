@@ -39,15 +39,50 @@
           "symbol": ""
         },
         {
-          "path": "src/catalog_json/saved_results.py",
-          "symbol": "import_jsonl",
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "8c442d521905c9fd47f6d1a8ada6e1f3b9a9af0557eb8a5f117247c40cfe9d17"
+          "observed_sha256": "8c442d521905c9fd47f6d1a8ada6e1f3b9a9af0557eb8a5f117247c40cfe9d17",
+          "path": "src/catalog_json/saved_results.py",
+          "symbol": "import_jsonl"
         }
       ],
       "summary": "CLI benchmark scan inventories PDFs; extract runs native first pass; score grades independent facts; run dispatches project/model/case argv adapters with persisted no-replay receipts.",
       "verified_at": "2026-10-12T01:31:43.107595+03:00"
+    },
+    "source-review-representation": {
+      "confidence": "verified",
+      "evidence": [
+        "Independent original OPN27 audit:168 exact parameter cells;88 core checks9.29s; adversarial wrong-unit,parent-child,identity,inequality,decimal-boundary regressions.",
+        "Native MCP2+FastAgentSDK source33:3chunks,max11832B,0truncations,exactSHA; repeated source image+notice retained;90 core tests11.54s."
+      ],
+      "git_head": "b147447f8f45d639cec63ad3a0e6f3a5f0dff9f8",
+      "key": "source-review-representation",
+      "kind": "failure-shield",
+      "locations": [
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "784fe9e8880551ef69b2a82b7210fc7342db337a8fa4025791086a0328ea1fd1",
+          "path": "src/catalog_json/audit.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "d6052b676e1baae415f203e67407d451a281afdb7e1f4c6f93b452117dc8f916",
+          "path": "src/catalog_json/tools.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "d3525405ec15ef1c9ecfc3fc3e573161c0746a70f11a35fe51d3693af388e162",
+          "path": "tests/test_source_equivalence.py",
+          "symbol": ""
+        }
+      ],
+      "summary": "Independent source comparison rejects real quantity/unit/condition changes while tolerating decimal presentation and verified metadata relocation; complete source parent headers required.",
+      "verified_at": "2026-10-12T12:02:59.562798+03:00"
     }
   },
   "schema_version": 1

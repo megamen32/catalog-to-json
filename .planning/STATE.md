@@ -23,3 +23,9 @@ Full reviewed queue is incomplete and runs on immutable installed1.4.1 with Mini
 Frozen1.4.2 routing comparison revealed ordinary END_TURN with no file on page26. Its failed attempt remains in the500-fact denominator. Version1.4.3 preserves the native context until a validated tool save or the existing deadline, guarding SDK swallowed cancellation. Independent delta-review and64 tests passed; real source-page canary pending.
 
 Real1.4.3 page26 canary: nativeMCP saved JSON,15/15 selected facts in99.455s; no extra continuation prompt needed in that execution. Exact output/provenance are public in catalog-extraction-benchmark/examples/agent-routing/2026-10-12-delivery-v1.4.3. Frozen1.4.2 failure remains recorded.
+
+## Source representation and persistent jobs,2026-10-12
+
+Version1.4.5 fixes confirmed numeric/header representation false positives while preserving exact IDs, operators, units and unknown parent scopes. Source observers must retain full parent headers. Native source table/layout pagination prevents SDK truncation; exact repeat crops retain images and add a no-new-evidence cue without a count cap.90 focused checks11.54s, native source33 MCP2/SDK exactSHA/no truncation, independent delta review PASS. These are source/tool proofs, not a new accuracy cohort.
+
+Operator-installed persistent user service has finite6GiB/2CPU/512task/24h limits and no automatic replay. Source manifest/runtime file hashes are pinned; old1.4.1 source-bound full queue will be checkpointed and resumed without relabelling. Reviewed980-page completion remains outstanding.
