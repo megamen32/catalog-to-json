@@ -178,6 +178,17 @@
       "whole_page_accepted_independently": false,
       "reason": "Both drawing descriptions assert porcelain, which the source page does not name. Printed95 upper+1 is correct; source/candidate table values and literalparentvoltageunit agree.",
       "observed_unix": 1791844617.8377469
+    },
+    {
+      "catalogue": "opn",
+      "physical_page": 16,
+      "status": "source_confirmed_unprinted_material_claim_under_native_repair",
+      "candidate_sha256": "c0408b5b1f78b5ce7310f5fea555abf60ec8ea37b1c78fae39d40dbd7508a73c",
+      "source_table_cells_independently_checked": 139,
+      "source_table_cells_passed": 139,
+      "whole_page_accepted_independently": false,
+      "reason": "Both descriptions assert metal for sectioned end fittings; page does not name material and hatching does not establish composition. All139 source cells with units/merged row scopes agree; printed134±1 and191±1 are correct. Historical native data unchanged.",
+      "observed_unix": 1791845372.134267
     }
   ]
 }
