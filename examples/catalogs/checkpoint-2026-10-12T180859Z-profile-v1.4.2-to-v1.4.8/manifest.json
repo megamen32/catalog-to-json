@@ -89,11 +89,15 @@
       1,
       4,
       5,
-      6
+      6,
+      22,
+      23,
+      25
     ],
-    "scope": "Uncaptioned photo material/function/subtype claims, unsupported logo numeral interpretation and hidden PDF footer presented as visible text. Printed catalogue table values are outside these four frontmatter pages.",
+    "scope": "Uncaptioned photo material/function/subtype claims, logo numeral interpretation and hidden footer; figure descriptions on22/23/25 contain wrong skirt-count comparison, porcelain material, climatic/pollution-class conflation and invented product terminology. A separate581-check source-transcribed table ledger for20–25 passed literal product/field/value/state/unit checks; this does not accept figure descriptions or the whole catalogue.",
     "candidate_bytes_preserved": true,
     "snapshot_original_statuses_historical": true,
-    "whole_visual_acceptance": false
+    "whole_visual_acceptance": false,
+    "parent_source_audit_rejection": "Scheduler1.4.19 prevents reacceptance of explicitly source-bound known-bad candidate bytes and requests native repair; model reports and historical candidate bytes remain unchanged."
   }
 }
