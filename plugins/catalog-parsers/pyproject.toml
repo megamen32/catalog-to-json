@@ -6,13 +6,20 @@ name = "catalog-parser-tools"
 version = "0.1.0"
 description = "Agent Plugin 1.0 MCP tools for source-bound catalogue parsing"
 requires-python = ">=3.11"
-dependencies = ["mcp>=1.20,<2", "pymupdf4llm==1.28.2"]
+dependencies = ["mcp>=1.20,<2", "pymupdf4llm==1.28.2", "beautifulsoup4>=4.13,<5"]
 license = "MIT"
 [project.optional-dependencies]
 docling = ["docling==2.137.0", "torch>=2.2", "torchvision>=0.17"]
+liteparse = ["liteparse==2.15.1"]
+img2table = ["img2table==2.0.0"]
+camelot = ["camelot-py==2.0.0"]
+gmft = ["gmft==0.4.4", "torch>=2.2", "torchvision>=0.17"]
+mineru = ["mineru==4.0.12"]
+paddle = ["paddleocr[doc-parser]==3.7.0", "paddlepaddle==3.3.1"]
 [project.scripts]
 catalog-parsers = "catalog_parsers.cli:main"
 catalog-parsers-mcp = "catalog_parsers.server:main"
+catalog-parser-experiment = "catalog_parsers.experiment:main"
 [tool.hatch.build.targets.wheel]
 packages = ["src/catalog_parsers"]
 
