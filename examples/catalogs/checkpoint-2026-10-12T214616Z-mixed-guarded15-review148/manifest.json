@@ -167,6 +167,17 @@
       "whole_page_accepted_independently": false,
       "reason": "Two visible upper bolts/holes do not establish the asserted two electrical-terminal functions. Reviewer must re-open original; no automatic whole-page acceptance or manual data change.",
       "observed_unix": 1791842532.6862566
+    },
+    {
+      "catalogue": "opn",
+      "physical_page": 15,
+      "status": "source_confirmed_material_error_under_native_repair",
+      "candidate_sha256": "a1ab938dfdf782c1fe4394ca487a3a26692a85c146c15d7ec6ed440c3f8cece9",
+      "source_table_cells_independently_checked": 120,
+      "source_table_cells_passed": 120,
+      "whole_page_accepted_independently": false,
+      "reason": "Both drawing descriptions assert porcelain, which the source page does not name. Printed95 upper+1 is correct; source/candidate table values and literalparentvoltageunit agree.",
+      "observed_unix": 1791844617.8377469
     }
   ]
 }
