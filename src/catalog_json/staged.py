@@ -11,6 +11,7 @@ import time
 import uuid
 from itertools import count
 from collections import deque
+from types import SimpleNamespace
 import pymupdf
 from fast_agent.llm.model_factory import ModelFactory
 from .schema import PageContent,Review
@@ -130,13 +131,25 @@ def load_role_runtimes(agents,path):
     """Explicit pinned native role runtimes; no implicit provider/runtime fallback."""
     routes=json.loads(Path(path).read_text())
     if set(routes.get('roles',{}))!={'extractor','reviewer'}:raise ValueError('Provide both explicit role runtimes')
-    for route in routes['roles'].values():
-        if not route.get('contract_sha256') or not route.get('file_sha256') or not route.get('program',{}).get('source_code_sha256'):
-            raise ValueError('Role runtime requires actual program, contract and file pins')
-        for name,digest in route['file_sha256'].items():
-            if hashlib.sha256(Path(name).read_bytes()).hexdigest()!=digest:raise ValueError('Pinned role runtime changed')
+    def validate(role_routes):
+        if set(role_routes)!={'extractor','reviewer'}:raise ValueError('Provide both explicit role runtimes')
+        for route in role_routes.values():
+            if not route.get('contract_sha256') or not route.get('file_sha256') or not route.get('program',{}).get('source_code_sha256'):
+                raise ValueError('Role runtime requires actual program, contract and file pins')
+            for name,digest in route['file_sha256'].items():
+                if hashlib.sha256(Path(name).read_bytes()).hexdigest()!=digest:raise ValueError('Pinned role runtime changed')
+    validate(routes['roles'])
     agents.role_runtimes=routes['roles'];agents.role_contracts={r:v['contract_sha256'] for r,v in routes['roles'].items()}
     agents.contract_digest=hashlib.sha256(json.dumps(agents.role_contracts,sort_keys=True).encode()).hexdigest()
+    agents.accepted_predecessor_profiles=[]
+    for previous in routes.get('accepted_predecessor_profiles',[]):
+        if previous.get('models')!={'extractor':agents.extractor,'reviewer':agents.reviewer}:
+            raise ValueError('Accepted predecessor models must match; no provider fallback')
+        validate(previous['roles'])
+        contracts={r:v['contract_sha256'] for r,v in previous['roles'].items()}
+        agents.accepted_predecessor_profiles.append(SimpleNamespace(extractor=agents.extractor,reviewer=agents.reviewer,
+            role_contracts=contracts,role_runtimes=previous['roles'],
+            contract_digest=hashlib.sha256(json.dumps(contracts,sort_keys=True).encode()).hexdigest()))
     return agents
 
 
@@ -182,6 +195,33 @@ def compatible_accepted_profile(work,old,agents,source_sha256,page):
     if not compatible_reviewed_profile(work,old,agents,source_sha256,page,old['next_attempt']):return False
     digest=hashlib.sha256((work/f"candidate-{old['next_attempt']}.json").read_bytes()).hexdigest()
     return source_audit_rejection(work,source_sha256,page,digest) is None
+
+
+def accepted_profile_agents(work,old,agents,source_sha256,page):
+    """Reuse only explicit historical acceptance; preserve its actual native producers."""
+    for profile in [agents,*getattr(agents,'accepted_predecessor_profiles',[])]:
+        if not compatible_accepted_profile(work,old,profile,source_sha256,page):continue
+        if profile is not agents:
+            attempt=old['next_attempt']
+            # A newly saved attempt/contract supersedes a historical acceptance,
+            # even if someone later restores its old bytes or stale metadata.
+            attempts=[int(p.stem.split('-')[-1]) for p in work.glob('candidate-*.json')]
+            if not attempts or max(attempts)!=attempt:continue
+            events=[json.loads(line) for line in (work/'tools.jsonl').read_text().splitlines()]
+            superseded=False
+            for role,kind,tool in [('extractor','candidate','save_page_json'),('reviewer','review','save_review')]:
+                saves=[e for e in events if e.get('tool')==tool and all(e.get(k)==v for k,v in
+                    {'source_sha256':source_sha256,'page':page,'attempt':attempt,'role':role,'model':getattr(agents,role)}.items())]
+                digest=hashlib.sha256((work/f'{kind}-{attempt}.json').read_bytes()).hexdigest()
+                if not saves or saves[-1].get('contract_sha256')!=role_contract(profile,role) or saves[-1].get('sha256')!=digest:
+                    superseded=True;break
+            if superseded:continue
+            origins={role:artifact_origin(work,work/f'{kind}-{attempt}.json',source_sha256,page,attempt,role,
+                    getattr(profile,role),role_contract(profile,role))
+                    for role,kind in [('extractor','candidate'),('reviewer','review')]}
+            if any(origin['program']!=profile.role_runtimes[role]['program'] for role,origin in origins.items()):continue
+        return profile
+    return None
 
 
 def source_audit_rejection(work,source_sha256,page,candidate_sha256):
@@ -328,15 +368,19 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             record={'pdf_page':page,'cache_key':key,'status':'pending','next_attempt':0,'attempts':[],'tested_program':version,'source_sha256':digest,'extractor':agents.extractor,'reviewer':agents.reviewer,'contract_sha256':agents.contract_digest,'role_contracts':{role:role_contract(agents,role) for role in providers},'elapsed_seconds':0}
             if old:record['prior_execution']=old
             item={'id':cid,'source':source,'out':out,'work':work,'record':record,'reviewed_audit':external_audit_digest(work)};pending[cid,page]=item
-            if old.get('status')=='accepted' and old.get('pdf_page')==page and (old.get('cache_key')==key or resume_compatible_profile) and compatible_accepted_profile(work,old,agents,digest,page):
-                candidate=validated_candidate(work,digest,page,agents.extractor,role_contract(agents,'extractor'));report_path=work/f"review-{old['next_attempt']}.json"
+            accepted_profile=accepted_profile_agents(work,old,agents,digest,page) if old.get('status')=='accepted' and (old.get('cache_key')==key or resume_compatible_profile) else None
+            if accepted_profile is not None:
+                candidate=validated_candidate(work,digest,page,agents.extractor,role_contract(accepted_profile,'extractor'));report_path=work/f"review-{old['next_attempt']}.json"
                 saves=[json.loads(line) for line in (work/'tools.jsonl').read_text().splitlines()] if (work/'tools.jsonl').exists() else []
                 review_hash=hashlib.sha256(report_path.read_bytes()).hexdigest() if report_path.exists() else None
-                if candidate and candidate[0]==old['next_attempt'] and review_hash==old.get('review_sha256') and artifact_origin(work,report_path,digest,page,old['next_attempt'],'reviewer',agents.reviewer,role_contract(agents,'reviewer'))['source_bound_save'] and Review.model_validate_json(report_path.read_text()).accepts(candidate[1]):
+                if candidate and candidate[0]==old['next_attempt'] and review_hash==old.get('review_sha256') and artifact_origin(work,report_path,digest,page,old['next_attempt'],'reviewer',agents.reviewer,role_contract(accepted_profile,'reviewer'))['source_bound_save'] and Review.model_validate_json(report_path.read_text()).accepts(candidate[1]):
                     record.update(old)
-                    record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,role_contract(agents,'extractor'))
-                    record['review_producer']=artifact_origin(work,report_path,digest,page,old['next_attempt'],'reviewer',agents.reviewer,role_contract(agents,'reviewer'))
+                    record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,role_contract(accepted_profile,'extractor'))
+                    record['review_producer']=artifact_origin(work,report_path,digest,page,old['next_attempt'],'reviewer',agents.reviewer,role_contract(accepted_profile,'reviewer'))
                     record['candidate_sha256']=record['candidate_producer']['artifact_sha256']
+                    record['cache_key']=key
+                    record['runner_resume']={'program':version,'primary_contract_sha256':agents.contract_digest,
+                        'accepted_artifact_contract_sha256':accepted_profile.contract_digest,'fresh_model_call':False}
                     continue
             candidate=validated_candidate(work,digest,page,agents.extractor,role_contract(agents,'extractor'))
             if candidate:
@@ -368,7 +412,8 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
 
     if pacing_state:
         identity=lambda entries:{(c['id'],c['source_sha256']) for c in entries}
-        if (pacing_state.get('contract_sha256')==agents.contract_digest and
+        allowed_contracts={p.contract_digest for p in [agents,*getattr(agents,'accepted_predecessor_profiles',[])]}
+        if (pacing_state.get('contract_sha256') in allowed_contracts and
                 pacing_state.get('models')=={'extractor':agents.extractor,'reviewer':agents.reviewer} and
                 identity(pacing_state.get('catalogs',[]))==identity(catalogs)):
             for name,state in pacing_state.get('method',{}).get('provider_pacing',{}).items():
@@ -429,7 +474,9 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                 await provider_slots[providers[role]].succeeded(rate_limit_count=rate_before)
                 failures=0
                 if role=='extractor':
-                    r.update(content=artifact.model_dump(),status='awaiting_review');enqueue_review(item)
+                    r.update(content=artifact.model_dump(),status='awaiting_review',tested_program=version,
+                        contract_sha256=agents.contract_digest,role_contracts={role:role_contract(agents,role) for role in providers})
+                    r.pop('runner_resume',None);enqueue_review(item)
                     path=item['work']/f'candidate-{attempt}.json'
                     r['candidate_sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
                     r['candidate_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.extractor,role_contract(agents,'extractor'))
