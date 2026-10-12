@@ -129,7 +129,10 @@ def compatible_accepted_profile(work,old,agents,source_sha256,page):
     attempt=old['next_attempt'];candidate=work/f'candidate-{attempt}.json';review=work/f'review-{attempt}.json'
     origins={role:artifact_origin(work,path,source_sha256,page,attempt,role,getattr(agents,role),roles[role]) for role,path in [('extractor',candidate),('reviewer',review)]}
     if any(o['status']!='receipt_verified' for o in origins.values()):return False
-    if old.get('candidate_sha256')!=origins['extractor']['artifact_sha256'] or old.get('review_sha256')!=origins['reviewer']['artifact_sha256']:return False
+    candidate_hash=old.get('candidate_sha256')
+    if candidate_hash is None and old.get('candidate_producer')==origins['extractor']:
+        candidate_hash=origins['extractor']['artifact_sha256']
+    if candidate_hash!=origins['extractor']['artifact_sha256'] or old.get('review_sha256')!=origins['reviewer']['artifact_sha256']:return False
     if json.loads(candidate.read_text())!=old.get('content'):return False
     events=[json.loads(l) for l in (work/'tools.jsonl').read_text().splitlines()]
     observed=[e for e in events if e.get('tool')=='read_external_audit' and e.get('role')=='reviewer'
@@ -265,11 +268,13 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                     record.update(old)
                     record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,role_contract(agents,'extractor'))
                     record['review_producer']=artifact_origin(work,report_path,digest,page,old['next_attempt'],'reviewer',agents.reviewer,role_contract(agents,'reviewer'))
+                    record['candidate_sha256']=record['candidate_producer']['artifact_sha256']
                     continue
             candidate=validated_candidate(work,digest,page,agents.extractor,role_contract(agents,'extractor'))
             if candidate:
                 record.update(content=candidate[1].model_dump(),next_attempt=candidate[0],status='awaiting_review');review.put_nowait(item)
                 record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,role_contract(agents,'extractor'))
+                record['candidate_sha256']=record['candidate_producer']['artifact_sha256']
             else:
                 # Unbound legacy output is retained as feedback, never minted as
                 # a new source/model result merely by asking another reviewer.

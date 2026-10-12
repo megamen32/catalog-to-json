@@ -63,6 +63,15 @@ def test_delivery_only_accepted_reuse_requires_unchanged_current_audit(tmp_path)
     old={'status':'accepted','pdf_page':1,'source_sha256':'source','extractor':'m','reviewer':'r','contract_sha256':'combined','role_contracts':agents.role_contracts,'next_attempt':0,'candidate_sha256':digests['extractor'],'review_sha256':digests['reviewer'],'content':value.model_dump()}
     assert compatible_accepted_profile(tmp_path,old,agents,'source',1)
     assert not compatible_accepted_profile(tmp_path,{**old,'pdf_page':2},agents,'source',1)
+    # Older resumed drafts omitted only the redundant top-level hash. Exact
+    # completed native origin plus identical content is still required.
+    from catalog_json.provenance import artifact_origin
+    origin=artifact_origin(tmp_path,tmp_path/'candidate-0.json','source',1,0,'extractor','m','x')
+    missing={**old,'candidate_sha256':None,'candidate_producer':origin}
+    assert compatible_accepted_profile(tmp_path,missing,agents,'source',1)
+    assert not compatible_accepted_profile(tmp_path,{**missing,'candidate_producer':{**origin,'artifact_sha256':'wrong'}},agents,'source',1)
+    assert not compatible_accepted_profile(tmp_path,{**missing,'candidate_producer':{**origin,'status':'producer_unknown'}},agents,'source',1)
+    assert not compatible_accepted_profile(tmp_path,{**missing,'candidate_sha256':'wrong'},agents,'source',1)
     audit=tmp_path/'external-audit.json';audit.write_text('new original-source lead')
     assert not compatible_accepted_profile(tmp_path,old,agents,'source',1)
     event={**events[-1],'tool':'read_external_audit','sha256':hashlib.sha256(audit.read_bytes()).hexdigest()};events.insert(-1,event);log.write_text(''.join(json.dumps(e)+'\n' for e in events))
