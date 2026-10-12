@@ -82,5 +82,18 @@
       }
     ],
     "whole_catalogue_acceptance": false
+  },
+  "source_audit_erratum": {
+    "status": "under_fresh_source_bound_review",
+    "physical_opn_pages": [
+      1,
+      4,
+      5,
+      6
+    ],
+    "scope": "Uncaptioned photo material/function/subtype claims, unsupported logo numeral interpretation and hidden PDF footer presented as visible text. Printed catalogue table values are outside these four frontmatter pages.",
+    "candidate_bytes_preserved": true,
+    "snapshot_original_statuses_historical": true,
+    "whole_visual_acceptance": false
   }
 }
