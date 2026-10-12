@@ -23,6 +23,9 @@ def main():
     sub=p.add_subparsers(dest='command',required=True)
     c=sub.add_parser('convert');c.add_argument('input',type=Path);c.add_argument('--output',type=Path,required=True);c.add_argument('--pages',default='all');c.add_argument('--config',type=Path,required=True)
     c.add_argument('--extractor',default='zai.glm-5.3-flash?reasoning=low');c.add_argument('--reviewer',default='zai.glm-5.3-flash?reasoning=low');c.add_argument('--call-timeout',type=int,default=90);c.add_argument('--max-tokens',type=int,default=16384);c.add_argument('--max-repairs',type=int,default=None,help='Optional repair count for experiments; default: continue until accepted within the run deadline');c.add_argument('--deadline',type=int,default=180);c.add_argument('--resume',action='store_true')
+    batch=sub.add_parser('convert-batch',help='Convert every physical page of every catalogue in a source-bound queue')
+    batch.add_argument('manifest',type=Path);batch.add_argument('--output',type=Path,required=True);batch.add_argument('--config',type=Path,required=True)
+    batch.add_argument('--extractor',required=True);batch.add_argument('--reviewer',required=True);batch.add_argument('--call-timeout',type=int,default=1200);batch.add_argument('--max-tokens',type=int,default=16384);batch.add_argument('--deadline',type=int,default=86400);batch.add_argument('--resume',action='store_true')
     e=sub.add_parser('export');e.add_argument('input',type=Path);e.add_argument('--format',choices=['html','xlsx'],required=True);e.add_argument('--output',type=Path,required=True);e.add_argument('--allow-unverified',action='store_true')
     b=sub.add_parser('benchmark');bs=b.add_subparsers(dest='benchmark_command',required=True)
     scan=bs.add_parser('scan',help='Inventory every PDF page and render complex-page candidates')
@@ -41,6 +44,13 @@ def main():
     saved.add_argument('--document-id',required=True);saved.add_argument('--page',type=int,required=True);saved.add_argument('--output',type=Path,required=True)
     args=p.parse_args()
     try:
+        if args.command=='convert-batch':
+            from .batch import convert_batch
+            if args.deadline<=0 or args.call_timeout<=0:raise ValueError('Timeouts must be positive')
+            agents=AgentPair(args.config,args.extractor,args.reviewer,args.call_timeout,args.max_tokens)
+            result=asyncio.run(convert_batch(args.manifest,args.output,agents,args.resume,args.deadline))
+            print(json.dumps({'output':str(args.output/'batch.json'),'complete':result['complete'],'catalogs':[{'id':c['id'],'status':c['status'],'accepted_pages':c.get('accepted_pages',0),'pages':c['pages']} for c in result['catalogs']]},ensure_ascii=False))
+            return 0 if result['complete'] else 2
         if args.command=='benchmark':
             if args.benchmark_command=='import-jsonl':
                 from .saved_results import import_jsonl

@@ -50,3 +50,7 @@ catalog-json export output/catalog.json --format html --output catalogue.html
 Команды `benchmark scan`, `benchmark extract`, `benchmark score` и `benchmark run` выбирают сложные страницы и сравнивают проекты/модели по независимому эталону. Результаты сохраняют ошибки, время и версии; первый проход оценивается отдельно от исправленного результата. [Как запустить сравнение](docs/BENCHMARK.md).
 
 Independent evaluation: [Catalog Extraction Benchmark](https://github.com/megamen32/catalog-extraction-benchmark) provides 15 source-reviewed difficult pages, 500 engineering facts and common grading for canonical JSON and saved JSONL results.
+
+## Full catalogue queue
+
+`catalog-json convert-batch queue.json --output output --config fast-agent.config.example.yaml --extractor YOUR_MINIMAX_MODEL --reviewer YOUR_GLM_MODEL --resume` converts every physical page of every source-bound entry in `queue.json`. Its `catalogs` array contains `id`, `source` and `source_sha256`. It records the exact program version, source-code/contract digest, model settings and page/run time, and preserves incomplete checkpoints. Each page must pass independent source review. The default per-agent timeout is 1200 seconds; the finite whole-queue deadline is 24 hours. No conversational transcripts are required.

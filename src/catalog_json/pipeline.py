@@ -7,13 +7,17 @@ from pathlib import Path
 import pymupdf
 from .tools import write_json
 from .schema import PageContent,Review
+from .provenance import program_version
+from datetime import datetime, timezone
 
 
 async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=None,resume=False,deadline_seconds=180):
     if max_repairs is not None and max_repairs<0:raise ValueError('max_repairs must be nonnegative or None')
     source=source.resolve();out=out.resolve();out.mkdir(parents=True,exist_ok=True)
     digest=hashlib.sha256(source.read_bytes()).hexdigest()
-    job={'schema_version':'1.0','source':{'filename':source.name,'sha256':digest},'selection':pages,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'pages':[],'complete_for_selection':False,'catalog_complete':False}
+    version=program_version()
+    method={'stage':'reviewed_conversion','extractor':agents.extractor,'reviewer':agents.reviewer,'call_timeout_seconds':getattr(agents,'timeout',None),'max_tokens':getattr(agents,'max_tokens',None),'max_repairs':max_repairs,'deadline_seconds':deadline_seconds,'resume':resume,'contract_sha256':agents.contract_digest}
+    job={'tested_program':version,'test_method':method,'started_at':datetime.now(timezone.utc).isoformat(),'schema_version':'1.0','source':{'filename':source.name,'sha256':digest},'selection':pages,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'pages':[],'complete_for_selection':False,'catalog_complete':False}
     with pymupdf.open(source) as doc:count=len(doc)
     job['source']['page_count']=count;started=time.monotonic()
     prior_job=json.loads((out/'catalog.json').read_text()) if resume and (out/'catalog.json').exists() else None
@@ -35,7 +39,12 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=Non
                     latest=int(candidates[-1].stem.split('-')[-1])
                     previous={'next_stage':'reviewer','next_attempt':latest}
         # Incomplete runs keep their artifacts, but are never silently reused as accepted.
-        record={'pdf_page':n,'cache_key':key,'status':'pending','attempts':[]}
+        page_started=time.monotonic()
+        cached=None
+        record={'pdf_page':n,'cache_key':key,'status':'pending','attempts':list(previous.get('attempts',[])) if previous else [],'tested_program':version,'test_method':method,'started_at':datetime.now(timezone.utc).isoformat()}
+        if previous:
+            record['prior_execution']={k:previous.get(k) for k in ('tested_program','elapsed_seconds','status')}
+            record['prior_elapsed_seconds']=previous.get('elapsed_seconds')
         def remaining():
             seconds=deadline_seconds-(time.monotonic()-started)
             if seconds<=0:raise TimeoutError('Job deadline exhausted; retained checkpoint')
@@ -51,6 +60,7 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=Non
                     candidate=PageContent.model_validate_json(cached.read_text())
                     events=[json.loads(l) for l in (work/'tools.jsonl').read_text().splitlines()]
                     if not any(e['tool']=='save_page_json' and e['attempt']==attempt and e.get('sha256')==hashlib.sha256(cached.read_bytes()).hexdigest() for e in events):raise ValueError('Resume candidate lacks a validated tool save')
+                    record['reused_candidate']=True
                     previous=None
                 else:
                     candidate=await asyncio.wait_for(agents.run('extractor',source,out,n,attempt,feedback=attempt>0),remaining())
@@ -63,8 +73,13 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=Non
                 record.update(next_stage='extractor',next_attempt=attempt+1)
                 write_json(receipt,record)
         except Exception as exc:record.update(status='failed',error=f'{type(exc).__name__}: {exc}')
+        record['elapsed_seconds']=round(time.monotonic()-page_started,3)
+        record['finished_at']=datetime.now(timezone.utc).isoformat()
+        record['candidate_sha256']=hashlib.sha256(cached.read_bytes()).hexdigest() if cached is not None and cached.exists() else None
         write_json(receipt,record);job['pages'].append(record);write_json(out/'catalog.json',job)
         if time.monotonic()-started>=deadline_seconds:break
     job['complete_for_selection']=len(job['pages'])==len(pages) and all(p['status']=='accepted' for p in job['pages'])
     job['catalog_complete']=job['complete_for_selection'] and set(pages)==set(range(1,count+1))
+    job['elapsed_seconds']=round(time.monotonic()-started,3)
+    job['finished_at']=datetime.now(timezone.utc).isoformat()
     write_json(out/'catalog.json',job);return job

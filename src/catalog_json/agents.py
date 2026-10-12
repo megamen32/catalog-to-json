@@ -40,7 +40,7 @@ class AgentPair:
         started=time.time()
         async with fast.run() as app:
             message=await asyncio.wait_for(app[role].generate(task,request_params=RequestParams(maxTokens=self.max_tokens,max_iterations=self.max_iterations,use_history=True,parallel_tool_calls=False,streaming_timeout=self.timeout)),self.timeout)
-            write_json(runtime/'response.json',{'role':role,'stop_reason':str(message.stop_reason),'text':'\n'.join(b.text for b in message.content if getattr(b,'type',None)=='text')})
+            write_json(runtime/'response.json',{'role':role,'stop_reason':str(message.stop_reason),'elapsed_seconds':round(time.time()-started,3)})
         filename=f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'
         path=out/f'page-{page:04d}'/filename
         if not path.exists():raise RuntimeError(f'{role} ended ({message.stop_reason}) without saving {filename} through catalog tools')

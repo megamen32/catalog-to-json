@@ -15,6 +15,11 @@ def test_matrix_executes_and_resumes_without_replay(tmp_path):
       'cases':[{'id':'sample','source':str(source),'page':1,'fixture':'gold.json'}],
       'projects':[{'id':p,'version':'synthetic-v1','cwd':str(tmp_path),'command':[sys.executable,str(adapter),'{run_dir}/candidate.json',str(tmp_path/'page.json'),'{model}'],'artifact':'candidate.json'} for p in ['one','two']],
       'models':['synthetic-a','synthetic-b'],'timeout_seconds':5,'deadline_seconds':15}))
+    import subprocess
+    subprocess.run(['git','init',str(tmp_path)],check=True,capture_output=True)
+    (tmp_path/'.gitignore').write_text('out/\n')
+    subprocess.run(['git','-C',str(tmp_path),'add','source.pdf','gold.json','page.json','adapter.py','suite.json','.gitignore'],check=True)
+    subprocess.run(['git','-C',str(tmp_path),'-c','user.name=Test','-c','user.email=test@example.invalid','commit','-m','synthetic baseline'],check=True,capture_output=True)
     out=tmp_path/'out';first=run_suite(manifest,out)
     assert first['complete'] and len(first['runs'])==4 and all(r['score']['all_verified_checks_passed'] for r in first['runs'])
     # Changed grader/fixtures can reuse original output; the adapter stays frozen.
