@@ -74,6 +74,54 @@ def test_repairs_are_not_postponed_until_all_catalogues_are_extracted(tmp_path):
     assert events.index(('extractor',1,1))<events.index(('extractor',3,0))
 
 
+def test_repaired_review_precedes_queued_first_reviews(tmp_path):
+    events=[]
+    async def call(agents,role,source,out,page,attempt):
+        events.append((role,page,attempt))
+        # First review leaves several fresh candidates queued before its repair.
+        await asyncio.sleep(.06 if role=='reviewer' and page==1 and attempt==0 else .03 if role=='reviewer' and page==2 else .005)
+        value=PageContent(title=str(page),text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        if role=='reviewer' and page==1 and attempt==0:value.verdict='revise'
+        write_json(out/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump())
+        return value
+    result=asyncio.run(staged_batch(manifest(tmp_path),tmp_path/'out',Agents(),deadline_seconds=3,call=call))
+    assert result['complete']
+    assert events.index(('reviewer',1,1))<events.index(('reviewer',3,0))
+
+
+def test_review_priority_is_reselected_after_provider_admission_wait(tmp_path):
+    events=[]
+    async def call(agents,role,source,out,page,attempt):
+        events.append((role,page,attempt));await asyncio.sleep(.03 if role=='reviewer' and page==1 and attempt==0 else .003)
+        value=PageContent(title=str(page),text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        if role=='reviewer' and page==1 and attempt==0:
+            # A second worker already holds page2, but cannot yet call its API.
+            # The source repair becomes ready during this provider cooldown.
+            await agents.rate_limit_observer(role);value.verdict='revise'
+        write_json(out/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump())
+        return value
+    result=asyncio.run(staged_batch(manifest(tmp_path),tmp_path/'out',Agents(),deadline_seconds=3,call=call,
+                                   reviewer_workers=2,initial_provider_concurrency=1,retry_delay=.1))
+    assert result['complete']
+    assert events.index(('reviewer',1,1))<events.index(('reviewer',2,0))
+    assert sorted(e[1:] for e in events if e[0]=='reviewer')==[(1,0),(1,1),(2,0),(3,0)]
+
+
+def test_later_catalogue_drafts_cannot_bury_earlier_catalogue_repair(tmp_path):
+    path=manifest(tmp_path);data=json.loads(path.read_text());first=data['catalogs'][0];data['catalogs']=[{**first,'id':'first'},{**first,'id':'later'}];write_json(path,data)
+    events=[]
+    async def call(agents,role,source,out,page,attempt):
+        events.append((role,out.name,page,attempt))
+        await asyncio.sleep(.06 if role=='reviewer' and out.name=='first' and page==1 and attempt==0 else .025 if role=='reviewer' else .003)
+        value=PageContent(title=str(page),text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        if role=='reviewer' and out.name=='first' and page==1 and attempt==0:value.verdict='revise'
+        write_json(out/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump());return value
+    result=asyncio.run(staged_batch(path,tmp_path/'out',Agents(),deadline_seconds=3,call=call))
+    assert result['complete']
+    assert events.index(('reviewer','first',1,1))<events.index(('reviewer','later',1,0))
+    assert [c['accepted_pages'] for c in result['catalogs']]==[3,3]
+
+
 def test_candidate_binding_requires_source_page_model_and_saved_hash(tmp_path):
     work=tmp_path/'page-0001';work.mkdir()
     value=PageContent(title='old',text_blocks=[],tables=[],figures=[])
