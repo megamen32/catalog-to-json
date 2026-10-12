@@ -1,0 +1,159 @@
+{
+  "source_audit_status": {
+    "whole_catalogue_independent_acceptance": false,
+    "source_confirmed_repair_states": [
+      {
+        "catalogue": "opn",
+        "physical_page": 1,
+        "current_candidate_sha256": "2ec12dda22003a7545e19c880723d69069a0935b941a4e431fb5e7644b4ea38c",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 4,
+        "current_candidate_sha256": "0005013474ab2cc410d6cfa396939918e9b97e1b917d5cd20fd9ebf7248e0f52",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 5,
+        "current_candidate_sha256": "cf46bd3405f69cc9d1a9d6d2e78b39fbafa3a78972ae84c2ca32456fba70bcfc",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 6,
+        "current_candidate_sha256": "be19eeba453083c8b8c076a5621223e8e361bc65a5befb211c8dbcdabd56dec9",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 22,
+        "current_candidate_sha256": "11dda13c0e7d5df0e48836d95d42bff14d5b199e813855bd6223ba8866703464",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 23,
+        "current_candidate_sha256": "fbddadfd57c97f82e304a91b06923161b617c85dbeb13aac0cf0e329fb1b9b88",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 25,
+        "current_candidate_sha256": "5e88389e1849061fb5dd38f8f392c280d2df6ccebff88c80eb495c7a98298fcf",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 30,
+        "current_candidate_sha256": "27e0fc79f73aad25164e62e2f7e38a60e5975c789daba1fe1bd85816f29a00a6",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 35,
+        "current_candidate_sha256": "7c3578bbc13b33d77601f1267ebcb685358e4c15e662d85c482fd13d5f514989",
+        "status": "under_native_agent_repair"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 36,
+        "current_candidate_sha256": "023720a265c42cee79bc21c08718ea47ccae98c0a1ff3b9a80670880955d9053",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 40,
+        "current_candidate_sha256": "764e668555f8b2bc83d799766c9ac7c28db75e2bfccf7a2da0df93ce0c998039",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 43,
+        "current_candidate_sha256": "e395efd9ff2af0240c322914e85fc047231676c38488466ae697586a1ed636a9",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 44,
+        "current_candidate_sha256": "cbeb49d8f99084289786e5b487dc2e887fad6ae700c854b277fd2a802e7261c7",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "isolators",
+        "physical_page": 77,
+        "current_candidate_sha256": "0258f73bbf0be854d19db4540f5211d2fad5911f2450956fd4e7fabe5673673d",
+        "status": "under_native_agent_repair"
+      },
+      {
+        "catalogue": "isolators",
+        "physical_page": 101,
+        "current_candidate_sha256": "1be47846d60eb421837548d008c2f09495aecb40d4beb91940dc3f68e6fd8893",
+        "status": "under_native_agent_repair"
+      }
+    ],
+    "known_bad_bytes_rejected_by_scheduler": "1.4.20; source veto retained from1.4.19",
+    "model_review_is_not_independent_visual_acceptance": true
+  },
+  "checkpoint_utc": "2026-10-12T214616Z",
+  "status": "incomplete",
+  "all_catalogues_complete": false,
+  "accepted_pages": 142,
+  "source_pages": 980,
+  "selection": "New producercomposition15 +reviewer148; historical accepted142 artifacts retain original provenance; no historical score inherited",
+  "catalogues": [
+    {
+      "id": "opn",
+      "source_sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+      "source_page_count": 60,
+      "accepted_pages": 59,
+      "json": "opn.json",
+      "json_sha256": "75ebb4e39c5b6a48a4b9d46400f1e4da921f0413225ba40e8ecb8a4d0d440ef3",
+      "wide_tables": 54,
+      "wide_literal_values_reopened_exact": true,
+      "excel": "opn-accepted-partial.xlsx",
+      "excel_sha256": "90d525b061a64194d32a34ca0088dc3543f75d114de8211878dd3a66d551d898",
+      "exported_cells": 3486,
+      "excel_reopened_exact": true
+    },
+    {
+      "id": "isolators",
+      "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+      "source_page_count": 162,
+      "accepted_pages": 83,
+      "json": "isolators.json",
+      "json_sha256": "834d07b05fa5c95596e80235912012543f0e9dfc3e275dd8c0e64fd36842a7fd",
+      "wide_tables": 63,
+      "wide_literal_values_reopened_exact": true,
+      "excel": "isolators-accepted-partial.xlsx",
+      "excel_sha256": "2a8756b999a73a6ba6b59806907d4e3da49714cda927a130716bd39c57c31c6e",
+      "exported_cells": 4690,
+      "excel_reopened_exact": true
+    },
+    {
+      "id": "small",
+      "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+      "source_page_count": 228,
+      "accepted_pages": 0,
+      "json": "small.json",
+      "json_sha256": "709b16a2effbc65a58f28dec65ca586b3f0bb150e92abbd51aa59c99f01d9bb8"
+    },
+    {
+      "id": "armature",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+      "source_page_count": 314,
+      "accepted_pages": 0,
+      "json": "armature.json",
+      "json_sha256": "5cce5806a0145862407b22d675cf6ea49db240b6a72bdf33023e8030315f826b"
+    },
+    {
+      "id": "innovations",
+      "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+      "source_page_count": 216,
+      "accepted_pages": 0,
+      "json": "innovations.json",
+      "json_sha256": "4e8793ea1e379752842e842163d8ec3d6d13bf43d7d9ddff8f37969a9637f32a"
+    }
+  ]
+}
