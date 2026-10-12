@@ -3,6 +3,7 @@ import asyncio
 from catalog_json.staged import ProviderGate
 from catalog_json.staged import observe_worker_rate_limits
 import json
+import pytest
 
 
 def test_provider_gate_bounds_active_calls_and_reduces_after_429():
@@ -139,3 +140,32 @@ def test_operator_hold_rejects_wrong_model_provider_and_nonfinite_deadline(tmp_p
         with pytest.raises(ValueError):operator_holds(p,a,providers)
     p.write_text(json.dumps({'schema_version':'1.0','providers':{'unknown':{'model':a.extractor,'not_before_unix':0}}}))
     with pytest.raises(ValueError):operator_holds(p,a,providers)
+
+
+def test_existing_admission_waiter_cannot_be_overtaken_by_new_call():
+    """Fast unit: busy workers cannot starve an older source-audit review; <1s/max5s."""
+    async def run():
+        gate=ProviderGate(1,.01);order=[];await gate.__aenter__()
+        async def older():
+            async with gate:order.append('older');await asyncio.sleep(0)
+        old=asyncio.create_task(older());await asyncio.sleep(0)
+        await gate.__aexit__()
+        async with gate:order.append('newer')
+        await old
+        assert order==['older','newer']
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize('cancel_index',[0,1])
+def test_cancelling_queued_admission_releases_only_its_ticket(cancel_index):
+    """Fast unit: cancellation of head/middle cannot strand other jobs; <1s/max5s."""
+    async def run():
+        gate=ProviderGate(1,.01);order=[];await gate.__aenter__()
+        async def work(number):
+            async with gate:order.append(number);await asyncio.sleep(0)
+        pending=[asyncio.create_task(work(n)) for n in range(3)];await asyncio.sleep(0)
+        pending[cancel_index].cancel();await asyncio.gather(pending[cancel_index],return_exceptions=True)
+        await gate.__aexit__();await asyncio.gather(*(p for n,p in enumerate(pending) if n!=cancel_index))
+        assert order==[n for n in range(3) if n!=cancel_index]
+        assert gate.active==0 and gate.snapshot()['waiting_calls']==0
+    asyncio.run(run())

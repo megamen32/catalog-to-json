@@ -70,3 +70,9 @@ Removing an entry releases only its operator hold; SDK backoff still applies.
 Already admitted calls finish normally, the other provider keeps running, and
 queue waiting remains outside each native call timeout. The whole job deadline
 continues to include waiting. No provider/model fallback is introduced.
+
+Provider admissions follow FIFO order so workers finishing quickly cannot
+repeatedly overtake an older waiting review. `waiting_calls` reports queued
+admissions; `active_calls` reports actual native work. A page is marked
+`awaiting_provider_admission` until its gate grants a slot, then `extracting` or
+`reviewing`. Cancelling a waiting page removes only its own admission ticket.

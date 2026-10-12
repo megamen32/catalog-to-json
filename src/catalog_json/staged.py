@@ -10,6 +10,7 @@ import sys
 import time
 import uuid
 from itertools import count
+from collections import deque
 import pymupdf
 from fast_agent.llm.model_factory import ModelFactory
 from .schema import PageContent,Review
@@ -42,15 +43,21 @@ class ProviderGate:
     def __init__(self,limit,retry_delay,initial=None):
         self.maximum=limit;self.limit=min(limit,initial) if initial is not None else limit;self.retry_delay=retry_delay
         self.active=0;self.cooldown=0;self.operator_not_before=0;self.rate_limit_count=0;self.rate_limit_waves=0;self.successes=0
-        self.condition=asyncio.Condition()
+        self.condition=asyncio.Condition();self.waiters=deque()
 
     async def __aenter__(self):
+        token=object()
         async with self.condition:
-            while True:
-                delay=max(self.cooldown-time.monotonic(),self.operator_not_before-time.time())
-                if self.active<self.limit and delay<=0:self.active+=1;return self
-                try:await asyncio.wait_for(self.condition.wait(),delay) if delay>0 else await self.condition.wait()
-                except TimeoutError:pass
+            self.waiters.append(token)
+            try:
+                while True:
+                    delay=max(self.cooldown-time.monotonic(),self.operator_not_before-time.time())
+                    if self.waiters[0] is token and self.active<self.limit and delay<=0:
+                        self.waiters.popleft();self.active+=1;self.condition.notify_all();return self
+                    try:await asyncio.wait_for(self.condition.wait(),delay) if delay>0 else await self.condition.wait()
+                    except TimeoutError:pass
+            except BaseException:
+                self.waiters.remove(token);self.condition.notify_all();raise
 
     async def __aexit__(self,*args):
         async with self.condition:self.active-=1;self.condition.notify_all()
@@ -87,7 +94,7 @@ class ProviderGate:
 
     def snapshot(self):
         return {'configured_maximum':self.maximum,'current_limit':self.limit,
-                'active_calls':self.active,'rate_limit_count':self.rate_limit_count,
+                'active_calls':self.active,'waiting_calls':len(self.waiters),'rate_limit_count':self.rate_limit_count,
                 'rate_limit_waves':self.rate_limit_waves,
                 'operator_not_before_unix':self.operator_not_before,
                 'operator_hold_remaining_seconds':max(0,round(self.operator_not_before-time.time(),3)),
@@ -339,12 +346,13 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             task=await queue.get();item=task[2] if role=='extractor' else task
             r=item['record'];attempt=r['next_attempt'];began=time.monotonic()
             try:
-                r.update(status='extracting' if role=='extractor' else 'reviewing',active_role=role);save(item)
+                r.update(status='awaiting_provider_admission',active_role=role);save(item)
                 if role=='reviewer':
                     previous=item['work']/f'review-{attempt}.json'
                     if previous.exists():
                         history=item['work']/'review-history'/hashlib.sha256(previous.read_bytes()).hexdigest();history.mkdir(parents=True,exist_ok=True);shutil.copy2(previous,history/previous.name)
                 async with provider_slots[providers[role]]:
+                    r['status']='extracting' if role=='extractor' else 'reviewing';save(item)
                     artifact=await call(agents,role,item['source'],item['out'],r['pdf_page'],attempt)
                 await provider_slots[providers[role]].succeeded()
                 failures=0
