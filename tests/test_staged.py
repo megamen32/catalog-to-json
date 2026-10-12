@@ -92,6 +92,16 @@ def test_candidate_binding_requires_source_page_model_and_saved_hash(tmp_path):
     assert validated_candidate(work,'a'*64,1,'minimax-test') is None
 
 
+def test_restoring_superseded_full_bytes_cannot_unlock_resume(tmp_path):
+    work=tmp_path/'page-0001';work.mkdir();value=PageContent(title='old',text_blocks=[],tables=[],figures=[])
+    path=work/'candidate-0.json';write_json(path,value.model_dump());old=path.read_bytes()
+    event={'tool':'save_page_json','attempt':0,'role':'extractor','page':1,'model':'m','source_sha256':'s','contract_sha256':'c','sha256':hashlib.sha256(old).hexdigest()}
+    value.title='new';write_json(path,value.model_dump());new={**event,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()}
+    (work/'tools.jsonl').write_text(json.dumps(event)+'\n'+json.dumps(new)+'\n')
+    path.write_bytes(old)
+    assert validated_candidate(work,'s',1,'m','c') is None
+
+
 def test_seed_without_catalogue_binding_is_rejected_before_any_provider_call(tmp_path):
     queue=manifest(tmp_path);seed=tmp_path/'seed';(seed/'test/page-0001').mkdir(parents=True)
     async def call(*args):raise AssertionError('No provider call is allowed')
@@ -118,6 +128,19 @@ def test_same_provider_roles_share_one_active_call_slot(tmp_path):
         write_json(out/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump());return value
     result=asyncio.run(staged_batch(manifest(tmp_path),tmp_path/'out',Shared(),deadline_seconds=3,call=call))
     assert result['complete'] and peak==1
+
+
+def test_parallel_reviewers_keep_every_page_and_provider_bounds(tmp_path):
+    active={'extractor':0,'reviewer':0};peak=dict(active)
+    async def call(agents,role,source,out,page,attempt):
+        active[role]+=1;peak[role]=max(peak[role],active[role]);await asyncio.sleep(.02)
+        value=PageContent(title=str(page),text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        write_json(out/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump());active[role]-=1;return value
+    result=asyncio.run(staged_batch(manifest(tmp_path),tmp_path/'out',Agents(),call=call,extractor_workers=3,reviewer_workers=3,initial_provider_concurrency=2))
+    assert result['complete'] and peak=={'extractor':2,'reviewer':2}
+    records=json.loads((tmp_path/'out/test/catalog.json').read_text())['pages']
+    assert [r['pdf_page'] for r in records]==[1,2,3] and all(r['status']=='accepted' for r in records)
+    assert all(r['candidate_producer']['program'] is None for r in records)
 
 
 def test_cancelled_role_call_cleans_own_child_in_separate_session(tmp_path,monkeypatch):

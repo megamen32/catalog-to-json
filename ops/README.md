@@ -17,3 +17,21 @@ Use an immutable installed release for each job. Stop only the exact owned prior
 invocation, retain its checkpoint, verify it is gone, then resume that same queue.
 Changed program contracts require a separately labelled output; never relabel old
 JSON as a new producer. The service does not bypass the CLI's independent review.
+
+Staged jobs default to one worker per role. `--extractor-workers` and
+`--reviewer-workers` set finite pool maxima; `--initial-provider-concurrency`
+starts each provider below its maximum and raises admission after successful
+calls. Every provider has its own gate. A429 reduces future admission and starts
+shared backoff; admitted calls finish within their existing deadline. Underlying
+provider-SDK retries and FastAgent retries are observed, including recovered429s;
+retained receipts contain counts/hashes rather than response bodies. Choose a
+job-specific systemd override from measured aggregate memory/CPU/task capacity.
+Cancellation releases waiting gates and cleans only owned worker subprocesses.
+
+Each new native worker receipt binds actual program metadata to source, physical
+page, role, model, contract, attempt and exact saved bytes. Catalogue records keep
+separate `candidate_producer` and `review_producer`. An old save without this
+receipt is explicitly `producer_unknown`; `tested_program` names the queue runner.
+Source-equivalent seed data is retained as previous-agent feedback. Changed
+contracts require a fresh extractor save and independent review, with the old
+files retained under their original attempt numbers.

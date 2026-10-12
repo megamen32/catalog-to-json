@@ -3,6 +3,7 @@ import asyncio
 from datetime import datetime,timezone
 import hashlib
 import json
+import re
 from pathlib import Path
 import shutil
 import sys
@@ -13,8 +14,63 @@ import pymupdf
 from fast_agent.llm.model_factory import ModelFactory
 from .schema import PageContent,Review
 from .tools import write_json
-from .provenance import program_version
+from .provenance import program_version,artifact_origin
 from .processes import OwnedProcessTree
+
+
+RATE_LIMIT=re.compile(r'(?:HTTP(?:/\d(?:\.\d)?)?[^\n]{0,100}\b429\b|Error\s+code:\s*429\b|RateLimitError|rate[ _-]limit(?:ed| error| exceeded| reached)|Too Many Requests)',re.I)
+
+
+async def observe_worker_rate_limits(log,receipt,callback,seen=None):
+    """Observe exposed SDK retries without exposing logs or replaying successful calls."""
+    seen=set() if seen is None else seen
+    if not log.exists():return seen
+    for number,line in enumerate(log.read_text(errors='replace').splitlines()):
+        try:structured=json.loads(line)
+        except json.JSONDecodeError:structured={}
+        typed=isinstance(structured,dict) and structured.get('catalog_worker_event')=='provider_rate_limit' and structured.get('http_status')==429
+        if number not in seen and (typed or RATE_LIMIT.search(line)):
+            seen.add(number)
+            with receipt.open('a') as stream:
+                stream.write(json.dumps({'time':time.time(),'signal':'provider_rate_limit','worker_log_line':number+1,'line_sha256':hashlib.sha256(line.encode()).hexdigest()})+'\n')
+            await callback()
+    return seen
+
+
+class ProviderGate:
+    """Finite configured capacity with provider-wide pacing after rate limits."""
+    def __init__(self,limit,retry_delay,initial=None):
+        self.maximum=limit;self.limit=min(limit,initial) if initial is not None else limit;self.retry_delay=retry_delay
+        self.active=0;self.cooldown=0;self.rate_limit_count=0;self.successes=0
+        self.condition=asyncio.Condition()
+
+    async def __aenter__(self):
+        async with self.condition:
+            while True:
+                delay=self.cooldown-time.monotonic()
+                if self.active<self.limit and delay<=0:self.active+=1;return self
+                try:await asyncio.wait_for(self.condition.wait(),delay) if delay>0 else await self.condition.wait()
+                except TimeoutError:pass
+
+    async def __aexit__(self,*args):
+        async with self.condition:self.active-=1;self.condition.notify_all()
+
+    async def rate_limited(self):
+        async with self.condition:
+            self.rate_limit_count+=1;self.limit=max(1,self.limit//2);self.successes=0
+            self.cooldown=max(self.cooldown,time.monotonic()+min(900,self.retry_delay*2**min(self.rate_limit_count-1,5)))
+            self.condition.notify_all()
+
+    async def succeeded(self):
+        async with self.condition:
+            self.successes+=1
+            if self.successes>=max(4,self.limit*2):self.limit=min(self.maximum,self.limit+1);self.successes=0
+            self.condition.notify_all()
+
+    def snapshot(self):
+        return {'configured_maximum':self.maximum,'current_limit':self.limit,
+                'active_calls':self.active,'rate_limit_count':self.rate_limit_count,
+                'backoff_remaining_seconds':max(0,round(self.cooldown-time.monotonic(),3))}
 
 
 async def isolated_call(agents,role,source,out,page,attempt,worker_command=None):
@@ -25,9 +81,17 @@ async def isolated_call(agents,role,source,out,page,attempt,worker_command=None)
     with (call/'worker.log').open('w') as log:
         process=await asyncio.create_subprocess_exec(*args,stdout=log,stderr=asyncio.subprocess.STDOUT,start_new_session=True)
         tree=OwnedProcessTree(process.pid);watcher=asyncio.create_task(tree.watch())
+        rate_seen=set();observer=getattr(agents,'rate_limit_observer',None)
+        async def scan_rates():
+            nonlocal rate_seen
+            if observer:rate_seen=await observe_worker_rate_limits(call/'worker.log',call/'rate-limits.jsonl',lambda:observer(role),rate_seen)
+        async def watch_rates():
+            while True:await scan_rates();await asyncio.sleep(1)
+        rate_watcher=asyncio.create_task(watch_rates())
         try:await asyncio.wait_for(process.wait(),agents.timeout+30)
         finally:
-            tree.capture();watcher.cancel();await asyncio.gather(watcher,return_exceptions=True)
+            tree.capture();watcher.cancel();rate_watcher.cancel();await asyncio.gather(watcher,rate_watcher,return_exceptions=True)
+            await scan_rates()
             await tree.cleanup();await process.wait()
     if not result.exists():raise RuntimeError(f'{role} worker exited {process.returncode} without a validated result; retained {call}')
     data=json.loads(result.read_text())
@@ -41,12 +105,17 @@ def validated_candidate(work,source_sha256,page,extractor,contract_sha256=None):
     saves=[json.loads(line) for line in events.read_text().splitlines()]
     for path in sorted(work.glob('candidate-*.json'),key=lambda p:int(p.stem.split('-')[-1]),reverse=True):
         attempt=int(path.stem.split('-')[-1]);digest=hashlib.sha256(path.read_bytes()).hexdigest()
-        if any(e.get('tool')=='save_page_json' and e.get('role')=='extractor' and e.get('model')==extractor and e.get('source_sha256')==source_sha256 and e.get('page')==page and e.get('attempt')==attempt and e.get('sha256')==digest and (contract_sha256 is None or e.get('contract_sha256')==contract_sha256) for e in saves):
+        bound=[e for e in saves if e.get('tool')=='save_page_json' and e.get('role')=='extractor' and e.get('model')==extractor and e.get('source_sha256')==source_sha256 and e.get('page')==page and e.get('attempt')==attempt and (contract_sha256 is None or e.get('contract_sha256')==contract_sha256)]
+        if bound and bound[-1].get('sha256')==digest:
             return attempt,PageContent.model_validate_json(path.read_text())
     return None
 
 
-async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=False,seed=None,call=isolated_call,retry_delay=30):
+async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=False,seed=None,call=isolated_call,retry_delay=30,extractor_workers=1,reviewer_workers=1,initial_provider_concurrency=None):
+    if any(type(n) is not int or n<1 or n>16 for n in (extractor_workers,reviewer_workers)):
+        raise ValueError('Role workers must be integers from 1 to 16; choose them within the measured job budget')
+    if initial_provider_concurrency is not None and (type(initial_provider_concurrency) is not int or not 1<=initial_provider_concurrency<=16):
+        raise ValueError('Initial provider concurrency must be an integer from 1 to 16')
     manifest=Path(manifest).resolve();output=Path(output).resolve()
     if output.exists() and any(output.iterdir()) and not resume:raise ValueError('Use a fresh staged queue or explicit resume')
     output.mkdir(parents=True,exist_ok=True)
@@ -55,7 +124,10 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
     version=program_version();started=time.monotonic();pending={};catalogs=[]
     workflow=hashlib.sha256(b''.join(Path(__file__).with_name(name).read_bytes() for name in ('staged.py','stage_worker.py','processes.py','supervise.py'))).hexdigest()
     providers={role:ModelFactory.parse_model_spec(getattr(agents,role)).provider.value for role in ('extractor','reviewer')}
-    provider_slots={name:asyncio.Semaphore(1) for name in set(providers.values())}
+    role_counts={'extractor':extractor_workers,'reviewer':reviewer_workers}
+    provider_slots={name:ProviderGate(max(role_counts[role] for role in providers if providers[role]==name),retry_delay,initial_provider_concurrency) for name in set(providers.values())}
+    async def observe_rate_limit(role):await provider_slots[providers[role]].rate_limited()
+    agents.rate_limit_observer=observe_rate_limit
     extract=asyncio.PriorityQueue();review=asyncio.Queue();sequence=count()
     def enqueue_extraction(item,repair=False):extract.put_nowait((0 if repair else 1,next(sequence),item))
     for entry in entries:
@@ -91,10 +163,14 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                 saves=[json.loads(line) for line in (work/'tools.jsonl').read_text().splitlines()] if (work/'tools.jsonl').exists() else []
                 review_hash=hashlib.sha256(report_path.read_bytes()).hexdigest() if report_path.exists() else None
                 if candidate and candidate[0]==old['next_attempt'] and review_hash==old.get('review_sha256') and any(e.get('tool')=='save_review' and e.get('role')=='reviewer' and e.get('model')==agents.reviewer and e.get('source_sha256')==digest and e.get('page')==page and e.get('attempt')==old['next_attempt'] and e.get('sha256')==review_hash for e in saves) and Review.model_validate_json(report_path.read_text()).accepts(candidate[1]):
-                    record.update(old);continue
+                    record.update(old)
+                    record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,agents.contract_digest)
+                    record['review_producer']=artifact_origin(work,report_path,digest,page,old['next_attempt'],'reviewer',agents.reviewer,agents.contract_digest)
+                    continue
             candidate=validated_candidate(work,digest,page,agents.extractor,agents.contract_digest)
             if candidate:
                 record.update(content=candidate[1].model_dump(),next_attempt=candidate[0],status='awaiting_review');review.put_nowait(item)
+                record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,agents.contract_digest)
             else:
                 # Unbound legacy output is retained as feedback, never minted as
                 # a new source/model result merely by asking another reviewer.
@@ -108,7 +184,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             accepted=sum(r['status']=='accepted' for r in records)
             cat.update(accepted_pages=accepted,draft_pages=sum('content' in r for r in records),status='complete' if accepted==cat['pages'] else 'running')
             write_json(Path(cat['output']),{'schema_version':'1.0','stage':'reviewed_conversion','tested_program':version,'source':{'filename':Path(cat['source']).name,'sha256':cat['source_sha256'],'page_count':cat['pages']},'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'pages':records,'catalog_complete':accepted==cat['pages'],'complete_for_selection':accepted==cat['pages']})
-        state={'schema_version':'1.0','tested_program':version,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'contract_sha256':agents.contract_digest,'workflow_sha256':workflow,'method':{'separate_provider_queues':True,'concurrency_per_provider':1,'call_timeout_seconds':agents.timeout,'max_tokens':agents.max_tokens,'max_repairs':None,'deadline_seconds':deadline_seconds},'catalogs':catalogs,'complete':all(c['status']=='complete' for c in catalogs),'elapsed_seconds':round(time.monotonic()-started,3)}
+        state={'schema_version':'1.0','tested_program':version,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'contract_sha256':agents.contract_digest,'workflow_sha256':workflow,'method':{'separate_provider_queues':True,'concurrency_per_provider':max(role_counts.values()),'role_workers':role_counts,'provider_pacing':{name:slot.snapshot() for name,slot in provider_slots.items()},'call_timeout_seconds':agents.timeout,'max_tokens':agents.max_tokens,'max_repairs':None,'deadline_seconds':deadline_seconds},'catalogs':catalogs,'complete':all(c['status']=='complete' for c in catalogs),'elapsed_seconds':round(time.monotonic()-started,3)}
         write_json(output/'batch.json',state);return state
 
     def save(item):write_json(item['work']/'result.json',item['record']);snapshot()
@@ -126,15 +202,18 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                         history=item['work']/'review-history'/hashlib.sha256(previous.read_bytes()).hexdigest();history.mkdir(parents=True,exist_ok=True);shutil.copy2(previous,history/previous.name)
                 async with provider_slots[providers[role]]:
                     artifact=await call(agents,role,item['source'],item['out'],r['pdf_page'],attempt)
+                await provider_slots[providers[role]].succeeded()
                 failures=0
                 if role=='extractor':
                     r.update(content=artifact.model_dump(),status='awaiting_review');review.put_nowait(item)
                     path=item['work']/f'candidate-{attempt}.json'
                     r['candidate_sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
+                    r['candidate_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.extractor,agents.contract_digest)
                 else:
                     candidate=PageContent.model_validate(r['content']);r['review']=artifact.model_dump()
                     r['attempts'].append({'candidate':f'candidate-{attempt}.json','review':f'review-{attempt}.json'})
                     path=item['work']/f'review-{attempt}.json';r['review_sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
+                    r['review_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.reviewer,agents.contract_digest)
                     if artifact.accepts(candidate):r['status']='accepted'
                     else:r.update(status='needs_review',next_attempt=attempt+1);enqueue_extraction(item,repair=True)
             except asyncio.CancelledError:
@@ -142,6 +221,8 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                 raise
             except Exception as exc:
                 failures+=1;r.update(status='awaiting_review' if role=='reviewer' and 'content' in r else 'pending',last_error=f'{type(exc).__name__}: {exc}')
+                if RATE_LIMIT.search(r['last_error']):
+                    await provider_slots[providers[role]].rate_limited()
                 r.setdefault('failures',[]).append({'role':role,'attempt':attempt,'error':r['last_error'],'time':datetime.now(timezone.utc).isoformat()})
                 # Provider pacing belongs to this worker only; the other keeps running.
                 save(item);await asyncio.sleep(min(900,retry_delay*2**min(failures-1,5)))
@@ -150,7 +231,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             finally:
                 r['elapsed_seconds']+=round(time.monotonic()-began,3);r.pop('active_role',None);save(item);queue.task_done()
 
-    snapshot();workers=[asyncio.create_task(worker('extractor',extract)),asyncio.create_task(worker('reviewer',review))];interrupted=False
+    snapshot();workers=[asyncio.create_task(worker(role,extract if role=='extractor' else review)) for role,n in role_counts.items() for _ in range(n)];interrupted=False
     try:
         async with asyncio.timeout(deadline_seconds):
             while not all(i['record']['status']=='accepted' for i in pending.values()):await asyncio.sleep(.1)
