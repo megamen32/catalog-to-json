@@ -48,3 +48,5 @@ catalog-json export output/catalog.json --format html --output catalogue.html
 ## Бенчмарк
 
 Команды `benchmark scan`, `benchmark extract`, `benchmark score` и `benchmark run` выбирают сложные страницы и сравнивают проекты/модели по независимому эталону. Результаты сохраняют ошибки, время и версии; первый проход оценивается отдельно от исправленного результата. [Как запустить сравнение](docs/BENCHMARK.md).
+
+Independent evaluation: [Catalog Extraction Benchmark](https://github.com/megamen32/catalog-extraction-benchmark) provides 15 source-reviewed difficult pages, 500 engineering facts and common grading for canonical JSON and saved JSONL results.

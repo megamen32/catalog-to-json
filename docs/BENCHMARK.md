@@ -1,6 +1,8 @@
 # Catalog extraction benchmark
 
-Use the same original page across every project/model arm. Keep golden annotations private and out of extractor inputs. Quality comes from deterministic comparisons with independently checked source facts, not a model's own approval.
+The independent public [Catalog Extraction Benchmark](https://github.com/megamen32/catalog-extraction-benchmark) now maintains the frozen 15-case dataset, engineering fact grading and cross-project adapters. Use its `catalog-bench` CLI for comparisons; the commands below retain the parser’s extraction adapter and earlier diagnostic scoring.
+
+Use the same original page across every project/model arm. Keep supplied documents private and answer keys out of extractor inputs. Quality comes from deterministic comparisons with independently checked source facts, not a model's own approval.
 
 ## Find difficult cases
 
