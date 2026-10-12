@@ -189,6 +189,17 @@
       "whole_page_accepted_independently": false,
       "reason": "Both descriptions assert metal for sectioned end fittings; page does not name material and hatching does not establish composition. All139 source cells with units/merged row scopes agree; printed134±1 and191±1 are correct. Historical native data unchanged.",
       "observed_unix": 1791845372.134267
+    },
+    {
+      "catalogue": "opn",
+      "physical_page": 17,
+      "status": "source_confirmed_unprinted_material_claim_under_native_repair",
+      "candidate_sha256": "39e4adfc8d0576be73ecdc77e04938fead5af8c477ebd0055fdaa3b07cd6bcd4",
+      "source_table_cells_independently_checked": 240,
+      "source_table_cells_passed": 240,
+      "whole_page_accepted_independently": false,
+      "reason": "First drawing description asserts metal body; originalpage does not name material. All240 cells including correctly inheritedprimaryheaderunits and mergedscopes agree. Diskprojections III1upper+3lower/IV1upper+6lower are correct in historicalcandidate5. Native bytes unchanged.",
+      "observed_unix": 1791845899.6778827
     }
   ]
 }
