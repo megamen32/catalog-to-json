@@ -150,12 +150,12 @@ def validate_role_receipt(data,work,path,source_sha256,page,attempt,role,model,c
     return origin
 
 
-def compatible_accepted_profile(work,old,agents,source_sha256,page):
-    """Delivery-only resume: retain exact accepted role artifacts, not old runner labels."""
+def compatible_reviewed_profile(work,old,agents,source_sha256,page,attempt):
+    """Exact paired artifact and audit binding, independent of the review verdict."""
     roles={role:role_contract(agents,role) for role in ('extractor','reviewer')}
-    if any(old.get(k)!=v for k,v in {'status':'accepted','pdf_page':page,'source_sha256':source_sha256,
+    if any(old.get(k)!=v for k,v in {'pdf_page':page,'source_sha256':source_sha256,
             'extractor':agents.extractor,'reviewer':agents.reviewer,'contract_sha256':agents.contract_digest,'role_contracts':roles}.items()):return False
-    attempt=old['next_attempt'];candidate=work/f'candidate-{attempt}.json';review=work/f'review-{attempt}.json'
+    candidate=work/f'candidate-{attempt}.json';review=work/f'review-{attempt}.json'
     origins={role:artifact_origin(work,path,source_sha256,page,attempt,role,getattr(agents,role),roles[role]) for role,path in [('extractor',candidate),('reviewer',review)]}
     if any(o['status']!='receipt_verified' for o in origins.values()):return False
     candidate_hash=old.get('candidate_sha256')
@@ -170,6 +170,11 @@ def compatible_accepted_profile(work,old,agents,source_sha256,page):
               and origins['reviewer']['started_at']<=e.get('time',0)<=origins['reviewer']['finished_at']]
     audit=work/'external-audit.json';digest=hashlib.sha256(audit.read_bytes()).hexdigest() if audit.exists() else None
     return (observed[-1].get('sha256') if observed else None)==digest
+
+
+def compatible_accepted_profile(work,old,agents,source_sha256,page):
+    if old.get('status')!='accepted' or type(old.get('next_attempt')) is not int:return False
+    return compatible_reviewed_profile(work,old,agents,source_sha256,page,old['next_attempt'])
 
 
 def external_audit_digest(work):
@@ -301,9 +306,20 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                     continue
             candidate=validated_candidate(work,digest,page,agents.extractor,role_contract(agents,'extractor'))
             if candidate:
-                record.update(content=candidate[1].model_dump(),next_attempt=candidate[0],status='awaiting_review');review.put_nowait(item)
+                record.update(content=candidate[1].model_dump(),next_attempt=candidate[0],status='awaiting_review')
                 record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,role_contract(agents,'extractor'))
                 record['candidate_sha256']=record['candidate_producer']['artifact_sha256']
+                if (resume_compatible_profile and old.get('status')!='accepted' and
+                        type(old.get('next_attempt')) is int and old.get('next_attempt')==candidate[0]+1 and
+                        compatible_reviewed_profile(work,old,agents,digest,page,candidate[0])):
+                    report_path=work/f'review-{candidate[0]}.json';feedback=Review.model_validate_json(report_path.read_text())
+                    if not feedback.accepts(candidate[1]):
+                        record.update(status='needs_review',next_attempt=candidate[0]+1,review=feedback.model_dump(),
+                                      review_sha256=hashlib.sha256(report_path.read_bytes()).hexdigest(),
+                                      review_producer=artifact_origin(work,report_path,digest,page,candidate[0],'reviewer',agents.reviewer,role_contract(agents,'reviewer')),
+                                      attempts=[dict(a) for a in old.get('attempts',[])],repair_feedback_reused=True)
+                        enqueue_extraction(item,repair=True);continue
+                review.put_nowait(item)
             else:
                 # Unbound legacy output is retained as feedback, never minted as
                 # a new source/model result merely by asking another reviewer.

@@ -76,3 +76,10 @@ repeatedly overtake an older waiting review. `waiting_calls` reports queued
 admissions; `active_calls` reports actual native work. A page is marked
 `awaiting_provider_admission` until its gate grants a slot, then `extracting` or
 `reviewing`. Cancelling a waiting page removes only its own admission ticket.
+
+A compatible delivery-only resume also retains a completed revise report when
+both native role receipts, saved hashes, source/page/model/contracts and the
+current external audit match exactly. It continues extractor repair at the next
+attempt instead of paying for a duplicate review of the same candidate. Changed
+or newly supplied audit leads still require a fresh reviewer. This reuse never
+turns an unresolved report into acceptance.

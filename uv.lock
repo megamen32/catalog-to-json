@@ -363,7 +363,7 @@ wheels = [
 
 [[package]]
 name = "catalog-to-json"
-version = "1.4.13"
+version = "1.4.14"
 source = { editable = "." }
 dependencies = [
     { name = "fast-agent-mcp" },

@@ -439,3 +439,33 @@ def test_operator_quota_hold_expires_job_without_admitting_or_spending_native_ca
     assert result['method']['provider_pacing']['anthropic']['active_calls']==0
     assert result['method']['provider_pacing']['anthropic']['operator_hold_remaining_seconds']>59
     assert result['method']['operator_holds_sha256']==hashlib.sha256(hold.read_bytes()).hexdigest()
+
+
+@pytest.mark.parametrize('new_audit',[False,True])
+def test_bound_repair_feedback_survives_scheduler_resume_without_rechecking_same_candidate(tmp_path,new_audit):
+    """Focused integration: resume continues a proven repair instead of paying for duplicate review; <1s/max5s."""
+    import time,uuid
+    queue=manifest(tmp_path);out=tmp_path/'out';calls=[];pause=True
+    async def call(agents,role,source,directory,page,attempt):
+        calls.append((role,page,attempt))
+        if pause and role=='extractor' and page==1 and attempt==1:await asyncio.sleep(10)
+        work=directory/f'page-{page:04d}';began=time.time()
+        value=PageContent(title=f'{page}:{attempt}',text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        if role=='reviewer' and page==1 and attempt==0:
+            value.verdict='revise';value.issues=[Issue(severity='error',path='title',message='Source-grounded synthetic repair')]
+        path=work/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json');write_json(path,value.model_dump());digest=hashlib.sha256(path.read_bytes()).hexdigest();sha=hashlib.sha256(source.read_bytes()).hexdigest()
+        event={'tool':'save_page_json' if role=='extractor' else 'save_review','role':role,'page':page,'attempt':attempt,'source_sha256':sha,'model':getattr(agents,role),'contract_sha256':agents.contract_digest,'sha256':digest,'time':time.time()}
+        with (work/'tools.jsonl').open('a') as stream:
+            audit=work/'external-audit.json'
+            if role=='reviewer' and audit.exists():stream.write(json.dumps({**event,'tool':'read_external_audit','sha256':hashlib.sha256(audit.read_bytes()).hexdigest()})+'\n')
+            stream.write(json.dumps(event)+'\n')
+        receipt=work/'calls'/uuid.uuid4().hex/'result.json';write_json(receipt,{'status':'completed','execution':{'program':{'package_version':'synthetic','source_code_sha256':'verified-program'},'source_sha256':sha,'physical_page':page,'attempt':attempt,'role':role,'model':getattr(agents,role),'contract_sha256':agents.contract_digest,'artifact_sha256':digest,'started_at':began,'finished_at':time.time()}})
+        return value
+    assert not asyncio.run(staged_batch(queue,out,Agents(),deadline_seconds=.06,call=call))['complete']
+    record=json.loads((out/'test/page-0001/result.json').read_text());assert record['next_attempt']==1 and record['review']['verdict']=='revise'
+    if new_audit:write_json(out/'test/page-0001/external-audit.json',{'pdf_page':1,'findings':['New source lead']})
+    pause=False;calls.clear()
+    result=asyncio.run(staged_batch(queue,out,Agents(),deadline_seconds=1,call=call,resume=True,resume_compatible_profile=True))
+    assert result['complete']
+    if new_audit:assert calls[:3]==[('reviewer',1,0),('extractor',1,1),('reviewer',1,1)]
+    else:assert calls==[('extractor',1,1),('reviewer',1,1)]
