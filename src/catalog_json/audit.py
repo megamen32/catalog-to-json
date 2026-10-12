@@ -92,7 +92,14 @@ def unit_pattern(value):
 
 
 def condition_keys(column):
-    text=' '.join(x for x in (column.group,column.label) if x)
+    # A leaf may repeat its exact parent for standalone readability. It does not
+    # create a second physical condition; retain every nonmatching leaf byte.
+    group=column.group or ''
+    label=column.label or ''
+    if (group and label.startswith(group) and
+            (not re.search(r'\w$',group) or not re.match(r'\w',label[len(group):]))):
+        label=label[len(group):].lstrip()
+    text=' '.join(x for x in (group,label) if x)
     if column.qualifier and re.search(CONDITION_START,column.qualifier,re.I):
         if column_key(column.qualifier,column) not in column_key(text,column):text+=' '+column.qualifier
     tail=text[len(primary_header(text)):]

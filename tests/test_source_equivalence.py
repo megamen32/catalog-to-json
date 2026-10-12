@@ -107,3 +107,39 @@ def test_outlined_diameter_cyrillic_phi_is_not_lost_or_a_product_alias():
 @pytest.mark.parametrize('source,candidate',[('Шкаф13','ШкаØ13'),('Шкаф 13','ШкаØ 13')])
 def test_word_ending_is_not_a_diameter_symbol(source,candidate):
     assert compare_source(page(figure=source),page(figure=candidate))
+
+
+@pytest.mark.parametrize('group,leaf',[
+    ('Остающееся напряжение (кВ), при грозовых импульсах тока длит. 8/20 величиной:', '5 кА'),
+    ('Остающееся напряжение (кВ), при следующих значениях коммутационных токов длительностью 30/60 мкс:', '125 А'),
+])
+def test_exact_parent_repeated_in_leaf_is_not_an_extra_condition(group,leaf):
+    """Fast unit: source-confirmed OPN17/26 false refusal, expected<1s/max5s."""
+    observed=page(label=leaf,group=group)
+    candidate=page(label=group+' '+leaf,group=group)
+    original=observed.model_dump(),candidate.model_dump()
+    assert not compare_source(observed,candidate)
+    assert not compare_source(candidate,observed)
+    assert original==(observed.model_dump(),candidate.model_dump())
+
+
+@pytest.mark.parametrize('leaf,changed',[
+    ('125 А','250 А'),('147,5 А','14,75 А'),('125 А','125 мА'),('≤125 А','≥125 А'),
+])
+def test_repeated_parent_does_not_hide_changed_leaf_quantity(leaf,changed):
+    group='Остающееся напряжение (кВ), при токе длительностью 30/60 мкс:'
+    assert compare_source(page(label=leaf,group=group),page(label=group+' '+changed,group=group))
+
+
+def test_repeated_parent_does_not_hide_changed_or_absent_parent_condition():
+    group='Напряжение (кВ), при токе 125 А и длительности 30/60 мкс:'
+    for changed in ['Напряжение (кВ), при токе 125 А:',
+                    'Напряжение (кВ), при токе 125 А и длительности 8/20 мкс:',
+                    'Напряжение (кВ), при токе 125 А и длительности 30/60 мкс и температуре 25 °C:']:
+        assert compare_source(page(label='Значение',group=group),page(label=changed+' Значение',group=changed))
+
+
+def test_parent_prefix_inside_a_quantity_token_is_not_a_repeated_parent():
+    group='Напряжение при токе 1'
+    assert compare_source(page(label='0 А',group=group,qualifier='0 А'),
+                          page(label=group+'0 А',group=group,qualifier='0 А'))
