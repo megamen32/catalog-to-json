@@ -155,5 +155,18 @@
       "json": "innovations.json",
       "json_sha256": "4e8793ea1e379752842e842163d8ec3d6d13bf43d7d9ddff8f37969a9637f32a"
     }
+  ],
+  "post_snapshot_source_reviews": [
+    {
+      "catalogue": "opn",
+      "physical_page": 26,
+      "status": "fresh_source_bound_review_of_unprinted_function_claim",
+      "candidate_sha256": "bde9e021fae44168eb899d73a1d0e38ce3cd11f7e4d49718b90840e7551388a2",
+      "source_table_cells_independently_checked": 192,
+      "source_table_cells_passed": 192,
+      "whole_page_accepted_independently": false,
+      "reason": "Two visible upper bolts/holes do not establish the asserted two electrical-terminal functions. Reviewer must re-open original; no automatic whole-page acceptance or manual data change.",
+      "observed_unix": 1791842532.6862566
+    }
   ]
 }
