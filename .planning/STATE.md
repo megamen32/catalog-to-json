@@ -21,3 +21,5 @@ Full reviewed queue is incomplete and runs on immutable installed1.4.1 with Mini
 ## Delivery continuation, 2026-10-12
 
 Frozen1.4.2 routing comparison revealed ordinary END_TURN with no file on page26. Its failed attempt remains in the500-fact denominator. Version1.4.3 preserves the native context until a validated tool save or the existing deadline, guarding SDK swallowed cancellation. Independent delta-review and64 tests passed; real source-page canary pending.
+
+Real1.4.3 page26 canary: nativeMCP saved JSON,15/15 selected facts in99.455s; no extra continuation prompt needed in that execution. Exact output/provenance are public in catalog-extraction-benchmark/examples/agent-routing/2026-10-12-delivery-v1.4.3. Frozen1.4.2 failure remains recorded.
