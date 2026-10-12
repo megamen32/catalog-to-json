@@ -48,3 +48,23 @@ def test_source_equivalent_representation_does_not_block_review(observed,candida
 ])
 def test_semantic_changes_still_block_review(observed,candidate):
     assert compare_source(observed,candidate)
+
+
+def test_outlined_diameter_cyrillic_phi_is_not_lost_or_a_product_alias():
+    """Fast unit: observed outlined drawing alias must retain number/span; expected<1s/max5s."""
+    from catalog_json.schema import Figure
+    from test_contract import content
+    a=content();b=content()
+    a.figures=[Figure(title='View',description='',labels=['ф13 2 отв.','Ф116'])]
+    b.figures=[Figure(title='View',description='',labels=['Ø13 2 отв.','φ116'])]
+    assert not compare_source(a,b)
+    b.figures[0].labels=['Ø130 2 отв.','φ116']
+    assert compare_source(a,b)
+    a=content();b=content();a.tables[0].columns[0].label=b.tables[0].columns[0].label='Код изделия'
+    a.tables[0].rows[0].cells[0].value='Ф13';b.tables[0].rows[0].cells[0].value='Ø13'
+    assert compare_source(a,b)
+
+
+@pytest.mark.parametrize('source,candidate',[('Шкаф13','ШкаØ13'),('Шкаф 13','ШкаØ 13')])
+def test_word_ending_is_not_a_diameter_symbol(source,candidate):
+    assert compare_source(page(figure=source),page(figure=candidate))

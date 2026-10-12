@@ -17,7 +17,7 @@ def header_key(value):
 def figure_key(value):
     # Image observations cannot disambiguate identical Latin/Cyrillic glyph shapes.
     text=unicodedata.normalize('NFKC',value.translate(str.maketrans('АВЕКМНОРСТХавекмнорстх','ABEKMHOPCTXabekmhopctx'))).casefold()
-    text=re.sub(r'[φø⌀](?=\s*\d)','⌀',text)
+    text=re.sub(r'(?<!\w)[φфø⌀](?=\s*\d)','⌀',text)
     text=re.sub(r'(?<=\d),(?=\d)','.',text)
     return re.sub(r'[^\w+±.,⌀\s-]','',text)
 

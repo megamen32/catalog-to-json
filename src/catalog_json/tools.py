@@ -41,14 +41,14 @@ def source_chunk(text,offset,length):
 class CatalogTools:
     def __init__(self, source=None, output=None, role='extractor', page=None, attempt=0,model=None,contract_sha256=None):
         self.model=model;self.contract_sha256=contract_sha256
-        self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.disclosed={};self.latest_zoom={};self.corrections={};self.grids={};self.source_artifacts={};self.region_reads={};self.source=None;self.output=None
+        self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.disclosed={};self.latest_zoom={};self.corrections={};self.grids={};self.source_artifacts={};self.region_reads={};self.edit_baselines={};self.invalid_edit_baselines=set();self.source=None;self.output=None
         if source and output:self.open(source,output)
 
     def open(self,source,output):
         source=Path(source).resolve();output=Path(output).resolve()
         if output==source or source.parent==output:raise ValueError('Choose a separate output directory')
         with pymupdf.open(source) as doc:count=len(doc)
-        self.source=source;self.source_digest=hashlib.sha256(source.read_bytes()).hexdigest();self.output=output;output.mkdir(parents=True,exist_ok=True);self.seen={};self.source_artifacts={};self.region_reads={}
+        self.source=source;self.source_digest=hashlib.sha256(source.read_bytes()).hexdigest();self.output=output;output.mkdir(parents=True,exist_ok=True);self.seen={};self.source_artifacts={};self.region_reads={};self.edit_baselines={};self.invalid_edit_baselines=set();self.grids={};self.disclosed={};self.latest_zoom={};self.corrections={}
         return {'filename':source.name,'page_count':count,'role':self.role,'output':str(output)}
 
     def work(self,page):
@@ -128,6 +128,14 @@ class CatalogTools:
         if self.role=='reviewer' and kind=='page':self.disclosed.setdefault(page,time.monotonic())
         self.log(page,'read_page_json' if kind=='page' else 'read_review',file=path.name)
         data=json.loads(path.read_text())
+        if self.role=='extractor' and kind=='page':
+            attempt=int(path.stem.split('-')[-1]);digest=hashlib.sha256(path.read_bytes()).hexdigest();event_path=self.work(page)/'tools.jsonl'
+            events=[json.loads(l) for l in event_path.read_text().splitlines()] if event_path.exists() else []
+            saves=[e for e in events if e.get('tool')=='save_page_json' and all(e.get(k)==v for k,v in {'page':page,'attempt':attempt,'role':'extractor','source_sha256':self.source_digest,'model':self.model,'contract_sha256':self.contract_sha256}.items())]
+            if attempt<=self.attempt and saves and saves[-1].get('sha256')==digest:
+                self.edit_baselines[page]={'file':path.name,'sha256':digest};self.invalid_edit_baselines.discard(page)
+            else:
+                self.edit_baselines.pop(page,None);self.invalid_edit_baselines.add(page)
         if self.role=='reviewer' and kind=='page':
             observed_file=self.work(page)/(f'verified-source-observation-{self.attempt}.json' if 'correct_source_observation' in self.seen.get(page,set()) else f'source-observation-{self.attempt}.json')
             observed=PageContent.model_validate_json(observed_file.read_text())
@@ -145,6 +153,8 @@ class CatalogTools:
 
     def grid_differences(self,page,model):
         differences=[]
+        if not model.tables and any(g['row_count']>=2 and g['column_count']>=2 and not g['unknown_cells'] and any(cell for row in g['expanded_rows'] for cell in row) for g in self.grids.get(page,[])):
+            return [{'path':'tables','direct_value':'Inspected readable source grid','candidate_value':[]}]
         for grid in self.grids.get(page,[]):
             matches=[]
             for i,t in enumerate(model.tables):
@@ -201,6 +211,7 @@ class CatalogTools:
         prior=work/filename
         if prior.exists():write_json(work/'.history'/prior.stem/(hashlib.sha256(prior.read_bytes()).hexdigest()+'.json'),json.loads(prior.read_text()))
         write_json(work/filename,model.model_dump())
+        if kind=='page':self.invalid_edit_baselines.discard(page)
         self.log(page,'save_page_json' if kind=='page' else 'save_source_observation' if kind=='observation' else 'save_review',file=filename,sha256=hashlib.sha256((work/filename).read_bytes()).hexdigest())
         return {'saved':True,'file':str(work/filename)}
 
@@ -242,16 +253,55 @@ class CatalogTools:
         try:model={'text_blocks':TextBlock,'tables':Table,'figures':Figure}[section].model_validate_json(json_text)
         except ValidationError as exc:return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False))}
         path=self.work(page)/f'sections-{self.attempt}'/section/f'{index:04d}.json'
-        write_json(path,model.model_dump());self.log(page,'save_section',section=section,index=index)
+        write_json(path,model.model_dump());self.log(page,'save_section',section=section,index=index,sha256=hashlib.sha256(path.read_bytes()).hexdigest())
         return {'saved':True,'section':section,'index':index}
 
-    def finalize(self,page,title,printed_page=None,source_notes=None,uncertainties=None):
-        data={'title':title,'printed_page':printed_page,'source_notes':source_notes or [],'uncertainties':uncertainties or []}
+    def finalize(self,page,title,printed_page=None,source_notes=None,uncertainties=None,preserve_existing=True):
+        work=self.work(page);events=[];all_events=[]
+        path=work/'tools.jsonl'
+        if path.exists():
+            for position,line in enumerate(path.read_text().splitlines()):
+                event=json.loads(line)
+                all_events.append(event)
+                if all(event.get(k)==v for k,v in {'page':page,'attempt':self.attempt,'role':'extractor','source_sha256':self.source_digest,'model':self.model,'contract_sha256':self.contract_sha256}.items()):events.append((position,event))
+        full=work/f'candidate-{self.attempt}.json';base_position=-1
+        full_saves=[(position,e) for position,e in events if e['tool']=='save_page_json']
+        if preserve_existing and full_saves and not full.exists():return {'saved':False,'error':'Latest complete page is missing; do not revive an older candidate. Make a fresh full save or explicitly rebuild all sections with preserve_existing=False'}
+        if preserve_existing and page in self.invalid_edit_baselines:return {'saved':False,'error':'Read candidate is unbound or from a future attempt; make a fresh full save, or rebuild ALL source sections and finalize with preserve_existing=False'}
+        if preserve_existing and not full.exists() and page in self.edit_baselines:
+            baseline=self.edit_baselines[page];full=work/baseline['file']
+            if hashlib.sha256(full.read_bytes()).hexdigest()!=baseline['sha256']:return {'saved':False,'error':'Read baseline changed; reinspect before editing'}
+        data={'text_blocks':[],'tables':[],'figures':[],'printed_page':None,'source_notes':[],'uncertainties':[]}
+        if full_saves:base_position=full_saves[-1][0]
+        if preserve_existing and full.exists():
+            digest=hashlib.sha256(full.read_bytes()).hexdigest()
+            saves=[full_saves[-1][0]] if full_saves and full_saves[-1][1].get('sha256')==digest else []
+            if full.name!=f'candidate-{self.attempt}.json':
+                # Recheck the latest save at finalization as well as at read time:
+                # restoring old bytes must not revive a superseded prior baseline.
+                prior_attempt=int(full.stem.split('-')[-1])
+                prior_saves=[e for e in all_events if e.get('tool')=='save_page_json' and all(e.get(k)==v for k,v in {'page':page,'attempt':prior_attempt,'role':'extractor','source_sha256':self.source_digest,'model':self.model,'contract_sha256':self.contract_sha256}.items())]
+                saves=[-1] if prior_attempt<self.attempt and page in self.edit_baselines and prior_saves and prior_saves[-1].get('sha256')==digest else []
+            if not saves:return {'saved':False,'error':'Existing full page lacks this source/model/contract validated save; use a fresh full save or new attempt'}
+            base_position=max(saves);data=PageContent.model_validate_json(full.read_text()).model_dump()
+        # Only edits after the latest full save apply. Older drafts remain retained,
+        # but cannot overwrite the complete page with stale rows or missing sections.
+        edits={}
+        for position,event in events:
+            if position>base_position and event['tool']=='save_section':edits[event['section'],event['index']]=event
         for section in ('text_blocks','tables','figures'):
-            paths=sorted((self.work(page)/f'sections-{self.attempt}'/section).glob('*.json'))
-            indexes=[int(p.stem) for p in paths]
-            if indexes!=list(range(len(indexes))):return {'saved':False,'error':f'{section} indices must be contiguous starting at 0'}
-            data[section]=[json.loads(p.read_text()) for p in paths]
+            for index in sorted(i for name,i in edits if name==section):
+                path=work/f'sections-{self.attempt}'/section/f'{index:04d}.json'
+                if not path.exists() or hashlib.sha256(path.read_bytes()).hexdigest()!=edits[section,index].get('sha256'):
+                    return {'saved':False,'error':'Section changed outside its current validated tool save'}
+                if index>len(data[section]):return {'saved':False,'error':f'{section} indices must be contiguous starting at 0'}
+                value=json.loads(path.read_text())
+                if index==len(data[section]):data[section].append(value)
+                else:data[section][index]=value
+        data['title']=title
+        if printed_page is not None:data['printed_page']=printed_page
+        if source_notes is not None:data['source_notes']=source_notes
+        if uncertainties is not None:data['uncertainties']=uncertainties
         return self.save(page,json.dumps(data,ensure_ascii=False),'page')
 
 
@@ -321,12 +371,12 @@ def server(context):
             return context.save(page,json_text,'page')
         @mcp.tool()
         def save_section(page: int,section: str,index: int,json_text: str) -> dict:
-            """Validate/save ONE table, figure or text block; section=tables/figures/text_blocks. index starts at 0. Useful for long pages."""
+            """Validate/save ONE table, figure or text block; index starts at0. After a full save this edits that section while retaining the other sections."""
             return context.section(page,section,index,json_text)
         @mcp.tool()
-        def finalize_page(page: int,title: str,printed_page: str|None=None,source_notes: list[str]|None=None,uncertainties: list[str]|None=None) -> dict:
-            """Assemble saved sections into complete page JSON and validate it. Use same attempt; all indices contiguous."""
-            return context.finalize(page,title,printed_page,source_notes,uncertainties)
+        def finalize_page(page: int,title: str,printed_page: str|None=None,source_notes: list[str]|None=None,uncertainties: list[str]|None=None,preserve_existing: bool=True) -> dict:
+            """Assemble validated sections into complete JSON. After a full save, apply only later section edits and retain all untouched tables/text/figures and omitted metadata. Same source/model/contract/attempt; new indices contiguous. An unbound read baseline is refused: rebuild ALL sections and explicitly set preserve_existing=False for a fresh page, or make a full save."""
+            return context.finalize(page,title,printed_page,source_notes,uncertainties,preserve_existing)
     else:
         @mcp.tool()
         def save_source_observation(page: int,json_text: str) -> dict:

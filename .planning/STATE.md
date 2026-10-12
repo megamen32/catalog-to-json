@@ -29,3 +29,9 @@ Real1.4.3 page26 canary: nativeMCP saved JSON,15/15 selected facts in99.455s; no
 Version1.4.5 fixes confirmed numeric/header representation false positives while preserving exact IDs, operators, units and unknown parent scopes. Source observers must retain full parent headers. Native source table/layout pagination prevents SDK truncation; exact repeat crops retain images and add a no-new-evidence cue without a count cap.90 focused checks11.54s, native source33 MCP2/SDK exactSHA/no truncation, independent delta review PASS. These are source/tool proofs, not a new accuracy cohort.
 
 Operator-installed persistent user service has finite6GiB/2CPU/512task/24h limits and no automatic replay. Source manifest/runtime file hashes are pinned; old1.4.1 source-bound full queue will be checkpointed and resumed without relabelling. Reviewed980-page completion remains outstanding.
+
+## Repeated benchmark and section repair, 2026-10-12
+
+Three rounds per version are public in catalog-extraction-benchmark with all90 attempts and84 exact final outputs. Under released grader0.2.4, v1.4.2 scores483/463/466 of500 (mean94.13%, sample SD2.16pp), v1.4.4 scores368/341/345 (mean70.27%, SD2.91pp). Failures remain in the denominator. Catalogue-macro means86.96% vs85.23% show differing per-catalogue strengths. Historic grader outputs are retained separately.
+
+Version1.4.6 repairs confirmed destructive figure-section finalization and strictly binds current/prior edit baselines. Native original-page78 retention proof preserves two tables/all140 cells, eleven text blocks and metadata.105 fast-unit tests and package build pass; source/tool correctness is not new model accuracy. Independent drawing feature-association failures still prevent treating the v1.4.5 OPN27 canary and old OPN38/39 as fully verified. Full980 review remains outstanding. See quick/20261012-section-preservation/SUMMARY.md.
