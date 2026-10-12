@@ -13,13 +13,17 @@ def available():
     for package in ['pymupdf4llm','docling']:
         try:result[package]=importlib.metadata.version(package)
         except importlib.metadata.PackageNotFoundError:result[package]=None
+    from .dispatch import capabilities
+    result.update(capabilities())
     return result
 
 
 def parse(source,page,backend,output,model='not-applicable',resume=False):
     import pymupdf
     source=Path(source).resolve();output=Path(output).resolve()
-    if backend not in ['pymupdf4llm','docling']:raise ValueError('Unknown parser backend')
+    if backend not in ['pymupdf4llm','docling']:
+        from .dispatch import parse_external
+        return parse_external(source,page,backend,output,model,resume)
     digest=hashlib.sha256(source.read_bytes()).hexdigest()
     version=available()[backend]
     if version is None:raise ValueError(f'Optional parser {backend} is not installed')

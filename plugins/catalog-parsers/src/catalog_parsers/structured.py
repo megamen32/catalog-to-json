@@ -87,12 +87,16 @@ def from_html_blocks(raw, title):
                     out['tables'].extend(html_tables(v))
                 elif value.get('type') == 'table_body' and k == 'content' and isinstance(v, str):
                     out['tables'].extend(html_tables(v))
+                elif k=='content' and value.get('type')=='text' and isinstance(v,str):
+                    out['text_blocks'].append({'kind':'paragraph','text':v})
+                elif k=='block_content' and isinstance(v,str) and value.get('block_label') not in ('table','image'):
+                    out['text_blocks'].append({'kind':'paragraph','text':v})
                 else: visit(v)
         elif isinstance(value, list):
             for item in value: visit(item)
     visit(raw)
     for i, table in enumerate(out['tables']):table['id'] = f't{i}';table['title'] = f't{i}'
-    out['source_notes'].append('Only parser-emitted HTML table geometry is expanded; absent cells are unknown. No benchmark/source-derived repairs. Caption and figure evidence remains in raw JSON.')
+    out['source_notes'].append('Only parser-emitted HTML table geometry is expanded; absent cells are unknown. Native text leaves are retained without guessed header associations. No benchmark/source-derived repairs. Figure geometry remains in raw JSON.')
     return out
 
 

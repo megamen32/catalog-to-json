@@ -1,6 +1,7 @@
 """Compose portable Agent Plugin 1.0 MCP/skill contributions through native FastAgent APIs."""
 import hashlib
 import json
+import os
 from pathlib import Path
 
 
@@ -27,6 +28,8 @@ def plugin_servers(plugins,source,page,output):
             if name=='catalog' or name in result:raise ValueError('Plugin MCP server name collision')
             if spec.get('type')!='stdio':raise ValueError('Only explicitly configured local stdio plugins are supported by this extractor')
             args=[expand(v) for v in spec.get('args',[])];env={k:expand(v) for k,v in spec.get('env',{}).items()}
+            if plugin['name']=='catalog-parsers' and os.environ.get('CATALOG_PARSER_EXECUTORS'):
+                env['CATALOG_PARSER_EXECUTORS']=os.environ['CATALOG_PARSER_EXECUTORS']
             # Source/page scoping is the catalogue-parser plugin's supported native CLI contract.
             if plugin['name']=='catalog-parsers':args+=['--source',str(Path(source).resolve()),'--page',str(page),'--cache-root',str(data/'cache')]
             server={'command':expand(spec['command']),'args':args,'env':env}

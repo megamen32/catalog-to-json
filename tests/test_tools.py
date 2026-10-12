@@ -226,3 +226,19 @@ def test_repair_reads_latest_artifact_after_tenth_attempt(tmp_path):
     for number in (9,10):
         d=content();d.title=str(number);write_json(t.work(1)/f'candidate-{number}.json',d.model_dump())
     assert t.read(1,'page')['title']=='10'
+
+
+def test_external_audit_is_source_bound_and_keeps_review_blind(tmp_path):
+    """Fast unit: independent leads cannot cross source or bypass blind review; <1s/max5s."""
+    import hashlib,pytest
+    from catalog_json.tools import write_json
+    source=pdf(tmp_path);out=tmp_path/'output'
+    t=CatalogTools(source,out,page=1)
+    write_json(t.work(1)/'external-audit.json',{'pdf_page':1,'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'findings':[{'path':'source_notes','observation':'Check tiny source text'}]})
+    assert t.external_audit(1)['present']
+    r=CatalogTools(source,out,role='reviewer',page=1)
+    with pytest.raises(ValueError,match='independent'):r.external_audit(1)
+    r.render(1);assert r.save(1,content().model_dump_json(),'observation')['saved']
+    assert r.external_audit(1)['present']
+    write_json(t.work(1)/'external-audit.json',{'pdf_page':2,'source_sha256':'wrong','findings':[]})
+    with pytest.raises(ValueError,match='another source/page'):t.external_audit(1)

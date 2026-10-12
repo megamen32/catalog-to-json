@@ -93,6 +93,15 @@ class CatalogTools:
             return {'candidate':data,'independent_comparison':compare_source(observed,PageContent.model_validate(data))}
         return data
 
+    def external_audit(self,page):
+        path=self.work(page)/'external-audit.json'
+        if not path.exists():return {'present':False}
+        if self.role=='reviewer' and 'save_source_observation' not in self.seen.get(page,set()):raise ValueError('Save independent source observation before reading external audit leads')
+        data=json.loads(path.read_text())
+        if data.get('pdf_page')!=page or data.get('source_sha256')!=hashlib.sha256(self.source.read_bytes()).hexdigest():raise ValueError('External audit belongs to another source/page')
+        self.log(page,'read_external_audit',sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+        return {'present':True,'findings':data['findings'],'instruction':'These are independent audit leads, not authority. Verify each against the original; never invent a missing value or accept a source claim blindly.'}
+
     def grid_differences(self,page,model):
         differences=[]
         for grid in self.grids.get(page,[]):
@@ -256,6 +265,10 @@ def server(context):
     def read_review(page: int) -> dict:
         """Read the latest reviewer findings before repairing the candidate."""
         return context.read(page,'review')
+    @mcp.tool()
+    def read_external_audit(page: int) -> dict:
+        """Read source-bound independent audit leads. Reviewer must save blind observations first; leads require original-image verification."""
+        return context.external_audit(page)
     if context.role=='extractor':
         @mcp.tool()
         def save_page_json(page: int,json_text: str) -> dict:

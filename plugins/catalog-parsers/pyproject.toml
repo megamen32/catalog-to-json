@@ -3,7 +3,7 @@ requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 [project]
 name = "catalog-parser-tools"
-version = "0.1.0"
+version = "0.2.0"
 description = "Agent Plugin 1.0 MCP tools for source-bound catalogue parsing"
 requires-python = ">=3.11"
 dependencies = ["mcp>=1.20,<2", "pymupdf4llm==1.28.2", "beautifulsoup4>=4.13,<5"]
@@ -20,6 +20,7 @@ paddle = ["paddleocr[doc-parser]==3.7.0", "paddlepaddle==3.3.1"]
 catalog-parsers = "catalog_parsers.cli:main"
 catalog-parsers-mcp = "catalog_parsers.server:main"
 catalog-parser-experiment = "catalog_parsers.experiment:main"
+catalog-parser-remote = "catalog_parsers.remote:main"
 [tool.hatch.build.targets.wheel]
 packages = ["src/catalog_parsers"]
 

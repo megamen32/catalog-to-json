@@ -24,7 +24,10 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=Non
     if not pages or len(set(pages))!=len(pages) or any(n<1 or n>count for n in pages):raise ValueError('Page selection is empty, repeated, or out of range')
     for n in pages:
         work=out/f'page-{n:04d}';work.mkdir(exist_ok=True)
-        key=hashlib.sha256(json.dumps({'source':digest,'page':n,'models':job['models'],'contract':agents.contract_digest,'repairs':max_repairs},sort_keys=True).encode()).hexdigest()
+        audit_path=work/'external-audit.json'
+        audit_digest=hashlib.sha256(audit_path.read_bytes()).hexdigest() if audit_path.exists() else None
+        page_method={**method,'external_audit_sha256':audit_digest}
+        key=hashlib.sha256(json.dumps({'external_audit':audit_digest,'source':digest,'page':n,'models':job['models'],'contract':agents.contract_digest,'repairs':max_repairs},sort_keys=True).encode()).hexdigest()
         receipt=work/'result.json'
         previous=None
         if resume and receipt.exists():
@@ -41,7 +44,7 @@ async def convert(source: Path,out: Path,pages: list[int],agents,max_repairs=Non
         # Incomplete runs keep their artifacts, but are never silently reused as accepted.
         page_started=time.monotonic()
         cached=None
-        record={'pdf_page':n,'cache_key':key,'status':'pending','attempts':list(previous.get('attempts',[])) if previous else [],'tested_program':version,'test_method':method,'started_at':datetime.now(timezone.utc).isoformat()}
+        record={'pdf_page':n,'cache_key':key,'status':'pending','attempts':list(previous.get('attempts',[])) if previous else [],'tested_program':version,'test_method':page_method,'started_at':datetime.now(timezone.utc).isoformat()}
         if previous:
             record['prior_execution']={k:previous.get(k) for k in ('tested_program','elapsed_seconds','status')}
             record['prior_elapsed_seconds']=previous.get('elapsed_seconds')

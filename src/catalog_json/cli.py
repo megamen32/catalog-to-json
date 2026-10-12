@@ -26,6 +26,10 @@ def main():
     batch=sub.add_parser('convert-batch',help='Convert every physical page of every catalogue in a source-bound queue')
     batch.add_argument('manifest',type=Path);batch.add_argument('--output',type=Path,required=True);batch.add_argument('--config',type=Path,required=True)
     batch.add_argument('--extractor',required=True);batch.add_argument('--reviewer',required=True);batch.add_argument('--call-timeout',type=int,default=1200);batch.add_argument('--max-tokens',type=int,default=16384);batch.add_argument('--deadline',type=int,default=86400);batch.add_argument('--resume',action='store_true')
+    batch.add_argument('--parallel-stages',action='store_true',help='One isolated extractor and one reviewer process; review failures do not block extraction')
+    batch.add_argument('--seed',type=Path,help='Retain validated candidates from an earlier queue, then independently re-audit them')
+    native=sub.add_parser('native-batch',help='Save all directly readable source data as explicitly unreviewed JSON')
+    native.add_argument('manifest',type=Path);native.add_argument('--output',type=Path,required=True);native.add_argument('--deadline',type=int,default=3600)
     e=sub.add_parser('export');e.add_argument('input',type=Path);e.add_argument('--format',choices=['html','xlsx'],required=True);e.add_argument('--output',type=Path,required=True);e.add_argument('--allow-unverified',action='store_true')
     b=sub.add_parser('benchmark');bs=b.add_subparsers(dest='benchmark_command',required=True)
     scan=bs.add_parser('scan',help='Inventory every PDF page and render complex-page candidates')
@@ -44,11 +48,21 @@ def main():
     saved.add_argument('--document-id',required=True);saved.add_argument('--page',type=int,required=True);saved.add_argument('--output',type=Path,required=True)
     args=p.parse_args()
     try:
+        if args.command=='native-batch':
+            from .native_batch import native_batch
+            if args.deadline<=0:raise ValueError('Deadline must be positive')
+            result=native_batch(args.manifest,args.output,args.deadline)
+            print(json.dumps(result,ensure_ascii=False));return 0 if result['complete'] else 2
         if args.command=='convert-batch':
             from .batch import convert_batch
             if args.deadline<=0 or args.call_timeout<=0:raise ValueError('Timeouts must be positive')
             agents=AgentPair(args.config,args.extractor,args.reviewer,args.call_timeout,args.max_tokens)
-            result=asyncio.run(convert_batch(args.manifest,args.output,agents,args.resume,args.deadline))
+            if args.parallel_stages:
+                from .staged import staged_batch
+                result=asyncio.run(staged_batch(args.manifest,args.output,agents,args.deadline,args.resume,args.seed))
+            else:
+                if args.seed:raise ValueError('--seed requires --parallel-stages')
+                result=asyncio.run(convert_batch(args.manifest,args.output,agents,args.resume,args.deadline))
             print(json.dumps({'output':str(args.output/'batch.json'),'complete':result['complete'],'catalogs':[{'id':c['id'],'status':c['status'],'accepted_pages':c.get('accepted_pages',0),'pages':c['pages']} for c in result['catalogs']]},ensure_ascii=False))
             return 0 if result['complete'] else 2
         if args.command=='benchmark':

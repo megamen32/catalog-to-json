@@ -9,6 +9,7 @@ import yaml
 from fast_agent import FastAgent
 from fast_agent.types import RequestParams
 from fast_agent.skills.registry import SkillRegistry
+from fast_agent.mcp.mcp_aggregator import MCPAttachOptions
 from .schema import PageContent,Review
 from .tools import SKILLS,write_json
 from .models import register_model_capabilities
@@ -31,6 +32,16 @@ class AgentPair:
         self.contract_digest=hashlib.sha256(('tool-agent-v2-independent-observer'+''.join(Path(__file__).with_name(name).read_text() for name in ('agents.py','plugin_inputs.py','tools.py','audit.py','grid.py','models.py'))+instructions+json.dumps(PageContent.model_json_schema(),sort_keys=True)+json.dumps(Review.model_json_schema(),sort_keys=True)).encode()).hexdigest()
 
     async def run(self,role,source,out,page,attempt,feedback=False):
+        return await asyncio.wait_for(self._guarded_run(role,source,out,page,attempt,feedback),self.timeout)
+
+    async def _guarded_run(self,role,source,out,page,attempt,feedback):
+        try:
+            return await self._run(role,source,out,page,attempt,feedback)
+        except SystemExit as exc:
+            # Native startup failures must checkpoint the page, not kill the queue.
+            raise RuntimeError(f'FastAgent {role} startup exited with code {exc.code}') from exc
+
+    async def _run(self,role,source,out,page,attempt,feedback=False):
         runtime=out/f'page-{page:04d}'/f'agent-{role}-{attempt}';runtime.mkdir(parents=True,exist_ok=True)
         # Preserve provider settings and env placeholders, never materialize API keys.
         config=yaml.safe_load(self.config.read_text()) or {}
@@ -41,6 +52,7 @@ class AgentPair:
         if set(extra_servers)&set(contributions):raise ValueError('Configured and plugin MCP server names collide')
         config['mcp']['servers'].update(extra_servers)
         config['mcp']['servers'].update(contributions)
+        for server in config['mcp']['servers'].values():server['load_on_start']=False
         config.pop('agent_plugins',None)
         config['logger']={'level':'error','type':'console','show_chat':False,'show_tools':False,'progress_display':False}
         cfg=runtime/'fast-agent.yaml';cfg.write_text(yaml.safe_dump(config),encoding='utf-8')
@@ -52,8 +64,11 @@ class AgentPair:
         fast.agent(name=role,instruction=instruction,model=getattr(self,role),servers=list(config['mcp']['servers']),skills=role_skills,use_history=True,shell=False)(lambda:None)
         task=f'Process physical PDF page {page}. '+('Extract the entire page; save_page_json or save_section/finalize_page is the deliverable.' if role=='extractor' else 'Audit ALL content and EVERY cell against the source; save_review is the deliverable. Do not use spot checks.')
         if feedback:task+=' Read read_page_json and read_review for the prior attempt. Reinspect and fix actual defects, then save a complete new candidate. Do not trust the previous review without source comparison.'
+        task+=' Check read_external_audit after inspecting the source (reviewer only after saving independent observations). Verify its source-bound leads before the final save.'
         started=time.time()
         async with fast.run() as app:
+            for server in config['mcp']['servers']:
+                await app.attach_mcp_server(role,server,options=MCPAttachOptions(startup_timeout_seconds=min(60,self.timeout)))
             message=await asyncio.wait_for(app[role].generate(task,request_params=RequestParams(maxTokens=self.max_tokens,max_iterations=self.max_iterations,use_history=True,parallel_tool_calls=False,streaming_timeout=self.timeout)),self.timeout)
             write_json(runtime/'response.json',{'role':role,'stop_reason':str(message.stop_reason),'elapsed_seconds':round(time.time()-started,3)})
         filename=f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'
