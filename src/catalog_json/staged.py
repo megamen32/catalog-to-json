@@ -41,7 +41,7 @@ class ProviderGate:
     """Finite configured capacity with provider-wide pacing after rate limits."""
     def __init__(self,limit,retry_delay,initial=None):
         self.maximum=limit;self.limit=min(limit,initial) if initial is not None else limit;self.retry_delay=retry_delay
-        self.active=0;self.cooldown=0;self.rate_limit_count=0;self.successes=0
+        self.active=0;self.cooldown=0;self.rate_limit_count=0;self.rate_limit_waves=0;self.successes=0
         self.condition=asyncio.Condition()
 
     async def __aenter__(self):
@@ -57,8 +57,10 @@ class ProviderGate:
 
     async def rate_limited(self):
         async with self.condition:
-            self.rate_limit_count+=1;self.limit=max(1,self.limit//2);self.successes=0
-            self.cooldown=max(self.cooldown,time.monotonic()+min(900,self.retry_delay*2**min(self.rate_limit_count-1,5)))
+            self.rate_limit_count+=1;self.successes=0;now=time.monotonic()
+            if now>=self.cooldown:
+                self.rate_limit_waves+=1;self.limit=max(1,self.limit//2)
+                self.cooldown=now+min(900,self.retry_delay*2**min(self.rate_limit_waves-1,5))
             self.condition.notify_all()
 
     async def succeeded(self):
@@ -70,6 +72,7 @@ class ProviderGate:
     def snapshot(self):
         return {'configured_maximum':self.maximum,'current_limit':self.limit,
                 'active_calls':self.active,'rate_limit_count':self.rate_limit_count,
+                'rate_limit_waves':self.rate_limit_waves,
                 'backoff_remaining_seconds':max(0,round(self.cooldown-time.monotonic(),3))}
 
 
@@ -104,6 +107,25 @@ def validate_role_receipt(data,work,path,source_sha256,page,attempt,role,model,c
     if schema.model_validate(data['artifact']).model_dump()!=schema.model_validate_json(path.read_text()).model_dump():
         raise RuntimeError('Native worker returned different artifact content')
     return origin
+
+
+def compatible_accepted_profile(work,old,agents,source_sha256,page):
+    """Delivery-only resume: retain exact accepted role artifacts, not old runner labels."""
+    roles={role:role_contract(agents,role) for role in ('extractor','reviewer')}
+    if any(old.get(k)!=v for k,v in {'status':'accepted','pdf_page':page,'source_sha256':source_sha256,
+            'extractor':agents.extractor,'reviewer':agents.reviewer,'contract_sha256':agents.contract_digest,'role_contracts':roles}.items()):return False
+    attempt=old['next_attempt'];candidate=work/f'candidate-{attempt}.json';review=work/f'review-{attempt}.json'
+    origins={role:artifact_origin(work,path,source_sha256,page,attempt,role,getattr(agents,role),roles[role]) for role,path in [('extractor',candidate),('reviewer',review)]}
+    if any(o['status']!='receipt_verified' for o in origins.values()):return False
+    if old.get('candidate_sha256')!=origins['extractor']['artifact_sha256'] or old.get('review_sha256')!=origins['reviewer']['artifact_sha256']:return False
+    if json.loads(candidate.read_text())!=old.get('content'):return False
+    events=[json.loads(l) for l in (work/'tools.jsonl').read_text().splitlines()]
+    observed=[e for e in events if e.get('tool')=='read_external_audit' and e.get('role')=='reviewer'
+              and e.get('page')==page and e.get('attempt')==attempt and e.get('source_sha256')==source_sha256
+              and e.get('model')==agents.reviewer and e.get('contract_sha256')==roles['reviewer']
+              and origins['reviewer']['started_at']<=e.get('time',0)<=origins['reviewer']['finished_at']]
+    audit=work/'external-audit.json';digest=hashlib.sha256(audit.read_bytes()).hexdigest() if audit.exists() else None
+    return (observed[-1].get('sha256') if observed else None)==digest
 
 
 async def isolated_call(agents,role,source,out,page,attempt,worker_command=None):
@@ -155,7 +177,7 @@ def validated_candidate(work,source_sha256,page,extractor,contract_sha256=None):
     return None
 
 
-async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=False,seed=None,call=isolated_call,retry_delay=30,extractor_workers=1,reviewer_workers=1,initial_provider_concurrency=None):
+async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=False,seed=None,call=isolated_call,retry_delay=30,extractor_workers=1,reviewer_workers=1,initial_provider_concurrency=None,resume_compatible_profile=False):
     if any(type(n) is not int or n<1 or n>16 for n in (extractor_workers,reviewer_workers)):
         raise ValueError('Role workers must be integers from 1 to 16; choose them within the measured job budget')
     if initial_provider_concurrency is not None and (type(initial_provider_concurrency) is not int or not 1<=initial_provider_concurrency<=16):
@@ -202,7 +224,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             record={'pdf_page':page,'cache_key':key,'status':'pending','next_attempt':0,'attempts':[],'tested_program':version,'source_sha256':digest,'extractor':agents.extractor,'reviewer':agents.reviewer,'contract_sha256':agents.contract_digest,'role_contracts':{role:role_contract(agents,role) for role in providers},'elapsed_seconds':0}
             if old:record['prior_execution']=old
             item={'id':cid,'source':source,'out':out,'work':work,'record':record};pending[cid,page]=item
-            if old.get('cache_key')==key and old.get('status')=='accepted':
+            if old.get('status')=='accepted' and old.get('pdf_page')==page and (old.get('cache_key')==key or resume_compatible_profile and compatible_accepted_profile(work,old,agents,digest,page)):
                 candidate=validated_candidate(work,digest,page,agents.extractor,role_contract(agents,'extractor'));report_path=work/f"review-{old['next_attempt']}.json"
                 saves=[json.loads(line) for line in (work/'tools.jsonl').read_text().splitlines()] if (work/'tools.jsonl').exists() else []
                 review_hash=hashlib.sha256(report_path.read_bytes()).hexdigest() if report_path.exists() else None

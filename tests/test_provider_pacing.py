@@ -87,3 +87,14 @@ def test_underlying_sdk_recovered_429_is_observed(monkeypatch):
         assert BaseClient._should_retry(None,SimpleNamespace(status_code=429))=='unchanged SDK decision'
         assert BaseClient._should_retry(None,SimpleNamespace(status_code=200))=='unchanged SDK decision'
     assert seen==[429] and BaseClient._should_retry is original
+
+
+def test_rate_limit_wave_is_counted_but_reduces_admission_once():
+    async def run():
+        gate=ProviderGate(8,.02,initial=4)
+        for _ in range(4):await gate.rate_limited()
+        assert gate.rate_limit_count==4 and gate.limit==2 and gate.rate_limit_waves==1
+        remaining=gate.cooldown-asyncio.get_running_loop().time();assert 0<remaining<=.02
+        await asyncio.sleep(.025);await gate.rate_limited()
+        assert gate.limit==1 and gate.rate_limit_waves==2 and gate.rate_limit_count==5
+    asyncio.run(run())
