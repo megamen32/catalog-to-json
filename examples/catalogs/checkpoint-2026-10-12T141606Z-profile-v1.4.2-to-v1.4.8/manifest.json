@@ -1,0 +1,62 @@
+{
+  "checkpoint_utc": "2026-10-12T141606Z",
+  "status": "incomplete",
+  "all_catalogues_complete": false,
+  "accepted_pages": 53,
+  "source_pages": 980,
+  "selection": "best measured extractor1.4.2; fixed reviewer1.4.8; combined pipeline not independently benchmarked",
+  "catalogues": [
+    {
+      "id": "opn",
+      "source_sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+      "source_page_count": 60,
+      "accepted_pages": 43,
+      "json": "opn.json",
+      "json_sha256": "ed3f40319afc7437e32a773f875b865034fc80bb8a0e8485b8b46419fa672cc6",
+      "wide_tables": 38,
+      "wide_literal_values_reopened_exact": true,
+      "excel": "opn-accepted-partial.xlsx",
+      "excel_sha256": "4fd9c2ffbfd51e93499de7d4c9728bf3ee7f4c1809416d80807ac1cbd79297f3",
+      "exported_cells": 2250,
+      "excel_reopened_exact": true
+    },
+    {
+      "id": "isolators",
+      "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+      "source_page_count": 162,
+      "accepted_pages": 10,
+      "json": "isolators.json",
+      "json_sha256": "148090daffa2fc6415ed48b42c4209ae1a762c61a1031875914ea66d16da76b4",
+      "wide_tables": 7,
+      "wide_literal_values_reopened_exact": true,
+      "excel": "isolators-accepted-partial.xlsx",
+      "excel_sha256": "4abe326d8991f4658669557df2e8555856f605c8dba57fbcb1afd76e8f746dbf",
+      "exported_cells": 255,
+      "excel_reopened_exact": true
+    },
+    {
+      "id": "small",
+      "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+      "source_page_count": 228,
+      "accepted_pages": 0,
+      "json": "small.json",
+      "json_sha256": "d3f9e3502e7def02e82dfaab805b335d5368a67911b6c36a4ae1a148522662aa"
+    },
+    {
+      "id": "armature",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+      "source_page_count": 314,
+      "accepted_pages": 0,
+      "json": "armature.json",
+      "json_sha256": "9303765218ca3549bf0e8aaacd68875c7117f3ab0c175daafcbe4ed9b53784d5"
+    },
+    {
+      "id": "innovations",
+      "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+      "source_page_count": 216,
+      "accepted_pages": 0,
+      "json": "innovations.json",
+      "json_sha256": "36ea089f6c15e184cd899d32677983c4dc65604db930bd5213e26ae612815145"
+    }
+  ]
+}
