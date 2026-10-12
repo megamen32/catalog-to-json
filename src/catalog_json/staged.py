@@ -69,6 +69,18 @@ class ProviderGate:
             if self.successes>=max(4,self.limit*2):self.limit=min(self.maximum,self.limit+1);self.successes=0
             self.condition.notify_all()
 
+    def restore(self,state,elapsed=0):
+        """Restore admission only; native active calls were checkpointed/cleaned."""
+        maximum=state.get('configured_maximum');limit=state.get('current_limit')
+        signals=state.get('rate_limit_count',0);waves=state.get('rate_limit_waves',0)
+        remaining=state.get('backoff_remaining_seconds',0)
+        if (any(type(n) is not int for n in (maximum,limit,signals,waves)) or
+                not 1<=limit<=maximum<=16 or not 0<=waves<=signals or
+                type(remaining) not in (int,float) or not 0<=remaining<=900):
+            raise ValueError('Invalid provider pacing checkpoint')
+        self.limit=min(self.maximum,limit);self.rate_limit_count=signals;self.rate_limit_waves=waves
+        self.cooldown=time.monotonic()+max(0,remaining-max(0,elapsed))
+
     def snapshot(self):
         return {'configured_maximum':self.maximum,'current_limit':self.limit,
                 'active_calls':self.active,'rate_limit_count':self.rate_limit_count,
@@ -128,6 +140,24 @@ def compatible_accepted_profile(work,old,agents,source_sha256,page):
     return (observed[-1].get('sha256') if observed else None)==digest
 
 
+def external_audit_digest(work):
+    path=work/'external-audit.json'
+    return hashlib.sha256(path.read_bytes()).hexdigest() if path.exists() else None
+
+
+def reviewed_audit_digest(item,agents):
+    """Only a read made during the actual bound review certifies current leads."""
+    r=item['record'];origin=r.get('review_producer',{});events=item['work']/'tools.jsonl'
+    if origin.get('status')!='receipt_verified' or not events.exists():return None
+    matching=[e for e in (json.loads(line) for line in events.read_text().splitlines())
+              if e.get('tool')=='read_external_audit' and e.get('role')=='reviewer'
+              and e.get('page')==r['pdf_page'] and e.get('attempt')==r['next_attempt']
+              and e.get('source_sha256')==r['source_sha256'] and e.get('model')==agents.reviewer
+              and e.get('contract_sha256')==role_contract(agents,'reviewer')
+              and origin['started_at']<=e.get('time',0)<=origin['finished_at']]
+    return matching[-1].get('sha256') if matching else None
+
+
 async def isolated_call(agents,role,source,out,page,attempt,worker_command=None):
     call=out/f'page-{page:04d}'/'calls'/uuid.uuid4().hex
     call.mkdir(parents=True);result=call/'result.json'
@@ -185,6 +215,9 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
     manifest=Path(manifest).resolve();output=Path(output).resolve()
     if output.exists() and any(output.iterdir()) and not resume:raise ValueError('Use a fresh staged queue or explicit resume')
     output.mkdir(parents=True,exist_ok=True)
+    pacing_path=output/'batch.json'
+    pacing_state=json.loads(pacing_path.read_text()) if resume and resume_compatible_profile and pacing_path.exists() else None
+    pacing_modified=pacing_path.stat().st_mtime if pacing_state else None
     entries=json.loads(manifest.read_text())['catalogs'];ids=[e['id'] for e in entries]
     if not ids or len(set(ids))!=len(ids):raise ValueError('Catalogue IDs must be unique')
     version=program_version();started=time.monotonic();pending={};catalogs=[]
@@ -223,8 +256,8 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             old=json.loads((work/'result.json').read_text()) if (work/'result.json').exists() else {}
             record={'pdf_page':page,'cache_key':key,'status':'pending','next_attempt':0,'attempts':[],'tested_program':version,'source_sha256':digest,'extractor':agents.extractor,'reviewer':agents.reviewer,'contract_sha256':agents.contract_digest,'role_contracts':{role:role_contract(agents,role) for role in providers},'elapsed_seconds':0}
             if old:record['prior_execution']=old
-            item={'id':cid,'source':source,'out':out,'work':work,'record':record};pending[cid,page]=item
-            if old.get('status')=='accepted' and old.get('pdf_page')==page and (old.get('cache_key')==key or resume_compatible_profile and compatible_accepted_profile(work,old,agents,digest,page)):
+            item={'id':cid,'source':source,'out':out,'work':work,'record':record,'reviewed_audit':external_audit_digest(work)};pending[cid,page]=item
+            if old.get('status')=='accepted' and old.get('pdf_page')==page and (old.get('cache_key')==key or resume_compatible_profile) and compatible_accepted_profile(work,old,agents,digest,page):
                 candidate=validated_candidate(work,digest,page,agents.extractor,role_contract(agents,'extractor'));report_path=work/f"review-{old['next_attempt']}.json"
                 saves=[json.loads(line) for line in (work/'tools.jsonl').read_text().splitlines()] if (work/'tools.jsonl').exists() else []
                 review_hash=hashlib.sha256(report_path.read_bytes()).hexdigest() if report_path.exists() else None
@@ -243,6 +276,14 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                 prior_attempts=[int(p.stem.split('-')[-1]) for p in work.glob('candidate-*.json')]
                 if prior_attempts:record['next_attempt']=max(prior_attempts)+1
                 enqueue_extraction(item,repair=bool(prior_attempts))
+
+    if pacing_state:
+        identity=lambda entries:{(c['id'],c['source_sha256']) for c in entries}
+        if (pacing_state.get('contract_sha256')==agents.contract_digest and
+                pacing_state.get('models')=={'extractor':agents.extractor,'reviewer':agents.reviewer} and
+                identity(pacing_state.get('catalogs',[]))==identity(catalogs)):
+            for name,state in pacing_state.get('method',{}).get('provider_pacing',{}).items():
+                if name in provider_slots:provider_slots[name].restore(state,time.time()-pacing_modified)
 
     def snapshot():
         for cat in catalogs:
@@ -280,7 +321,8 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                     r['attempts'].append({'candidate':f'candidate-{attempt}.json','review':f'review-{attempt}.json'})
                     path=item['work']/f'review-{attempt}.json';r['review_sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
                     r['review_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.reviewer,role_contract(agents,'reviewer'))
-                    if artifact.accepts(candidate):r['status']='accepted'
+                    if artifact.accepts(candidate):
+                        r['status']='accepted';item['reviewed_audit']=reviewed_audit_digest(item,agents)
                     else:r.update(status='needs_review',next_attempt=attempt+1);enqueue_extraction(item,repair=True)
             except asyncio.CancelledError:
                 r['status']='awaiting_review' if role=='reviewer' and 'content' in r else 'pending'
@@ -300,7 +342,16 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
     snapshot();workers=[asyncio.create_task(worker(role,extract if role=='extractor' else review)) for role,n in role_counts.items() for _ in range(n)];interrupted=False
     try:
         async with asyncio.timeout(deadline_seconds):
-            while not all(i['record']['status']=='accepted' for i in pending.values()):await asyncio.sleep(.1)
+            while True:
+                # A new, changed or removed independent source lead reopens only
+                # the affected accepted page. Retain its exact extractor bytes.
+                for item in pending.values():
+                    r=item['record']
+                    if r['status']=='accepted' and external_audit_digest(item['work'])!=item['reviewed_audit']:
+                        r.update(status='awaiting_review',external_audit_changed_at=datetime.now(timezone.utc).isoformat())
+                        review.put_nowait(item);save(item)
+                if all(i['record']['status']=='accepted' for i in pending.values()):break
+                await asyncio.sleep(.1)
     except TimeoutError:pass
     except asyncio.CancelledError:interrupted=True
     finally:

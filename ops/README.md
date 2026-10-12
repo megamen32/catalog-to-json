@@ -45,3 +45,15 @@ adapter adds receipts and rate-limit observation. The parent retains separate
 role contracts, validates the exact source/model/page/attempt/artifact receipt,
 and caches the combined pair. No route silently falls back to another runtime.
 An individually benchmarked extractor does not certify the combined pipeline.
+
+For a delivery-only upgrade, `--resume-compatible-profile` retains an accepted
+page only when both native role receipts, physical page, source, saved hashes,
+models/contracts and current audit still match. It also restores provider limits
+and remaining cooldown from the same source/model/contract checkpoint, without
+restoring cancelled active calls or exceeding the new job budget.
+
+During a staged run, a new, changed or removed source-bound external audit reopens
+the affected accepted page for fresh independent review. The exact extractor
+artifact remains available, and the previous review is archived. A new pass must
+consume the current audit within its verified native review receipt. Independent
+audit leads require source verification; they are not prepared replacement data.

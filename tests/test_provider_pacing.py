@@ -98,3 +98,13 @@ def test_rate_limit_wave_is_counted_but_reduces_admission_once():
         await asyncio.sleep(.025);await gate.rate_limited()
         assert gate.limit==1 and gate.rate_limit_waves==2 and gate.rate_limit_count==5
     asyncio.run(run())
+
+
+def test_resume_gate_retains_saturated_limit_and_cooldown_without_active_calls():
+    """Fast unit: delivery restart cannot flood a saturated provider; <1s/max5s."""
+    gate=ProviderGate(8,30,initial=4)
+    gate.restore({'configured_maximum':8,'current_limit':1,'active_calls':4,'rate_limit_count':40,'rate_limit_waves':2,'backoff_remaining_seconds':60},elapsed=15)
+    assert gate.limit==1 and gate.active==0 and gate.rate_limit_count==40 and gate.rate_limit_waves==2
+    assert 44<gate.snapshot()['backoff_remaining_seconds']<=45
+    reduced=ProviderGate(2,30);reduced.restore({'configured_maximum':8,'current_limit':5,'rate_limit_count':1,'rate_limit_waves':1,'backoff_remaining_seconds':0},elapsed=0)
+    assert reduced.limit==2

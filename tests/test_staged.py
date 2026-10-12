@@ -335,3 +335,94 @@ def test_sdk_uncancelled_return_still_cannot_exceed_absolute_deadline():
             await asyncio.wait_for(generate_until_saved(model,'source',object(),lambda:False,deadline=time.monotonic()+.03),.03)
         assert model.calls==1
     asyncio.run(run())
+
+
+@pytest.mark.parametrize("change",["add","replace","remove"])
+def test_new_external_audit_requeues_accepted_page_without_repeating_extraction(tmp_path,monkeypatch,change):
+    """Focused integration: live source lead cannot leave stale accepted status; <1s/max5s."""
+    from catalog_json import staged
+    calls=[];changed=False
+    audit=tmp_path/'out/test/page-0001/external-audit.json'
+    if change!='add':
+        audit.parent.mkdir(parents=True);write_json(audit,{'pdf_page':1,'findings':['Original lead']})
+    monkeypatch.setattr(staged,'reviewed_audit_digest',lambda item,agents: staged.external_audit_digest(item['work']),raising=False)
+    async def call(agents,role,source,out,page,attempt):
+        nonlocal changed
+        calls.append((role,page,attempt))
+        if role=='reviewer' and page==2 and not changed:
+            changed=True
+            if change=='remove':audit.unlink()
+            else:write_json(audit,{'pdf_page':1,'findings':[{'message':'Independent source lead'}]})
+            await asyncio.sleep(.02)
+        if role=='reviewer' and page==3:await asyncio.sleep(.04)
+        value=PageContent(title=str(page),text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        write_json(out/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump());return value
+    result=asyncio.run(staged_batch(manifest(tmp_path),tmp_path/'out',Agents(),deadline_seconds=1,call=call,resume=True))
+    assert result['complete']
+    assert calls.count(('extractor',1,0))==1
+    assert calls.count(('reviewer',1,0))==2
+    assert list((tmp_path/'out/test/page-0001/review-history').glob('*/review-0.json'))
+
+
+def test_reviewed_audit_requires_exact_native_review_receipt_window(tmp_path):
+    """Fast unit: stale/wrong-identity audit reads never certify fresh leads; <1s/max5s."""
+    from catalog_json.staged import reviewed_audit_digest
+    item={'work':tmp_path,'record':{'pdf_page':1,'next_attempt':2,'source_sha256':'s','review_producer':{'status':'receipt_verified','started_at':10,'finished_at':20}}}
+    a=Agents();event={'tool':'read_external_audit','role':'reviewer','page':1,'attempt':2,'source_sha256':'s','model':a.reviewer,'contract_sha256':a.contract_digest,'time':15,'sha256':'current'}
+    log=tmp_path/'tools.jsonl';log.write_text(json.dumps(event)+'\n')
+    assert reviewed_audit_digest(item,a)=='current'
+    for key,value in [('role','extractor'),('page',2),('attempt',1),('source_sha256','other'),('model','other'),('contract_sha256','other'),('time',9),('time',21)]:
+        log.write_text(json.dumps({**event,key:value})+'\n');assert reviewed_audit_digest(item,a) is None
+    log.write_text(json.dumps(event)+'\n');item['record']['review_producer']['status']='producer_unknown'
+    assert reviewed_audit_digest(item,a) is None
+
+
+def test_changed_audit_during_review_requires_actual_fresh_read(tmp_path,monkeypatch):
+    """Focused integration: a pass without consuming the changed source lead stays open; <1s/max5s."""
+    from catalog_json import staged
+    calls=[];reads={}
+    monkeypatch.setattr(staged,'reviewed_audit_digest',lambda item,agents:reads.get(item['record']['pdf_page']))
+    async def call(agents,role,source,out,page,attempt):
+        calls.append((role,page,attempt))
+        if role=='reviewer' and page==1:
+            if calls.count(('reviewer',1,0))==1:write_json(out/'page-0001/external-audit.json',{'pdf_page':1,'findings':['Late source lead']})
+            else:reads[1]=staged.external_audit_digest(out/'page-0001')
+        value=PageContent(title=str(page),text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        write_json(out/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump());return value
+    result=asyncio.run(staged_batch(manifest(tmp_path),tmp_path/'out',Agents(),deadline_seconds=1,call=call))
+    assert result['complete'] and calls.count(('reviewer',1,0))==2 and calls.count(('extractor',1,0))==1
+
+
+@pytest.mark.parametrize('changed',['none','source','contract','model'])
+def test_compatible_resume_restores_pacing_only_for_same_source_and_roles(tmp_path,changed):
+    """Focused integration: restart preserves capacity feedback only for its profile; <1s/max5s."""
+    queue=manifest(tmp_path);entry=json.loads(queue.read_text())['catalogs'][0];out=tmp_path/'out';out.mkdir()
+    prior={'contract_sha256':Agents.contract_digest,'models':{'extractor':Agents.extractor,'reviewer':Agents.reviewer},'catalogs':[entry],'method':{'provider_pacing':{'anthropic':{'configured_maximum':8,'current_limit':1,'rate_limit_count':40,'rate_limit_waves':2,'backoff_remaining_seconds':0}}}}
+    if changed=='source':prior['catalogs'][0]={**entry,'source_sha256':'different'}
+    if changed=='contract':prior['contract_sha256']='different'
+    if changed=='model':prior['models']['extractor']='other'
+    write_json(out/'batch.json',prior);active=0;peak=0
+    async def call(agents,role,source,directory,page,attempt):
+        nonlocal active,peak
+        if role=='extractor':active+=1;peak=max(peak,active);await asyncio.sleep(.01);active-=1
+        value=PageContent(title=str(page),text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        write_json(directory/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump());return value
+    result=asyncio.run(staged_batch(queue,out,Agents(),deadline_seconds=1,call=call,resume=True,resume_compatible_profile=True,extractor_workers=2,reviewer_workers=2,initial_provider_concurrency=2))
+    assert result['complete'] and peak==(1 if changed=='none' else 2)
+    assert result['method']['provider_pacing']['anthropic']['rate_limit_count']==(40 if changed=='none' else 0)
+
+
+def test_matching_cache_key_cannot_reuse_unverified_native_review_receipt(tmp_path):
+    """Focused integration: ordinary resume cannot bypass native receipt/audit proof; <1s/max5s."""
+    queue=manifest(tmp_path);out=tmp_path/'out';calls=[]
+    async def call(agents,role,source,directory,page,attempt):
+        calls.append(role);work=directory/f'page-{page:04d}'
+        value=PageContent(title=str(page),text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        path=work/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json');write_json(path,value.model_dump())
+        event={'tool':'save_page_json' if role=='extractor' else 'save_review','role':role,'model':getattr(agents,role),'page':page,'attempt':attempt,'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'contract_sha256':agents.contract_digest,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'time':1}
+        with (work/'tools.jsonl').open('a') as stream:stream.write(json.dumps(event)+'\n')
+        return value
+    assert asyncio.run(staged_batch(queue,out,Agents(),call=call))['complete']
+    calls.clear()
+    assert asyncio.run(staged_batch(queue,out,Agents(),call=call,resume=True))['complete']
+    assert calls==['reviewer']*3
