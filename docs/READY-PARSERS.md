@@ -68,3 +68,13 @@
 Выходные JSON, raw backend JSON, receipts, времена и ошибки сохранены в локальном архиве измерений; документы и результаты извлечения не публикуются. [Протокол независимого бенчмарка](https://github.com/megamen32/catalog-extraction-benchmark/blob/main/docs/READY-SOLUTIONS.md).
 
 Проба GLM 5.3 Flash на опубликованном исходнике 1.3.0 (d3398f0668bbf5c5744a3237f53fca9d09087287), с тем же parser plugin 0.1.0 и page-bound MCP: 128/140 инженерных и буквальных табличных проверок, 9/11 подписей рисунков, 3/3 отрицательных проверок; 107,150 с, reasoning=low, timeout=900 с. Это первый проход без проверяющего; отсутствующие значения в объединённых ячейках остались ошибками. Кандидат, исходная execution receipt и подробный независимый score сохранены. Проба MiniMax выше имела другой hash прототипа; это не контролируемое сравнение моделей.
+
+## Готовые плагины, MCP и skills сверх этих 24
+
+[Дополнительные агентные пакеты](READY-AGENT-PACKAGES.md): Xberg, LandingAI ADE, Reducto, Anthropic document-skills, pdf-mcp и CUPIDS Data liberation. Для каждого указаны реальная упаковка, upstream revision, зависимости и проверенный статус; запуск MCP не подменяет измерение точности. Xberg и pdf-mcp уже прошли initialize/tools-list и чтение страницы 78.
+
+## Расширенная проверка
+
+[Таблица 20 реально измеренных конфигураций](https://github.com/megamen32/catalog-extraction-benchmark/blob/main/docs/READY-SOLUTIONS.md) сохраняет неудачные страницы в знаменателе 500. Сильнейший standalone по этой выборке: Docling266/500; MinerU advanced Metal201/500, gmft141/500, img2table91/500. Это несколько разных adapter contracts и один повтор, не проверенный агентный router. На отдельных типах таблиц gmft/img2table/MinerU advanced дополняют Docling.
+
+Текущий Agent Plugin0.2 даёт FastAgent Docling/PyMuPDF4LLM и явно настроенные isolated executors img2table/gmft. Native MCP initialize, capabilities, page-bound parse и чтение хешированного артефакта проверены. Skill описывает выбор по видимым линиям, иерархии заголовков, пропускам и разногласиям; оригинал с Vision решает спор. Сравнение одной версии программы и одной модели с прежним/расширенным набором инструментов проводится отдельно. Улучшение агентной точности пока не подтверждено.

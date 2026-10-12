@@ -47,7 +47,7 @@ class AgentPair:
         config=yaml.safe_load(self.config.read_text()) or {}
         extra_servers=dict(config.get('mcp',{}).get('servers',{}))
         extra_servers.pop('catalog',None)
-        config['mcp']={'servers':{'catalog':{'command':sys.executable,'args':['-m','catalog_json.tools','--source',str(source),'--output',str(out),'--role',role,'--page',str(page),'--attempt',str(attempt)]}}}
+        config['mcp']={'servers':{'catalog':{'command':sys.executable,'args':['-m','catalog_json.tools','--source',str(source),'--output',str(out),'--role',role,'--page',str(page),'--attempt',str(attempt),'--model',getattr(self,role)]}}}
         contributions=plugin_servers(self.plugins,source,page,out)
         if set(extra_servers)&set(contributions):raise ValueError('Configured and plugin MCP server names collide')
         config['mcp']['servers'].update(extra_servers)

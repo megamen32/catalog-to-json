@@ -1,0 +1,137 @@
+{
+  "source_date": "2026-10-12",
+  "new_beyond_existing24": [
+    {
+      "name": "Xberg",
+      "url": "https://github.com/xberg-io/xberg",
+      "revision": "b4bdf0b9346188c8b540698f80b359fb9ff60ed0",
+      "license": "MIT",
+      "package": "Codex/Claude/Cursor/Factory plugin + MCP + skills",
+      "version": "1.3.8",
+      "format": "JSON text/tables/cells/bbox, Markdown",
+      "scope": "Local full document parser; engineering schema/reviewer/Excel not included",
+      "needs": "No key; CPU native; optional OCR/VLM disabled",
+      "status": "Official muslCLI1.3.8 and actual nativeplugin launch initialize9tools success; full15cases completed; frozen engineering0/500,3.280s,11native tables. GNU release GLIBC incompatibility retained.",
+      "manifest_paths": "plugin/.codex-plugin/plugin.json; plugin/.claude-plugin/plugin.json; plugin/.mcp.json"
+    },
+    {
+      "name": "LandingAI ADE",
+      "url": "https://github.com/landing-ai/ade-document-processing-skills",
+      "revision": "f72208154e5534261a9b12f4190bdc843aee191d",
+      "license": "MIT",
+      "package": "Official Claude plugin + Agent Skills",
+      "version": "3.4.0",
+      "format": "JSONSchema fields + citations/bboxes/confidence; parse Markdown; dataframe/Excel recipes",
+      "scope": "Cloud parse→schema extract→classify/split→stitch/export workflow",
+      "needs": "VISION_AGENT_API_KEY; no local GPU needed",
+      "status": "Manifest and source verified. Not run: protected provider authentication not available to this test; no request/registration/call made.",
+      "manifest_paths": "plugins/ade-document-processing/.claude-plugin/plugin.json"
+    },
+    {
+      "name": "Reducto CLI",
+      "url": "https://github.com/reductoai/claude-plugins",
+      "revision": "cbbd7a9673a08f55355f3c9ef156f68cb2245912",
+      "license": "MIT",
+      "package": "Official Claude plugin + Agent Skills; CLI",
+      "version": "skill1.0.0, plugin version not declared",
+      "format": "Parse Markdown; extract JSONSchema; edit document",
+      "scope": "Ready cloud end-to-end document workflow",
+      "needs": "Device-code login/account; no GPU required",
+      "status": "Manifest and skill verified. Not run: requires reducto login/authenticated account.",
+      "manifest_paths": "plugins/reducto-cli/.claude-plugin/plugin.json"
+    },
+    {
+      "name": "Anthropic document-skills",
+      "url": "https://github.com/anthropics/skills",
+      "revision": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+      "license": "Document skills proprietary/source-available under Anthropic agreements; NOT repo Apache-2.0",
+      "package": "Official Claude marketplace document-skills; PDF/XLSX Agent Skills",
+      "version": "marketplace1.0.0",
+      "format": "Agent recipes using pdfplumber/pypdf and XLSX; no universal engineering schema",
+      "scope": "PDF manipulation/extract+XLSX authoring skill recipes, not standalone digitization engine",
+      "needs": "Local libraries; full agent workflow needs a host model",
+      "status": "Manifest/scripts/license verified. No agent/provider run. Existing pdfplumber measurement is not this skill end-to-end benchmark.",
+      "manifest_paths": " .claude-plugin/marketplace.json; skills/pdf/LICENSE.txt; skills/xlsx/LICENSE.txt"
+    },
+    {
+      "name": "pdf-mcp",
+      "url": "https://github.com/jztan/pdf-mcp",
+      "revision": "a7815534a365c49b3bc08a34865e18a6ed92dc0c",
+      "license": "MIT",
+      "package": "Ready MCP stdio/HTTP + Claude Desktop MCPB; NOT Agent Plugin1.0",
+      "version": "3.5.0",
+      "format": "JSON pages/text/tables/images/rectangles; table backend metadata",
+      "scope": "Local PDF read/search/render/chart/cache tool workflow; no SKU schema/reviewer/XLSX",
+      "needs": "No auth for local stdio; native CPU; OCR via local Tesseract rus+eng possible; optional search embeddings",
+      "status": "Installed exact revision; initialize13 tools; full15calls completed; frozen engineering1/500,36.922s,21native tables, page78tables0.",
+      "manifest_paths": "pyproject.toml; src/pdf_mcp/server.py; manifest.json MCPB"
+    },
+    {
+      "name": "Data liberation",
+      "url": "https://github.com/CUPIDS-Lab/data-liberation-skill",
+      "revision": "acb59c9bf5439f06642768e42a619757314287fa",
+      "license": "MIT",
+      "package": "Agent SKILL package, no native plugin manifest/MCP",
+      "version": "revision-pinned",
+      "format": "Tidy CSV/dataframes/JSON recipes, Pandera/provenance",
+      "scope": "Agent end-to-end survey→extract→tidy→audit→publish recipe, relies on parsers",
+      "needs": "Local CPU dependencies; host agent model for orchestration",
+      "status": "SKILL/reference/template source verified; no executable catalogue parser or provider run.",
+      "manifest_paths": "SKILL.md"
+    }
+  ],
+  "policy": "No marketing claim is benchmark accuracy; standalone parser results are not an agent orchestration score.",
+  "additional_ready_packages": [
+    {
+      "name": "Excel MCP",
+      "url": "https://github.com/sbroenne/mcp-server-excel",
+      "revision": "22438fd33ea20ef3ae1f0d446c9b3af640ff100b",
+      "license": "MIT",
+      "package": "Actual Agent Plugins1.0 rootplugin.json+mcp.json; CLI/MCP exporter",
+      "version": "source manifest0.0.0 build placeholder; no binary tested",
+      "scope": "Excel desktop automation, not PDFextractor",
+      "needs": "Windows, desktopExcel2016+, interactive desktop",
+      "status": "Manifest/schema and MCP config source verified; platform unavailable on Linux/Mac. Not attempted."
+    },
+    {
+      "name": "TableShot",
+      "url": "https://github.com/Bespoke34/tableshot",
+      "revision": "ccb86cc2f14bac877b825b3f91d3cd01f01f3892",
+      "license": "MIT",
+      "package": "Ready MCP, no native AgentPlugin manifest",
+      "version": "0.1.1",
+      "scope": "Native table extraction JSON/HTML/CSV/Markdown, PDFtext routing; optionalML/OCR extras",
+      "needs": "No keys; CPU base pdfplumber; optionalTableTransformer/Torch orONNXOCR not installed",
+      "status": "Exactsource installed; MCP initialize2tools; real15-case nativeMCPcalls completed1/500,38tables,17.335s; standalonecomponent score."
+    },
+    {
+      "name": "PDF Capture MCP",
+      "url": "https://github.com/ChenHongYu2026/pdf-capture-mcp",
+      "revision": "ea1aaf366a2c30babab0d067a7a7038a69174333",
+      "license": "MIT",
+      "package": "Ready MCP+CLI, no native AgentPlugin manifest",
+      "version": "0.12.0 alpha",
+      "scope": "Extraction→Markdown audit→QC/repair→knowledgepackage; pdfplumbertables+PyMuPDF4LLMbase/optionalMarker/MinerU/VLM",
+      "needs": "CPU base no keys; optional engines heavy; VLMauth disabled explicitly; no autoengineinstallation invoked",
+      "status": "MCP initialize14tools; original78table0 due invalid pdfplumberstrategy. Privateoptionspatch15cases1/500,62tables,15.061s. Fullpipeline78 package+QC WARN. Firststdoutpatch failed semanticok and retained. Corrected minimalpymupdfmessages→stderr realworkflow78 29.343s semanticok:true, no JSONRPCerrors, exactsame Markdown. Patchedresult is not officialrelease score."
+    }
+  ],
+  "native_directory_apps": [
+    {
+      "name": "Adobe Acrobat",
+      "source": "plugin-management live search_plugins query Adobe Acrobat PDF Excel",
+      "installed": false,
+      "status": "Available uninstalled; runtime tools unconnected; metadataonly; no account/registration/action attempted",
+      "directory_receipt": "research/adobe-plugin-directory.json",
+      "package": "Hosted native app plugin, not AgentPlugins1.0 sourcebundle",
+      "license": "Commercial service terms; no redistributable sourcebundle verified",
+      "capability": "Directory advertises PDFconvert/OCR/pageoperations; do not infer PDFExtractAPI exposed byapp"
+    }
+  ],
+  "separate_cloud_processor": {
+    "name": "AdobePDF ExtractAPI",
+    "url": "https://developer.adobe.com/document-services/docs/overview/pdf-extract-api/",
+    "format": "StructuredJSON+cellspans; optionalCSV/XLSX/tablePNG andfiguresPNG",
+    "status": "OfficialAPI docsverified; no auth available/providercall made; not a nativeplugin benchmark"
+  }
+}

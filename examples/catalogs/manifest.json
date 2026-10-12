@@ -1,0 +1,105 @@
+{
+  "storage_policy": {
+    "git_max_file_bytes": 10485760,
+    "larger_artifacts": "Yandex Disk, with links and source/program/hash metadata"
+  },
+  "artifacts": [
+    {
+      "id": "armature",
+      "file": "2026-10-12-native-prototype/armature.json",
+      "sha256": "d6ebb4bf2e4f28604b1dfe695ddabc919904f869b235d6014a6ffbb768edb7b5",
+      "bytes": 1640192,
+      "pages": 314,
+      "stage": "native_draft",
+      "reviewed": false,
+      "tested_program": {
+        "package_version": "1.3.0",
+        "git_revision": "470614c9d7b3afbbafd890b823304e7a06de2bc6",
+        "dirty": true,
+        "source_code_sha256": "eb3a16645575fec0dbf6682600b0ea83c884372146f48ebaa9fe2741a1f8ff4d",
+        "python_version": "3.12.13"
+      }
+    },
+    {
+      "id": "innovations",
+      "file": "2026-10-12-native-prototype/innovations.json",
+      "sha256": "37a186cd47822744aa29f9e703dcf02ec21ba426237213b4603ba3c68a3bedbf",
+      "bytes": 1615090,
+      "pages": 216,
+      "stage": "native_draft",
+      "reviewed": false,
+      "tested_program": {
+        "package_version": "1.3.0",
+        "git_revision": "470614c9d7b3afbbafd890b823304e7a06de2bc6",
+        "dirty": true,
+        "source_code_sha256": "eb3a16645575fec0dbf6682600b0ea83c884372146f48ebaa9fe2741a1f8ff4d",
+        "python_version": "3.12.13"
+      }
+    },
+    {
+      "id": "isolators",
+      "file": "2026-10-12-native-prototype/isolators.json",
+      "sha256": "6bbcf6799c6ffdea0d884d8018e25c2d77a5b56a92d4b2eb612160b213c3d8ab",
+      "bytes": 1248963,
+      "pages": 162,
+      "stage": "native_draft",
+      "reviewed": false,
+      "tested_program": {
+        "package_version": "1.3.0",
+        "git_revision": "470614c9d7b3afbbafd890b823304e7a06de2bc6",
+        "dirty": true,
+        "source_code_sha256": "eb3a16645575fec0dbf6682600b0ea83c884372146f48ebaa9fe2741a1f8ff4d",
+        "python_version": "3.12.13"
+      }
+    },
+    {
+      "id": "opn",
+      "file": "2026-10-12-native-prototype/opn.json",
+      "sha256": "d50911478dfede03b038eecbd48f72279efc9e08914490f85378ab8f0551e9a7",
+      "bytes": 368913,
+      "pages": 60,
+      "stage": "native_draft",
+      "reviewed": false,
+      "tested_program": {
+        "package_version": "1.3.0",
+        "git_revision": "470614c9d7b3afbbafd890b823304e7a06de2bc6",
+        "dirty": true,
+        "source_code_sha256": "eb3a16645575fec0dbf6682600b0ea83c884372146f48ebaa9fe2741a1f8ff4d",
+        "python_version": "3.12.13"
+      }
+    },
+    {
+      "id": "small",
+      "file": "2026-10-12-native-prototype/small.json",
+      "sha256": "3fea4c74c0853f32e37c50834bb01baaa9f282f59c6e8b2a2355b284eaecf7d7",
+      "bytes": 1847562,
+      "pages": 228,
+      "stage": "native_draft",
+      "reviewed": false,
+      "tested_program": {
+        "package_version": "1.3.0",
+        "git_revision": "470614c9d7b3afbbafd890b823304e7a06de2bc6",
+        "dirty": true,
+        "source_code_sha256": "eb3a16645575fec0dbf6682600b0ea83c884372146f48ebaa9fe2741a1f8ff4d",
+        "python_version": "3.12.13"
+      }
+    },
+    {
+      "id": "opn",
+      "file": "2026-10-12-catalog-to-json-1.4.0-checkpoint/opn.json",
+      "sha256": "0b01d4ce903e963ad06435d6f250c8961a144e2e979dd8e63656d0f24e302e76",
+      "bytes": 207899,
+      "pages": 11,
+      "accepted_pages": 4,
+      "stage": "reviewed_checkpoint",
+      "reviewed": false,
+      "tested_program": {
+        "package_version": "1.4.0",
+        "git_revision": "0dc37f8d90ba584344ebbc0ec2284a6b2b68c3db",
+        "dirty": false,
+        "source_code_sha256": "b2cecc2b645e5f0faafa7f2c53912c1466a6044b6895d80192f524ca0ab30878",
+        "python_version": "3.12.13"
+      }
+    }
+  ]
+}

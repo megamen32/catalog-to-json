@@ -24,7 +24,8 @@ def write_json(path, data):
 
 
 class CatalogTools:
-    def __init__(self, source=None, output=None, role='extractor', page=None, attempt=0):
+    def __init__(self, source=None, output=None, role='extractor', page=None, attempt=0,model=None):
+        self.model=model
         self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.disclosed={};self.latest_zoom={};self.corrections={};self.grids={};self.source=None;self.output=None
         if source and output:self.open(source,output)
 
@@ -32,7 +33,7 @@ class CatalogTools:
         source=Path(source).resolve();output=Path(output).resolve()
         if output==source or source.parent==output:raise ValueError('Choose a separate output directory')
         with pymupdf.open(source) as doc:count=len(doc)
-        self.source=source;self.output=output;output.mkdir(parents=True,exist_ok=True);self.seen={}
+        self.source=source;self.source_digest=hashlib.sha256(source.read_bytes()).hexdigest();self.output=output;output.mkdir(parents=True,exist_ok=True);self.seen={}
         return {'filename':source.name,'page_count':count,'role':self.role,'output':str(output)}
 
     def work(self,page):
@@ -45,7 +46,7 @@ class CatalogTools:
     def log(self,page,tool,**metadata):
         self.seen.setdefault(page,set()).add(tool)
         with (self.work(page)/'tools.jsonl').open('a',encoding='utf-8') as f:
-            f.write(json.dumps({'time':time.time(),'role':self.role,'attempt':self.attempt,'page':page,'tool':tool,**metadata},ensure_ascii=False)+'\n')
+            f.write(json.dumps({'time':time.time(),'role':self.role,'model':self.model,'source_sha256':self.source_digest,'attempt':self.attempt,'page':page,'tool':tool,**metadata},ensure_ascii=False)+'\n')
 
     def render(self,page,box=None,rotation=0):
         work=self.work(page)
@@ -301,8 +302,9 @@ def server(context):
 def main():
     p=argparse.ArgumentParser();p.add_argument('--source',type=Path);p.add_argument('--output',type=Path)
     p.add_argument('--role',choices=['extractor','reviewer'],default='extractor');p.add_argument('--page',type=int);p.add_argument('--attempt',type=int,default=0)
+    p.add_argument('--model')
     args=p.parse_args()
     if bool(args.source)!=bool(args.output):p.error('--source and --output must be supplied together')
-    server(CatalogTools(args.source,args.output,args.role,args.page,args.attempt)).run()
+    server(CatalogTools(args.source,args.output,args.role,args.page,args.attempt,args.model)).run()
 
 if __name__=='__main__':main()
