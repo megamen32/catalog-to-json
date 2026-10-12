@@ -4,7 +4,7 @@ description: Choose complementary catalogue parsers from measured strengths, pre
 ---
 # Choose evidence for the page
 
-Call parser_capabilities first. Use only explicitly available backends; an unavailable GPU/backend is a reported failure, not permission for a hidden device or provider fallback. All tools are bound to this source and physical page. Read raw/canonical artifacts through read_parser_artifact; keep receipts.
+Call parser_capabilities first. Use only explicitly available backends; an unavailable GPU/backend is a reported failure, not permission for a hidden device or provider fallback. All tools are bound to this source and physical page. inspect_pdf_page returns inventory/headers, not body cell values. After any successful parser call, read its canonical rows with read_parser_artifact, following next_offset through every needed row. For disputed blanks/merges also read raw spans. A successful receipt or header inventory is not proof that you have seen body values; keep receipts.
 
 ## Measured complementary roles
 
@@ -21,7 +21,7 @@ These limited examples suggest routing, not a universally validated classifier. 
 
 Start with AnyDoc/native extraction. For a complex table get Docling evidence; for a ruled grid compare img2table; for a questionable detected region or nested header compare gmft. Do not call every parser on every page by default. If one parser fails or omits a table, explicitly select another available backend or original-image Vision.
 
-Table-count/physical-column mismatches, collapsed independent parameters, missing units/conditions, incorrect merge propagation, unexplained empty values, altered tolerances and unread rotated labels require source-image verification. Use view_region with rotation, read_source_layout for codepoints, and read_source_table for directly supported merge geometry. Majority agreement does not prove correctness.
+Table-count/physical-column mismatches, collapsed independent parameters, missing units/conditions, incorrect merge propagation, unexplained empty values, altered tolerances and unread rotated labels require source-image verification. Use view_region with rotation, read_source_layout for codepoints, and read_source_table for directly supported merge geometry. Before writing blank, distinguish a source blank from unknown and from a value owned by a merged cell spanning that row. Reconstruct the whole parent/child condition including negation (for example «не менее»), and bind each unit to its own parameter. An adjacent current unit cannot supply a voltage unit. Majority agreement does not prove correctness.
 
 Retain literal source spelling, including source typos. Never invent a value, repair from gold, translate a Latin/Cyrillic lookalike or confuse letter З with digit 3. Drawings still require original-image inspection of all views, labels, hole counts and tolerances. A source limitation confirmed by zoom belongs in source_notes; unresolved technical unknowns remain uncertainties and block acceptance.
 

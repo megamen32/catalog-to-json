@@ -13,3 +13,7 @@ The full 980-page input set has not been processed: only the requested compariso
 ## Benchmark extension, 2026-10-12
 
 Benchmark core v1.1.0 delivered: full 980-page structural inventory, 15 visually curated stress cases, independent page-78 fact scoring and project/model command matrix. Two fresh native model profiles have saved quantitative results and explicit coverage limits. Additional real project comparison is pending the promised repository links; fourteen further selected pages are unannotated. See quick/20261012-catalog-benchmark/SUMMARY.md.
+
+## Current parser routing experiment, 2026-10-12
+
+Full reviewed queue is incomplete and runs on immutable installed1.4.1 with MiniMax extraction and GLM Coding Endpoint review. Native980-page drafts are public unreviewed examples. Frozen30 first-pass comparisons are public in catalog-extraction-benchmark: baseline479/500, extended467/500 under corrected grader0.2.2; no universal winner. Extended did one canonical read on page33, baseline zero; img2table/gmft were available but not invoked. Version1.4.2 changes reading instructions and producer-contract provenance; fresh15-page model comparison pending. See quick/20261012-parser-body-routing.

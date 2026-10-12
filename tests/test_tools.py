@@ -35,7 +35,7 @@ def test_save_requires_inspection_and_returns_errors(tmp_path):
 def test_native_mcp_image_roundtrip(tmp_path):
     source=pdf(tmp_path)
     async def run():
-        params=StdioServerParameters(command=sys.executable,args=['-m','catalog_json.tools','--source',str(source),'--output',str(tmp_path/'out')])
+        params=StdioServerParameters(command=sys.executable,args=['-m','catalog_json.tools','--source',str(source),'--output',str(tmp_path/'out'),'--model','native-test','--contract-sha256','c'*64])
         async with stdio_client(params) as (reader,writer):
             async with ClientSession(reader,writer) as client:
                 await client.initialize();listed=await client.list_tools()
@@ -46,6 +46,13 @@ def test_native_mcp_image_roundtrip(tmp_path):
                 assert any(b.type=='image' for b in result.content)
                 result=await client.call_tool('get_json_schema',{'kind':'page'})
                 assert not result.is_error
+                await client.call_tool('extract_direct',{'page':1})
+                saved=await client.call_tool('save_page_json',{'page':1,'json_text':content().model_dump_json()});assert not saved.is_error
+                from catalog_json.staged import validated_candidate
+                work=tmp_path/'out/page-0001'
+                import hashlib
+                assert validated_candidate(work,hashlib.sha256(source.read_bytes()).hexdigest(),1,'native-test','c'*64)
+                assert validated_candidate(work,hashlib.sha256(source.read_bytes()).hexdigest(),1,'native-test','d'*64) is None
     asyncio.run(asyncio.wait_for(run(),20))
 
 
@@ -242,3 +249,16 @@ def test_external_audit_is_source_bound_and_keeps_review_blind(tmp_path):
     assert r.external_audit(1)['present']
     write_json(t.work(1)/'external-audit.json',{'pdf_page':2,'source_sha256':'wrong','findings':[]})
     with pytest.raises(ValueError,match='another source/page'):t.external_audit(1)
+
+
+def test_installed_package_does_not_claim_ancestor_checkout_revision(tmp_path,monkeypatch):
+    """Fast unit: installed/runtime metadata must not inherit another checkout; expected1s/max5s."""
+    from catalog_json import provenance
+    parent=tmp_path/'checkout';(parent/'.git').mkdir(parents=True)
+    package=parent/'environment/lib/catalog_json';package.mkdir(parents=True)
+    module=package/'provenance.py';module.write_text('# installed artifact')
+    monkeypatch.setattr(provenance,'__file__',str(module))
+    def forbidden(*args,**kwargs):raise AssertionError('Do not discover Git in package ancestors')
+    monkeypatch.setattr(provenance.subprocess,'run',forbidden)
+    result=provenance.program_version()
+    assert result['git_revision'] is None and result['dirty'] is None

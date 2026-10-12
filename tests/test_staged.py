@@ -81,6 +81,10 @@ def test_candidate_binding_requires_source_page_model_and_saved_hash(tmp_path):
     event={'tool':'save_page_json','attempt':0,'role':'extractor','page':1,'model':'minimax-test','source_sha256':'a'*64,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()}
     (work/'tools.jsonl').write_text(json.dumps(event)+'\n')
     assert validated_candidate(work,'a'*64,1,'minimax-test')
+    assert validated_candidate(work,'a'*64,1,'minimax-test','current-contract') is None
+    event['contract_sha256']='current-contract';(work/'tools.jsonl').write_text(json.dumps(event)+'\n')
+    assert validated_candidate(work,'a'*64,1,'minimax-test','current-contract')
+    assert validated_candidate(work,'a'*64,1,'minimax-test','other-contract') is None
     assert validated_candidate(work,'b'*64,1,'minimax-test') is None
     assert validated_candidate(work,'a'*64,2,'minimax-test') is None
     assert validated_candidate(work,'a'*64,1,'another-extractor') is None
@@ -157,3 +161,62 @@ def test_quick_worker_exit_cannot_orphan_its_separate_session_child(tmp_path):
         pid=int(pid_file.read_text())
         assert not psutil.pid_exists(pid) or psutil.Process(pid).status()==psutil.STATUS_ZOMBIE
     asyncio.run(check())
+
+
+def test_changed_contract_reextracts_instead_of_relabelling_prior_candidate(tmp_path):
+    """Focused integration: a new contract must produce its own candidate; expected1s/max5s."""
+    from catalog_json.tools import CatalogTools
+    from pathlib import Path
+    queue=manifest(tmp_path);out=tmp_path/'out';work=out/'test/page-0001'
+    source=Path(json.loads(queue.read_text())['catalogs'][0]['source'])
+    old=CatalogTools(source,out/'test',page=1,model=Agents.extractor);old.render(1);old.direct(1)
+    assert old.save(1,PageContent(title='prior',text_blocks=[],tables=[],figures=[]).model_dump_json(),'page')['saved']
+    write_json(work/'result.json',{'contract_sha256':'prior-contract','next_attempt':0,'status':'awaiting_review'})
+    calls=[]
+    async def call(agents,role,source,out,page,attempt):
+        calls.append((role,page,attempt))
+        value=PageContent(title='current',text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        write_json(out/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump());return value
+    asyncio.run(staged_batch(queue,out,Agents(),resume=True,call=call))
+    assert ('extractor',1,1) in calls
+    assert json.loads((work/'candidate-0.json').read_text())['title']=='prior'
+
+
+def test_failed_new_contract_attempt_cannot_unlock_old_candidate_on_second_resume(tmp_path):
+    """Focused integration: interrupted contract upgrades stay source/version bound; expected1s/max5s."""
+    from catalog_json.tools import CatalogTools
+    from pathlib import Path
+    queue=manifest(tmp_path);out=tmp_path/'out';work=out/'test/page-0001'
+    source=Path(json.loads(queue.read_text())['catalogs'][0]['source'])
+    old=CatalogTools(source,out/'test',page=1,model=Agents.extractor);old.render(1);old.direct(1)
+    assert old.save(1,PageContent(title='prior',text_blocks=[],tables=[],figures=[]).model_dump_json(),'page')['saved']
+    write_json(work/'result.json',{'contract_sha256':'prior-contract','next_attempt':0,'status':'awaiting_review'})
+    async def failed(*args):raise RuntimeError('Failed before current-contract save')
+    asyncio.run(staged_batch(queue,out,Agents(),resume=True,call=failed,retry_delay=.5,deadline_seconds=.08))
+    calls=[]
+    async def good(agents,role,source,out,page,attempt):
+        calls.append((role,page,attempt))
+        value=PageContent(title='current',text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        write_json(out/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump());return value
+    asyncio.run(staged_batch(queue,out,Agents(),resume=True,call=good))
+    assert ('extractor',1,1) in calls
+    assert ('reviewer',1,0) not in calls
+    assert json.loads((work/'candidate-0.json').read_text())['title']=='prior'
+
+
+def test_current_contract_saved_candidate_survives_stale_result_marker(tmp_path):
+    """Focused integration: source-bound saves avoid replay despite stale marker; expected1s/max5s."""
+    from catalog_json.tools import CatalogTools
+    from pathlib import Path
+    queue=manifest(tmp_path);out=tmp_path/'out';work=out/'test/page-0001'
+    source=Path(json.loads(queue.read_text())['catalogs'][0]['source'])
+    tool=CatalogTools(source,out/'test',page=1,model=Agents.extractor,contract_sha256=Agents.contract_digest);tool.render(1);tool.direct(1)
+    assert tool.save(1,PageContent(title='current',text_blocks=[],tables=[],figures=[]).model_dump_json(),'page')['saved']
+    write_json(work/'result.json',{'contract_sha256':'stale-marker','next_attempt':0,'status':'awaiting_review'})
+    calls=[]
+    async def call(agents,role,source,out,page,attempt):
+        calls.append((role,page,attempt))
+        value=PageContent(title='current',text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        write_json(out/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump());return value
+    asyncio.run(staged_batch(queue,out,Agents(),resume=True,call=call))
+    assert ('extractor',1,0) not in calls and ('reviewer',1,0) in calls

@@ -35,13 +35,13 @@ async def isolated_call(agents,role,source,out,page,attempt,worker_command=None)
     return (PageContent if role=='extractor' else Review).model_validate(data['artifact'])
 
 
-def validated_candidate(work,source_sha256,page,extractor):
+def validated_candidate(work,source_sha256,page,extractor,contract_sha256=None):
     events=work/'tools.jsonl'
     if not events.exists():return None
     saves=[json.loads(line) for line in events.read_text().splitlines()]
     for path in sorted(work.glob('candidate-*.json'),key=lambda p:int(p.stem.split('-')[-1]),reverse=True):
         attempt=int(path.stem.split('-')[-1]);digest=hashlib.sha256(path.read_bytes()).hexdigest()
-        if any(e.get('tool')=='save_page_json' and e.get('role')=='extractor' and e.get('model')==extractor and e.get('source_sha256')==source_sha256 and e.get('page')==page and e.get('attempt')==attempt and e.get('sha256')==digest for e in saves):
+        if any(e.get('tool')=='save_page_json' and e.get('role')=='extractor' and e.get('model')==extractor and e.get('source_sha256')==source_sha256 and e.get('page')==page and e.get('attempt')==attempt and e.get('sha256')==digest and (contract_sha256 is None or e.get('contract_sha256')==contract_sha256) for e in saves):
             return attempt,PageContent.model_validate_json(path.read_text())
     return None
 
@@ -87,12 +87,12 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             if old:record['prior_execution']=old
             item={'id':cid,'source':source,'out':out,'work':work,'record':record};pending[cid,page]=item
             if old.get('cache_key')==key and old.get('status')=='accepted':
-                candidate=validated_candidate(work,digest,page,agents.extractor);report_path=work/f"review-{old['next_attempt']}.json"
+                candidate=validated_candidate(work,digest,page,agents.extractor,agents.contract_digest);report_path=work/f"review-{old['next_attempt']}.json"
                 saves=[json.loads(line) for line in (work/'tools.jsonl').read_text().splitlines()] if (work/'tools.jsonl').exists() else []
                 review_hash=hashlib.sha256(report_path.read_bytes()).hexdigest() if report_path.exists() else None
                 if candidate and candidate[0]==old['next_attempt'] and review_hash==old.get('review_sha256') and any(e.get('tool')=='save_review' and e.get('role')=='reviewer' and e.get('model')==agents.reviewer and e.get('source_sha256')==digest and e.get('page')==page and e.get('attempt')==old['next_attempt'] and e.get('sha256')==review_hash for e in saves) and Review.model_validate_json(report_path.read_text()).accepts(candidate[1]):
                     record.update(old);continue
-            candidate=validated_candidate(work,digest,page,agents.extractor)
+            candidate=validated_candidate(work,digest,page,agents.extractor,agents.contract_digest)
             if candidate:
                 record.update(content=candidate[1].model_dump(),next_attempt=candidate[0],status='awaiting_review');review.put_nowait(item)
             else:

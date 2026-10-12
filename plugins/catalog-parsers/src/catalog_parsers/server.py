@@ -19,7 +19,7 @@ def build_server(source=None,page=None,cache_root=None):
 
     @mcp.tool()
     def inspect_pdf_page(backend:str,source_path:str='',physical_page:int=0)->dict:
-        """Parse one source page with an explicitly available local or remote native backend. Results are evidence requiring source review."""
+        """Parse one source page and return table inventory/headers, NOT body cell values. After success read_parser_artifact(kind="canonical") supplies rows; read kind="raw" for merge/geometry evidence. Source review remains required."""
         selected=Path(source or source_path).resolve();number=page or physical_page
         if source and source_path and Path(source_path).resolve()!=Path(source).resolve():raise ValueError('Source differs from this MCP session')
         if page and physical_page and physical_page!=page:raise ValueError('Page differs from this MCP session')
@@ -33,11 +33,11 @@ def build_server(source=None,page=None,cache_root=None):
         candidate=json.loads((output/'candidate.json').read_text())
         return {'receipt':r,'tables':[{'id':t['id'],'rows':len(t['rows']),'columns':len(t['columns']),'headers':t['columns']} for t in candidate['tables']],
                 'artifact_id':key,'canonical_path':str(output/'candidate.json'),'raw_path':str(output/'raw.json'),
-                'instruction':'Compare all fields/spans against original images. Do not split ambiguous combined fields or replace source typos using guessed meaning.'}
+                'instruction':'This response has inventory and headers only, not body cells. Read artifact_id with read_parser_artifact(kind="canonical"), continuing by next_offset until every relevant row is read. For blanks/merges also inspect kind="raw" spans. Compare actual rows, parameter/unit/condition paths and span ownership with original images. Never infer a blank from missing inventory data or split ambiguous combined fields by guess.'}
 
     @mcp.tool()
     def read_parser_artifact(artifact_id:str,kind:str='canonical',offset:int=0,length:int=16000)->dict:
-        """Read a bounded chunk of this session's retained parser JSON, without a model transcript."""
+        """Read actual canonical body rows or raw geometry/spans. inspect_pdf_page alone does not expose body evidence. Continue by next_offset until needed rows are covered; retain original-image verification."""
         if len(artifact_id)!=64 or any(c not in '0123456789abcdef' for c in artifact_id):raise ValueError('Invalid artifact identity')
         if kind not in ['canonical','raw','receipt'] or offset<0 or not 1<=length<=24000:raise ValueError('Invalid chunk selection')
         name={'canonical':'candidate.json','raw':'raw.json','receipt':'receipt.json'}[kind]
