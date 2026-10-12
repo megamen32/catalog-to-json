@@ -58,5 +58,40 @@
       "json": "innovations.json",
       "json_sha256": "36ea089f6c15e184cd899d32677983c4dc65604db930bd5213e26ae612815145"
     }
-  ]
+  ],
+  "post_snapshot_source_audit": {
+    "observed_utc": "2026-10-12T15:01:04Z",
+    "catalogue": "opn",
+    "physical_pages": [
+      42,
+      47,
+      48
+    ],
+    "status": "descriptions_reopened_for_fresh_source_review",
+    "confirmed_issues": [
+      {
+        "page": 42,
+        "issue": "Grounding M10 function assigned to central view-B holes without a source label linking them."
+      },
+      {
+        "page": 47,
+        "issue": "Porcelain/coating material inferred from ribbed geometry without a printed source."
+      },
+      {
+        "page": 48,
+        "issue": "Porcelain/metal material and a particular suspended configuration inferred without a printed assignment."
+      }
+    ],
+    "table_checks": {
+      "pages": [
+        42,
+        48
+      ],
+      "literal_cells": 112,
+      "result": "matched in independent visual audit"
+    },
+    "historical_files_unchanged": true,
+    "snapshot_statuses_describe_checkpoint_time": true,
+    "full_catalogue_visual_acceptance": false
+  }
 }
