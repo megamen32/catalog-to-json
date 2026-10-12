@@ -100,3 +100,5 @@ This route has its own benchmark identity and inherits no older accuracy score.
 The unchanged measured route remains available without this option.
 
 Reviewer1.4.16 adds explicit literal branding quotation evidence: a freshly viewed source box, the visible quote in its original language, and separately retained text-layer agreement/unavailability/conflict. Hidden or missing native text does not substitute for image evidence. This is a new reviewer contract and an experimental quality change; immutable142/148 production roles and existing benchmark cohorts are unchanged.
+
+Reviewer1.4.17 binds nontechnical branding figure captions to their freshly inspected source box and explicit source kind. Only an identical complete candidate branding block can satisfy that caption across representation; default figure checks, engineering values/operators/diameters/view labels and ordinary prose remain strict. It is a new unbenchmarked reviewer contract; existing immutable roles remain separate.

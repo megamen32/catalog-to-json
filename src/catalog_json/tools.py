@@ -41,7 +41,7 @@ def source_chunk(text,offset,length):
 
 class CatalogTools:
     def __init__(self, source=None, output=None, role='extractor', page=None, attempt=0,model=None,contract_sha256=None):
-        self.model=model;self.contract_sha256=contract_sha256;self.region_evidence={}
+        self.model=model;self.contract_sha256=contract_sha256;self.region_evidence={};self.branding_figure_quotes={}
         self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.disclosed={};self.latest_zoom={};self.corrections={};self.grids={};self.source_artifacts={};self.region_reads={};self.edit_baselines={};self.invalid_edit_baselines=set();self.source=None;self.output=None
         if source and output:self.open(source,output)
 
@@ -49,7 +49,7 @@ class CatalogTools:
         source=Path(source).resolve();output=Path(output).resolve()
         if output==source or source.parent==output:raise ValueError('Choose a separate output directory')
         with pymupdf.open(source) as doc:count=len(doc)
-        self.source=source;self.source_digest=hashlib.sha256(source.read_bytes()).hexdigest();self.output=output;output.mkdir(parents=True,exist_ok=True);self.seen={};self.source_artifacts={};self.region_reads={};self.region_evidence={};self.edit_baselines={};self.invalid_edit_baselines=set();self.grids={};self.disclosed={};self.latest_zoom={};self.corrections={}
+        self.source=source;self.source_digest=hashlib.sha256(source.read_bytes()).hexdigest();self.output=output;output.mkdir(parents=True,exist_ok=True);self.seen={};self.source_artifacts={};self.region_reads={};self.region_evidence={};self.branding_figure_quotes={};self.edit_baselines={};self.invalid_edit_baselines=set();self.grids={};self.disclosed={};self.latest_zoom={};self.corrections={}
         return {'filename':source.name,'page_count':count,'role':self.role,'output':str(output)}
 
     def work(self,page):
@@ -141,7 +141,7 @@ class CatalogTools:
         if self.role=='reviewer' and kind=='page':
             observed_file=self.work(page)/(f'verified-source-observation-{self.attempt}.json' if 'correct_source_observation' in self.seen.get(page,set()) else f'source-observation-{self.attempt}.json')
             observed=PageContent.model_validate_json(observed_file.read_text())
-            return {'candidate':data,'independent_comparison':compare_source(observed,PageContent.model_validate(data))}
+            return {'candidate':data,'independent_comparison':compare_source(observed,PageContent.model_validate(data),self.branding_figure_quotes.get(page))}
         return data
 
     def external_audit(self,page):
@@ -227,7 +227,15 @@ class CatalogTools:
             quote_metadata={'quote_file':quote_file.name,'quote_sha256':hashlib.sha256(quote_file.read_bytes()).hexdigest()}
         if kind=='page':self.invalid_edit_baselines.discard(page)
         self.log(page,'save_page_json' if kind=='page' else 'save_source_observation' if kind=='observation' else 'save_review',file=filename,sha256=hashlib.sha256((work/filename).read_bytes()).hexdigest(),**quote_metadata)
+        if kind=='observation':self.bind_branding_figures(page,quotes)
         return {'saved':True,'file':str(work/filename)}
+
+    def bind_branding_figures(self,page,quotes):
+        bound={}
+        for quote in quotes:
+            if quote.get('source_kind')=='branding' and 'figure_index' in quote:
+                bound.setdefault(quote['figure_index'],set()).add(quote['visible_quote'])
+        self.branding_figure_quotes[page]=bound
 
     def correct_observation(self,page,json_text,reason,literal_quotes=None):
         if self.role!='reviewer' or page not in self.disclosed:return {'saved':False,'error':'Only a reviewer can revise its own observation after comparison'}
@@ -248,6 +256,7 @@ class CatalogTools:
         write_json(quote_file,{'source_sha256':self.source_digest,'physical_page':page,'attempt':self.attempt,'quotes':quotes})
         write_json(work/f'verified-source-observation-{self.attempt}.json',model.model_dump())
         self.log(page,'correct_source_observation',revision=revision,reason=reason,quote_file=quote_file.name,quote_sha256=hashlib.sha256(quote_file.read_bytes()).hexdigest())
+        self.bind_branding_figures(page,quotes)
         self.disclosed[page]=time.monotonic()
         return {'saved':True,'revision':revision,'original_blind_observation_retained':True}
 
@@ -401,7 +410,7 @@ def server(context):
     else:
         @mcp.tool()
         def save_source_observation(page: int,json_text: str,literal_quotes: list[dict]|None=None) -> dict:
-            """Save blind PageContent BEFORE candidate. For each branding block supply literal_quotes={block_index,box,visible_quote,basis:text_layer|vision,conflict:null|source_notes text,rotation:0}. View that exact box first. Quote original language; translations/descriptions are not source quotes. Native text and visible quote are retained separately; an actual conflict needs a source note and Vision evidence."""
+            """Save blind PageContent BEFORE candidate. Branding literal_quotes items use {block_index,box,visible_quote,basis:text_layer|vision,conflict:null|source_notes text,rotation:0}. For a nontechnical branding caption represented as a figure label, use {figure_index,label_index,source_kind:branding,...} instead of block_index. View each exact box first. Numbers/operators/diameter/view signs cannot be reclassified. Quote original language. Native text and visible quote remain separate; an actual conflict needs a source note and Vision evidence."""
             return context.save(page,json_text,'observation',literal_quotes)
         @mcp.tool()
         def correct_source_observation(page: int,json_text: str,reason: str,literal_quotes: list[dict]|None=None) -> dict:

@@ -3,6 +3,7 @@ import re
 import unicodedata
 from decimal import Decimal,InvalidOperation
 from .schema import PageContent
+from .observation_quotes import is_branding_caption
 
 
 def text_key(value):
@@ -67,7 +68,7 @@ def same_value(a,b,identity=False):
     return values[0]==values[1]
 
 
-def compare_source(observed: PageContent,candidate: PageContent):
+def compare_source(observed: PageContent,candidate: PageContent,branding_figure_quotes=None):
     differences=[]
     def add(path,expected,actual):
         differences.append({'path':path,'source_observation':expected,'candidate':actual})
@@ -104,9 +105,15 @@ def compare_source(observed: PageContent,candidate: PageContent):
     # one combined figure. Compare labels across figures, retaining numeric bounds.
     labels=[figure_key(label) for f in candidate.figures for label in f.labels]
     descriptions=[figure_key(f.description) for f in candidate.figures]
+    branding=[text_key(b.text) for b in candidate.text_blocks if b.kind=='branding']
     for i,sf in enumerate(observed.figures):
         for label in sf.labels:
             key=figure_key(label)
             if key not in labels and not any(re.search(figure_pattern(label),d) for d in labels+descriptions):
+                # Only a freshly source-bound, explicitly classified branding
+                # quotation may change representation. Engineering labels never
+                # inherit evidence from a caption or unrelated prose.
+                if (label in (branding_figure_quotes or {}).get(i,set()) and
+                        is_branding_caption(label) and text_key(label) in branding):continue
                 add(f'figures[{i}].labels',label,'missing or changed label/tolerance')
     return differences
