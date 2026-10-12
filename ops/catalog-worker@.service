@@ -15,6 +15,7 @@ Nice=10
 RuntimeMaxSec=86500
 TimeoutStopSec=60
 KillMode=control-group
+KillSignal=SIGINT
 Restart=no
 Environment=OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 MKL_NUM_THREADS=2 NUMEXPR_NUM_THREADS=2 TOKENIZERS_PARALLELISM=false
 StandardOutput=journal

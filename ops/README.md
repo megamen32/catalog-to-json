@@ -3,7 +3,7 @@
 The operator unit runs one source-bound queue independently of the chat terminal.
 It keeps the shared user resource boundary and gives each job a smaller finite
 budget:6GiB RAM, zero swap,2 CPU cores,512 tasks and24 hours plus shutdown grace.
-It does not restart or silently replay a failed job. CLI checkpoints stay available.
+It does not restart or silently replay a failed job. SIGINT gives the native CLI its cancellation/cleanup path before the final kill grace. CLI checkpoints stay available. Provider bridges must exec the CLI instead of nesting a subprocess waiter.
 
 Install `catalog-worker@.service` in the user's systemd unit directory. A private
 `~/.config/catalog-to-json/jobs/JOB.json` supplies `cwd`, an argv `command`, and
