@@ -1,0 +1,70 @@
+{
+  "profile": "full-selected-15-review21",
+  "status": "prepared_not_yet_live",
+  "models": {
+    "extractor": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+    "reviewer": "zai.glm-5.3-flash?reasoning=low"
+  },
+  "roles": {
+    "extractor": {
+      "program": {
+        "package_version": "1.4.15",
+        "git_revision": null,
+        "dirty": null,
+        "source_code_sha256": "f7ee07327271ca2dea80e46d77036e425ecee02333c065c0df72ecfd5e3e7aff",
+        "python_version": "3.12.13",
+        "components": {
+          "agent_logic": {
+            "package_version": "1.4.2",
+            "git_revision": null,
+            "dirty": null,
+            "source_code_sha256": "fa8352a1a7f3632367a2ba02ff9290109c337113aa918a942093aa0cb8740a8b",
+            "python_version": "3.12.13"
+          },
+          "catalog_tools": {
+            "package_version": "1.4.8",
+            "git_revision": null,
+            "dirty": null,
+            "source_code_sha256": "3db63ecf26eacd9b1ba0e33e35d368eea1a6c5ce190cecf09d0c261b0766804b",
+            "python_version": "3.12.13"
+          },
+          "legacy_skills": {
+            "catalog-extract": "cb0ac951a01754366f2fa54f85fd8b5aed19e879549f5caa735e6aaea2f068a0",
+            "catalog-review": "200ea928b29b0d08bf3977bd4cfc92b039ede7621ceddd16a8fd3138ceef6942"
+          },
+          "catalog_server_bridge_sha256": "cfc42e91dd294672db23001aee5bf8444edd08b2839522c6d41668fafd197e97",
+          "role_worker_bridge_sha256": "6677033c2e5059410651b0ae57a0f8ad5c397ed5ba2616d691605276a434c66b",
+          "composition_bridge_sha256": "cfc42e91dd294672db23001aee5bf8444edd08b2839522c6d41668fafd197e97",
+          "delivery_adapter_sha256": "78e3d0119d4e6d1049466fe09e7ceec522ec0bde337465530f7371669682ec46"
+        }
+      },
+      "contract_sha256": "d66b8b75acf1151cd7ddf759b8f2686bdbc7faf6bc17a6e2bd277a218060f9cf"
+    },
+    "reviewer": {
+      "program": {
+        "package_version": "1.4.21",
+        "git_revision": null,
+        "dirty": null,
+        "source_code_sha256": "136c7d2348d9f880e89b250169cbe4ad3a30020d2e0ef3dfae7dc6c89af8cdfd",
+        "python_version": "3.12.13"
+      },
+      "contract_sha256": "254c1025cf4eefa2faa2f9407ab2d951e9aa0c606ced902432626a39b8161c50"
+    }
+  },
+  "scheduler": {
+    "package_version": "1.4.25",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "373c903d4622be8fc18e0fcfac899d31d72000c9857403e84ea5aa226c34f818",
+    "python_version": "3.12.13"
+  },
+  "reviewer_endpoint": "https://api.z.ai/api/coding/paas/v4/",
+  "reusable_accepted_at_preparation": 492,
+  "reusable_pending_candidates": 488,
+  "source_pages": 980,
+  "new_large_benchmark_runs": 0,
+  "inherited_accuracy": false,
+  "role_choice": "Extractor15 retained. Reviewer21 adds validated independent literal-source observations and unit-equivalence fixes; native blind consumer409.592s verified180cells without previous false unit differences. No complete matched score superiority claimed. Reviewer25 failed independent drawing canary;26/27 retain drawing defects and are not promoted. Coordinator25 used for tested durable state handling only.",
+  "historical_producer_versions_retained": true,
+  "source_acceptance_vetoes_retained": true
+}
