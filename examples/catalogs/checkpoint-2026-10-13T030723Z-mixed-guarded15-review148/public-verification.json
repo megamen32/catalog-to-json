@@ -1,0 +1,78 @@
+{
+  "status": "PASS",
+  "revision": "73a2129",
+  "verified_at_unix": 1791861102.1814222,
+  "accepted_pages": 219,
+  "source_pages": 980,
+  "files": [
+    {
+      "name": "README.md",
+      "bytes": 3985,
+      "sha256": "9e015f82d873a82f4eb8fc3bb78d6218c811c6eae9d4d8a067d5f4726b74c933",
+      "public_byte_match": true
+    },
+    {
+      "name": "armature.json",
+      "bytes": 163685,
+      "sha256": "d022714c8bc7bea730cf21a33b4f9d40d48778ebc15d1a2a5db03b9c99086165",
+      "public_byte_match": true
+    },
+    {
+      "name": "innovations.json",
+      "bytes": 4140997,
+      "sha256": "344885ceaaae142a83337b535482ca24e6aea37440716f8f4d304522cc066917",
+      "public_byte_match": true
+    },
+    {
+      "name": "isolators-accepted-partial.xlsx",
+      "bytes": 1291847,
+      "sha256": "dc57c552b5399c5deef542fb1c3ac70c049c8ad63c298e85d72586e8a0948cac",
+      "public_byte_match": true
+    },
+    {
+      "name": "isolators.json",
+      "bytes": 4756058,
+      "sha256": "f5c2f78a71c008180cb23e45a380f3edf496a81748b92a096a9621e6ee6f8e33",
+      "public_byte_match": true
+    },
+    {
+      "name": "local-verification.json",
+      "bytes": 93424,
+      "sha256": "48aa00b7719a8c89c7fe335b78e65094b5ebc7e71f5f37c553c445403f911126",
+      "public_byte_match": true
+    },
+    {
+      "name": "manifest.json",
+      "bytes": 8128,
+      "sha256": "e3e4123c8dbdbe3e7b3a92dc1cfe09655a288971baf89274cfa3a9039a585bfc",
+      "public_byte_match": true
+    },
+    {
+      "name": "opn-accepted-partial.xlsx",
+      "bytes": 440917,
+      "sha256": "d80bfa722f33ab5ea1210e18558b12c9527fad78ba3d327767a4222f0c1f6b29",
+      "public_byte_match": true
+    },
+    {
+      "name": "opn.json",
+      "bytes": 1642661,
+      "sha256": "4505d49fa863ba06eb5fb645946517c8743138963314b79ad535e1b28f8bd4b0",
+      "public_byte_match": true
+    },
+    {
+      "name": "small-accepted-partial.xlsx",
+      "bytes": 22360,
+      "sha256": "3ecc40923b1b0069977a2942c820f47d71e7b8c2e374b010eb8f152e148fe9c7",
+      "public_byte_match": true
+    },
+    {
+      "name": "small.json",
+      "bytes": 5115760,
+      "sha256": "54b22f54df909eb287d691e66e1ef68be9aa470a98d07741701fb30569b3603f",
+      "public_byte_match": true
+    }
+  ],
+  "all_catalogues_complete": false,
+  "model_calls": 0,
+  "producer_provenance_and_excel_reopened_exact": true
+}
