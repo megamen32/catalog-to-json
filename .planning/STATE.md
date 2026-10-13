@@ -1,5 +1,11 @@
 # State
 
+## Текущее состояние, 2026-10-13
+
+Полная очередь фактически переведена на extractor1.4.15 / reviewer1.4.30 / coordinator1.4.30. MiniMax M3.1 Flash Preview извлекает; GLM5.3Flash проверяет через Coding Endpoint. При переходе сохранены все980черновиков и500принятых страниц с прежними фактическими производителями; текущие native вызовы не прерывались. Окончательная проверка всего набора ещё продолжается. Старые разделы ниже — исторические результаты.
+
+Исправлены противоречия source-observation/final-review, manifest starvation и неподкреплённый общий drawing PASS.83 focused checks и native MCP retained replay прошли без нового большого бенчмарка. Геометрическая точность новой модели не измерена; запрещено наследовать96,47% от другого профиля. Все980страниц выданы пользователю одним публичным ZIP, включая явно отмеченные непроверенные, со source/producer metadata. См. quick/261013-us5-resolve-conflicting-review-feedback-fair/SUMMARY.md.
+
 2026-10-12: Initial delivery complete. Public main and Agent Plugin 1.0 release v1.0.2 are published. Native FastAgent extraction uses GLM 5.3 Flash; the real independent review used MiniMax M3.1 Flash Preview via its explicitly configured subscription endpoint.
 
 The real selected-page CLI run is accepted after autonomous source-grounded repair. Page 78 contains two tables (4×15 and 10×8); all 140 cells including names and blanks match independent private QA. The rotated drawing tolerance is preserved as ±2. All eleven review checks pass with no outstanding issues. JSON-derived Excel reopened with all 140 cells unchanged; HTML contains the corrected drawing labels.

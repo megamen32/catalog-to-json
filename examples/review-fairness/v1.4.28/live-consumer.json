@@ -1,0 +1,202 @@
+{
+  "status": "PASS_LIVE_QUEUE28",
+  "observed_unix": 1791921107.819155,
+  "snapshot": "At drained handoff from reviewer28 to reviewer30",
+  "accepted_retained_exact": 500,
+  "all980_preexisting_candidates_retained": true,
+  "all980_current_drafts_present": true,
+  "native_calls_interrupted": 0,
+  "new_native_reviewers": [
+    {
+      "catalogue": "isolators",
+      "page": 47,
+      "status": "awaiting_review",
+      "review_verdict": "revise",
+      "producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.4.28",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "34541f5a573d4ea31bb551800d671e4c4abfbf5072d803410b40110753edc587",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "357cc081ea9642599337380a5e4bfec02d033bebc06460dbfe6e1c57f658293c",
+        "source_bound_save": true,
+        "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+        "physical_page": 47,
+        "attempt": 24,
+        "role": "reviewer",
+        "model": "zai.glm-5.3-flash?reasoning=low",
+        "contract_sha256": "40cbd6cc36cb853fc4b20c3ebd6dcecaca9597fa8b08b820f4d433080042afee",
+        "receipt": "calls/3ef2012569d94a879e2187d45db25309/result.json",
+        "started_at": 1791919578.099007,
+        "finished_at": 1791920044.4511402
+      }
+    },
+    {
+      "catalogue": "small",
+      "page": 25,
+      "status": "awaiting_provider_admission",
+      "review_verdict": "revise",
+      "producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.4.28",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "34541f5a573d4ea31bb551800d671e4c4abfbf5072d803410b40110753edc587",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "72035f8646d95a7ca5af54141235f524a6b8721c8a721771b568f41543f0f12c",
+        "source_bound_save": true,
+        "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+        "physical_page": 25,
+        "attempt": 12,
+        "role": "reviewer",
+        "model": "zai.glm-5.3-flash?reasoning=low",
+        "contract_sha256": "40cbd6cc36cb853fc4b20c3ebd6dcecaca9597fa8b08b820f4d433080042afee",
+        "receipt": "calls/8eec635e23174adda374c07864f99032/result.json",
+        "started_at": 1791920053.3152108,
+        "finished_at": 1791920297.9518228
+      }
+    },
+    {
+      "catalogue": "armature",
+      "page": 1,
+      "status": "awaiting_review",
+      "review_verdict": "revise",
+      "producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.4.28",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "34541f5a573d4ea31bb551800d671e4c4abfbf5072d803410b40110753edc587",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "e55673864a69186f71bec805639a4938dcb8b1b92738c99cdedccdb24f4058da",
+        "source_bound_save": true,
+        "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "physical_page": 1,
+        "attempt": 0,
+        "role": "reviewer",
+        "model": "zai.glm-5.3-flash?reasoning=low",
+        "contract_sha256": "40cbd6cc36cb853fc4b20c3ebd6dcecaca9597fa8b08b820f4d433080042afee",
+        "receipt": "calls/2e2bc0d24f334f169d7aec8d36d8745a/result.json",
+        "started_at": 1791919833.7745109,
+        "finished_at": 1791920061.4237413
+      }
+    },
+    {
+      "catalogue": "armature",
+      "page": 2,
+      "status": "awaiting_provider_admission",
+      "review_verdict": "revise",
+      "producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.4.28",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "34541f5a573d4ea31bb551800d671e4c4abfbf5072d803410b40110753edc587",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "4f00ea0140233bc0c3fedc402713b1249c29d016ef254547b95ce76d9f4d225e",
+        "source_bound_save": true,
+        "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "physical_page": 2,
+        "attempt": 0,
+        "role": "reviewer",
+        "model": "zai.glm-5.3-flash?reasoning=low",
+        "contract_sha256": "40cbd6cc36cb853fc4b20c3ebd6dcecaca9597fa8b08b820f4d433080042afee",
+        "receipt": "calls/c0bdfc462a744db4950d84e647cfb973/result.json",
+        "started_at": 1791920309.398653,
+        "finished_at": 1791920501.2537537
+      }
+    },
+    {
+      "catalogue": "innovations",
+      "page": 5,
+      "status": "needs_review",
+      "review_verdict": "uncertain",
+      "producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.4.28",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "34541f5a573d4ea31bb551800d671e4c4abfbf5072d803410b40110753edc587",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "2c35204b999c8a03f07b601b76236fcaeabe8b00f368847ddcb7ce7c53bffdae",
+        "source_bound_save": true,
+        "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+        "physical_page": 5,
+        "attempt": 3,
+        "role": "reviewer",
+        "model": "zai.glm-5.3-flash?reasoning=low",
+        "contract_sha256": "40cbd6cc36cb853fc4b20c3ebd6dcecaca9597fa8b08b820f4d433080042afee",
+        "receipt": "calls/685decd6655b48a395238a35eadfa263/result.json",
+        "started_at": 1791920306.417625,
+        "finished_at": 1791920806.8372967
+      }
+    },
+    {
+      "catalogue": "innovations",
+      "page": 38,
+      "status": "awaiting_review",
+      "review_verdict": "revise",
+      "producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.4.28",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "34541f5a573d4ea31bb551800d671e4c4abfbf5072d803410b40110753edc587",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "20c730c21216d714c97389081d0763a48d346280c96ee886cd91b0103c6aa454",
+        "source_bound_save": true,
+        "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+        "physical_page": 38,
+        "attempt": 0,
+        "role": "reviewer",
+        "model": "zai.glm-5.3-flash?reasoning=low",
+        "contract_sha256": "40cbd6cc36cb853fc4b20c3ebd6dcecaca9597fa8b08b820f4d433080042afee",
+        "receipt": "calls/9fff5554fa14405b8177a356e4d6ce0d/result.json",
+        "started_at": 1791919574.99839,
+        "finished_at": 1791919823.7363074
+      }
+    },
+    {
+      "catalogue": "innovations",
+      "page": 73,
+      "status": "awaiting_provider_admission",
+      "review_verdict": "revise",
+      "producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.4.28",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "34541f5a573d4ea31bb551800d671e4c4abfbf5072d803410b40110753edc587",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "171a33c4ce91d87d364a01656c0781b304eb425caaa8895580c6b3bbf6a6d000",
+        "source_bound_save": true,
+        "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+        "physical_page": 73,
+        "attempt": 0,
+        "role": "reviewer",
+        "model": "zai.glm-5.3-flash?reasoning=low",
+        "contract_sha256": "40cbd6cc36cb853fc4b20c3ebd6dcecaca9597fa8b08b820f4d433080042afee",
+        "receipt": "calls/c7fa013915494d31b1f1bd14a97f34bd/result.json",
+        "started_at": 1791920073.893938,
+        "finished_at": 1791920505.8075268
+      }
+    }
+  ],
+  "armature_first_pass_delivered": true,
+  "full_catalogues_complete": false
+}
