@@ -7,6 +7,8 @@ import pymupdf
 
 def table_grids(page,box):
     if len(box)!=4 or not all(0<=v<=1 for v in box) or box[0]>=box[2] or box[1]>=box[3]:raise ValueError('Normalized box must be [left,top,right,bottom]')
+    if page.rotation:
+        return {'tables':[],'note':'This PDF page itself is rotated. Native table axes do not match the page viewer; use original-image Vision and source geometry rather than infer rows from mismatched axes.'}
     width,height=page.rect.width,page.rect.height
     clip=pymupdf.Rect(box[0]*width,box[1]*height,box[2]*width,box[3]*height)
     # A hand-chosen crop may cut the outer line of a merged cell by a few

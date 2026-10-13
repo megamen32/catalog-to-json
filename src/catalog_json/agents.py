@@ -45,7 +45,7 @@ class AgentPair:
         instructions=''.join(p.read_text() for directory in self.skill_directories for p in sorted(directory.glob('*/SKILL.md')))
         self.plugins_provenance=[{k:p[k] for k in ('name','version','sha256')} for p in self.plugins]
         instructions+=json.dumps(self.plugins_provenance,sort_keys=True)
-        self.contract_digest=hashlib.sha256(('tool-agent-v2-independent-observer'+''.join(Path(__file__).with_name(name).read_text() for name in ('agents.py','plugin_inputs.py','tools.py','audit.py','grid.py','models.py','observation_quotes.py'))+instructions+json.dumps(PageContent.model_json_schema(),sort_keys=True)+json.dumps(Review.model_json_schema(),sort_keys=True)).encode()).hexdigest()
+        self.contract_digest=hashlib.sha256(('tool-agent-v2-independent-observer'+''.join(Path(__file__).with_name(name).read_text() for name in ('agents.py','plugin_inputs.py','tools.py','audit.py','grid.py','models.py','observation_quotes.py','drawing_geometry.py'))+instructions+json.dumps(PageContent.model_json_schema(),sort_keys=True)+json.dumps(Review.model_json_schema(),sort_keys=True)).encode()).hexdigest()
 
     async def run(self,role,source,out,page,attempt,feedback=False):
         return await asyncio.wait_for(self._guarded_run(role,source,out,page,attempt,feedback),self.timeout)

@@ -69,6 +69,22 @@ def test_json_exports_keep_units_qualifiers_and_full_page(tmp_path):
     assert any('Н±2' in str(row) for row in book['Текст и чертежи'].values)
 
 
+def test_excel_shows_artifact_producers_not_new_queue_version(tmp_path):
+    """Fast unit: public exports must not relabel historical data; <1s/max5s."""
+    from catalog_json.export import to_xlsx
+    from openpyxl import load_workbook
+    page={'pdf_page':35,'status':'accepted','content':content().model_dump(),
+          'candidate_producer':{'status':'receipt_verified','model':'MiniMax','program':{'package_version':'1.4.15','source_code_sha256':'extractor-sha'}},
+          'review_producer':{'status':'receipt_verified','model':'GLM','program':{'package_version':'1.4.8','source_code_sha256':'reviewer-sha'}}}
+    catalog={'complete_for_selection':True,'tested_program':{'package_version':'1.4.26'},'source':{'filename':'source.pdf','sha256':'source-sha'},'pages':[page]}
+    to_xlsx(catalog,tmp_path/'export.xlsx');sheet=load_workbook(tmp_path/'export.xlsx')['Происхождение']
+    row=dict(zip(next(sheet.values),list(sheet.values)[1]));assert row['PDF страница']==35
+    assert row['Версия извлекателя']=='1.4.15' and row['Версия проверяющего']=='1.4.8'
+    assert row['Исходный PDF']=='source.pdf' and row['Извлекатель']=='MiniMax'
+    catalog['pages'][0].pop('candidate_producer');to_xlsx(catalog,tmp_path/'unknown.xlsx')
+    unknown=load_workbook(tmp_path/'unknown.xlsx')['Происхождение'];row=dict(zip(next(unknown.values),list(unknown.values)[1]));assert row['Версия извлекателя']=='не подтверждена'
+
+
 def test_bundled_skills_native_discovery():
     """Fast unit: prevent silently running without the user's native skill; expected <1 s, max 5 s."""
     from fast_agent.skills.registry import SkillRegistry

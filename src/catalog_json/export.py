@@ -22,8 +22,22 @@ def to_xlsx(catalog,path: Path,allow_unverified=False):
     pages=accepted_pages(catalog,allow_unverified);w=Workbook();s=w.active;s.title='Данные'
     s.append(['PDF страница','Таблица','Строка','Столбец','Значение','Единица','Состояние','Группа','Условие'])
     texts=w.create_sheet('Текст и чертежи');texts.append(['PDF страница','Тип','Заголовок','Текст','Подписи'])
+    provenance=w.create_sheet('Происхождение')
+    provenance.append(['PDF страница','Напечатанный номер','Статус','Исходный PDF','SHA исходного PDF',
+                       'Извлекатель','Версия извлекателя','SHA кода извлекателя','Проверяющий','Версия проверяющего','SHA кода проверяющего',
+                       'Последнее извлечение, с','Последняя проверка, с'])
+    def producer(page,key):
+        origin=page.get(key,{})
+        if origin.get('status')!='receipt_verified':return ['не подтверждён','не подтверждена',None,None]
+        program=origin.get('program',{});elapsed=None
+        if all(isinstance(origin.get(k),(int,float)) for k in ('started_at','finished_at')):
+            elapsed=round(origin['finished_at']-origin['started_at'],3)
+        return [origin.get('model'),program.get('package_version','не подтверждена'),program.get('source_code_sha256'),elapsed]
     for page in pages:
         data=PageContent.model_validate(page['content'])
+        extraction=producer(page,'candidate_producer');review=producer(page,'review_producer')
+        provenance.append([page['pdf_page'],data.printed_page,page['status'],catalog.get('source',{}).get('filename'),
+                           page.get('source_sha256',catalog.get('source',{}).get('sha256')),*extraction[:3],*review[:3],extraction[3],review[3]])
         texts.append([page['pdf_page'],'Заголовок',data.title,'',''])
         for block in data.text_blocks:texts.append([page['pdf_page'],block.kind,'',block.text,''])
         for figure in data.figures:texts.append([page['pdf_page'],'Чертёж',figure.title,figure.description,', '.join(figure.labels)])
@@ -52,6 +66,8 @@ def to_xlsx(catalog,path: Path,allow_unverified=False):
                 c.alignment=Alignment(wrap_text=True,vertical='top')
                 if isinstance(c.value,str) and c.value.startswith('='):c.data_type='s'
     for col,width in {'A':16,'B':25,'C':35,'D':100,'E':60}.items():texts.column_dimensions[col].width=width
+    provenance.freeze_panes='C2';provenance.auto_filter.ref=provenance.dimensions
+    for column in provenance.columns:provenance.column_dimensions[column[0].column_letter].width=30
     w.save(path)
 
 

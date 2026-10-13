@@ -112,9 +112,9 @@ class CatalogTools:
         self.log(page,'repeat_region',box=box,rotation=rotation,identical_reads=count)
         return [image,TextContent(type='text',text='This exact source region is unchanged and has already been viewed. Another identical crop adds no evidence. Compare the already read rows/headers and save completed sections now; explicitly record remaining uncertainty rather than repeating the same inspection. The image remains available and there is no inspection-count limit.')]
 
-    def source_payload(self,page,kind,data):
+    def source_payload(self,page,kind,data,maximum_bytes=SOURCE_RESPONSE_BYTES):
         text=json.dumps(data,ensure_ascii=False,indent=2)
-        if len(json.dumps(data,ensure_ascii=True,indent=2).encode())<=SOURCE_RESPONSE_BYTES:return data
+        if len(json.dumps(data,ensure_ascii=True,indent=2).encode())<=maximum_bytes:return data
         digest=hashlib.sha256(text.encode()).hexdigest()
         self.source_artifacts[(page,digest)]=text
         (self.work(page)/f'source-{kind}-{digest}.json').write_text(text,encoding='utf-8')
@@ -128,6 +128,34 @@ class CatalogTools:
         result=source_chunk(self.source_artifacts[key],offset,length)
         self.log(page,'read_source_artifact',artifact_id=artifact_id,offset=offset,next_offset=result['next_offset'])
         return result
+
+    def drawing_geometry(self,page,box,offset=0,limit=20,path_kind='stroke'):
+        from .drawing_geometry import drawing_geometry
+        if offset<0 or not 1<=limit<=20 or path_kind not in {'stroke','fill','all'}:raise ValueError('Invalid drawing index range/kind')
+        self.work(page)
+        with pymupdf.open(self.source) as doc:result=drawing_geometry(doc[page-1],box)
+        self.log(page,'inspect_drawing_geometry',box=box,paths=len(result['paths']),words=len(result['words']))
+        selected=[p for p in result['paths'] if path_kind=='all' or (p['stroke'] is not None if path_kind=='stroke' else p['fill'] is not None)]
+        if offset>len(selected):raise ValueError('Drawing index offset is past the end')
+        paths=[{k:p[k] for k in ('id','box','type','line_width_pdf_points','dashes')}|{'item_count':len(p['items'])} for p in selected[offset:offset+limit]]
+        return {'physical_page':page,'source_sha256':self.source_digest,'box':box,'pdf_rotation':result['pdf_rotation'],
+                'coordinate_system':result['coordinate_system'],'words':self.source_payload(page,'drawing-words',{'words':result['words']},3000),
+                'counts':{'all_paths':len(result['paths']),'selected_paths':len(selected),'words':len(result['words']),'small_filled_triangles':len(result['small_filled_triangles'])},
+                'path_kind':path_kind,'path_index':paths,'next_offset':min(offset+limit,len(selected)),
+                'triangle_path_ids_in_index':[t['path_id'] for t in result['small_filled_triangles'] if t['path_id'] in {p['id'] for p in paths}],
+                'instruction':'Index only; read_drawing_paths retrieves literal endpoints for chosen IDs. Default index contains stroked paths, excluding fill-only glyph outlines explicitly; use path_kind=all or fill for those. Follow next_offset through selected_paths as needed. Words may be a paged source artifact. All paths remain available; neither index nor geometry infers ownership.',
+                'limits':result['limits']}
+
+    def drawing_paths(self,page,box,path_ids):
+        from .drawing_geometry import drawing_geometry
+        if not path_ids or len(path_ids)>40 or len(set(path_ids))!=len(path_ids):raise ValueError('Choose 1..40 unique path IDs')
+        self.work(page)
+        with pymupdf.open(self.source) as doc:result=drawing_geometry(doc[page-1],box)
+        paths={p['id']:p for p in result['paths']}
+        if any(identifier not in paths for identifier in path_ids):raise ValueError('Path ID is outside this source region')
+        self.log(page,'read_drawing_paths',box=box,path_ids=path_ids)
+        return self.source_payload(page,'drawing-paths',{'physical_page':page,'source_sha256':self.source_digest,'box':box,
+                                  'coordinate_system':result['coordinate_system'],'paths':[paths[i] for i in path_ids]})
 
     def direct(self,page):
         work=self.work(page)
@@ -288,7 +316,8 @@ class CatalogTools:
         with pymupdf.open(self.source) as doc:
             p=doc[page-1];result=[]
             for x0,y0,x1,y1,text,*_ in p.get_text('words'):
-                rect=[round(x0/p.rect.width,4),round(y0/p.rect.height,4),round(x1/p.rect.width,4),round(y1/p.rect.height,4)]
+                visible=pymupdf.Rect(x0,y0,x1,y1)*p.rotation_matrix
+                rect=[round(visible.x0/p.rect.width,4),round(visible.y0/p.rect.height,4),round(visible.x1/p.rect.width,4),round(visible.y1/p.rect.height,4)]
                 if box and not (box[0]<=(rect[0]+rect[2])/2<=box[2] and box[1]<=(rect[1]+rect[3])/2<=box[3]):continue
                 word={'text':text,'box':rect}
                 if len(text)<=12 and any(c in 'ABCEHKMOPTXYАВСЕНКМОРТХУ' for c in text):
@@ -400,6 +429,14 @@ def server(context):
     def read_source_layout(page: int,box: list[float]|None=None) -> dict:
         """Read original text-layer words with normalized positions. Use to resolve column alignment or identical Latin/Cyrillic glyphs; diagrams still need Vision."""
         return context.source_payload(page,'layout',context.layout(page,box))
+    @mcp.tool()
+    def inspect_drawing_geometry(page: int,box: list[float],offset: int=0,limit: int=20,path_kind: str='stroke') -> dict:
+        """Read drawing words/directions and compact path index. Default stroke index explicitly omits fill-only glyph outlines; choose all/fill if needed. Follow next_offset through counts.selected_paths; use read_drawing_paths for chosen IDs. Coordinates match original view_region. Verify both dimension endpoints and visible contours; no inferred ownership. Empty native geometry needs Vision."""
+        return context.drawing_geometry(page,box,offset,limit,path_kind)
+    @mcp.tool()
+    def read_drawing_paths(page: int,box: list[float],path_ids: list[str]) -> dict:
+        """Read exact native endpoints/control points, stroke/fill/style for1..40 indexed path IDs in the same original region. Large paths use read_source_artifact pagination; no segment is truncated. Small filled triangles may be arrowheads or other marks: verify the original."""
+        return context.drawing_paths(page,box,path_ids)
     @mcp.tool()
     def extract_direct(page: int) -> dict:
         """Run local AnyDoc; return structured candidate, fallible text and reasons for Vision. No credentials or cloud upload."""
