@@ -1,0 +1,71 @@
+{
+  "status": "PASS_PUBLIC_EXACT_BYTES",
+  "commit": "e1b1fbbaf7a98bb661f6b0e36237b44d36ca1a83",
+  "files": [
+    {
+      "file": "README.md",
+      "http_status": 200,
+      "sha256": "ac6e161d85893d8c1b05d4e350371b0d1effe8cccc7a85ca751e47126fc71f5c",
+      "bytes": 3802
+    },
+    {
+      "file": "innovations.json",
+      "http_status": 200,
+      "sha256": "4a760a1134e3aadda494477ac0b40cf757476fe6b24d27bc52f2041f6d3a4273",
+      "bytes": 112945
+    },
+    {
+      "file": "manifest.json",
+      "http_status": 200,
+      "sha256": "54db839dbdad2861763edc24dce4c610b86de33e34b3565f2ba621954ea39609",
+      "bytes": 7094
+    },
+    {
+      "file": "opn.json",
+      "http_status": 200,
+      "sha256": "5f62353f3d80b5a348d72b79637c0744ecbaa7e9130b23537f5df918149645f2",
+      "bytes": 1643664
+    },
+    {
+      "file": "opn-accepted-partial.xlsx",
+      "http_status": 200,
+      "sha256": "e67c465db339fe40887ff463a19fb1ca5b07f2869d7b2b2c3cc849e07a7b072a",
+      "bytes": 438130
+    },
+    {
+      "file": "small.json",
+      "http_status": 200,
+      "sha256": "8c949f256ea32990994aa32d3d0c4cb9388c5695a8b0f5d76348e7d748c98dfc",
+      "bytes": 395837
+    },
+    {
+      "file": "publication-verification.json",
+      "http_status": 200,
+      "sha256": "608d94fc95242b6096dcb2f9b7eced58a8c85fb9fed31d68cf6392730c811920",
+      "bytes": 1292
+    },
+    {
+      "file": "isolators-accepted-partial.xlsx",
+      "http_status": 200,
+      "sha256": "d727df8cd5d4defc933a63df1e2512c542b0dfd30ab36986ae7cab285aee10bb",
+      "bytes": 805020
+    },
+    {
+      "file": "isolators.json",
+      "http_status": 200,
+      "sha256": "2561e8779df6a866c245b2a04ef542d844a1a5ed0e865cc63d3b2923279808f2",
+      "bytes": 4672045
+    },
+    {
+      "file": "armature.json",
+      "http_status": 200,
+      "sha256": "a66dbde104455008c0614a8d31cef455d73e1eab4d831872f63e6326b6159a23",
+      "bytes": 163685
+    }
+  ],
+  "provider_calls": 0,
+  "elapsed_seconds": 1.5652006150003217,
+  "whole_catalogue_complete": false,
+  "model_accepted_pages": 166,
+  "scope": "Direct readback of every published checkpoint file, including exact JSON and reopened Excel; not an independent accuracy claim"
+}
