@@ -1,0 +1,1432 @@
+{
+  "observed_unix": 1791914050.084618,
+  "provider_calls_by_collector": 0,
+  "scope": "Entire page extraction/review repair pilot, not drawing-only isolation. Cached input counted separately; reasoning subset not added twice. Retained failed contexts included when they report usage; absent usage is unknown, never claimed zero. Current and previous session snapshots deduplicated by exact provider usage event. Cache writes absent from provider reporting do not establish zero. Token counts do not equal subscription consumption or USD.",
+  "rounds": [
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "pages": [
+        27,
+        39
+      ],
+      "native_contexts": 14,
+      "provider_usage_events": 367,
+      "input_total_reported_or_known_components": 17855048,
+      "input_uncached": 966765,
+      "cache_read": 16888283,
+      "output_total": 280038,
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "contexts_with_usage": 14,
+      "contexts_without_usage_not_assumed_free": 0,
+      "drawing032_correct": 14,
+      "drawing033_correct": 14,
+      "drawing_expected": 21,
+      "valid_pages": 2
+    },
+    {
+      "program": "1.4.26",
+      "round": 2,
+      "pages": [
+        27,
+        39
+      ],
+      "native_contexts": 3,
+      "provider_usage_events": 59,
+      "input_total_reported_or_known_components": 2383459,
+      "input_uncached": 155216,
+      "cache_read": 2228243,
+      "output_total": 65411,
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "contexts_with_usage": 2,
+      "contexts_without_usage_not_assumed_free": 1,
+      "drawing032_correct": 5,
+      "drawing033_correct": 5,
+      "drawing_expected": 21,
+      "valid_pages": 1
+    },
+    {
+      "program": "1.4.26",
+      "round": 3,
+      "pages": [
+        27,
+        39
+      ],
+      "native_contexts": 5,
+      "provider_usage_events": 249,
+      "input_total_reported_or_known_components": 26044692,
+      "input_uncached": 556077,
+      "cache_read": 25488615,
+      "output_total": 133868,
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "contexts_with_usage": 5,
+      "contexts_without_usage_not_assumed_free": 0,
+      "drawing032_correct": 18,
+      "drawing033_correct": 18,
+      "drawing_expected": 21,
+      "valid_pages": 2
+    },
+    {
+      "program": "1.4.27",
+      "round": 1,
+      "pages": [
+        27,
+        39
+      ],
+      "native_contexts": 7,
+      "provider_usage_events": 159,
+      "input_total_reported_or_known_components": 7306188,
+      "input_uncached": 397609,
+      "cache_read": 6908579,
+      "output_total": 119434,
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "contexts_with_usage": 6,
+      "contexts_without_usage_not_assumed_free": 1,
+      "drawing032_correct": 5,
+      "drawing033_correct": 5,
+      "drawing_expected": 21,
+      "valid_pages": 1
+    },
+    {
+      "program": "1.4.27",
+      "round": 2,
+      "pages": [
+        27,
+        39
+      ],
+      "native_contexts": 6,
+      "provider_usage_events": 185,
+      "input_total_reported_or_known_components": 9674770,
+      "input_uncached": 447758,
+      "cache_read": 9227012,
+      "output_total": 116105,
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "contexts_with_usage": 6,
+      "contexts_without_usage_not_assumed_free": 0,
+      "drawing032_correct": 16,
+      "drawing033_correct": 16,
+      "drawing_expected": 21,
+      "valid_pages": 2
+    },
+    {
+      "program": "1.4.27",
+      "round": 3,
+      "pages": [
+        27,
+        39
+      ],
+      "native_contexts": 4,
+      "provider_usage_events": 129,
+      "input_total_reported_or_known_components": 6048290,
+      "input_uncached": 308921,
+      "cache_read": 5739369,
+      "output_total": 115163,
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "contexts_with_usage": 4,
+      "contexts_without_usage_not_assumed_free": 0,
+      "drawing032_correct": 19,
+      "drawing033_correct": 19,
+      "drawing_expected": 21,
+      "valid_pages": 2
+    }
+  ],
+  "native_contexts": [
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 27,
+      "role": "extractor",
+      "attempt": 1,
+      "provider_usage_events": 31,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "587f77be6b856cb74fdf34428160e7fcade031517e36e9c500921b33c5d2e019",
+          "started_at": 1791855410.2847536,
+          "finished_at": 1791855610.9611373
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 31,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 1267469,
+      "input_uncached": 81075,
+      "cache_read": 1186394,
+      "cache_write_reported": 0,
+      "output_total": 29509,
+      "reasoning_subset_reported": 3576
+    },
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 27,
+      "role": "extractor",
+      "attempt": 2,
+      "provider_usage_events": 82,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "3e280c8bcc23411736c586117dc10a6e62edaf917905de8e6d0d9084043c3cd9",
+          "started_at": 1791856018.0611567,
+          "finished_at": 1791856555.9415283
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 82,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 7112891,
+      "input_uncached": 147534,
+      "cache_read": 6965357,
+      "cache_write_reported": 0,
+      "output_total": 36927,
+      "reasoning_subset_reported": 10879
+    },
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 27,
+      "role": "extractor",
+      "attempt": 3,
+      "provider_usage_events": 25,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "ac9d928edac9575489321939bc7151f7403db87b2bc238f64b3667ce41c153e9",
+          "started_at": 1791857934.1561003,
+          "finished_at": 1791858121.3166034
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 25,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 1045277,
+      "input_uncached": 65774,
+      "cache_read": 979503,
+      "cache_write_reported": 0,
+      "output_total": 14655,
+      "reasoning_subset_reported": 7103
+    },
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 27,
+      "role": "extractor",
+      "attempt": 4,
+      "provider_usage_events": 17,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "a2f815115e1c02d6f496e20b664efe95d56946866367b665d33f4cc54895a643",
+          "started_at": 1791858713.1634872,
+          "finished_at": 1791858822.9183853
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 17,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 387289,
+      "input_uncached": 27260,
+      "cache_read": 360029,
+      "cache_write_reported": 0,
+      "output_total": 9052,
+      "reasoning_subset_reported": 1541
+    },
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 27,
+      "role": "reviewer",
+      "attempt": 1,
+      "provider_usage_events": 18,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "c580c9a1a787ffad2d2d56ab19fa58e645db02addf86c7fe57d4acf472846844",
+          "started_at": 1791855617.0641243,
+          "finished_at": 1791856011.8907158
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 18,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 644614,
+      "input_uncached": 62150,
+      "cache_read": 582464,
+      "cache_write_reported": 0,
+      "output_total": 16910,
+      "reasoning_subset_reported": 4040
+    },
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 27,
+      "role": "reviewer",
+      "attempt": 2,
+      "provider_usage_events": 35,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "71663ed3440efac2048aa1fc7281ae1a85dfe6f909562e8606a9868d20d99364",
+          "started_at": 1791857028.3528693,
+          "finished_at": 1791857929.892156
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 35,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 2280738,
+      "input_uncached": 123234,
+      "cache_read": 2157504,
+      "cache_write_reported": 0,
+      "output_total": 47167,
+      "reasoning_subset_reported": 4933
+    },
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 27,
+      "role": "reviewer",
+      "attempt": 3,
+      "provider_usage_events": 30,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "7488c6f42463d664099d7a8d51094592254cc382e7cc5bd53ce0e73de2e6382c",
+          "started_at": 1791858126.8429801,
+          "finished_at": 1791858707.7746458
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 30,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 1487761,
+      "input_uncached": 137745,
+      "cache_read": 1350016,
+      "cache_write_reported": 0,
+      "output_total": 27390,
+      "reasoning_subset_reported": 4553
+    },
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 27,
+      "role": "reviewer",
+      "attempt": 4,
+      "provider_usage_events": 17,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "e5f218720cc67221f0e9095fdd9c3e32d2f27cd81729db17a1b84b40d4296084",
+          "started_at": 1791859108.5445294,
+          "finished_at": 1791859571.2897444
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 17,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 573887,
+      "input_uncached": 56511,
+      "cache_read": 517376,
+      "cache_write_reported": 0,
+      "output_total": 28462,
+      "reasoning_subset_reported": 3618
+    },
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 39,
+      "role": "extractor",
+      "attempt": 1,
+      "provider_usage_events": 15,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "a31dfcff463a0e3e5ef74a58bac1d80e827bc3f6114efb3da23d118813e81daf",
+          "started_at": 1791855617.064039,
+          "finished_at": 1791855683.0041778
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 15,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 319551,
+      "input_uncached": 38531,
+      "cache_read": 281020,
+      "cache_write_reported": 0,
+      "output_total": 8007,
+      "reasoning_subset_reported": 964
+    },
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 39,
+      "role": "extractor",
+      "attempt": 2,
+      "provider_usage_events": 24,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "70026efec92811305f9e40c54157993048c7dcd886a346eb3e2198ce3b4f6b48",
+          "started_at": 1791858126.9069746,
+          "finished_at": 1791858306.4918368
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 24,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 689879,
+      "input_uncached": 48811,
+      "cache_read": 641068,
+      "cache_write_reported": 0,
+      "output_total": 16516,
+      "reasoning_subset_reported": 6288
+    },
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 39,
+      "role": "extractor",
+      "attempt": 3,
+      "provider_usage_events": 16,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "8a7ff8e8fbef23697e3fe2de93ce813103b4b72b1bdf705bada00e0b9c60e432",
+          "started_at": 1791859108.4316275,
+          "finished_at": 1791859251.3613625
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 16,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 398820,
+      "input_uncached": 41860,
+      "cache_read": 356960,
+      "cache_write_reported": 0,
+      "output_total": 9588,
+      "reasoning_subset_reported": 4544
+    },
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 39,
+      "role": "reviewer",
+      "attempt": 1,
+      "provider_usage_events": 14,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "e3c7408b6709d5bcc7cf117e329a855eeef38bb371016b8b8724d23fb4d431b4",
+          "started_at": 1791856017.981217,
+          "finished_at": 1791856256.552556
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 14,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 426215,
+      "input_uncached": 49639,
+      "cache_read": 376576,
+      "cache_write_reported": 0,
+      "output_total": 8473,
+      "reasoning_subset_reported": 1050
+    },
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 39,
+      "role": "reviewer",
+      "attempt": 2,
+      "provider_usage_events": 24,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "22b8170d5ee5bee75f3d390b195d429b8ad04c27e5de8e02d1fe377bb75031a2",
+          "started_at": 1791858713.6561186,
+          "finished_at": 1791859103.0472205
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 24,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 779620,
+      "input_uncached": 57636,
+      "cache_read": 721984,
+      "cache_write_reported": 0,
+      "output_total": 17266,
+      "reasoning_subset_reported": 2398
+    },
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "page": 39,
+      "role": "reviewer",
+      "attempt": 3,
+      "provider_usage_events": 19,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "bff7014366ffc72dfc390bb9c2f6985dd62e5e3ef78ce5050685d63f4c02f339",
+          "started_at": 1791859574.8872576,
+          "finished_at": 1791859809.8442974
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 19,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 441037,
+      "input_uncached": 29005,
+      "cache_read": 412032,
+      "cache_write_reported": 0,
+      "output_total": 10116,
+      "reasoning_subset_reported": 1158
+    },
+    {
+      "program": "1.4.26",
+      "round": 2,
+      "page": 27,
+      "role": "extractor",
+      "attempt": 1,
+      "provider_usage_events": 34,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "1be3de29d94250ef5b81497bc10c3e79d617ecf17617688fbf4875843a80ff8c",
+          "started_at": 1791856679.3581667,
+          "finished_at": 1791856944.7172675
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 34,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 1333760,
+      "input_uncached": 73261,
+      "cache_read": 1260499,
+      "cache_write_reported": 0,
+      "output_total": 26863,
+      "reasoning_subset_reported": 5215
+    },
+    {
+      "program": "1.4.26",
+      "round": 2,
+      "page": 27,
+      "role": "reviewer",
+      "attempt": 1,
+      "provider_usage_events": 25,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "48600b33c78f265a31eb96424d1003baf565226edc4d13602b250c8297a38abe",
+          "started_at": 1791859815.2455692,
+          "finished_at": 1791860476.209925
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 25,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 1049699,
+      "input_uncached": 81955,
+      "cache_read": 967744,
+      "cache_write_reported": 0,
+      "output_total": 38548,
+      "reasoning_subset_reported": 4983
+    },
+    {
+      "program": "1.4.26",
+      "round": 2,
+      "page": 39,
+      "role": "extractor",
+      "attempt": 1,
+      "provider_usage_events": 0,
+      "histories": 2,
+      "native_receipts": [],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 0,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 0,
+      "input_uncached": 0,
+      "cache_read": 0,
+      "cache_write_reported": 0,
+      "output_total": 0,
+      "reasoning_subset_reported": 0
+    },
+    {
+      "program": "1.4.26",
+      "round": 3,
+      "page": 27,
+      "role": "extractor",
+      "attempt": 1,
+      "provider_usage_events": 33,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "20618a38aa7a14e454703f6e471de958df9889851c00cfb830123c0a6d4b4512",
+          "started_at": 1791867602.0628564,
+          "finished_at": 1791867834.7153337
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 33,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 1283114,
+      "input_uncached": 66727,
+      "cache_read": 1216387,
+      "cache_write_reported": 0,
+      "output_total": 22208,
+      "reasoning_subset_reported": 8811
+    },
+    {
+      "program": "1.4.26",
+      "round": 3,
+      "page": 27,
+      "role": "reviewer",
+      "attempt": 1,
+      "provider_usage_events": 27,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "10a1661b8d1f4825fcf162f841217fb95f554bc8934dd9c8a5cb1a6200889788",
+          "started_at": 1791867840.7059155,
+          "finished_at": 1791868145.3835819
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 27,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 941701,
+      "input_uncached": 63301,
+      "cache_read": 878400,
+      "cache_write_reported": 0,
+      "output_total": 16628,
+      "reasoning_subset_reported": 1304
+    },
+    {
+      "program": "1.4.26",
+      "round": 3,
+      "page": 39,
+      "role": "extractor",
+      "attempt": 1,
+      "provider_usage_events": 29,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "eecabad25c92a30f73cfbd78b15fa475bb3423ea4aa2223c31e92323efb43bdd",
+          "started_at": 1791867840.5305915,
+          "finished_at": 1791868014.7352211
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 29,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 1013012,
+      "input_uncached": 65790,
+      "cache_read": 947222,
+      "cache_write_reported": 0,
+      "output_total": 19152,
+      "reasoning_subset_reported": 8471
+    },
+    {
+      "program": "1.4.26",
+      "round": 3,
+      "page": 39,
+      "role": "extractor",
+      "attempt": 2,
+      "provider_usage_events": 140,
+      "histories": 2,
+      "native_receipts": [],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 140,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 22108031,
+      "input_uncached": 305201,
+      "cache_read": 21802830,
+      "cache_write_reported": 0,
+      "output_total": 64183,
+      "reasoning_subset_reported": 52409
+    },
+    {
+      "program": "1.4.26",
+      "round": 3,
+      "page": 39,
+      "role": "reviewer",
+      "attempt": 1,
+      "provider_usage_events": 20,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "f97b8cc2d1f20f82763655ae4e1b09cbfd55b4da285ae2d2d45291a323197664",
+          "started_at": 1791868149.1840398,
+          "finished_at": 1791868379.7480586
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 20,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 698834,
+      "input_uncached": 55058,
+      "cache_read": 643776,
+      "cache_write_reported": 0,
+      "output_total": 11697,
+      "reasoning_subset_reported": 2089
+    },
+    {
+      "program": "1.4.27",
+      "round": 1,
+      "page": 27,
+      "role": "extractor",
+      "attempt": 1,
+      "provider_usage_events": 0,
+      "histories": 2,
+      "native_receipts": [],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 0,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 0,
+      "input_uncached": 0,
+      "cache_read": 0,
+      "cache_write_reported": 0,
+      "output_total": 0,
+      "reasoning_subset_reported": 0
+    },
+    {
+      "program": "1.4.27",
+      "round": 1,
+      "page": 39,
+      "role": "extractor",
+      "attempt": 1,
+      "provider_usage_events": 53,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "ce3e72ac17f32d2a96823a09b6a8a9743c27fa62c0d653ffd8e928a2163f6067",
+          "started_at": 1791867602.0954852,
+          "finished_at": 1791867951.8684058
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 53,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 3427276,
+      "input_uncached": 122956,
+      "cache_read": 3304320,
+      "cache_write_reported": 0,
+      "output_total": 47134,
+      "reasoning_subset_reported": 31647
+    },
+    {
+      "program": "1.4.27",
+      "round": 1,
+      "page": 39,
+      "role": "extractor",
+      "attempt": 2,
+      "provider_usage_events": 14,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "092d8e2b4c58464dcd4f529829a1da0d45fedb4d582cacc68da3d173a0d0e585",
+          "started_at": 1791868302.3675876,
+          "finished_at": 1791868394.1712494
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 14,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 346515,
+      "input_uncached": 36812,
+      "cache_read": 309703,
+      "cache_write_reported": 0,
+      "output_total": 12492,
+      "reasoning_subset_reported": 1653
+    },
+    {
+      "program": "1.4.27",
+      "round": 1,
+      "page": 39,
+      "role": "extractor",
+      "attempt": 3,
+      "provider_usage_events": 22,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "d69be4bf6cd1068ba066345aede1bb9a3469f9b7dcb30c8d29be18d5a2ab1160",
+          "started_at": 1791868762.7046,
+          "finished_at": 1791868897.5182106
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 22,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 724066,
+      "input_uncached": 48454,
+      "cache_read": 675612,
+      "cache_write_reported": 0,
+      "output_total": 17401,
+      "reasoning_subset_reported": 4067
+    },
+    {
+      "program": "1.4.27",
+      "round": 1,
+      "page": 39,
+      "role": "reviewer",
+      "attempt": 1,
+      "provider_usage_events": 28,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "cc36edab9c1c12285673d1775e802ffe5d772fe8a7780cdb18bab9068421dd7b",
+          "started_at": 1791867955.6616626,
+          "finished_at": 1791868298.61498
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 28,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 1181311,
+      "input_uncached": 68671,
+      "cache_read": 1112640,
+      "cache_write_reported": 0,
+      "output_total": 14626,
+      "reasoning_subset_reported": 3394
+    },
+    {
+      "program": "1.4.27",
+      "round": 1,
+      "page": 39,
+      "role": "reviewer",
+      "attempt": 2,
+      "provider_usage_events": 28,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "c74601273a50c2b743c7c9cdf1afe6b1dd363219ff6361411fe17b38ca0926cf",
+          "started_at": 1791868398.1244211,
+          "finished_at": 1791868759.126438
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 28,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 1245370,
+      "input_uncached": 76538,
+      "cache_read": 1168832,
+      "cache_write_reported": 0,
+      "output_total": 17997,
+      "reasoning_subset_reported": 2500
+    },
+    {
+      "program": "1.4.27",
+      "round": 1,
+      "page": 39,
+      "role": "reviewer",
+      "attempt": 3,
+      "provider_usage_events": 14,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "aa770fe38f4827125ec2a4415bf317fbece76135c34a1f5bd3304216bfa8928f",
+          "started_at": 1791868901.6519625,
+          "finished_at": 1791869099.4369636
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 14,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 381650,
+      "input_uncached": 44178,
+      "cache_read": 337472,
+      "cache_write_reported": 0,
+      "output_total": 9784,
+      "reasoning_subset_reported": 1391
+    },
+    {
+      "program": "1.4.27",
+      "round": 2,
+      "page": 27,
+      "role": "extractor",
+      "attempt": 1,
+      "provider_usage_events": 63,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "5e4a95eb9878a23887e625931fe48e182d42812e7a0721b0e50a0cf440569adf",
+          "started_at": 1791869103.2569468,
+          "finished_at": 1791869448.5514498
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 63,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 4544392,
+      "input_uncached": 121193,
+      "cache_read": 4423199,
+      "cache_write_reported": 0,
+      "output_total": 33182,
+      "reasoning_subset_reported": 11519
+    },
+    {
+      "program": "1.4.27",
+      "round": 2,
+      "page": 27,
+      "role": "reviewer",
+      "attempt": 1,
+      "provider_usage_events": 20,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "ed9223930063788b45a93e4c6cc3aac529a110975033fcbb6403126bf9c60130",
+          "started_at": 1791869454.6741107,
+          "finished_at": 1791869860.7449963
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 20,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 793898,
+      "input_uncached": 65322,
+      "cache_read": 728576,
+      "cache_write_reported": 0,
+      "output_total": 26433,
+      "reasoning_subset_reported": 2646
+    },
+    {
+      "program": "1.4.27",
+      "round": 2,
+      "page": 39,
+      "role": "extractor",
+      "attempt": 1,
+      "provider_usage_events": 37,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "524dc60333cbbc4eaf9b4d0583ff4b205caea784a8f1a697bdbe78ae01b4b74d",
+          "started_at": 1791869454.5594077,
+          "finished_at": 1791869713.1622798
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 37,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 2126994,
+      "input_uncached": 102760,
+      "cache_read": 2024234,
+      "cache_write_reported": 0,
+      "output_total": 24728,
+      "reasoning_subset_reported": 16468
+    },
+    {
+      "program": "1.4.27",
+      "round": 2,
+      "page": 39,
+      "role": "extractor",
+      "attempt": 2,
+      "provider_usage_events": 22,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "9591dcbe5f5f3f55051c58558da8a646688f765f71d43fb925194386fa4b3b37",
+          "started_at": 1791870051.859624,
+          "finished_at": 1791870141.0885417
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 22,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 635963,
+      "input_uncached": 41664,
+      "cache_read": 594299,
+      "cache_write_reported": 0,
+      "output_total": 12915,
+      "reasoning_subset_reported": 1804
+    },
+    {
+      "program": "1.4.27",
+      "round": 2,
+      "page": 39,
+      "role": "reviewer",
+      "attempt": 1,
+      "provider_usage_events": 19,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "0044095448fc458ea55e5db25bf8cc933cb09b8bdb93ebf0cbfa72ac8588f1b2",
+          "started_at": 1791869864.2562652,
+          "finished_at": 1791870048.1005545
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 19,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 629930,
+      "input_uncached": 52778,
+      "cache_read": 577152,
+      "cache_write_reported": 0,
+      "output_total": 6598,
+      "reasoning_subset_reported": 1533
+    },
+    {
+      "program": "1.4.27",
+      "round": 2,
+      "page": 39,
+      "role": "reviewer",
+      "attempt": 2,
+      "provider_usage_events": 24,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "1ea96f20174bb2ae752c3eb092a5f437fcbae511095154e48507195a35aee1ee",
+          "started_at": 1791870144.7175667,
+          "finished_at": 1791870468.790086
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 24,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 943593,
+      "input_uncached": 64041,
+      "cache_read": 879552,
+      "cache_write_reported": 0,
+      "output_total": 12249,
+      "reasoning_subset_reported": 3374
+    },
+    {
+      "program": "1.4.27",
+      "round": 3,
+      "page": 27,
+      "role": "extractor",
+      "attempt": 1,
+      "provider_usage_events": 51,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "d0f4d76d2e47be95b0921e1870e800b92bec5078561060c375a82e87da708876",
+          "started_at": 1791870472.5686316,
+          "finished_at": 1791870799.1709456
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 51,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 2646432,
+      "input_uncached": 105268,
+      "cache_read": 2541164,
+      "cache_write_reported": 0,
+      "output_total": 42525,
+      "reasoning_subset_reported": 14807
+    },
+    {
+      "program": "1.4.27",
+      "round": 3,
+      "page": 27,
+      "role": "reviewer",
+      "attempt": 1,
+      "provider_usage_events": 32,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "105f921f72f6b25461e4d229250c53e4b0d74118aa5fa045a287f43da87b2ba0",
+          "started_at": 1791870804.5009637,
+          "finished_at": 1791871439.749649
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 32,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 2016044,
+      "input_uncached": 111276,
+      "cache_read": 1904768,
+      "cache_write_reported": 0,
+      "output_total": 42875,
+      "reasoning_subset_reported": 5609
+    },
+    {
+      "program": "1.4.27",
+      "round": 3,
+      "page": 39,
+      "role": "extractor",
+      "attempt": 1,
+      "provider_usage_events": 23,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "a8efd45fca5d111de284bf3840fd5921bc263dbce69539eb762e227453221e00",
+          "started_at": 1791870804.802643,
+          "finished_at": 1791870952.4837868
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 23,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 657025,
+      "input_uncached": 43588,
+      "cache_read": 613437,
+      "cache_write_reported": 0,
+      "output_total": 17812,
+      "reasoning_subset_reported": 6950
+    },
+    {
+      "program": "1.4.27",
+      "round": 3,
+      "page": 39,
+      "role": "reviewer",
+      "attempt": 1,
+      "provider_usage_events": 23,
+      "histories": 2,
+      "native_receipts": [
+        {
+          "status": "completed",
+          "artifact_sha256": "6ef78bd562048c4eef09110ee7c1677ebd4eb372ef09950c2da59c76b75eeb36",
+          "started_at": 1791871443.80612,
+          "finished_at": 1791871703.0353296
+        }
+      ],
+      "input_missing_events": 0,
+      "output_missing_events": 0,
+      "cache_write_unreported_events": 23,
+      "malformed_usage": 0,
+      "input_total_reported_or_known_components": 728789,
+      "input_uncached": 48789,
+      "cache_read": 680000,
+      "cache_write_reported": 0,
+      "output_total": 11951,
+      "reasoning_subset_reported": 1476
+    }
+  ],
+  "private_usage_source_files": 78,
+  "private_usage_source_sha256s": [
+    "246fa7ac293facb8c376c64c8259c52b5c539506fc1c4e6bf9a7c84880b8c6ca",
+    "c05108056bb21e341d8949855f37a23df678405210467b9f94cb8117d0f9c40a",
+    "9f8c54da160af378b02a12b8d97416facf55377ebf32bea9c84d02f5a721200c",
+    "15fc3992e9aaf1fac7c57e7764de974f1d8675aa10da2e6cee4a3fe0091202e5",
+    "18a0aa81484369292f7521f90cf4fb289b7919593c730254a1142d633305e9f0",
+    "cbed5fe8ba6da17706647ad1f0d4a7d80db68910ea94b7b94071c274c1b7e86f",
+    "927f28a0959e94695d485389119b1eec0ffd25b304999b9e8264e5274c7eadbc",
+    "6c7a6560819723cd864b912772810132309a60479861b8599645c2fb4f9bca92",
+    "ab5bb2f054acbaaf49073a618b44430bc5d5518e926b8d604a79e021e083e641",
+    "edc3d4ce8d948dc3a06ac74231a4fc0e63c0611a14d59ec803427cf5778d9d69",
+    "e6ee0a8ff87bf25eb22f74d73d12b0e9d8370c599a62b95f792965f8b91303ea",
+    "52e60d0e2e500ac3037572fb2daf93562f12e727dc94fd593eafce6020486682",
+    "c0c849a20cc3be5438234e4c0df7c4d1f86a25ee522268b749b091d9c9c1b9cc",
+    "f479a751b2f1851715d4ffa58a91644c54a17d547075e27fd1a15006abdfab8c",
+    "913b4d025b632290b1a560c2c7d3263e0021c01fd7a4e5e2fcfaeae687ffcd15",
+    "e88e023b676b7ed6b5f1e3c711a88eb1af6687e15b9937966ac3b2781c3c96e2",
+    "a0e42e8785bc571f00192794b5d020c443138186609d814ebcc14864a9b52ba3",
+    "751108eb1c7963298dfa1923ccd7b37fe9f1f595849ab27467d09d4568c5dbb1",
+    "1e69355a7f4c6801cfadd5c31f6dbc0f286887a3aa1d3b188e8163acaaf6ed36",
+    "231292c36e121536cb3a5445f6e9638b639549b6e1b251cbee88b7e3acf3fef7",
+    "e37313f8bff62710e510e8f2aca7028e9c8119d00a69c9ec63b1ba4411cfd56d",
+    "fab777e2f5fee16398a16f579c20bb7c38b51062e5850abf38a9af76205820b3",
+    "79661c875e97d0264f811c5aa6580847df027e73b8db6d7401f13a4a24f3c76a",
+    "e485410030ab0fd49913d0735a61b45129e9d88bfba0152beb3ce654902a7bcc",
+    "dd0bffa8c98fb02a0b744b2dcd92847e52f812531eb23e875864e725c2b18ed1",
+    "7cc2e36cc9ff4b769cc84216be7b73e21aa9d0841cd1d4706f2fab57a30e8036",
+    "a2c032679a0c98323c39ff31d9d77f377e32fe7cf00d6e14e93ef1c0a384e616",
+    "35e6333eed80f3d4ffe8bf7c5410fac46a68bdc1ef21d60bd4851b71b81f27a0",
+    "209a387566aa5e71633a0af09e7327f087267677866237ccebc7f35d74c1c3d3",
+    "cbbeca4f8be5ce317bae0b0589f880190aa345061d54c80a87e5b2b54dd2ba7c",
+    "e313f5efbd465cb880098358018bdb444d2bd5033c0a2e50ef3d259ae6bdebf9",
+    "fcb5772e37e5bb7d00808b058bbc738a47cb38dd94f60be444e4aa40dbf5e251",
+    "8b2be742e4a604117eecc4317fc3581e60da279943ca9a2b1cd6bf51b095d14b",
+    "ad48d453b54879c36fce5cdf2ceddccc75013c6cf7044253a71121635ddbef02",
+    "0f0714441e699cf00de86454081b1a92726f44691cb69d6e296c2191f7534225",
+    "88681ae09ed869618208f6734b45342e3198dafba3df727e4500dd09217d3817",
+    "0486a18143b2cdea7d74a7a40e8b17d226f1ff30de47da3f75785674cb3b4638",
+    "7d97a6c13f00b38f445274a6a4e6c531554b62f22e7d6a47f347f498a61bcc52",
+    "00586b8103fc94fb8f066a34e669c675268caf1c9af78646a921ad2849f461d7",
+    "eed0cec29af577d9e29303174df0030cf2a7ba84054730bd7ee474db61a0c037",
+    "370bfdf8773f45395461a44affbcf48c8242b336049db0b0a4154ba383f5ec18",
+    "0cf60518e615942747068cb38878ab0d4445bc4d7ce46aa8273a4385aba1a944",
+    "2d4014c0ef1f7fe59e7b282be1b074cc3725bdd6478f2a81638b989ab952ca60",
+    "263232a5ec1f00b7e4bcf43746eb1de6cf6e78780105e4bf84e9341a7275c4f1",
+    "6415af4e7ffe9354da1ae41dce1d72bb15f6696c515e48d26fdef3298c0c1302",
+    "a9826aa201a592d7e27da66ce8e9841ca61b2e5d0aeabbf26d12d4bb35c08174",
+    "febe34e1be4027dbee23afd1cd1cceb07bc9d83ae958a8e8de6cef9d87582df1",
+    "0df13233106a4bbcef0dddd49897dbb68820773c04945b4bc7ef4bacba8aa76f",
+    "fcd48a67ffa463e01ed0b4ae69280f7507553a14f4c4dd0bce563590070e8427",
+    "535d3163ce0d0aafb2edcab7f46dab55f01c6281921a74f52a811f72721702c8",
+    "97a068004b684def53ea764d5d4519890288086076d87da4e2a5cbea36356a01",
+    "54dc46e7dbf132c38e50c65c204d075b091a3c5e3c12755833d6b2e6aadc18bd",
+    "95f0bae5034ed973fe98957f6b0e640949d209d4ea3210ebe996c179637bfa4c",
+    "84c1ce049f4331d598b8618f5fc7c5bd926c5240b83f8c3c7f7de9c4ee8d2bef",
+    "521e1f275da9284d29db808ca6b289649dcd790da4af201b7d14a50ad98be7a2",
+    "f3eac9ecf0b76c6e68c328153cc30c1213333fdf2b81e7a438c96aa9a454043c",
+    "48f6cf5af984fa29a5abdd8530729c414d51895ceb709423acd8b41f6b5228f0",
+    "877f2c33a2e996bc9071dcd6d61c904d65aa071f7155e789e2f84039893edabe",
+    "fd2bc9b1374ff95f5eedf35f0fa58af630342bbbb6f5b5935c49bea7a5b5f5bc",
+    "f335a5ad64cd10f52f4e008978c60de310272fecd2902afda60d25ee05883d17",
+    "619efead8344cf1fe0f2db8f39b56e9098a3f9a0a4621ae2df835bd100c76bc8",
+    "8e26e8339c790ba36775d1acf3c9c5e5ca0863dd63fa6e9e347dd0b3d5d528ee",
+    "848d61dc6ef1a780d9984aee1e2910be09ae1703351f2e688df777ba78c4632f",
+    "b54552767e90f5207ab0e45c04938d11baf3d5588c73a8547c11d33ff139332e",
+    "ee38b409407414df98b6a555fb24972eb869e1eb93cb1f4c40076c4a2df3af79",
+    "e2e54f40c1980c606769b58c0a92f2e5800e8f4adf84a3b523fda0f879dfd038",
+    "38ee24d29cbed32897862e3fba34432eda8ec0dbb5064fe421bc7d6f170c3702",
+    "b3e481699703df1a1c8e9866368b145f04086c981e454b21583bcbf013656a95",
+    "1de916a1008da9e7bd58108db90cc59ea540aa83a56befccb6365dfd3e7a2424",
+    "52a6f083410d018bfe89d978d9e10e37011be005e7b1cd7053bd406bb24bfabd",
+    "a6d97175d5b33027b280b8107e3c41757fb1f35c9a65d15183732482d8e054d2",
+    "ac549d4170ececae7ee4b54b85b25c650fb491084a05e9ded957a82ba48c30a3",
+    "ce3faf7abfdcd5a30ef6af71007578d5252d0b9d81c855b6bb99982ee0be1e05",
+    "2bafac23161bd05e583ca0f32267d7c8f6c45589f264ac06c0bc6db5bf5a785a",
+    "a47627df011eb756edacb161d9c7cb94c235719f239f27944c0ce4997afa4096",
+    "12ad0f08fd67faca5a627a1ef2c9fb4991f1b694a7ab117afd1b6ebf0add4cbb",
+    "70923ee6d0b37eff1ed502441f324a5aa153110f76dd0d88903bdadeb7fc35f4"
+  ],
+  "drawing_selected_offline_scores": [
+    {
+      "program": "1.4.26",
+      "round": 1,
+      "engineering_correct": 20,
+      "drawing032_correct": 14,
+      "drawing033_correct": 14,
+      "drawing_expected": 21,
+      "engineering_expected": 20,
+      "valid_pages": 2,
+      "cases": [
+        {
+          "page": 27,
+          "candidate_sha256": "a2f815115e1c02d6f496e20b664efe95d56946866367b665d33f4cc54895a643",
+          "attempt": 4,
+          "native_status": "model_accepted_awaiting_independent_source_audit",
+          "drawing032_correct": 9,
+          "drawing033_correct": 9,
+          "drawing_expected": 13
+        },
+        {
+          "page": 39,
+          "candidate_sha256": "8a7ff8e8fbef23697e3fe2de93ce813103b4b72b1bdf705bada00e0b9c60e432",
+          "attempt": 3,
+          "native_status": "model_accepted_awaiting_independent_source_audit",
+          "drawing032_correct": 5,
+          "drawing033_correct": 5,
+          "drawing_expected": 8
+        }
+      ]
+    },
+    {
+      "program": "1.4.26",
+      "round": 2,
+      "engineering_correct": 10,
+      "drawing032_correct": 5,
+      "drawing033_correct": 5,
+      "drawing_expected": 21,
+      "engineering_expected": 20,
+      "valid_pages": 1,
+      "cases": [
+        {
+          "page": 27,
+          "candidate_sha256": "1be3de29d94250ef5b81497bc10c3e79d617ecf17617688fbf4875843a80ff8c",
+          "attempt": 1,
+          "native_status": "model_accepted_awaiting_independent_source_audit",
+          "drawing032_correct": 5,
+          "drawing033_correct": 5,
+          "drawing_expected": 13
+        },
+        {
+          "page": 39,
+          "status": "failed",
+          "no_completed_native_candidate": true
+        }
+      ]
+    },
+    {
+      "program": "1.4.26",
+      "round": 3,
+      "engineering_correct": 20,
+      "drawing032_correct": 18,
+      "drawing033_correct": 18,
+      "drawing_expected": 21,
+      "engineering_expected": 20,
+      "valid_pages": 2,
+      "cases": [
+        {
+          "page": 27,
+          "candidate_sha256": "20618a38aa7a14e454703f6e471de958df9889851c00cfb830123c0a6d4b4512",
+          "attempt": 1,
+          "native_status": "model_accepted_awaiting_independent_source_audit",
+          "drawing032_correct": 13,
+          "drawing033_correct": 13,
+          "drawing_expected": 13
+        },
+        {
+          "page": 39,
+          "candidate_sha256": "eecabad25c92a30f73cfbd78b15fa475bb3423ea4aa2223c31e92323efb43bdd",
+          "attempt": 1,
+          "native_status": "failed",
+          "drawing032_correct": 5,
+          "drawing033_correct": 5,
+          "drawing_expected": 8
+        }
+      ]
+    },
+    {
+      "program": "1.4.27",
+      "round": 1,
+      "engineering_correct": 10,
+      "drawing032_correct": 5,
+      "drawing033_correct": 5,
+      "drawing_expected": 21,
+      "engineering_expected": 20,
+      "valid_pages": 1,
+      "cases": [
+        {
+          "page": 27,
+          "status": "failed",
+          "no_completed_native_candidate": true
+        },
+        {
+          "page": 39,
+          "candidate_sha256": "d69be4bf6cd1068ba066345aede1bb9a3469f9b7dcb30c8d29be18d5a2ab1160",
+          "attempt": 3,
+          "native_status": "model_accepted_awaiting_independent_source_audit",
+          "drawing032_correct": 5,
+          "drawing033_correct": 5,
+          "drawing_expected": 8
+        }
+      ]
+    },
+    {
+      "program": "1.4.27",
+      "round": 2,
+      "engineering_correct": 20,
+      "drawing032_correct": 16,
+      "drawing033_correct": 16,
+      "drawing_expected": 21,
+      "engineering_expected": 20,
+      "valid_pages": 2,
+      "cases": [
+        {
+          "page": 27,
+          "candidate_sha256": "5e4a95eb9878a23887e625931fe48e182d42812e7a0721b0e50a0cf440569adf",
+          "attempt": 1,
+          "native_status": "model_accepted_awaiting_independent_source_audit",
+          "drawing032_correct": 9,
+          "drawing033_correct": 9,
+          "drawing_expected": 13
+        },
+        {
+          "page": 39,
+          "candidate_sha256": "9591dcbe5f5f3f55051c58558da8a646688f765f71d43fb925194386fa4b3b37",
+          "attempt": 2,
+          "native_status": "model_accepted_awaiting_independent_source_audit",
+          "drawing032_correct": 7,
+          "drawing033_correct": 7,
+          "drawing_expected": 8
+        }
+      ]
+    },
+    {
+      "program": "1.4.27",
+      "round": 3,
+      "engineering_correct": 20,
+      "drawing032_correct": 19,
+      "drawing033_correct": 19,
+      "drawing_expected": 21,
+      "engineering_expected": 20,
+      "valid_pages": 2,
+      "cases": [
+        {
+          "page": 27,
+          "candidate_sha256": "d0f4d76d2e47be95b0921e1870e800b92bec5078561060c375a82e87da708876",
+          "attempt": 1,
+          "native_status": "model_accepted_awaiting_independent_source_audit",
+          "drawing032_correct": 13,
+          "drawing033_correct": 13,
+          "drawing_expected": 13
+        },
+        {
+          "page": 39,
+          "candidate_sha256": "a8efd45fca5d111de284bf3840fd5921bc263dbce69539eb762e227453221e00",
+          "attempt": 1,
+          "native_status": "model_accepted_awaiting_independent_source_audit",
+          "drawing032_correct": 6,
+          "drawing033_correct": 6,
+          "drawing_expected": 8
+        }
+      ]
+    }
+  ],
+  "full_drawing_accuracy_established": false,
+  "models": {
+    "extractor": "MiniMax-M3.1-Flash-Preview?reasoning=medium",
+    "reviewer": "glm-5.3-flash?reasoning=low (Coding Endpoint)"
+  }
+}
