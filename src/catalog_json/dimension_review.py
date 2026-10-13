@@ -5,6 +5,8 @@ from pydantic import Field,field_validator
 from typing import Literal
 
 class DimensionReview(Model):
+    source_figure_index: int = Field(ge=0)
+    source_label_index: int = Field(ge=0)
     figure_index: int = Field(ge=0)
     label_index: int = Field(ge=0)
     view: str = Field(min_length=1)
@@ -35,7 +37,12 @@ def dimension_targets(content):
                 targets.append({'figure_index':fi,'label_index':li,'figure_title':figure.title,'label':label})
     return targets
 
-def missing_dimension_evidence(content,records,candidate_sha256):
-    valid={(r['figure_index'],r['label_index']) for r in records
-           if r.get('candidate_sha256')==candidate_sha256 and r.get('agrees_with_candidate') is True}
-    return [target for target in dimension_targets(content) if (target['figure_index'],target['label_index']) not in valid]
+def missing_dimension_evidence(content,records,candidate_sha256,observed=None,observation_sha256=None):
+    records=[r for r in records if r.get('candidate_sha256')==candidate_sha256 and r.get('agrees_with_candidate') is True
+             and (observed is None or r.get('observation_sha256')==observation_sha256)]
+    valid={(r['figure_index'],r['label_index']) for r in records}
+    missing=[target|{'inventory':'candidate'} for target in dimension_targets(content) if (target['figure_index'],target['label_index']) not in valid]
+    if observed is not None:
+        source_valid={(r.get('source_figure_index'),r.get('source_label_index')) for r in records}
+        missing.extend(target|{'inventory':'source'} for target in dimension_targets(observed) if (target['figure_index'],target['label_index']) not in source_valid)
+    return missing

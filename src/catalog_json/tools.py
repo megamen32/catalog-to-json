@@ -180,7 +180,9 @@ class CatalogTools:
 
     def dimension_inventory(self,page):
         candidate=PageContent.model_validate(self.read(page,'page')['candidate'])
-        return {'targets':dimension_targets(candidate),'instruction':'Inspect each repeated variant/view separately. Coverage is not proof of geometry correctness. Nonstandard labels and raster dimensions also require review; this inventory is a minimum, not an exhaustive detector.'}
+        observation_file=self.work(page)/(f'verified-source-observation-{self.attempt}.json' if 'correct_source_observation' in self.seen.get(page,set()) else f'source-observation-{self.attempt}.json')
+        observed=PageContent.model_validate_json(observation_file.read_text())
+        return {'candidate_targets':dimension_targets(candidate),'source_targets':dimension_targets(observed),'instruction':'Map each independently observed source figure/label to its own candidate figure/label. Moving dimensions only into descriptions does not cover source targets. Inspect each repeated variant/view separately. Coverage is not proof of geometry correctness.'}
 
     def record_dimension(self,page,json_text):
         if self.role!='reviewer':return {'saved':False,'error':'Only reviewer records dimension evidence'}
@@ -190,6 +192,14 @@ class CatalogTools:
         if record.figure_index>=len(candidate.figures):return {'saved':False,'error':'Unknown candidate figure'}
         figure=candidate.figures[record.figure_index]
         if record.label_index>=len(figure.labels):return {'saved':False,'error':'Unknown candidate label'}
+        observation_file=self.work(page)/(f'verified-source-observation-{self.attempt}.json' if 'correct_source_observation' in self.seen.get(page,set()) else f'source-observation-{self.attempt}.json')
+        observed=PageContent.model_validate_json(observation_file.read_text())
+        if record.source_figure_index>=len(observed.figures) or record.source_label_index>=len(observed.figures[record.source_figure_index].labels):return {'saved':False,'error':'Unknown independently observed source dimension'}
+        from .audit import figure_key
+        import re
+        source_label=observed.figures[record.source_figure_index].labels[record.source_label_index]
+        if record.agrees_with_candidate and re.sub(r'\s+','',figure_key(source_label))!=re.sub(r'\s+','',figure_key(figure.labels[record.label_index])):
+            return {'saved':False,'error':'Different source/candidate labels cannot certify the same dimension; report a blocking mismatch rather than borrowing another source label'}
         if record.candidate_feature_quote not in figure.description and not (record.relation=='annotation' and record.candidate_feature_quote in figure.labels[record.label_index]):return {'saved':False,'error':'Quote the actual candidate description for this feature; do not invent a corrected association'}
         box=record.source_box;feature=record.feature_box
         import math
@@ -210,7 +220,7 @@ class CatalogTools:
                     return {'saved':False,'error':'Claimed tips do not match selected native path vertices; inspect arrowhead paths rather than guessing coordinates'}
         work=self.work(page);path=work/f'candidate-{self.attempt}.json'
         if not path.exists():return {'saved':False,'error':'Evidence requires an exact candidate for this attempt'}
-        payload=record.model_dump()|{'candidate_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'source_sha256':self.source_digest,'physical_page':page,'attempt':self.attempt,'candidate_label':figure.labels[record.label_index],'figure_title':figure.title,'basis':'native_geometry_and_vision' if record.path_ids else 'vision','limits':'Source-grounded reviewer assertion; coordinate coverage does not certify semantic ownership.'}
+        payload=record.model_dump()|{'candidate_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'observation_sha256':hashlib.sha256(observation_file.read_bytes()).hexdigest(),'source_label':observed.figures[record.source_figure_index].labels[record.source_label_index],'source_figure_title':observed.figures[record.source_figure_index].title,'source_sha256':self.source_digest,'physical_page':page,'attempt':self.attempt,'candidate_label':figure.labels[record.label_index],'figure_title':figure.title,'basis':'native_geometry_and_vision' if record.path_ids else 'vision','limits':'Source-grounded reviewer assertion; coordinate coverage does not certify semantic ownership.'}
         existing=self.dimension_reviews.setdefault(page,{}).get((record.figure_index,record.label_index))
         if existing and existing!=payload and not record.correction_reason.strip():return {'saved':False,'error':'Explain the new source evidence before replacing this dimension assertion; previous negative evidence stays in history'}
         self.dimension_reviews[page][record.figure_index,record.label_index]=payload
@@ -318,7 +328,7 @@ class CatalogTools:
                     candidate=PageContent.model_validate(disclosed['candidate']);candidate_file=work/f'candidate-{self.attempt}.json'
                     candidate_sha=hashlib.sha256(candidate_file.read_bytes()).hexdigest() if candidate_file.exists() else None
                     records=list(self.dimension_reviews.get(page,{}).values())
-                    missing=missing_dimension_evidence(candidate,records,candidate_sha)
+                    missing=missing_dimension_evidence(candidate,records,candidate_sha,observation,hashlib.sha256(observation_file.read_bytes()).hexdigest())
                     if missing:return {'saved':False,'error':'A blanket figures PASS cannot certify dimension ownership. Inspect each listed source view/variant, follow tips and extension lines, and call record_dimension_review. If unresolved or wrong, mark figures failed and report the exact relationship; never borrow a label from another view.', 'missing_dimension_relations':missing}
                 if model.verdict=='pass' and disclosed['independent_comparison']:
                     return {'saved':False,'error':'Independent source observations contradict the claimed pass. Report ALL differences and any additional findings.', 'differences':disclosed['independent_comparison']}
@@ -546,7 +556,7 @@ def server(context):
             return context.dimension_inventory(page)
         @mcp.tool()
         def record_dimension_review(page: int,json_text: str) -> dict:
-            """Record source-bound relationship evidence. JSON: figure_index,label_index,view,relation(linear/diameter/leader/annotation),source_box,feature_box,tip_points,path_ids,source_feature,candidate_feature_quote,agrees_with_candidate,evidence, optional correction_reason. First view_region on source_box including tips/extension lines/contour; quote candidate description exactly. annotation classifies actual non-dimensional dates/identifiers after source inspection, with no invented arrows; diameter/tolerance cannot use it. Native path IDs optional for scans. Changed records need correction_reason; all revisions retained. False/unresolved relations prohibit blanket figures PASS."""
+            """Record source-bound relationship evidence. JSON: source_figure_index,source_label_index,figure_index,label_index,view,relation(linear/diameter/leader/annotation),source_box,feature_box,tip_points,path_ids,source_feature,candidate_feature_quote,agrees_with_candidate,evidence, optional correction_reason. Map independent source and candidate targets separately. First view_region on source_box including tips/extension lines/contour; quote candidate description exactly. annotation classifies actual non-dimensional dates/identifiers after source inspection, with no invented arrows; diameter/tolerance cannot use it. Native path IDs optional for scans. Changed records need correction_reason; all revisions retained. False/unresolved relations prohibit blanket figures PASS."""
             return context.record_dimension(page,json_text)
         @mcp.tool()
         def save_source_observation(page: int,json_text: str,literal_quotes: list[dict]|None=None) -> dict:
