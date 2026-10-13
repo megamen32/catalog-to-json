@@ -1,0 +1,9 @@
+{
+  "status": "PASS_NATIVE_FASTAGENT_TOOL_REFRESH",
+  "model_calls": 0,
+  "provider_api_requests": 0,
+  "initial_tools": 10,
+  "after_labels_tools": 13,
+  "elapsed_seconds": 2.768,
+  "scope": "Real FastAgent attach/call and tools/list_changed refresh; generate is never invoked, provider address loopback port1"
+}

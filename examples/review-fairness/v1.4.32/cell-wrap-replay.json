@@ -1,0 +1,63 @@
+{
+  "program": "1.4.32",
+  "model_calls": 0,
+  "catalogue": "innovations",
+  "physical_page": 181,
+  "candidate_sha256": "87d22f030a81b64203a2241fbbdbc8114bfd74cf5ff218fed3059f60cfa22b41",
+  "false_wrap_differences_removed": [
+    {
+      "path": "tables[0].rows[2].cells[column=1].value",
+      "source_observation": "АС 70/72;\nАС 120/19; АС 120/27",
+      "candidate": "АС 70/72; АС 120/19; АС 120/27"
+    },
+    {
+      "path": "tables[0].rows[3].cells[column=1].value",
+      "source_observation": "АС 150/19;\nАС 150/24; АС 150/34",
+      "candidate": "АС 150/19; АС 150/24; АС 150/34"
+    },
+    {
+      "path": "tables[0].rows[4].cells[column=1].value",
+      "source_observation": "АС 185/24;\nАС 185/29; АС 95/141;\nАС 185/43; АС 205/27",
+      "candidate": "АС 185/24; АС 185/29; АС 95/141; АС 185/43; АС 205/27"
+    },
+    {
+      "path": "tables[0].rows[5].cells[column=1].value",
+      "source_observation": "АС 240/32;\nАС 240/39; АС 240/56",
+      "candidate": "АС 240/32; АС 240/39; АС 240/56"
+    },
+    {
+      "path": "tables[0].rows[6].cells[column=1].value",
+      "source_observation": "АС 300/39; АС 300/48;\nАС 300/66; АС 300/67;\nАС 330/30; АС 330/43;\nАС 400/18; АС 400/22;",
+      "candidate": "АС 300/39; АС 300/48; АС 300/66; АС 300/67; АС 330/30; АС 330/43; АС 400/18; АС 400/22;"
+    }
+  ],
+  "other_differences_retained": [
+    {
+      "path": "text_blocks[source=6]",
+      "source_observation": "Преимущества соединительных шлейфовых прессуемых зажимов типа ШРП",
+      "candidate": "missing or changed wording"
+    }
+  ],
+  "strict_identifier_negative_controls": [
+    [
+      "АС 70/72",
+      "АС 70/27"
+    ],
+    [
+      "12 34",
+      "1234"
+    ],
+    [
+      "СЗ",
+      "C3"
+    ],
+    [
+      "1,0",
+      "1.0"
+    ],
+    [
+      "М10-1",
+      "М10 1"
+    ]
+  ]
+}

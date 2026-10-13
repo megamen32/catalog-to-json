@@ -142,6 +142,9 @@ def header_without(text,components,column=None):
 
 def same_value(a,b,identity=False):
     if str(a)==str(b):return True
+    # PDF cell wrapping is layout, not a changed product code. Keep every
+    # non-whitespace character and boundary: '12 34' must not become '1234'.
+    if isinstance(a,str) and isinstance(b,str) and re.sub(r'\s+',' ',a).strip()==re.sub(r'\s+',' ',b).strip():return True
     if identity or isinstance(a,bool) or isinstance(b,bool):return False
     values=[]
     for value in (a,b):

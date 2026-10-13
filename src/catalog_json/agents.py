@@ -81,7 +81,7 @@ class AgentPair:
         fast.agent(name=role,instruction=instruction,model=getattr(self,role),servers=list(config['mcp']['servers']),skills=role_skills,use_history=True,shell=False)(lambda:None)
         task=f'Process physical PDF page {page}. '+('Extract the entire page; save_page_json or save_section/finalize_page is the deliverable.' if role=='extractor' else 'Audit ALL content and EVERY cell against the source; save_review is the deliverable. Do not use spot checks.')
         if feedback:task+=' Read read_page_json and read_review for the prior attempt. Reinspect and fix actual defects, then save a complete new candidate. Do not trust the previous review without source comparison.'
-        task+=' For engineering drawing dimensions, use trace_dimension_candidates on each disputed label, compare separate shaft ends and tip candidates with both extension lines in the original view_region; no feature name is inferred by this tool.'
+        task+=' Start with image, needed zoom and JSON save tools. Review helpers are hidden until enable_helpers: text for codepoints, tables for direct data, labels for relationship records, drawings for disputed engineering contours. Use trace_dimension_candidates only when an engineering label has ambiguous endpoints/ownership; compare separate shaft ends and tip candidates with both extension lines in the original. No feature name is inferred by this tool.'
         task+=' Check read_external_audit after inspecting the source (reviewer only after saving independent observations). Verify its source-bound leads before the final save.'
         started=time.time()
         filename=f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'

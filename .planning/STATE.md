@@ -1,3 +1,7 @@
+## Current continuation, 2026-10-14: fair random review31 deployed
+
+Extractor15 MiniMax-M3.1-Flash-Preview, reviewer/coordinator31 GLM5.3Flash CodingEndpoint. Source and release published;70 focused checks and native retained MCP batch replay pass. Removed5 false branding findings;3 saved false drawing PASS still refused. No paid benchmark calls. Native full queue retains503 accepted/980 drafts, admits random first pages181/152 and fresh repaired47. Full digitization/review remains incomplete. Existing numeric annotations on certificates still incur unnecessary geometry-style bookkeeping; minimal basic tools plus optional helper discovery is a viable next simplification, not yet implemented or accuracy-tested.
+
 # State
 
 ## Текущее состояние, 2026-10-13

@@ -347,7 +347,7 @@ class CatalogTools:
                     candidate_sha=hashlib.sha256(candidate_file.read_bytes()).hexdigest() if candidate_file.exists() else None
                     records=list(self.dimension_reviews.get(page,{}).values())
                     missing=missing_dimension_evidence(candidate,records,candidate_sha,observation,hashlib.sha256(observation_file.read_bytes()).hexdigest())
-                    if missing:return {'saved':False,'error':'A blanket figures PASS cannot certify dimension ownership. Inspect each listed source view/variant, follow tips and extension lines, and call record_dimension_review. If unresolved or wrong, mark figures failed and report the exact relationship; never borrow a label from another view.', 'missing_dimension_relations':missing}
+                    if missing:return {'saved':False,'error':'A blanket figures PASS cannot certify dimension ownership. Enable labels helpers to record already inspected relationships in a batch; enable drawings only for ambiguous engineering geometry. Inspect each source view/variant and its own tips/contour. False or unresolved relationships require figures failed. Never borrow a label from another view.', 'missing_dimension_relations':missing}
                 if model.verdict=='pass' and disclosed['independent_comparison']:
                     return {'saved':False,'error':'Independent source observations contradict the claimed pass. Report ALL differences and any additional findings.', 'differences':disclosed['independent_comparison']}
             if kind=='review' and model.verdict!='pass':
@@ -484,7 +484,32 @@ class CatalogTools:
 
 
 def server(context):
-    mcp=MCPServer('catalog-tools',version='1.1.0',log_level='ERROR')
+    basic={'load_skill','get_json_schema','view_page','view_region','read_page_json','read_external_audit',
+           'save_source_observation','correct_source_observation','save_review','enable_helpers'}
+    if not context.source:basic.add('open_catalog')
+    groups={'text':{'read_source_layout','read_source_artifact'},
+            'tables':{'read_source_table','read_source_layout','read_source_artifact','extract_direct'},
+            'labels':{'inspect_dimension_review_targets','record_dimension_review','record_dimension_reviews'},
+            'drawings':{'inspect_drawing_geometry','read_drawing_paths','trace_dimension_candidates',
+                        'read_source_layout','read_source_artifact','inspect_dimension_review_targets',
+                        'record_dimension_review','record_dimension_reviews'}}
+    exposed=set(basic)
+    class FocusedCatalogServer(MCPServer):
+        async def list_tools(self):
+            tools=await super().list_tools()
+            return [t for t in tools if t.name in exposed] if context.role=='reviewer' else tools
+    mcp=FocusedCatalogServer('catalog-tools',version='1.1.0',log_level='ERROR')
+    if context.role=='reviewer':
+        from mcp.server.mcpserver import Context
+        @mcp.tool()
+        async def enable_helpers(group: str,ctx: Context) -> dict:
+            """Reveal optional helpers only when needed: text for native glyphs, tables for direct rows/merges, labels for recording inspected source relationships, drawings for ambiguous contours/vector geometry, all for compatibility. Images and save validation remain mandatory."""
+            if group not in {*groups,'all'}:return {'enabled':False,'error':'Choose text, tables, labels, drawings or all'}
+            additions=groups[group] if group!='all' else {t.name for t in await MCPServer.list_tools(mcp)}
+            exposed.update(additions)
+            if context.page is not None:context.log(context.page,'enable_helpers',group=group)
+            await ctx.session.send_tool_list_changed()
+            return {'enabled':True,'group':group,'available_tools':sorted(exposed),'instruction':'Optional helpers are now advertised. Choose only the evidence needed; full original-image and save validation rules are unchanged.'}
     @mcp.tool()
     def open_catalog(source_path: str,output_directory: str) -> dict:
         """Open a user-specified local PDF and separate output folder. Not needed in an assigned CLI job."""

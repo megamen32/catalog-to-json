@@ -2,6 +2,9 @@
 name: catalog-review
 description: Adversarially audit catalog JSON against original PDF images and selected zooms; find omissions, wrong rotated labels, units, merged cells, values and diagram details.
 ---
+
+Start with the basic tools: view_page, view_region, save_source_observation, read_page_json, correct_source_observation if needed, and save_review. The normal path is original image → zoom only unresolved regions → blind source JSON → candidate comparison → review JSON. Keep all full-page/cell/value checks. Optional helpers are initially hidden: call enable_helpers(group="text") for native codepoints, group="tables" for direct rows/merges, or group="labels" for recording inspected relationships in one batch, or group="drawings" for ambiguous engineering contours requiring native paths. The MCP tool list refreshes natively. Literal labels contain only visible printed text: put reading-method comments, parenthetical descriptions and confirmed source unreadability in description/source_notes, never into a literal label. On a tiny nontechnical certificate/photo, preserve confirmed readable text and explicitly describe unreadable parts after inspecting a zoom; do not invent missing digits or keep retrying the same pixels. Unknown engineering values still require uncertainty and block acceptance. Do not open every helper group or call every parser just because it exists. Use group="all" only for a necessary compatibility case.
+
 # Strict catalog review
 
 The inventory contains BOTH source_targets and candidate_targets. Map each independent source_figure_index/source_label_index to the correct candidate figure_index/label_index; repeated variants cannot borrow coverage. Source dimensions moved into candidate prose still require separate explicit labels/relationships. Observation corrections invalidate older relationship evidence; reinspect the affected source. Source and candidate numeric labels must agree before a relationship can be confirmed.

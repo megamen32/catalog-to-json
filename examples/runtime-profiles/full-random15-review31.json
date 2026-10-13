@@ -1,0 +1,142 @@
+{
+  "status": "PASS_LIVE31",
+  "models": {
+    "extractor": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+    "reviewer": "zai.glm-5.3-flash?reasoning=low"
+  },
+  "roles": {
+    "extractor": {
+      "program": {
+        "package_version": "1.4.15",
+        "git_revision": null,
+        "dirty": null,
+        "source_code_sha256": "f7ee07327271ca2dea80e46d77036e425ecee02333c065c0df72ecfd5e3e7aff",
+        "python_version": "3.12.13",
+        "components": {
+          "agent_logic": {
+            "package_version": "1.4.2",
+            "git_revision": null,
+            "dirty": null,
+            "source_code_sha256": "fa8352a1a7f3632367a2ba02ff9290109c337113aa918a942093aa0cb8740a8b",
+            "python_version": "3.12.13"
+          },
+          "catalog_tools": {
+            "package_version": "1.4.8",
+            "git_revision": null,
+            "dirty": null,
+            "source_code_sha256": "3db63ecf26eacd9b1ba0e33e35d368eea1a6c5ce190cecf09d0c261b0766804b",
+            "python_version": "3.12.13"
+          },
+          "legacy_skills": {
+            "catalog-extract": "cb0ac951a01754366f2fa54f85fd8b5aed19e879549f5caa735e6aaea2f068a0",
+            "catalog-review": "200ea928b29b0d08bf3977bd4cfc92b039ede7621ceddd16a8fd3138ceef6942"
+          },
+          "catalog_server_bridge_sha256": "cfc42e91dd294672db23001aee5bf8444edd08b2839522c6d41668fafd197e97",
+          "role_worker_bridge_sha256": "6677033c2e5059410651b0ae57a0f8ad5c397ed5ba2616d691605276a434c66b",
+          "composition_bridge_sha256": "cfc42e91dd294672db23001aee5bf8444edd08b2839522c6d41668fafd197e97",
+          "delivery_adapter_sha256": "78e3d0119d4e6d1049466fe09e7ceec522ec0bde337465530f7371669682ec46"
+        }
+      },
+      "contract_sha256": "d66b8b75acf1151cd7ddf759b8f2686bdbc7faf6bc17a6e2bd277a218060f9cf"
+    },
+    "reviewer": {
+      "program": {
+        "package_version": "1.4.31",
+        "git_revision": null,
+        "dirty": null,
+        "source_code_sha256": "2a5818cbc8743f8a86b1e0e2e4003dc417740a1dcd7a2e367eea840eee90c642",
+        "python_version": "3.12.13"
+      },
+      "contract_sha256": "30d65405ae9fa361eb59e5568ee015f826bd17ad061411cc408c8c3e22e03d14"
+    }
+  },
+  "review_order": "alternate first passes and repairs; fresh repairs before backlog with fairness; seeded random pages favouring smaller inventories",
+  "queue_random_seed": "213a1dfcf8cc498280e301e2f6dcfcd3",
+  "last_admissions": [
+    {
+      "catalogue": "isolators",
+      "page": 47,
+      "role": "reviewer",
+      "lane": "fresh_repair",
+      "selected_unix": 1791927295.3333757,
+      "queue_random_seed": "213a1dfcf8cc498280e301e2f6dcfcd3"
+    },
+    {
+      "catalogue": "armature",
+      "page": 152,
+      "role": "extractor",
+      "lane": "repair",
+      "selected_unix": 1791927608.3393257,
+      "queue_random_seed": null
+    },
+    {
+      "catalogue": "innovations",
+      "page": 181,
+      "role": "extractor",
+      "lane": "repair",
+      "selected_unix": 1791927600.497303,
+      "queue_random_seed": null
+    }
+  ],
+  "all980_drafts_present": true,
+  "all980_previous_candidates_retained": true,
+  "previous_accepted_exactly_retained": 503,
+  "native_calls_interrupted": 0,
+  "new_native_reviews": [
+    {
+      "catalogue": "armature",
+      "page": 152,
+      "verdict": "revise",
+      "producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.4.31",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "2a5818cbc8743f8a86b1e0e2e4003dc417740a1dcd7a2e367eea840eee90c642",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "a55e84681e429cd1913f8fec6c09a226c6bf77ae656139bb783b8e9d176a4e36",
+        "source_bound_save": true,
+        "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "physical_page": 152,
+        "attempt": 0,
+        "role": "reviewer",
+        "model": "zai.glm-5.3-flash?reasoning=low",
+        "contract_sha256": "30d65405ae9fa361eb59e5568ee015f826bd17ad061411cc408c8c3e22e03d14",
+        "receipt": "calls/e27802fbe073438599d2654c09cc6f4f/result.json",
+        "started_at": 1791927303.757017,
+        "finished_at": 1791927595.4198856
+      }
+    },
+    {
+      "catalogue": "innovations",
+      "page": 181,
+      "verdict": "revise",
+      "producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.4.31",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "2a5818cbc8743f8a86b1e0e2e4003dc417740a1dcd7a2e367eea840eee90c642",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "f9162ef6d0602503057d3d6c25e85c57594fb59aaff0e7a91da0bf92b3dcfb8f",
+        "source_bound_save": true,
+        "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+        "physical_page": 181,
+        "attempt": 0,
+        "role": "reviewer",
+        "model": "zai.glm-5.3-flash?reasoning=low",
+        "contract_sha256": "30d65405ae9fa361eb59e5568ee015f826bd17ad061411cc408c8c3e22e03d14",
+        "receipt": "calls/c95fb463a1bf4217924aa0b063654247/result.json",
+        "started_at": 1791927295.5622454,
+        "finished_at": 1791927593.4184868
+      }
+    }
+  ],
+  "current_accepted": 503,
+  "full_catalogues_complete": false,
+  "observed_unix": 1791927840.1881778
+}

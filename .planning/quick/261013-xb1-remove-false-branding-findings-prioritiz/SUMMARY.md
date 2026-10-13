@@ -1,7 +1,7 @@
 ---
 phase: quick
 plan: 1
-status: source-ready-runtime-pending
+status: deployed-running
 ---
 # Проверено и подготовлено к передаче рабочей очереди
 
@@ -12,3 +12,7 @@ status: source-ready-runtime-pending
 Пакетная запись размерных доказательств применяет те же individual проверки. 70 focused unit/integration GREEN за19.20s. Native MCP retained79 GREEN за4.138s,7 связей за1 вызов вместо7, неправильный индекс отвергнут. Model calls0. Это не новая оценка accuracy/speed моделей.
 
 Подготовлена неизменная связка extractor15/reviewer31, ZAI CodingEndpoint. Все503 ранее принятые страницы и477 pending candidates пригодны к resume. Передача выполняется только после natural drain действующих вызовов; runtime еще не переключен на момент этого source commit. Чужой page117.json сохранен.
+
+Runtime consumer: естественная передача заняла1565.512s,0 прерванных вызовов. MiniMax продолжал ремонт, пока прежний GLM завершал свои вызовы. Runtime1.4.31 active/running;503 прежние приемки ивсе980 предыдущих кандидатов сохранены. Реальная очередь допускает непоследовательные181/152 и свежий ремонт47. Первая новая приемка еще ожидается; весь каталог не завершен.
+
+Дополнение32 по свежим ошибкам и вопросу пользователя: устраняются5 ложных newline-cell сравнений; reviewer10 основных инструментов вместо21, опциональные группы нативно открываются. Native FastAgent SDK refresh10→13 за2.768s, no provider requests;72 focused22.23s и native MCP replay79 за3.516s. Runtime32 подготовлен, переход пока не выполнен.

@@ -278,3 +278,44 @@ def test_installed_package_does_not_claim_ancestor_checkout_revision(tmp_path,mo
     monkeypatch.setattr(provenance.subprocess,'run',forbidden)
     result=provenance.program_version()
     assert result['git_revision'] is None and result['dirty'] is None
+
+
+def test_cell_wrap_is_layout_without_relaxing_product_identifiers():
+    from catalog_json.audit import same_value
+    assert same_value('АС 70/72;\nАС 120/19; АС 120/27','АС 70/72; АС 120/19; АС 120/27',identity=True)
+    assert not same_value('АС 70/72','АС 70/27',identity=True)
+    assert not same_value('12 34','1234',identity=True)
+    assert not same_value('СЗ','C3',identity=True)
+    assert not same_value('1,0','1.0',identity=True)
+    assert not same_value('М10-1','М10 1',identity=True)
+
+
+def test_native_review_tools_start_small_and_expand_without_losing_validation(tmp_path):
+    """Focused integration: native MCP tool-list change; expected2s/max20s; no LLM."""
+    source=pdf(tmp_path)
+    async def run():
+        changed=asyncio.Event()
+        def data(result):
+            assert not result.is_error,result
+            return result.structured_content if result.structured_content is not None else json.loads(next(x.text for x in result.content if getattr(x,'type',None)=='text'))
+        async def message_handler(message):
+            if getattr(getattr(message,'root',message),'method',None)=='notifications/tools/list_changed':changed.set()
+        params=StdioServerParameters(command=sys.executable,args=['-m','catalog_json.tools','--source',str(source),'--output',str(tmp_path/'out'),'--role','reviewer','--page','1'])
+        async with stdio_client(params) as (reader,writer):
+            async with ClientSession(reader,writer,message_handler=message_handler) as client:
+                await client.initialize();initial=await client.list_tools();names={t.name for t in initial.tools}
+                assert len(names)==10 and {'view_page','view_region','save_review','enable_helpers'}<=names
+                assert 'inspect_drawing_geometry' not in names and 'record_dimension_reviews' not in names
+                helper=next(t for t in initial.tools if t.name=='enable_helpers');assert 'ctx' not in helper.input_schema['properties']
+                bad=await client.call_tool('enable_helpers',{'group':'invalid'});assert not data(bad)['enabled']
+                result=await client.call_tool('enable_helpers',{'group':'labels'});assert data(result)['enabled']
+                await asyncio.wait_for(changed.wait(),2)
+                expanded={t.name for t in (await client.list_tools()).tools}
+                assert 'record_dimension_reviews'in expanded and 'inspect_drawing_geometry'not in expanded
+                await client.call_tool('view_page',{'page':1})
+                # Optional visibility never allows skipping blind observation and candidate inspection.
+                refused=await client.call_tool('save_review',{'page':1,'json_text':review().model_dump_json()})
+                assert not data(refused)['saved']
+                await client.call_tool('enable_helpers',{'group':'drawings'})
+                expanded={t.name for t in (await client.list_tools()).tools};assert 'inspect_drawing_geometry'in expanded
+    asyncio.run(asyncio.wait_for(run(),20))
