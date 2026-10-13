@@ -13,3 +13,6 @@ output/
 .agents/shared-session/knowledge/*.lock
 
 .catalog-parser-cache/
+
+# Owner-authorized public catalogue snapshots include their partial Excel exports.
+!/examples/catalogs/*/*-accepted-partial.xlsx
