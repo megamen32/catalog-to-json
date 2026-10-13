@@ -1,4 +1,8 @@
-## Current continuation, 2026-10-14 02:07MSK: GLM recovered and native review resumed
+## Current source candidate, 2026-10-14: semantic catalogue1.5.0
+
+User corrects goal: understand engineering catalogue meaning, not an OCR facsimile. New page_context distinguishes actual product data/project specifications/software demonstrations/supporting content. Independently agreed context permits faithful narrative paraphrase; explicit reviewer verifies purpose, summary, actual-vs-demo, technical facts and relations. Genuine table IDs/units/values and drawing ownership stay checked. Legacy context absent retains old strict contract and original producer. Unambiguous table alignment replaces positional zip; schema/example delivered before review save. Worker focused checks pass, including75 affected and separate native semantic-save control; source/publication only, live semantic canary pending. Existing15→32 full queue is still running and not relabelled as1.5.0. Benchmark regression registry8 cases is independent of frozen500/520 totals.
+
+## Previous continuation, 2026-10-14 02:07MSK: GLM recovered and native review resumed
 
 Manual transcript/original audit of3 pages: useful real word repair innovations181, inefficient logos armature152,55zoom/704s extractor15 and34calls/468s reviewer32 on small4. Confirmed owned defect: audit.compare_source pairs tables by index, producing false cell issues when source/candidate order differs. Follow-up implementation priority: unambiguous table mapping before comparison, keep ambiguous cases blocked; also early review-schema guidance and compact candidate reads. Source-bound containment leads on small4 are read by extractor12, no manual candidate edit or relaxed acceptance. Detailed measurements: examples/review-fairness/v1.4.32/transcript-audit-2026-10-14.json. Full catalogue review remains running/incomplete.
 

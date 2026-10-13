@@ -1,0 +1,242 @@
+"""Fast unit/focused tool integration: demo meaning vs actual data; expected 3s, max30s.
+
+Detects demo rows becoming offers, one-sided classification and summary bypasses.
+No provider/model calls; native limited small4 canary remains the delivery gate.
+"""
+import json
+import pytest
+from pydantic import ValidationError
+from catalog_json.audit import compare_source
+from catalog_json.schema import PageContent,PageContext,Figure,TextBlock,ContextReview
+from catalog_json.tools import CatalogTools,review_contract
+from test_tools import pdf
+from test_contract import content,review
+
+
+def context(kind='software_demonstration',box=None,transcription='contextual_summary'):
+    return PageContext.model_validate({'kind':kind,'summary':'Software creates and exports a sample specification, not a product offer.',
+        'source_evidence':[{'kind':'software_demonstration' if transcription=='contextual_summary' else kind,
+                            'box':box or [.1,.2,.9,.8],'observation':'Feature prose introduces a DEMO CAD window and example generated report.',
+                            'transcription':transcription}]})
+
+
+def demonstration():
+    return PageContent(title='Specification software',page_context=context(),text_blocks=[TextBlock(kind='paragraph',text='Export to Excel and Word.')],tables=[],figures=[])
+
+
+def semantic_review():
+    return ContextReview(page_purpose_verified=True,summary_meaning_verified=True,actual_vs_demo_verified=True,
+                         technical_facts_verified=True,relations_verified=True,
+                         evidence='The feature prose and DEMO CAD window establish a software example. The candidate accurately describes report generation without offering sample rows as real products.')
+
+
+def test_legacy_absent_context_stays_literal_and_unmodified():
+    old=content().model_dump();old.pop('page_context',None)
+    source=PageContent.model_validate(old);candidate=PageContent.model_validate(old)
+    assert source.page_context is None and not compare_source(source,candidate)
+    candidate.tables[0].rows[0].cells[0].value=999
+    assert compare_source(source,candidate)
+    assert 'page_context' not in old
+
+
+def test_summary_requires_independent_semantic_and_region_agreement():
+    a=demonstration();b=demonstration()
+    b.page_context.summary='The program exports a demonstrated project report.'
+    assert not compare_source(a,b)
+    b.page_context=None
+    assert compare_source(a,b)[0]['path']=='page_context'
+    b.page_context=context('mixed')
+    assert any(d['path']=='page_context.kind' for d in compare_source(a,b))
+    b.page_context=context(box=[.1,.01,.9,.15])
+    assert any(d['path']=='page_context.source_evidence' for d in compare_source(a,b))
+
+
+@pytest.mark.parametrize('change',['move','add','kind','transcription'])
+def test_all_literal_evidence_regions_require_independent_alignment(change):
+    a=content();a.page_context=context('mixed',transcription='literal')
+    b=a.model_copy(deep=True);e=b.page_context.source_evidence[0]
+    if change=='move':e.box=[.01,.01,.1,.1]
+    elif change=='add':b.page_context.source_evidence.append(e.model_copy(update={'box':[.01,.01,.1,.1]}))
+    elif change=='kind':e.kind='project_specification'
+    else:e.kind='software_demonstration';e.transcription='contextual_summary'
+    assert any(d['path']=='page_context.source_evidence' for d in compare_source(a,b))
+
+
+def test_independent_narrative_paraphrases_and_region_order_are_valid():
+    a=content();a.page_context=context('mixed',transcription='literal')
+    a.page_context.source_evidence.append(a.page_context.source_evidence[0].model_copy(update={'kind':'project_specification','box':[.1,.85,.9,.95]}))
+    b=a.model_copy(deep=True)
+    b.page_context.summary='A genuine project specification is presented with supporting documentation.'
+    for e in b.page_context.source_evidence:e.observation='Independently phrased description of the same inspected source region.'
+    b.page_context.source_evidence.reverse()
+    assert not compare_source(a,b)
+
+
+def test_ambiguous_duplicate_demo_regions_cannot_agree_by_position():
+    a=demonstration();b=demonstration()
+    a.page_context.source_evidence*=2;b.page_context.source_evidence*=2
+    assert compare_source(a,b)
+
+
+def test_semantic_narrative_does_not_weaken_drawing_values():
+    a=demonstration();b=demonstration()
+    b.text_blocks=[TextBlock(kind='paragraph',text='The demonstration exports reports to Word and Excel.')]
+    assert not compare_source(a,b)
+    a.figures=[Figure(title='Real drawing',description='Ø13 outer contour',labels=['Ø13'])]
+    b.figures=[Figure(title='Real drawing',description='Ø130 outer contour',labels=['Ø130'])]
+    assert any(d['path'].startswith('figures') for d in compare_source(a,b))
+
+
+def test_contextual_narrative_paraphrase_and_case_inflection_preserve_tables():
+    a=content();a.page_context=context('catalogue_product_data',transcription='literal')
+    a.text_blocks=[TextBlock(kind='heading',text='Шлейфовые зажимы'),TextBlock(kind='paragraph',text='Для соединения шлейфовых проводов применяются зажимы.')]
+    b=a.model_copy(deep=True)
+    b.text_blocks=[TextBlock(kind='heading',text='Зажимы шлейфовых проводов'),TextBlock(kind='paragraph',text='Назначение зажимов — соединять шлейфовые провода.')]
+    assert not compare_source(a,b) and a.tables==b.tables
+    a.page_context=None;b.page_context=None
+    assert any(d['path'].startswith('text_blocks') for d in compare_source(a,b))
+
+
+@pytest.mark.parametrize('changed',['code','unit'])
+def test_contextual_paraphrase_never_allows_changed_table_code_or_unit(changed):
+    a=content();a.page_context=context('catalogue_product_data',transcription='literal')
+    a.tables[0].columns[0].label='Код изделия' if changed=='code' else 'Напряжение'
+    a.tables[0].columns[0].unit=None if changed=='code' else 'кВ'
+    a.tables[0].rows[0].cells[0].value='ШЗ-001' if changed=='code' else '10'
+    b=a.model_copy(deep=True)
+    a.text_blocks=[TextBlock(kind='paragraph',text='Параметры изделий приведены ниже.')]
+    b.text_blocks=[TextBlock(kind='paragraph',text='Ниже указаны характеристики изделий.')]
+    if changed=='code':b.tables[0].rows[0].cells[0].value='ШЗ-002'
+    else:b.tables[0].columns[0].unit='мВ'
+    differences=compare_source(a,b)
+    assert differences and all(d['path'].startswith('tables') for d in differences)
+
+
+def test_genuine_project_spec_stays_strict_on_mixed_page():
+    a=content();b=content();a.page_context=context('mixed');b.page_context=context('mixed')
+    b.tables[0].rows[0].cells[0].value=999
+    assert any('.value' in d['path'] for d in compare_source(a,b))
+    for d in (a,b):d.page_context=context('project_specification',transcription='literal')
+    assert compare_source(a,b)
+
+
+def test_pure_demo_cannot_publish_sample_table_as_catalogue_data():
+    a=content().model_dump();a['page_context']=context().model_dump()
+    with pytest.raises(ValidationError,match='demonstration rows'):
+        PageContent.model_validate(a)
+
+
+@pytest.mark.parametrize('kind',['catalogue_product_data','project_specification','supporting_material','unknown'])
+def test_summary_mode_cannot_reclassify_real_data(kind):
+    value=context().model_dump();value['kind']=kind
+    with pytest.raises(ValidationError):PageContext.model_validate(value)
+    value=context().model_dump();value['source_evidence'][0]['kind']=kind
+    with pytest.raises(ValidationError):PageContext.model_validate(value)
+
+
+def test_context_requires_visible_evidence_and_valid_boxes():
+    for patch in ({'summary':' '},{'source_evidence':[]}):
+        value=context().model_dump()|patch
+        with pytest.raises(ValidationError):PageContext.model_validate(value)
+    with pytest.raises(ValidationError):context(box=[0,.2,1,2])
+
+
+def test_source_bound_summary_save_and_blind_review_gate(tmp_path):
+    source=pdf(tmp_path);out=tmp_path/'out';a=demonstration()
+    extractor=CatalogTools(source,out);extractor.render(1);extractor.direct(1)
+    assert not extractor.save(1,a.model_dump_json(),'page')['saved']
+    extractor.render(1,a.page_context.source_evidence[0].box)
+    assert extractor.save(1,a.model_dump_json(),'page')['saved']
+    auditor=CatalogTools(source,out,role='reviewer');auditor.render(1)
+    with pytest.raises(ValueError,match='independently'):auditor.read(1,'page')
+    assert not auditor.save(1,a.model_dump_json(),'observation')['saved']
+    auditor.render(1,a.page_context.source_evidence[0].box)
+    assert auditor.save(1,a.model_dump_json(),'observation')['saved']
+    assert not auditor.read(1,'page')['independent_comparison']
+    r=review();r.observed_table_count=0;r.observed_row_counts=[];r.observed_column_counts=[]
+    r.context_review=semantic_review()
+    assert auditor.save(1,r.model_dump_json(),'review')['saved']
+    assert json.loads((auditor.work(1)/'source-observation-0.json').read_text())['page_context']['kind']=='software_demonstration'
+
+
+def test_context_pass_requires_explicit_complete_semantic_verdict(tmp_path):
+    source=pdf(tmp_path);out=tmp_path/'out';a=demonstration()
+    t=CatalogTools(source,out);t.render(1);t.direct(1);t.render(1,a.page_context.source_evidence[0].box)
+    assert t.save(1,a.model_dump_json(),'page')['saved']
+    auditor=CatalogTools(source,out,role='reviewer');auditor.render(1);auditor.render(1,a.page_context.source_evidence[0].box)
+    independent=a.model_copy(deep=True);independent.page_context.summary='Demonstrates automatic specification generation and report export.'
+    independent.page_context.source_evidence[0].observation='The surrounding feature explanation introduces the shown example project workflow.'
+    independent.text_blocks=[TextBlock(kind='paragraph',text='Пример показывает экспорт отчётов в Word и Excel.')]
+    assert auditor.save(1,independent.model_dump_json(),'observation')['saved'];auditor.read(1,'page')
+    report=review();report.observed_table_count=0;report.observed_row_counts=[];report.observed_column_counts=[]
+    for semantic in [None,*(semantic_review().model_copy(update={field:False}) for field in ('page_purpose_verified','summary_meaning_verified','actual_vs_demo_verified','technical_facts_verified','relations_verified')),semantic_review().model_copy(update={'evidence':' '})]:
+        report.context_review=semantic
+        refused=auditor.save(1,report.model_dump_json(),'review')
+        assert not refused['saved'] and 'required_context_review' in refused
+    report.context_review=semantic_review()
+    assert auditor.save(1,report.model_dump_json(),'review')['saved']
+
+
+def test_legacy_eleven_check_review_remains_valid_without_context_verdict():
+    report=review()
+    assert report.context_review is None and len(report.checks)==11 and report.accepts(content())
+
+
+def test_classification_disagreement_cannot_pass_review(tmp_path):
+    source=pdf(tmp_path);out=tmp_path/'out';a=demonstration()
+    t=CatalogTools(source,out);t.render(1);t.direct(1);t.render(1,a.page_context.source_evidence[0].box)
+    assert t.save(1,a.model_dump_json(),'page')['saved']
+    r=CatalogTools(source,out,role='reviewer');r.render(1)
+    actual=demonstration();actual.page_context=context('project_specification',transcription='literal')
+    assert r.save(1,actual.model_dump_json(),'observation')['saved'];r.read(1,'page')
+    report=review();report.observed_table_count=0;report.observed_row_counts=[];report.observed_column_counts=[]
+    report.context_review=semantic_review()
+    refused=r.save(1,report.model_dump_json(),'review')
+    assert not refused['saved'] and any(d['path']=='page_context.kind' for d in refused['differences'])
+
+
+def test_section_finalization_keeps_page_context(tmp_path):
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out');t.render(1);t.direct(1);a=demonstration()
+    t.render(1,a.page_context.source_evidence[0].box)
+    assert t.finalize(1,a.title,page_context=a.page_context.model_dump())['saved']
+    assert t.finalize(1,a.title)['saved']
+    assert json.loads((t.work(1)/'candidate-0.json').read_text())['page_context']==a.page_context.model_dump()
+
+
+def test_early_review_example_is_valid_but_never_an_acceptance():
+    contract=review_contract()
+    from catalog_json.schema import Review,CHECKS
+    example=Review.model_validate(contract['example'])
+    assert set(contract['required_review_checks'])==CHECKS
+    assert not example.accepts(demonstration())
+
+
+def test_native_reviewer_gets_review_schema_before_first_save(tmp_path):
+    """Focused integration: native MCP discovery; expected3s/max30s; no model calls."""
+    import asyncio
+    import sys
+    from mcp import ClientSession,StdioServerParameters
+    from mcp.client.stdio import stdio_client
+    source=pdf(tmp_path)
+    async def run():
+        params=StdioServerParameters(command=sys.executable,args=['-m','catalog_json.tools','--source',str(source),'--output',str(tmp_path/'out'),'--role','reviewer'])
+        async with stdio_client(params) as (reader,writer):
+            async with ClientSession(reader,writer) as client:
+                await client.initialize()
+                skill=await client.call_tool('load_skill',{})
+                assert not skill.is_error
+                text=skill.content[0].text
+                assert text.index('"observed_table_count"')<text.index('# Независимая инженерная проверка')
+                assert '"example"' in text and 'page_context' in text
+    asyncio.run(asyncio.wait_for(run(),30))
+
+
+def test_inspected_genuine_grid_cannot_be_discarded_by_unsupported_context(tmp_path):
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out');t.render(1);t.direct(1);a=demonstration()
+    t.grids[1]=[{'row_count':2,'column_count':2,'expanded_rows':[['A','1'],['B','2']],
+                 'unknown_cells':[],'merged_cells':[],'inspected_box':[.1,.2,.9,.8]}]
+    assert t.grid_differences(1,a)  # Declared summary alone is insufficient.
+    t.render(1,a.page_context.source_evidence[0].box)
+    assert not t.grid_differences(1,a)
+    a.page_context=context('project_specification',transcription='literal')
+    assert t.grid_differences(1,a)

@@ -177,36 +177,71 @@
     "transcript-audit-table-alignment": {
       "confidence": "verified",
       "evidence": [
-        "examples/review-fairness/v1.4.32/transcript-audit-2026-10-14.json"
+        "75 focused tests passed14.25s; native limited consumer small4 remains Root-owned; no provider calls in worker"
       ],
-      "git_head": "7cb5b1818fc07baea02d7925c1a1f33de5ce2e2d",
+      "git_head": "5e03eb4f11764b3d4d174020f2daba59b0d2739c",
       "key": "transcript-audit-table-alignment",
       "kind": "failure-shield",
       "locations": [
         {
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "77df8792b762fd4c297cc8e509d294c24acb6ce8b583003e30e691ab8da23a52",
+          "observed_sha256": "6e0e62c245b10ca82b0a05e87a9648894dd3098fd873719f4f8916b422dc0f1e",
           "path": "src/catalog_json/audit.py",
           "symbol": "compare_source"
         },
         {
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "3c8fd058bfb73b6126ab5d8c7346e799ff9894ef404e4d4f0f9b1ed4c5e9317d",
+          "observed_sha256": "bc18e8758e30d2b75ae39af1d476440a91e9a11383cbba949cfba2becd2cdc6f",
+          "path": "src/catalog_json/schema.py",
+          "symbol": "ContextReview"
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "e96c31243b45e768798f96c91258363ba48dba8056444712c49438dc4176e401",
           "path": "src/catalog_json/tools.py",
           "symbol": "CatalogTools.save"
         },
         {
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "3c8fd058bfb73b6126ab5d8c7346e799ff9894ef404e4d4f0f9b1ed4c5e9317d",
-          "path": "src/catalog_json/tools.py",
-          "symbol": "CatalogTools.external_audit"
+          "observed_sha256": "b386b0c925943ae07191b21757640224de6ff67a21c270683381979f44f8c6d6",
+          "path": "src/catalog_json/agents.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "e5db313c70b37f435447c83d95d0a5c32bf3b15cb7b7d8feffc22e1f96221e09",
+          "path": "skills/catalog-extract/SKILL.md",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "97a844b9599cbb8fab97e6b065c72652b99f42b60aad8e223b5f61042491e88a",
+          "path": "skills/catalog-review/SKILL.md",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "cd2bdf3e7b22b76aacda40c1e72beac2639033b78fc1bd4eae571e682eb40d45",
+          "path": "tests/test_page_context.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "aafa7c5846912c59e0df3e8971241ded1a13efa1ad23f5ac0560f35b27b84021",
+          "path": "tests/test_table_alignment.py",
+          "symbol": ""
         }
       ],
-      "summary": "Native session tool_calls is a dict; usage is in fast-agent-usage channels and prompt totals include cache. audit.compare_source zips source/candidate tables by array position; reordered multi-table pages get false cell diffs automatically appended by CatalogTools.save. small4 source9-column spec vs candidate4-column panel reproduces it. External source-bound leads in work/external-audit.json are read by extractor12; matcher implementation still needs an unambiguous alignment fix.",
-      "verified_at": "2026-10-14T02:19:10.413409+03:00"
+      "summary": "audit.align_tables matches mutually unique printed titles/headers/shapes; ambiguous multi-table identity blocks without cross-table cell noise. All context evidence matches kind+transcription+IoU>=0.8. Independently agreed page_context permits semantic heading/paragraph paraphrases; narrative string equality is not engineering truth. PASS requires five independent ContextReview checks: purpose, summary meaning, real-vs-demo, technical facts and relations. Table IDs/values/units, physical conditions and drawing labels/feature relations retain strict checks. Legacy absent context keeps eleven checks and literal comparison. Russian agent tasks/skills direct semantic engineering work and targeted tool choice.",
+      "verified_at": "2026-10-14T02:37:05.789579+03:00"
     }
   },
   "schema_version": 1

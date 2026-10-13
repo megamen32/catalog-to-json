@@ -55,14 +55,50 @@ class Figure(Model):
     description: str
     labels: list[str]
 
+PageKind = Literal["catalogue_product_data", "project_specification", "software_demonstration", "supporting_material", "mixed", "unknown"]
+
+class ContextEvidence(Model):
+    kind: PageKind
+    box: list[float] = Field(min_length=4,max_length=4,description="Source region [left,top,right,bottom], normalized 0..1")
+    observation: str = Field(min_length=1,description="Visible source evidence for the classification; not an inferred offer")
+    transcription: Literal["literal", "contextual_summary"] = "literal"
+
+    @model_validator(mode="after")
+    def supported_scope(self):
+        if (not all(0<=v<=1 for v in self.box) or self.box[0]>=self.box[2] or self.box[1]>=self.box[3]):
+            raise ValueError("Context box must be normalized [left,top,right,bottom]")
+        if not self.observation.strip():raise ValueError("Context evidence must describe the original")
+        if self.transcription=="contextual_summary" and self.kind!="software_demonstration":
+            raise ValueError("Only software demonstration regions may use a contextual summary")
+        return self
+
+class PageContext(Model):
+    kind: PageKind
+    summary: str = Field(min_length=1,description="Meaning and purpose of the page; distinguish examples from actual product/project data")
+    source_evidence: list[ContextEvidence] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def summary_scope(self):
+        if not self.summary.strip():raise ValueError("Page context needs a meaningful summary")
+        if self.kind not in {"software_demonstration","mixed"} and any(e.transcription=="contextual_summary" for e in self.source_evidence):
+            raise ValueError("A demonstration summary needs software_demonstration or mixed page context")
+        return self
+
 class PageContent(Model):
     title: str
+    page_context: PageContext | None = Field(default=None,description="Optional for legacy data. Independently classify source meaning before candidate disclosure. Absent context retains strict literal review.")
     printed_page: str | None = None
     text_blocks: list[TextBlock]
     tables: list[Table]
     figures: list[Figure]
     source_notes: list[str] = Field(default_factory=list,description="Visible source typos/ambiguities copied literally, not an extraction failure")
     uncertainties: list[str] = Field(default_factory=list,description="Only unresolved missing/illegible extraction evidence; do not put faithful source typos here")
+
+    @model_validator(mode="after")
+    def demonstration_is_not_an_offer(self):
+        if self.page_context and self.page_context.kind=="software_demonstration" and self.tables:
+            raise ValueError("Software demonstration rows are examples, not catalogue tables. Summarize the demonstrated interface/report in page_context; use mixed context and literal source evidence for genuine separate product/project tables.")
+        return self
 
 class Issue(Model):
     severity: Literal["error", "warning"]
@@ -74,6 +110,19 @@ class Check(Model):
     passed: bool
     evidence: str
 
+class ContextReview(Model):
+    page_purpose_verified: bool
+    summary_meaning_verified: bool
+    actual_vs_demo_verified: bool
+    technical_facts_verified: bool
+    relations_verified: bool
+    evidence: str = Field(min_length=1,description="Независимая проверка по оригиналу: назначение страницы, смысл пересказа, реальные данные/демонстрация, технические факты и связи изделия/параметра/условия/элемента чертежа. Перефразирование допустимо; числа, марки, единицы и связи нельзя менять.")
+
+    def accepts(self):
+        return (self.page_purpose_verified and self.summary_meaning_verified
+                and self.actual_vs_demo_verified and self.technical_facts_verified
+                and self.relations_verified and bool(self.evidence.strip()))
+
 class Review(Model):
     verdict: Literal["pass", "revise", "uncertain"]
     checks: list[Check]
@@ -81,11 +130,13 @@ class Review(Model):
     observed_table_count: int = Field(ge=0)
     observed_row_counts: list[int]
     observed_column_counts: list[int]
+    context_review: ContextReview | None = Field(default=None,description="Required for PASS when candidate has page_context; legacy absent-context reviews keep their eleven ordinary checks")
 
     def accepts(self, content: PageContent) -> bool:
         categories=[c.category for c in self.checks]
         return (self.verdict=="pass" and set(categories)==CHECKS and len(categories)==len(CHECKS)
                 and all(c.passed and c.evidence.strip() for c in self.checks)
+                and (content.page_context is None or (self.context_review is not None and self.context_review.accepts()))
                 and not self.issues and not content.uncertainties
                 and self.observed_table_count==len(content.tables)
                 and self.observed_row_counts==[len(t.rows) for t in content.tables]

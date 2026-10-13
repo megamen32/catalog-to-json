@@ -155,13 +155,65 @@ def same_value(a,b,identity=False):
     return values[0]==values[1]
 
 
-def compare_source(observed: PageContent,candidate: PageContent,branding_figure_quotes=None):
+def align_tables(observed,candidate):
+    """Use mutual unique source signals, never positional zip on multi-table pages.
+
+    Generated IDs are not source evidence. Titles, full headers and finally
+    unique shapes establish identity; cells are compared only after alignment.
+    """
+    left=set(range(len(observed.tables)));right=set(range(len(candidate.tables)));pairs=[]
+    if len(left)==len(right)==1:return [(0,0)],[],[]
+    def headers(table):
+        return tuple(header_key(' '.join(x for x in (c.group,c.label,c.unit,c.qualifier) if x)) for c in table.columns)
+    signals=[lambda t:text_key(t.title),headers,lambda t:(len(t.columns),len(t.rows))]
+    for signal in signals:
+        # Matching by a weaker signal is unsafe when either side has repeats.
+        a={i:signal(observed.tables[i]) for i in left};b={j:signal(candidate.tables[j]) for j in right}
+        for i in sorted(left):
+            key=a[i]
+            if not key or sum(v==key for v in a.values())!=1:continue
+            matches=[j for j,v in b.items() if v==key]
+            if len(matches)==1:
+                j=matches[0];pairs.append((i,j));left.remove(i);right.remove(j)
+    return sorted(pairs),sorted(left),sorted(right)
+
+
+def box_overlap(a,b):
+    intersection=max(0,min(a[2],b[2])-max(a[0],b[0]))*max(0,min(a[3],b[3])-max(a[1],b[1]))
+    union=(a[2]-a[0])*(a[3]-a[1])+(b[2]-b[0])*(b[3]-b[1])-intersection
+    return intersection/union if union else 0
+
+
+def context_differences(observed,candidate):
+    a=observed.page_context;b=candidate.page_context
+    if a is None and b is None:return []
+    def diff(path,source,actual):return {'path':path,'source_observation':source,'candidate':actual}
+    if a is None or b is None:
+        return [diff('page_context',a.model_dump() if a else None,b.model_dump() if b else None)]
     differences=[]
+    if a.kind!=b.kind:differences.append(diff('page_context.kind',a.kind,b.kind))
+    # All claimed regions must have independent source support. Narrative
+    # summaries/observations need semantic review, never literal equality.
+    source=a.source_evidence;actual=b.source_evidence
+    edges={i:[j for j,c in enumerate(actual) if c.kind==e.kind and c.transcription==e.transcription and box_overlap(e.box,c.box)>=.8] for i,e in enumerate(source)}
+    if len(source)!=len(actual) or any(len(js)!=1 for js in edges.values()) or len({js[0] for js in edges.values() if len(js)==1})!=len(actual):
+        differences.append(diff('page_context.source_evidence',[e.model_dump() for e in source],[e.model_dump() for e in actual]))
+    return differences
+
+
+def compare_source(observed: PageContent,candidate: PageContent,branding_figure_quotes=None):
+    differences=context_differences(observed,candidate)
+    semantic_narrative=observed.page_context is not None and candidate.page_context is not None and not differences
     def add(path,expected,actual):
         differences.append({'path':path,'source_observation':expected,'candidate':actual})
     if observed.uncertainties:add('source_observation.uncertainties',[],observed.uncertainties)
     if len(observed.tables)!=len(candidate.tables):add('tables',len(observed.tables),len(candidate.tables))
-    for ti,(source,table) in enumerate(zip(observed.tables,candidate.tables)):
+    pairs,unmatched_source,unmatched_candidate=align_tables(observed,candidate)
+    if unmatched_source or unmatched_candidate:
+        add('tables.alignment',{'unmatched_source_indices':unmatched_source},
+            {'unmatched_candidate_indices':unmatched_candidate,'reason':'Missing or ambiguous source table identity; reinspect before cell comparison'})
+    for si,ti in pairs:
+        source=observed.tables[si];table=candidate.tables[ti]
         prefix=f'tables[{ti}]'
         if len(source.columns)!=len(table.columns):add(prefix+'.columns',len(source.columns),len(table.columns))
         if len(source.rows)!=len(table.rows):add(prefix+'.rows',len(source.rows),len(table.rows))
@@ -191,6 +243,11 @@ def compare_source(observed: PageContent,candidate: PageContent,branding_figure_
     all_text=text_key(' '.join(b.text for b in candidate.text_blocks))
     branding=[b.text for b in candidate.text_blocks if b.kind=='branding']
     for i,block in enumerate(observed.text_blocks):
+        # This is semantic digitization, not sentence-by-sentence OCR. The
+        # independent review must explicitly verify technical facts and their
+        # relationships before PASS; no regex can certify narrative meaning.
+        # Tables, identities in cells and engineering labels stay strict below.
+        if semantic_narrative and block.kind in {'heading','paragraph'}:continue
         if block.kind=='branding' and branding_present(block.text,branding):continue
         if text_key(block.text) not in all_text:add(f'text_blocks[source={i}]',block.text,'missing or changed wording')
     # One source drawing can legitimately be represented as several views or

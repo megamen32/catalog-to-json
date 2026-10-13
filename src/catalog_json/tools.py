@@ -11,7 +11,7 @@ from mcp.server.mcpserver import MCPServer, Image
 from mcp.types import TextContent
 from .schema import PageContent, Review, Issue, CHECKS
 from .direct import inspect_page
-from .audit import compare_source
+from .audit import compare_source,align_tables
 from .observation_quotes import branding_quote_evidence
 from .review_consistency import structural_disagreements
 from .dimension_review import DimensionReview,dimension_targets,missing_dimension_evidence
@@ -57,6 +57,15 @@ def source_chunk(text,offset,length):
         if len(json.dumps(payload(middle),ensure_ascii=True,indent=2).encode())<=SOURCE_RESPONSE_BYTES:low=middle
         else:high=middle-1
     return payload(low)
+
+
+def review_contract():
+    return {'schema':Review.model_json_schema(),'required_review_checks':sorted(CHECKS),
+            'example':{'verdict':'uncertain','checks':[{'category':c,'passed':False,'evidence':'Replace with concrete original-image comparison'} for c in sorted(CHECKS)],
+                       'context_review':{'page_purpose_verified':False,'summary_meaning_verified':False,'actual_vs_demo_verified':False,'technical_facts_verified':False,'relations_verified':False,'evidence':'Замените независимым обоснованием по оригиналу: назначение страницы, смысл пересказа, реальные данные/демонстрация, технические факты и связи изделия, параметра, единицы, условия и элемента чертежа.'},
+                       'issues':[{'severity':'error','path':'replace_with_actual_path','message':'Replace with source-grounded finding'}],
+                       'observed_table_count':0,'observed_row_counts':[],'observed_column_counts':[]},
+            'instruction':'Это только пример структуры. Укажите фактические числа строк/столбцов в сопоставленном порядке кандидата и конкретные результаты проверки оригинала. Для PASS страницы с page_context нужны все пять true в context_review и независимое смысловое обоснование. Верный пересказ допустим; технические факты и связи проверяются по оригиналу, а не по сходству строк. Legacy без контекста сохраняет одиннадцать обычных checks. Не копируйте текст-заглушку.'}
 
 
 class CatalogTools:
@@ -271,7 +280,9 @@ class CatalogTools:
         if self.role=='reviewer' and kind=='page':
             observed_file=self.work(page)/(f'verified-source-observation-{self.attempt}.json' if 'correct_source_observation' in self.seen.get(page,set()) else f'source-observation-{self.attempt}.json')
             observed=PageContent.model_validate_json(observed_file.read_text())
-            return {'candidate':data,'independent_comparison':compare_source(observed,PageContent.model_validate(data),self.branding_figure_quotes.get(page))}
+            candidate=PageContent.model_validate(data);pairs,left,right=align_tables(observed,candidate)
+            return {'candidate':data,'independent_comparison':compare_source(observed,candidate,self.branding_figure_quotes.get(page)),
+                    'table_alignment':{'pairs':[{'source_index':i,'candidate_index':j} for i,j in pairs],'unmatched_source_indices':left,'unmatched_candidate_indices':right}}
         return data
 
     def external_audit(self,page):
@@ -285,9 +296,16 @@ class CatalogTools:
 
     def grid_differences(self,page,model):
         differences=[]
-        if not model.tables and any(g['row_count']>=2 and g['column_count']>=2 and not g['unknown_cells'] and any(cell for row in g['expanded_rows'] for cell in row) for g in self.grids.get(page,[])):
+        def demonstration(grid):
+            box=grid.get('inspected_box')
+            return box is not None and model.page_context is not None and any(
+                e.transcription=='contextual_summary' and e.box[0]<=box[0] and e.box[1]<=box[1] and e.box[2]>=box[2] and e.box[3]>=box[3]
+                and any(p==page and b==tuple(e.box) for p,b,rotation in self.region_evidence)
+                for e in model.page_context.source_evidence)
+        grids=[g for g in self.grids.get(page,[]) if not demonstration(g)]
+        if not model.tables and any(g['row_count']>=2 and g['column_count']>=2 and not g['unknown_cells'] and any(cell for row in g['expanded_rows'] for cell in row) for g in grids):
             return [{'path':'tables','direct_value':'Inspected readable source grid','candidate_value':[]}]
-        for grid in self.grids.get(page,[]):
+        for grid in grids:
             matches=[]
             for i,t in enumerate(model.tables):
                 if len(t.columns)!=grid['column_count']:continue
@@ -310,6 +328,12 @@ class CatalogTools:
                         differences.append({'path':f'tables[{ti}].rows[{ri}].cells[column={ci}]','direct_value':want,'candidate_value':cell.value,'merged_spans':grid['merged_cells']})
         return differences
 
+    def context_errors(self,page,model,after=0):
+        if model.page_context is None:return []
+        return [{'path':f'page_context.source_evidence[{i}].box','error':'View this exact original demonstration region before summarizing; a summary does not establish product data'}
+                for i,e in enumerate(model.page_context.source_evidence) if e.transcription=='contextual_summary'
+                and not any(p==page and b==tuple(e.box) and seen>after for (p,b,rotation),seen in self.region_evidence.items())]
+
     def save(self,page,json_text,kind,literal_quotes=None):
         work=self.work(page)
         expected='extractor' if kind=='page' else 'reviewer'
@@ -323,6 +347,9 @@ class CatalogTools:
         if kind=='observation' and 'read_page_json' in self.seen.get(page,set()):return {'saved':False,'error':'Source observations are frozen after candidate disclosure; start a fresh review to reinspect'}
         try:
             model=(PageContent if kind in ('page','observation') else Review).model_validate_json(json_text)
+            if kind in ('page','observation'):
+                errors=self.context_errors(page,model)
+                if errors:return {'saved':False,'context_errors':errors}
             if kind=='observation':
                 quotes,errors=branding_quote_evidence(self,page,model,literal_quotes)
                 if errors:
@@ -336,7 +363,12 @@ class CatalogTools:
                 disclosed=self.read(page,'page')
                 observation_file=work/(f'verified-source-observation-{self.attempt}.json' if 'correct_source_observation' in self.seen.get(page,set()) else f'source-observation-{self.attempt}.json')
                 observation=PageContent.model_validate_json(observation_file.read_text())
-                conflicts=structural_disagreements(observation,model)
+                candidate=PageContent.model_validate(disclosed['candidate'])
+                if model.verdict=='pass' and candidate.page_context is not None and (model.context_review is None or not model.context_review.accepts()):
+                    return {'saved':False,'error':'Для PASS нужен независимый смысловой context_review по оригиналу: назначение страницы, смысл пересказа, реальные данные/демонстрация, технические факты и связи изделия/параметра/условия/элемента чертежа. Все пять проверок должны быть true с конкретным обоснованием. Буквальное совпадение обычных предложений не требуется.','required_context_review':review_contract()['example']['context_review']}
+                pairs,left,right=align_tables(observation,candidate)
+                aligned=observation.model_copy(update={'tables':[observation.tables[i] for i,j in sorted(pairs,key=lambda pair:pair[1])]}) if not left and not right else observation
+                conflicts=structural_disagreements(aligned,model)
                 if conflicts:
                     self.log(page,'review_disagreement',conflicts=conflicts,
                              candidate_content_sha256=hashlib.sha256(json.dumps(disclosed['candidate'],sort_keys=True).encode()).hexdigest())
@@ -390,6 +422,8 @@ class CatalogTools:
         if not reason.strip():return {'saved':False,'error':'Explain the source evidence before revising the observation'}
         try:model=PageContent.model_validate_json(json_text)
         except ValidationError as exc:return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False))}
+        errors=self.context_errors(page,model,after=self.disclosed[page])
+        if errors:return {'saved':False,'context_errors':errors}
         quotes,errors=branding_quote_evidence(self,page,model,literal_quotes,after=self.disclosed[page])
         if errors:
             refused=self.source_payload(page,'observation-quotes',{'saved':False,'quote_errors':errors,'quote_evidence':quotes})
@@ -434,7 +468,7 @@ class CatalogTools:
         write_json(path,model.model_dump());self.log(page,'save_section',section=section,index=index,sha256=hashlib.sha256(path.read_bytes()).hexdigest())
         return {'saved':True,'section':section,'index':index}
 
-    def finalize(self,page,title,printed_page=None,source_notes=None,uncertainties=None,preserve_existing=True):
+    def finalize(self,page,title,printed_page=None,source_notes=None,uncertainties=None,preserve_existing=True,page_context=None):
         work=self.work(page);events=[];all_events=[]
         path=work/'tools.jsonl'
         if path.exists():
@@ -480,6 +514,7 @@ class CatalogTools:
         if printed_page is not None:data['printed_page']=printed_page
         if source_notes is not None:data['source_notes']=source_notes
         if uncertainties is not None:data['uncertainties']=uncertainties
+        if page_context is not None:data['page_context']=page_context
         return self.save(page,json.dumps(data,ensure_ascii=False),'page')
 
 
@@ -519,12 +554,14 @@ def server(context):
     def load_skill() -> str:
         """Read the registered native skill for this worker role before extracting/reviewing."""
         if context.page is not None:context.log(context.page,'load_skill')
-        return (SKILLS/f'catalog-{context.role.replace("extractor","extract").replace("reviewer","review")}'/'SKILL.md').read_text()
+        text=(SKILLS/f'catalog-{context.role.replace("extractor","extract").replace("reviewer","review")}'/'SKILL.md').read_text()
+        if context.role=='reviewer':text='Exact review schema and structural example (available before the first save):\n'+json.dumps(review_contract(),ensure_ascii=False,separators=(',',':'))+'\n\n'+text
+        return text
     @mcp.tool()
     def get_json_schema(kind: str='page') -> dict:
         """Get the exact saved-file schema. Chat responses need not be JSON. kind: page or review."""
         if kind not in ('page','review'):raise ValueError('kind must be page or review')
-        return {'schema':(PageContent if kind=='page' else Review).model_json_schema(),'required_review_checks':sorted(CHECKS)}
+        return {'schema':PageContent.model_json_schema(),'required_review_checks':sorted(CHECKS)} if kind=='page' else review_contract()
     @mcp.tool(structured_output=False)
     def view_page(page: int):
         """See the original PDF page as an image. Physical page number is one-based."""
@@ -540,6 +577,7 @@ def server(context):
         context.work(page)
         with pymupdf.open(context.source) as doc:result=table_grids(doc[page-1],box)
         for grid in result['tables']:
+            grid['inspected_box']=result['effective_box']
             if grid not in context.grids.setdefault(page,[]):context.grids[page].append(grid)
         context.log(page,'read_source_table',box=box)
         return context.source_payload(page,'table',result)
@@ -589,9 +627,9 @@ def server(context):
             """Validate/save ONE table, figure or text block; index starts at0. After a full save this edits that section while retaining the other sections."""
             return context.section(page,section,index,json_text)
         @mcp.tool()
-        def finalize_page(page: int,title: str,printed_page: str|None=None,source_notes: list[str]|None=None,uncertainties: list[str]|None=None,preserve_existing: bool=True) -> dict:
+        def finalize_page(page: int,title: str,printed_page: str|None=None,source_notes: list[str]|None=None,uncertainties: list[str]|None=None,preserve_existing: bool=True,page_context: dict|None=None) -> dict:
             """Assemble validated sections into complete JSON. After a full save, apply only later section edits and retain all untouched tables/text/figures and omitted metadata. Same source/model/contract/attempt; new indices contiguous. An unbound read baseline is refused: rebuild ALL sections and explicitly set preserve_existing=False for a fresh page, or make a full save."""
-            return context.finalize(page,title,printed_page,source_notes,uncertainties,preserve_existing)
+            return context.finalize(page,title,printed_page,source_notes,uncertainties,preserve_existing,page_context)
     else:
         @mcp.tool()
         def inspect_dimension_review_targets(page: int) -> dict:
