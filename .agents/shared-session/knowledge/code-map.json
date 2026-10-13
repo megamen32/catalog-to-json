@@ -52,17 +52,17 @@
     "fast-fair-review-and-branding": {
       "confidence": "verified",
       "evidence": [
-        "examples/review-fairness/v1.4.31/native-mcp-replay.json",
-        "tests/test_fair_queue.py"
+        "examples/review-fairness/v1.4.32/native-fastagent-tools.json",
+        "tests/test_tools.py"
       ],
-      "git_head": "daa0a75902236db5ae666114f4753d015502b77c",
+      "git_head": "486efd3d8fb899fb6c34a84fd1f6256ecef68877",
       "key": "fast-fair-review-and-branding",
       "kind": "production-path",
       "locations": [
         {
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "f7a382363ac88087690a3e209849fc728555d1fa6fa5da466e926eb38ca1c7d9",
+          "observed_sha256": "77df8792b762fd4c297cc8e509d294c24acb6ce8b583003e30e691ab8da23a52",
           "path": "src/catalog_json/audit.py",
           "symbol": ""
         },
@@ -83,13 +83,13 @@
         {
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "3fc3ccad160d0ddae7f85d45e4e81eb25c859abfa2b72fd3ea03b337fcbacdf9",
+          "observed_sha256": "3c8fd058bfb73b6126ab5d8c7346e799ff9894ef404e4d4f0f9b1ed4c5e9317d",
           "path": "src/catalog_json/tools.py",
           "symbol": ""
         }
       ],
-      "summary": "audit.compare_source tolerates only source-quoted branding regrouping with whole-word/multiplicity matching. FairWorkQueue alternates first reviews and fresh/historical repairs with persisted weighted random seed. tools.record_dimensions batches unchanged relation validation. staged logs last_admission and preserves source-bound predecessors.",
-      "verified_at": "2026-10-14T00:11:28.648679+03:00"
+      "summary": "audit compares literal branding independently of block order and normalizes only whitespace runs inside cell strings; IDs/numeric boundaries remain exact. FairWorkQueue gives fresh repairs a fair lane and seeded random first passes. tools.server reviewer starts with10 core tools; enable_helpers advertises extra groups via native notification. Save coverage/source validation unchanged. tools.record_dimensions batches same per-relation checks.",
+      "verified_at": "2026-10-14T01:07:26.172099+03:00"
     },
     "review-conflicts-fair-admission-dimension-evidence": {
       "confidence": "verified",

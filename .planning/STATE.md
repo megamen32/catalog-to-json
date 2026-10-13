@@ -1,4 +1,8 @@
-## Current continuation, 2026-10-14: fair random review31 deployed
+## Current continuation, 2026-10-14: basic fair review32 deployed
+
+Extractor15 MiniMax-M3.1-Flash-Preview remains unchanged. Reviewer/coordinator32 GLM5.3Flash CodingEndpoint published and deployed. Native FastAgent refresh exposes10 core tools then13 after enabling labels; optional geometry remains available. All source/coverage checks retained;72 focused checks pass and5 saved false cell-wrap differences disappear while a genuine defect remains. Safe handover915.206s,0 interrupted native calls; all980 drafts/previous candidate files and503 accepted identities verified. Full review remains incomplete,477 pending. First new native32 review is not yet delivered: provider429 backoff is retained, GLM limit1, about10min remaining at01:16MSK. No new paid benchmark; no new model accuracy or throughput claim.
+
+## Historical continuation: fair random review31 deployed
 
 Extractor15 MiniMax-M3.1-Flash-Preview, reviewer/coordinator31 GLM5.3Flash CodingEndpoint. Source and release published;70 focused checks and native retained MCP batch replay pass. Removed5 false branding findings;3 saved false drawing PASS still refused. No paid benchmark calls. Native full queue retains503 accepted/980 drafts, admits random first pages181/152 and fresh repaired47. Full digitization/review remains incomplete. Existing numeric annotations on certificates still incur unnecessary geometry-style bookkeeping; minimal basic tools plus optional helper discovery is a viable next simplification, not yet implemented or accuracy-tested.
 

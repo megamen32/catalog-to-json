@@ -1,0 +1,101 @@
+{
+  "status": "PASS_RESUME32_WAITING_FIRST_NEW_NATIVE_REVIEW",
+  "models": {
+    "extractor": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+    "reviewer": "zai.glm-5.3-flash?reasoning=low"
+  },
+  "roles": {
+    "extractor": {
+      "program": {
+        "package_version": "1.4.15",
+        "git_revision": null,
+        "dirty": null,
+        "source_code_sha256": "f7ee07327271ca2dea80e46d77036e425ecee02333c065c0df72ecfd5e3e7aff",
+        "python_version": "3.12.13",
+        "components": {
+          "agent_logic": {
+            "package_version": "1.4.2",
+            "git_revision": null,
+            "dirty": null,
+            "source_code_sha256": "fa8352a1a7f3632367a2ba02ff9290109c337113aa918a942093aa0cb8740a8b",
+            "python_version": "3.12.13"
+          },
+          "catalog_tools": {
+            "package_version": "1.4.8",
+            "git_revision": null,
+            "dirty": null,
+            "source_code_sha256": "3db63ecf26eacd9b1ba0e33e35d368eea1a6c5ce190cecf09d0c261b0766804b",
+            "python_version": "3.12.13"
+          },
+          "legacy_skills": {
+            "catalog-extract": "cb0ac951a01754366f2fa54f85fd8b5aed19e879549f5caa735e6aaea2f068a0",
+            "catalog-review": "200ea928b29b0d08bf3977bd4cfc92b039ede7621ceddd16a8fd3138ceef6942"
+          },
+          "catalog_server_bridge_sha256": "cfc42e91dd294672db23001aee5bf8444edd08b2839522c6d41668fafd197e97",
+          "role_worker_bridge_sha256": "6677033c2e5059410651b0ae57a0f8ad5c397ed5ba2616d691605276a434c66b",
+          "composition_bridge_sha256": "cfc42e91dd294672db23001aee5bf8444edd08b2839522c6d41668fafd197e97",
+          "delivery_adapter_sha256": "78e3d0119d4e6d1049466fe09e7ceec522ec0bde337465530f7371669682ec46"
+        }
+      },
+      "contract_sha256": "d66b8b75acf1151cd7ddf759b8f2686bdbc7faf6bc17a6e2bd277a218060f9cf"
+    },
+    "reviewer": {
+      "program": {
+        "package_version": "1.4.32",
+        "git_revision": null,
+        "dirty": null,
+        "source_code_sha256": "56e767a914bf01e63a366d64f329ff49c1aa2f633d34b3a756a1995003ea434a",
+        "python_version": "3.12.13"
+      },
+      "contract_sha256": "471409379b5708ccca7ed0995926de74ff187b61a28bddfae5b1068fb4e70fff"
+    }
+  },
+  "review_order": "alternate first passes and repairs; fresh repairs before backlog with fairness; seeded random pages favouring smaller inventories",
+  "queue_random_seed": "213a1dfcf8cc498280e301e2f6dcfcd3",
+  "last_admissions": [],
+  "all980_drafts_present": true,
+  "all980_previous_candidates_retained": true,
+  "previous_accepted_exactly_retained": 503,
+  "native_calls_interrupted": 0,
+  "new_native_reviews": [],
+  "current_accepted": 503,
+  "full_catalogues_complete": false,
+  "provider_pacing": {
+    "zai": {
+      "configured_maximum": 8,
+      "current_limit": 1,
+      "active_calls": 0,
+      "waiting_calls": 7,
+      "rate_limit_count": 621,
+      "rate_limit_waves": 66,
+      "backoff_streak": 6,
+      "clean_successes": 0,
+      "operator_not_before_unix": 0,
+      "operator_hold_remaining_seconds": 0,
+      "backoff_remaining_seconds": 614.37
+    },
+    "anthropic": {
+      "configured_maximum": 8,
+      "current_limit": 2,
+      "active_calls": 0,
+      "waiting_calls": 0,
+      "rate_limit_count": 922,
+      "rate_limit_waves": 72,
+      "backoff_streak": 0,
+      "clean_successes": 4,
+      "operator_not_before_unix": 1791867600.0,
+      "operator_hold_remaining_seconds": 0,
+      "backoff_remaining_seconds": 0
+    }
+  },
+  "observed_unix": 1791929835.1754,
+  "handover": {
+    "switched": true,
+    "elapsed_seconds": 915.2059073448181,
+    "native_calls_interrupted": 0,
+    "own_holds_restored": [
+      "anthropic",
+      "zai"
+    ]
+  }
+}
