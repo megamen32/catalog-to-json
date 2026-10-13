@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "source_revision": "0e2150b",
+  "release": "v1.4.27",
+  "files": [
+    {
+      "path": "src/catalog_json/drawing_geometry.py",
+      "sha256": "d1b0b8257fd43ca7aafed0a0e2d575aab6e5c9ca7b788ea0f5963444ea5a02bd",
+      "public_byte_match": true
+    },
+    {
+      "path": "src/catalog_json/tools.py",
+      "sha256": "d73aa983262c4cc71e139749efbd301bd985691775c9fcbd3edcd146592bb8d9",
+      "public_byte_match": true
+    },
+    {
+      "path": "src/catalog_json/agents.py",
+      "sha256": "8703029691acd661bce6b8fd104c5ec3af99f373b01b62b0814dab14b25d7b2c",
+      "public_byte_match": true
+    },
+    {
+      "path": "skills/catalog-extract/SKILL.md",
+      "sha256": "0ea63add48a2b7daea737da923cfd2beb9b1445e4fe8393b4c9ed37a74e6f897",
+      "public_byte_match": true
+    },
+    {
+      "path": "skills/catalog-review/SKILL.md",
+      "sha256": "1b2ecf9b586e6ce4875235e13b3fc28bbf3485233c2edb6d36487315d0bfea72",
+      "public_byte_match": true
+    },
+    {
+      "path": "tests/test_dimension_candidates.py",
+      "sha256": "3b55c42d898ad733d109876b8105d059fc7c6455a522ac31ff1dfe44a5610e98",
+      "public_byte_match": true
+    },
+    {
+      "path": "examples/drawing-tools/v1.4.27/native-source-proof.json",
+      "sha256": "7af1f6dbb9fa939f9075bbad55f3f8516615483993e8ad0e1872c015b935ac11",
+      "public_byte_match": true
+    }
+  ],
+  "wheel_sha256": "ad9098ce795c37b8e02b6d1a39532eea78f99c207a9d5f969de7f1dfcbde51a7",
+  "wheel_public_byte_match": true,
+  "model_calls": 0,
+  "full_page_accuracy_claim": false,
+  "verified_at_unix": 1791860565.4556024
+}
