@@ -18,6 +18,7 @@ from .schema import PageContent,Review
 from .tools import write_json,durable_directory
 from .provenance import program_version,artifact_origin
 from .processes import OwnedProcessTree
+from .fair_queue import FairWorkQueue
 
 
 RATE_LIMIT=re.compile(r'(?:HTTP(?:/\d(?:\.\d)?)?[^\n]{0,100}\b429\b|Error\s+code:\s*429\b|RateLimitError|rate[ _-]limit(?:ed| error| exceeded| reached)|Too Many Requests)',re.I)
@@ -327,19 +328,17 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
     entries=json.loads(manifest.read_text())['catalogs'];ids=[e['id'] for e in entries]
     if not ids or len(set(ids))!=len(ids):raise ValueError('Catalogue IDs must be unique')
     version=program_version();started=time.monotonic();pending={};catalogs=[]
-    workflow=hashlib.sha256(b''.join(Path(__file__).with_name(name).read_bytes() for name in ('staged.py','stage_worker.py','processes.py','supervise.py'))).hexdigest()
+    workflow=hashlib.sha256(b''.join(Path(__file__).with_name(name).read_bytes() for name in ('staged.py','stage_worker.py','processes.py','supervise.py','fair_queue.py'))).hexdigest()
     providers={role:ModelFactory.parse_model_spec(getattr(agents,role)).provider.value for role in ('extractor','reviewer')}
     role_counts={'extractor':extractor_workers,'reviewer':reviewer_workers}
     provider_slots={name:ProviderGate(max(role_counts[role] for role in providers if providers[role]==name),retry_delay,initial_provider_concurrency) for name in set(providers.values())}
     async def observe_rate_limit(role):await provider_slots[providers[role]].rate_limited()
     agents.rate_limit_observer=observe_rate_limit
-    extract=asyncio.PriorityQueue();review=asyncio.PriorityQueue();sequence=count();catalog_order={cid:i for i,cid in enumerate(ids)}
+    extract=FairWorkQueue(ids);review=FairWorkQueue(ids);sequence=count()
     def enqueue_extraction(item,repair=False):extract.put_nowait((0 if repair else 1,next(sequence),item))
     def enqueue_review(item,audit=False):
-        # Finish earlier catalogues and return source-confirmed repairs to review
-        # before their remaining first-pass drafts. Already admitted calls finish.
-        repair=audit or item['record']['next_attempt']>0
-        review.put_nowait(((catalog_order[item['id']],0 if repair else 1),next(sequence),item))
+        repair=audit or bool(item['record'].get('review') or item['record'].get('attempts') or item.get('has_prior_review'))
+        review.put_nowait((0 if repair else 1,next(sequence),item))
     for entry in entries:
         cid=entry['id']
         if not cid.replace('-','').replace('_','').isalnum():raise ValueError('Unsafe catalogue ID')
@@ -367,7 +366,8 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             old=json.loads((work/'result.json').read_text()) if (work/'result.json').exists() else {}
             record={'pdf_page':page,'cache_key':key,'status':'pending','next_attempt':0,'attempts':[],'tested_program':version,'source_sha256':digest,'extractor':agents.extractor,'reviewer':agents.reviewer,'contract_sha256':agents.contract_digest,'role_contracts':{role:role_contract(agents,role) for role in providers},'elapsed_seconds':0}
             if old:record['prior_execution']=old
-            item={'id':cid,'source':source,'out':out,'work':work,'record':record,'reviewed_audit':external_audit_digest(work)};pending[cid,page]=item
+            item={'id':cid,'source':source,'out':out,'work':work,'record':record,'reviewed_audit':external_audit_digest(work),
+                  'has_prior_review':bool(old.get('review') or old.get('attempts') or list(work.glob('review-*.json')))};pending[cid,page]=item
             accepted_profile=accepted_profile_agents(work,old,agents,digest,page) if old.get('status')=='accepted' and (old.get('cache_key')==key or resume_compatible_profile) else None
             if accepted_profile is not None:
                 candidate=validated_candidate(work,digest,page,agents.extractor,role_contract(accepted_profile,'extractor'));report_path=work/f"review-{old['next_attempt']}.json"
@@ -430,7 +430,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             digest=hashlib.sha256(json.dumps(payload,ensure_ascii=False).encode()).hexdigest()
             if snapshot_digests.get(cat['id'])!=digest:
                 write_json(Path(cat['output']),payload);snapshot_digests[cat['id']]=digest
-        state={'schema_version':'1.0','tested_program':version,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'contract_sha256':agents.contract_digest,'workflow_sha256':workflow,'method':{'separate_provider_queues':True,'review_order':'manifest catalogue order; repairs and changed source audits before first-pass drafts','concurrency_per_provider':max(role_counts.values()),'role_workers':role_counts,'provider_pacing':{name:slot.snapshot() for name,slot in provider_slots.items()},'operator_holds_sha256':holds_digest,'call_timeout_seconds':agents.timeout,'max_tokens':agents.max_tokens,'max_repairs':None,'deadline_seconds':deadline_seconds},'catalogs':catalogs,'complete':all(c['status']=='complete' for c in catalogs),'elapsed_seconds':round(time.monotonic()-started,3)}
+        state={'schema_version':'1.0','tested_program':version,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'contract_sha256':agents.contract_digest,'workflow_sha256':workflow,'method':{'separate_provider_queues':True,'review_order':'alternate first pass and repair; round robin catalogues at provider admission','concurrency_per_provider':max(role_counts.values()),'role_workers':role_counts,'provider_pacing':{name:slot.snapshot() for name,slot in provider_slots.items()},'operator_holds_sha256':holds_digest,'call_timeout_seconds':agents.timeout,'max_tokens':agents.max_tokens,'max_repairs':None,'deadline_seconds':deadline_seconds},'catalogs':catalogs,'complete':all(c['status']=='complete' for c in catalogs),'elapsed_seconds':round(time.monotonic()-started,3)}
         write_json(output/'batch.json',state);return state
 
     def save(item):write_json(item['work']/'result.json',item['record']);snapshot()
@@ -443,16 +443,6 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             for name,slot in provider_slots.items():await slot.hold_until(holds.get(name,0))
             holds_digest=digest;snapshot()
 
-    def preferred_review_task(current):
-        # A worker may have waited in the provider gate while an earlier catalogue
-        # or repaired page became ready. Select at admission, without cancelling
-        # an admitted API call or dropping either queue obligation.
-        try:preferred=review.get_nowait()
-        except asyncio.QueueEmpty:return current
-        if preferred[:2]<current[:2]:
-            review.put_nowait(current);review.task_done();return preferred
-        review.put_nowait(preferred);review.task_done();return current
-
     async def worker(role,queue):
         failures=0
         while True:
@@ -461,13 +451,13 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             try:
                 r.update(status='awaiting_provider_admission',active_role=role);save(item)
                 async with provider_slots[providers[role]]:
+                    preferred=queue.at_admission(task)
+                    if preferred is not task:
+                        r.update(status='awaiting_review' if role=='reviewer' else 'needs_review' if 'content' in r else 'pending');r.pop('active_role',None)
+                        r['elapsed_seconds']+=round(time.monotonic()-began,3);save(item)
+                        task=preferred;item=task[2];r=item['record'];attempt=r['next_attempt'];began=time.monotonic()
+                        r['active_role']=role
                     if role=='reviewer':
-                        preferred=preferred_review_task(task)
-                        if preferred is not task:
-                            r.update(status='awaiting_review');r.pop('active_role',None)
-                            r['elapsed_seconds']+=round(time.monotonic()-began,3);save(item)
-                            task=preferred;item=task[2];r=item['record'];attempt=r['next_attempt'];began=time.monotonic()
-                            r['active_role']=role
                         previous=item['work']/f'review-{attempt}.json'
                         if previous.exists():
                             history=item['work']/'review-history'/hashlib.sha256(previous.read_bytes()).hexdigest();history.mkdir(parents=True,exist_ok=True);shutil.copy2(previous,history/previous.name)

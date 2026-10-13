@@ -116,7 +116,7 @@ def test_review_priority_is_reselected_after_provider_admission_wait(tmp_path):
     assert sorted(e[1:] for e in events if e[0]=='reviewer')==[(1,0),(1,1),(2,0),(3,0)]
 
 
-def test_later_catalogue_drafts_cannot_bury_earlier_catalogue_repair(tmp_path):
+def test_repairs_and_later_catalogue_first_passes_both_progress(tmp_path):
     path=manifest(tmp_path);data=json.loads(path.read_text());first=data['catalogs'][0];data['catalogs']=[{**first,'id':'first'},{**first,'id':'later'}];write_json(path,data)
     events=[]
     async def call(agents,role,source,out,page,attempt):
@@ -127,7 +127,8 @@ def test_later_catalogue_drafts_cannot_bury_earlier_catalogue_repair(tmp_path):
         write_json(out/f'page-{page:04d}'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump());return value
     result=asyncio.run(staged_batch(path,tmp_path/'out',Agents(),deadline_seconds=3,call=call))
     assert result['complete']
-    assert events.index(('reviewer','first',1,1))<events.index(('reviewer','later',1,0))
+    assert ('reviewer','first',1,1) in events and ('reviewer','later',1,0) in events
+    assert events.index(('reviewer','first',1,1))<events.index(('reviewer','later',3,0))
     assert [c['accepted_pages'] for c in result['catalogs']]==[3,3]
 
 

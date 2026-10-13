@@ -13,6 +13,7 @@ from .schema import PageContent, Review, Issue, CHECKS
 from .direct import inspect_page
 from .audit import compare_source
 from .observation_quotes import branding_quote_evidence
+from .review_consistency import structural_disagreements
 
 SKILLS = Path(__file__).parent / 'skills'
 if not SKILLS.exists():
@@ -261,6 +262,14 @@ class CatalogTools:
                 if differences:return {'saved':False,'error':'Saved table contradicts the directly inspected PDF grid. Reinspect source/merge spans and preserve expanded_rows; use a fresh Vision-only context for genuinely unreliable grids.','direct_grid_differences':differences}
             if kind=='review':
                 disclosed=self.read(page,'page')
+                observation_file=work/(f'verified-source-observation-{self.attempt}.json' if 'correct_source_observation' in self.seen.get(page,set()) else f'source-observation-{self.attempt}.json')
+                observation=PageContent.model_validate_json(observation_file.read_text())
+                conflicts=structural_disagreements(observation,model)
+                if conflicts:
+                    self.log(page,'review_disagreement',conflicts=conflicts,
+                             candidate_content_sha256=hashlib.sha256(json.dumps(disclosed['candidate'],sort_keys=True).encode()).hexdigest())
+                    return {'saved':False,'error':'Final review contradicts its independent source observation. Do NOT tell the extractor to delete tables or duplicate table rows into figure labels. Reinspect the original region; correct_source_observation with source evidence if the observation classified a table as a figure, or correct the final counts/checks if they were wrong. Then save_review again. No candidate data was changed.',
+                            'review_disagreements':conflicts}
                 if model.verdict=='pass' and disclosed['independent_comparison']:
                     return {'saved':False,'error':'Independent source observations contradict the claimed pass. Report ALL differences and any additional findings.', 'differences':disclosed['independent_comparison']}
             if kind=='review' and model.verdict!='pass':

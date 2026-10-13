@@ -1,0 +1,152 @@
+{
+  "program": "1.4.28",
+  "scope": "Replay retained reviewer structure conflicts and real pending obligations; no new extraction accuracy cohort",
+  "model_calls": 0,
+  "reviews": [
+    {
+      "catalogue": "small",
+      "physical_page": 4,
+      "observation_sha256": "656e0457fa5e9c21ddf35dc2d04b6933a5bef1907694271fc37ee327e15b72f3",
+      "review_sha256": "9caf18dc587df20905babff1e711b9e6a1ae2d5618a5c91c28e39da6602e754c",
+      "disagreements": [
+        {
+          "category": "table_count",
+          "independent_observation": 0,
+          "final_review": 4
+        },
+        {
+          "category": "row_coverage",
+          "independent_observation": [],
+          "final_review": [
+            9,
+            24,
+            9,
+            4
+          ]
+        },
+        {
+          "category": "column_coverage",
+          "independent_observation": [],
+          "final_review": [
+            4,
+            9,
+            6,
+            2
+          ]
+        }
+      ],
+      "saved_issues_retained": 24,
+      "actual_save_refused": true,
+      "candidate_unchanged": true,
+      "contradictory_repair_not_written": true
+    },
+    {
+      "catalogue": "small",
+      "physical_page": 25,
+      "observation_sha256": "1c0a9748b03adef16ae61a58422f42ac18b0c638c962a18b393b85528ab051c7",
+      "review_sha256": "bc4d7e5fd5f855af9561c0f6dd76fd831afa7ca3465fd9c8e7f205855a874d35",
+      "disagreements": [],
+      "saved_issues_retained": 1
+    },
+    {
+      "catalogue": "isolators",
+      "physical_page": 47,
+      "observation_sha256": "21274fce6a0cdcc5a593f43f6a4dd77a73a2d2665e8d9ba1715a1ea395cf6a4e",
+      "review_sha256": "5a2e999241014333e4c29b04825c4cfdeb7dd583d5170b65ad0a2a42299345bc",
+      "disagreements": [],
+      "saved_issues_retained": 15
+    },
+    {
+      "catalogue": "innovations",
+      "physical_page": 4,
+      "observation_sha256": "ea5b782de220a50d1b172193666b40d7b5a9d172bc4ff51d1fb911b020124078",
+      "review_sha256": "7524708ef792ce8ec8d42a6b8f885d841e706dae403cba97279bb4ca2a4fcc77",
+      "disagreements": [],
+      "saved_issues_retained": 6
+    }
+  ],
+  "pending_at_replay": 481,
+  "first16_admissions": [
+    {
+      "lane": "first",
+      "catalogue": "innovations",
+      "page": 33
+    },
+    {
+      "lane": "repair",
+      "catalogue": "isolators",
+      "page": 47
+    },
+    {
+      "lane": "first",
+      "catalogue": "armature",
+      "page": 1
+    },
+    {
+      "lane": "repair",
+      "catalogue": "small",
+      "page": 4
+    },
+    {
+      "lane": "first",
+      "catalogue": "innovations",
+      "page": 38
+    },
+    {
+      "lane": "repair",
+      "catalogue": "innovations",
+      "page": 4
+    },
+    {
+      "lane": "first",
+      "catalogue": "armature",
+      "page": 2
+    },
+    {
+      "lane": "repair",
+      "catalogue": "small",
+      "page": 25
+    },
+    {
+      "lane": "first",
+      "catalogue": "innovations",
+      "page": 45
+    },
+    {
+      "lane": "repair",
+      "catalogue": "innovations",
+      "page": 5
+    },
+    {
+      "lane": "first",
+      "catalogue": "armature",
+      "page": 3
+    },
+    {
+      "lane": "repair",
+      "catalogue": "innovations",
+      "page": 8
+    },
+    {
+      "lane": "first",
+      "catalogue": "innovations",
+      "page": 50
+    },
+    {
+      "lane": "repair",
+      "catalogue": "innovations",
+      "page": 10
+    },
+    {
+      "lane": "first",
+      "catalogue": "armature",
+      "page": 4
+    },
+    {
+      "lane": "repair",
+      "catalogue": "innovations",
+      "page": 12
+    }
+  ],
+  "queue_obligations_preserved": true
+}
