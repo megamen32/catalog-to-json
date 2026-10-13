@@ -49,6 +49,48 @@
       "summary": "CLI benchmark scan inventories PDFs; extract runs native first pass; score grades independent facts; run dispatches project/model/case argv adapters with persisted no-replay receipts.",
       "verified_at": "2026-10-12T01:31:43.107595+03:00"
     },
+    "fast-fair-review-and-branding": {
+      "confidence": "verified",
+      "evidence": [
+        "examples/review-fairness/v1.4.31/native-mcp-replay.json",
+        "tests/test_fair_queue.py"
+      ],
+      "git_head": "daa0a75902236db5ae666114f4753d015502b77c",
+      "key": "fast-fair-review-and-branding",
+      "kind": "production-path",
+      "locations": [
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "f7a382363ac88087690a3e209849fc728555d1fa6fa5da466e926eb38ca1c7d9",
+          "path": "src/catalog_json/audit.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "6464394417a34291e49b9578596ffa19a530ddac3692abc04964c4918385b440",
+          "path": "src/catalog_json/fair_queue.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "33f218f79a775c51db637f9849342d061ae1803f6360d192d92ff8ac5f4d3572",
+          "path": "src/catalog_json/staged.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "3fc3ccad160d0ddae7f85d45e4e81eb25c859abfa2b72fd3ea03b337fcbacdf9",
+          "path": "src/catalog_json/tools.py",
+          "symbol": ""
+        }
+      ],
+      "summary": "audit.compare_source tolerates only source-quoted branding regrouping with whole-word/multiplicity matching. FairWorkQueue alternates first reviews and fresh/historical repairs with persisted weighted random seed. tools.record_dimensions batches unchanged relation validation. staged logs last_admission and preserves source-bound predecessors.",
+      "verified_at": "2026-10-14T00:11:28.648679+03:00"
+    },
     "review-conflicts-fair-admission-dimension-evidence": {
       "confidence": "verified",
       "evidence": [
