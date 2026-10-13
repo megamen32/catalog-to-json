@@ -1,0 +1,36 @@
+{
+  "observed_unix": 1791932003.302516,
+  "provider": "zai",
+  "model": "glm-5.3-flash",
+  "endpoint": "https://api.z.ai/api/coding/paas/v4/",
+  "http_status": 429,
+  "provider_code": "1310",
+  "provider_reset_literal": "2026-10-18 23:38:31",
+  "provider_reset_timezone": null,
+  "attempt": {
+    "catalogue": "innovations",
+    "pdf_page": 167,
+    "successful_provider_responses": 0,
+    "recorded429_messages": 29
+  },
+  "accepted_pages": 503,
+  "draft_pages": 980,
+  "remaining_unaccepted": 477,
+  "admission_hold_until_unix": 1792016131,
+  "hold_scope": "remaining existing24h job budget; explicit quota blocker, no fallback",
+  "live_admission_hold_verified": true,
+  "live_provider_pacing": {
+    "configured_maximum": 8,
+    "current_limit": 1,
+    "active_calls": 0,
+    "waiting_calls": 8,
+    "rate_limit_count": 920,
+    "rate_limit_waves": 68,
+    "backoff_streak": 8,
+    "clean_successes": 0,
+    "operator_not_before_unix": 1792016131,
+    "operator_hold_remaining_seconds": 84126.887,
+    "backoff_remaining_seconds": 203.004
+  },
+  "verified_unix": 1791932030.4044354
+}

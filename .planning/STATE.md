@@ -1,4 +1,8 @@
-## Current continuation, 2026-10-14: basic fair review32 deployed
+## Current blocker, 2026-10-14: GLM weekly/monthly quota exhausted
+
+Live verification after backoff: innovations167 native32 review had0 successful provider responses and29 recorded429 errors, explicit1310 Weekly/Monthly Limit Exhausted; provider reset literal2026-10-18 23:38:31 has no timezone.503/980 accepted,477 pending. Existing admission-hold mechanism suppresses GLM retries through the current24h job deadline2026-10-15 01:15:31MSK; live gate/digest verified, other provider untouched, no model fallback. All work retained. External blocker: quota renewal/reset; smallest continuation is resume once restored or explicit verified independent-reviewer profile selection. No new benchmark/API calls for diagnosis. Evidence: examples/runtime-profiles/glm-quota-2026-10-14.json.
+
+## Previous continuation, 2026-10-14: basic fair review32 deployed
 
 Extractor15 MiniMax-M3.1-Flash-Preview remains unchanged. Reviewer/coordinator32 GLM5.3Flash CodingEndpoint published and deployed. Native FastAgent refresh exposes10 core tools then13 after enabling labels; optional geometry remains available. All source/coverage checks retained;72 focused checks pass and5 saved false cell-wrap differences disappear while a genuine defect remains. Safe handover915.206s,0 interrupted native calls; all980 drafts/previous candidate files and503 accepted identities verified. Full review remains incomplete,477 pending. First new native32 review is not yet delivered: provider429 backoff is retained, GLM limit1, about10min remaining at01:16MSK. No new paid benchmark; no new model accuracy or throughput claim.
 
