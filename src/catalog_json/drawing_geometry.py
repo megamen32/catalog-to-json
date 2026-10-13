@@ -8,10 +8,11 @@ import math
 import pymupdf
 
 
-def drawing_geometry(page,box):
+def drawing_geometry(page,box,source_sha256=None):
     if (len(box)!=4 or any(not math.isfinite(v) or not 0<=v<=1 for v in box)
             or box[0]>=box[2] or box[1]>=box[3]):
         raise ValueError('Box must be [left,top,right,bottom] normalized to 0..1')
+    prefix=(f's{source_sha256}-' if source_sha256 else '')+f'page{page.number+1}-'
     matrix=page.rotation_matrix;viewport=page.rect
     def point(value):
         p=pymupdf.Point(value)*matrix
@@ -31,12 +32,12 @@ def drawing_geometry(page,box):
     words=[]
     for index,word in enumerate(page.get_text('words')):
         b=bounds(word[:4])
-        if intersects(b):words.append({'id':f'w{index}','text':word[4],'box':b,'direction':directions.get((word[5],word[6]))})
+        if intersects(b):words.append({'id':f'{prefix}w{index}','text':word[4],'box':b,'direction':directions.get((word[5],word[6]))})
     paths=[];triangles=[]
     for index,path in enumerate(page.get_drawings()):
         b=bounds(path['rect'])
         if not intersects(b):continue
-        identifier=f'p{index}';items=[];vertices=[]
+        identifier=f'{prefix}p{index}';items=[];vertices=[]
         for item_index,item in enumerate(path['items']):
             kind=item[0]
             if kind in {'l','c'}:
@@ -47,7 +48,7 @@ def drawing_geometry(page,box):
             elif kind=='qu':
                 q=pymupdf.Quad(item[1]);points=[point(p) for p in [q.ul,q.ur,q.lr,q.ll]]
             else:raise ValueError(f'Unsupported native drawing primitive: {kind}')
-            record={'id':f'{identifier}-i{item_index}','kind':kind,'points':points}
+            record={'index':item_index,'kind':kind,'points':points}
             if kind=='re' and len(item)>2:record['orientation']=item[2]
             items.append(record)
         paths.append({'id':identifier,'sequence':path.get('seqno'),'box':b,'type':path['type'],

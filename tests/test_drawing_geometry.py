@@ -39,6 +39,20 @@ def test_rotated_native_table_axes_require_image_fallback(tmp_path):
     assert not result['tables'] and 'rotated' in result['note']
 
 
+def test_geometry_ids_bind_source_and_physical_page(tmp_path):
+    sources=[]
+    for name in ['first','second']:
+        source=tmp_path/f'{name}.pdf'
+        with pymupdf.open() as document:
+            for i in range(2):document.new_page().draw_line((10,20),(100,20))
+            document.save(source)
+        sources.append(CatalogTools(source,tmp_path/name))
+    first_id=sources[0].drawing_geometry(1,[0,0,1,1])['path_index'][0]['id']
+    assert sources[0].drawing_paths(1,[0,0,1,1],[first_id])['paths'][0]['id']==first_id
+    with pytest.raises(ValueError,match='outside'):sources[0].drawing_paths(2,[0,0,1,1],[first_id])
+    with pytest.raises(ValueError,match='outside'):sources[1].drawing_paths(1,[0,0,1,1],[first_id])
+
+
 def test_many_separate_solid_segments_reach_agent_without_silent_truncation(tmp_path):
     source=tmp_path/'source.pdf'
     with pymupdf.open() as document:

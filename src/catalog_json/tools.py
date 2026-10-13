@@ -133,7 +133,7 @@ class CatalogTools:
         from .drawing_geometry import drawing_geometry
         if offset<0 or not 1<=limit<=20 or path_kind not in {'stroke','fill','all'}:raise ValueError('Invalid drawing index range/kind')
         self.work(page)
-        with pymupdf.open(self.source) as doc:result=drawing_geometry(doc[page-1],box)
+        with pymupdf.open(self.source) as doc:result=drawing_geometry(doc[page-1],box,self.source_digest)
         self.log(page,'inspect_drawing_geometry',box=box,paths=len(result['paths']),words=len(result['words']))
         selected=[p for p in result['paths'] if path_kind=='all' or (p['stroke'] is not None if path_kind=='stroke' else p['fill'] is not None)]
         if offset>len(selected):raise ValueError('Drawing index offset is past the end')
@@ -150,7 +150,7 @@ class CatalogTools:
         from .drawing_geometry import drawing_geometry
         if not path_ids or len(path_ids)>40 or len(set(path_ids))!=len(path_ids):raise ValueError('Choose 1..40 unique path IDs')
         self.work(page)
-        with pymupdf.open(self.source) as doc:result=drawing_geometry(doc[page-1],box)
+        with pymupdf.open(self.source) as doc:result=drawing_geometry(doc[page-1],box,self.source_digest)
         paths={p['id']:p for p in result['paths']}
         if any(identifier not in paths for identifier in path_ids):raise ValueError('Path ID is outside this source region')
         self.log(page,'read_drawing_paths',box=box,path_ids=path_ids)
