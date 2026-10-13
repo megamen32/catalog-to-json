@@ -1,5 +1,5 @@
 {
-  "status": "PASS_RESUME30_WAITING_FIRST_NEW_NATIVE_REVIEW",
+  "status": "PASS_LIVE30",
   "models": {
     "extractor": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
     "reviewer": "zai.glm-5.3-flash?reasoning=low"
@@ -55,8 +55,35 @@
   "all980_previous_candidates_retained": true,
   "previous_accepted_exactly_retained": 500,
   "native_calls_interrupted": 0,
-  "new_native_reviews": [],
+  "new_native_reviews": [
+    {
+      "catalogue": "innovations",
+      "page": 77,
+      "verdict": "revise",
+      "producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.4.30",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "a7553d87cba0cadc8b5f196fecec3003fc5c1103fabef75db66b57c431c0116f",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "b87a17b1c11e5e118c8f72f3db8928e351b6c9986bdb2a3dbf99c87dda93bfe2",
+        "source_bound_save": true,
+        "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+        "physical_page": 77,
+        "attempt": 0,
+        "role": "reviewer",
+        "model": "zai.glm-5.3-flash?reasoning=low",
+        "contract_sha256": "4b8b83f005a61a947e9f6da3c59d5eafb4e07b224309a131f37e4ff9648f50d7",
+        "receipt": "calls/929b1c38151247adb0139e430d93dea3/result.json",
+        "started_at": 1791920858.2948744,
+        "finished_at": 1791921137.7202682
+      }
+    }
+  ],
   "current_accepted": 500,
   "full_catalogues_complete": false,
-  "observed_unix": 1791921117.8155408
+  "observed_unix": 1791921744.7406278
 }

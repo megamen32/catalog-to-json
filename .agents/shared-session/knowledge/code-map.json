@@ -49,6 +49,54 @@
       "summary": "CLI benchmark scan inventories PDFs; extract runs native first pass; score grades independent facts; run dispatches project/model/case argv adapters with persisted no-replay receipts.",
       "verified_at": "2026-10-12T01:31:43.107595+03:00"
     },
+    "review-conflicts-fair-admission-dimension-evidence": {
+      "confidence": "verified",
+      "evidence": [
+        "Retained small4 contradiction rejected; 83 focused checks; 3 saved drawing false PASS refused; native MCP replay 0 model calls"
+      ],
+      "git_head": "f534328d6e5c94c5dddcd3fbcbfa05898dbd0607",
+      "key": "review-conflicts-fair-admission-dimension-evidence",
+      "kind": "production-path",
+      "locations": [
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "434dc7e989831472d43cb4aef7467f0be723d95d6db3f7d469ed9ae916a845d9",
+          "path": "src/catalog_json/tools.py",
+          "symbol": "CatalogTools.save"
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "f79c1b9330de829d50dcb3127db1272996b0026984521e641cfc700150f9fa32",
+          "path": "src/catalog_json/review_consistency.py",
+          "symbol": "structural_disagreements"
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "7c2b92f7609b788fad3befb1a9b6f4e1aba103c63f9bec88a3b5bfdf4d318d43",
+          "path": "src/catalog_json/fair_queue.py",
+          "symbol": "FairWorkQueue.at_admission"
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "4a6fb21a5b64d560c66f49e69618cc145c0e75709c4992c826c8851f6e705869",
+          "path": "src/catalog_json/staged.py",
+          "symbol": "staged_batch"
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "1761c86194044aa4d4383d5e2d4eb9f98fda1abf4758cc51db970037552c0902",
+          "path": "src/catalog_json/dimension_review.py",
+          "symbol": "missing_dimension_evidence"
+        }
+      ],
+      "summary": "tools.save rejects inconsistent independent/final counts; FairWorkQueue rotates lanes and catalogues after ProviderGate; dimension evidence covers independent source and candidate inventories and binds both hashes",
+      "verified_at": "2026-10-13T22:47:07.478844+03:00"
+    },
     "source-review-representation": {
       "confidence": "verified",
       "evidence": [
