@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "revision": "e869a9a",
+  "files": [
+    {
+      "path": "docs/DRAWING-USAGE-RU.md",
+      "sha256": "780bc111b0f249e48e1a56d36863ea005f0b17c9cf376ce66fa575f90fa44b2b",
+      "public_byte_match": true
+    },
+    {
+      "path": "examples/drawing-usage/2026-10-13/usage.json",
+      "sha256": "d1c35175fe55e382466482c6b9401ae98b093df59be3ae9e52908fb3bacd5021",
+      "public_byte_match": true
+    }
+  ],
+  "model_calls": 0,
+  "registered_latest_tokens_verified": true,
+  "full_drawing_accuracy_claim": false
+}

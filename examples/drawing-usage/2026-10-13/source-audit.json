@@ -1,0 +1,72 @@
+{
+  "source_sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+  "model_calls": 0,
+  "whole_drawing_accuracy_established": false,
+  "method": "Independent repeated original-image inspections; selected endpoint audit, not a random accuracy sample. Pilot jobs remain completed and are not restarted.",
+  "outputs": [
+    {
+      "program": "1.4.27",
+      "round": 3,
+      "physical_page": 27,
+      "candidate_sha256": "d0f4d76d2e47be95b0921e1870e800b92bec5078561060c375a82e87da708876",
+      "status": "source_rejected",
+      "message": "Размеры67,5/135 неправильно отнесены к одному отверстию правой пары. Проверить точное положение острий и оси между парой, а также обе нижние выноски вертикальных размеров. Source_note, совмещающая концы разных размерных линий, требует отдельной проверки.",
+      "source_region": [
+        0.45,
+        0.04,
+        0.95,
+        0.24
+      ]
+    },
+    {
+      "program": "1.4.27",
+      "round": 1,
+      "physical_page": 39,
+      "candidate_sha256": "d69be4bf6cd1068ba066345aede1bb9a3469f9b7dcb30c8d29be18d5a2ab1160",
+      "status": "source_rejected",
+      "message": "Две стрелки выноски числа отверстий ошибочно описаны как ссылки на два разных отверстия. Проверить каждое острие отдельно; количество отверстий и число отмеченных стрелками объектов различаются.",
+      "source_region": [
+        0.69,
+        0.23,
+        0.94,
+        0.36
+      ]
+    },
+    {
+      "program": "1.4.27",
+      "round": 2,
+      "physical_page": 39,
+      "candidate_sha256": "9591dcbe5f5f3f55051c58558da8a646688f765f71d43fb925194386fa4b3b37",
+      "status": "source_rejected",
+      "message": "Описание «наискось» не соответствует ориентации прямоугольного элемента видаА. Перепроверить его верхнюю и нижнюю грани относительно горизонтальной оси.",
+      "source_region": [
+        0.69,
+        0.23,
+        0.94,
+        0.36
+      ]
+    },
+    {
+      "program": "1.4.27",
+      "round": 3,
+      "physical_page": 39,
+      "candidate_sha256": "a8efd45fca5d111de284bf3840fd5921bc263dbce69539eb762e227453221e00",
+      "status": "source_rejected",
+      "message": "Общая нижняя выноска габаритов ошибочно помещена в толщину плиты. Повторно проверить оба острия относительно нижнего наружного контура. Вывод о несогласованности диаметра по предполагаемой продольной3Dформе не подтверждён; не объявлять ошибку источника по одному фронтальному силуэту.",
+      "source_region": [
+        0.45,
+        0.47,
+        0.68,
+        0.515
+      ]
+    },
+    {
+      "program": "1.4.27",
+      "round": 2,
+      "physical_page": 27,
+      "candidate_sha256": "5e4a95eb9878a23887e625931fe48e182d42812e7a0721b0e50a0cf440569adf",
+      "status": "no_error_found_for_previously_flagged_endpoint_relationships_only",
+      "full_page_accuracy_verified": false
+    }
+  ]
+}
