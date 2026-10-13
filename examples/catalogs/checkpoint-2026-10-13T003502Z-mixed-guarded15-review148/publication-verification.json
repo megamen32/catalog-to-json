@@ -1,0 +1,44 @@
+{
+  "status": "PASS_CURRENT_SOURCE_VETO_AND_PRODUCER_GATE",
+  "accepted_pages": 166,
+  "source_pages": 980,
+  "independent_whole_catalogue_audit_complete": false,
+  "json_values_modified": false,
+  "files": [
+    {
+      "file": "opn.json",
+      "sha256": "5f62353f3d80b5a348d72b79637c0744ecbaa7e9130b23537f5df918149645f2",
+      "bytes": 1643664
+    },
+    {
+      "file": "opn-accepted-partial.xlsx",
+      "sha256": "e67c465db339fe40887ff463a19fb1ca5b07f2869d7b2b2c3cc849e07a7b072a",
+      "bytes": 438130
+    },
+    {
+      "file": "isolators.json",
+      "sha256": "2561e8779df6a866c245b2a04ef542d844a1a5ed0e865cc63d3b2923279808f2",
+      "bytes": 4672045
+    },
+    {
+      "file": "isolators-accepted-partial.xlsx",
+      "sha256": "d727df8cd5d4defc933a63df1e2512c542b0dfd30ab36986ae7cab285aee10bb",
+      "bytes": 805020
+    },
+    {
+      "file": "small.json",
+      "sha256": "8c949f256ea32990994aa32d3d0c4cb9388c5695a8b0f5d76348e7d748c98dfc",
+      "bytes": 395837
+    },
+    {
+      "file": "armature.json",
+      "sha256": "a66dbde104455008c0614a8d31cef455d73e1eab4d831872f63e6326b6159a23",
+      "bytes": 163685
+    },
+    {
+      "file": "innovations.json",
+      "sha256": "4a760a1134e3aadda494477ac0b40cf757476fe6b24d27bc52f2041f6d3a4273",
+      "bytes": 112945
+    }
+  ]
+}

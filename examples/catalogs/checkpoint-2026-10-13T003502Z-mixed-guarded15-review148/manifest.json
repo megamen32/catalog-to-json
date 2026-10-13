@@ -1,0 +1,177 @@
+{
+  "source_audit_status": {
+    "whole_catalogue_independent_acceptance": false,
+    "source_confirmed_repair_states": [
+      {
+        "catalogue": "opn",
+        "physical_page": 1,
+        "current_candidate_sha256": "2ec12dda22003a7545e19c880723d69069a0935b941a4e431fb5e7644b4ea38c",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 4,
+        "current_candidate_sha256": "0005013474ab2cc410d6cfa396939918e9b97e1b917d5cd20fd9ebf7248e0f52",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 5,
+        "current_candidate_sha256": "cf46bd3405f69cc9d1a9d6d2e78b39fbafa3a78972ae84c2ca32456fba70bcfc",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 6,
+        "current_candidate_sha256": "be19eeba453083c8b8c076a5621223e8e361bc65a5befb211c8dbcdabd56dec9",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 15,
+        "current_candidate_sha256": "b030c92ce545a84d75bcc08af709ee46fccaa3d506ae9a68fbb4574721d1e005",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 16,
+        "current_candidate_sha256": "3644c63fdd30fdbeb9549b5e75ba42aa90be71e7990cbaf42d235cf6af03c1e8",
+        "status": "under_native_agent_repair"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 17,
+        "current_candidate_sha256": "c517eae68adff0cdc4f230f3b5bccc31727701586d352c77db3e2f6b7a6e5507",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 22,
+        "current_candidate_sha256": "11dda13c0e7d5df0e48836d95d42bff14d5b199e813855bd6223ba8866703464",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 23,
+        "current_candidate_sha256": "fbddadfd57c97f82e304a91b06923161b617c85dbeb13aac0cf0e329fb1b9b88",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 25,
+        "current_candidate_sha256": "5e88389e1849061fb5dd38f8f392c280d2df6ccebff88c80eb495c7a98298fcf",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 30,
+        "current_candidate_sha256": "27e0fc79f73aad25164e62e2f7e38a60e5975c789daba1fe1bd85816f29a00a6",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 35,
+        "current_candidate_sha256": "22ab054e276ba9805bdd6c72689e596e3e864232a673d57252afe9502f5b9fd3",
+        "status": "under_native_agent_repair"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 36,
+        "current_candidate_sha256": "023720a265c42cee79bc21c08718ea47ccae98c0a1ff3b9a80670880955d9053",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 40,
+        "current_candidate_sha256": "764e668555f8b2bc83d799766c9ac7c28db75e2bfccf7a2da0df93ce0c998039",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 43,
+        "current_candidate_sha256": "e395efd9ff2af0240c322914e85fc047231676c38488466ae697586a1ed636a9",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 44,
+        "current_candidate_sha256": "cbeb49d8f99084289786e5b487dc2e887fad6ae700c854b277fd2a802e7261c7",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "isolators",
+        "physical_page": 77,
+        "current_candidate_sha256": "84aef02d94d7198f71468615105118ae3769b33b33eb1f94b68a41556068afec",
+        "status": "under_native_agent_repair"
+      },
+      {
+        "catalogue": "isolators",
+        "physical_page": 101,
+        "current_candidate_sha256": "1be47846d60eb421837548d008c2f09495aecb40d4beb91940dc3f68e6fd8893",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      }
+    ],
+    "known_bad_bytes_rejected_by_scheduler": "1.4.20; source veto retained from1.4.19",
+    "model_review_is_not_independent_visual_acceptance": true
+  },
+  "checkpoint_utc": "2026-10-13T003502Z",
+  "status": "incomplete",
+  "all_catalogues_complete": false,
+  "accepted_pages": 166,
+  "source_pages": 980,
+  "selection": "New producercomposition15 +reviewer148; historical accepted142 artifacts retain original provenance; no historical score inherited",
+  "catalogues": [
+    {
+      "id": "opn",
+      "source_sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+      "source_page_count": 60,
+      "accepted_pages": 58,
+      "json": "opn.json",
+      "json_sha256": "5f62353f3d80b5a348d72b79637c0744ecbaa7e9130b23537f5df918149645f2",
+      "wide_tables": 52,
+      "wide_literal_values_reopened_exact": true,
+      "excel": "opn-accepted-partial.xlsx",
+      "excel_sha256": "e67c465db339fe40887ff463a19fb1ca5b07f2869d7b2b2c3cc849e07a7b072a",
+      "exported_cells": 3347,
+      "excel_reopened_exact": true
+    },
+    {
+      "id": "isolators",
+      "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+      "source_page_count": 162,
+      "accepted_pages": 108,
+      "json": "isolators.json",
+      "json_sha256": "2561e8779df6a866c245b2a04ef542d844a1a5ed0e865cc63d3b2923279808f2",
+      "wide_tables": 90,
+      "wide_literal_values_reopened_exact": true,
+      "excel": "isolators-accepted-partial.xlsx",
+      "excel_sha256": "d727df8cd5d4defc933a63df1e2512c542b0dfd30ab36986ae7cab285aee10bb",
+      "exported_cells": 7773,
+      "excel_reopened_exact": true
+    },
+    {
+      "id": "small",
+      "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+      "source_page_count": 228,
+      "accepted_pages": 0,
+      "json": "small.json",
+      "json_sha256": "8c949f256ea32990994aa32d3d0c4cb9388c5695a8b0f5d76348e7d748c98dfc"
+    },
+    {
+      "id": "armature",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+      "source_page_count": 314,
+      "accepted_pages": 0,
+      "json": "armature.json",
+      "json_sha256": "a66dbde104455008c0614a8d31cef455d73e1eab4d831872f63e6326b6159a23"
+    },
+    {
+      "id": "innovations",
+      "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+      "source_page_count": 216,
+      "accepted_pages": 0,
+      "json": "innovations.json",
+      "json_sha256": "4a760a1134e3aadda494477ac0b40cf757476fe6b24d27bc52f2041f6d3a4273"
+    }
+  ]
+}

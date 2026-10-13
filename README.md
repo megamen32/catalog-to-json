@@ -64,3 +64,7 @@ Independent evaluation: [Catalog Extraction Benchmark](https://github.com/megame
 Готовые альтернативы: [список 24 парсеров, MCP и сервисов](docs/READY-PARSERS.md). Подключение локальных Docling/PyMuPDF4LLM: пакет [Agent Plugin 1.0](plugins/catalog-parsers), пример `fast-agent.parsers.config.example.yaml`. Это необязательные источники структурированных данных для агента; окончательная проверка идёт по оригиналу.
 
 В1.4.4 parser-plugin0.2.2 выдаёт JSON порциями до12000байт, чтобы FastAgent не вырезал середину длинных ответов. Переход выполняется по возвращённому next_offset. Native MCP/SDK-проверка восстановила весь Docling JSON страницы30 без потери байтов; точность1.4.4 на полном бенчмарке пока не измерена. [Результаты выбора инструментов](https://github.com/megamen32/catalog-extraction-benchmark/tree/main/examples/agent-routing/2026-10-12-body-routing-v1.4.2).
+
+## Выгрузки каталогов
+
+[Последняя частичная выгрузка:166/980 страниц](examples/catalogs/checkpoint-2026-10-13T003502Z-mixed-guarded15-review148) содержит JSON с фактическими версиями производителей и Excel с широкими таблицами. Принятие моделями и независимый визуальный аудит указаны отдельно; весь набор ещё не завершён. [Прежние версии](examples/catalogs) сохранены.
