@@ -1,0 +1,64 @@
+{
+  "snapshot_utc": "20261013T191849Z",
+  "total_pages": 980,
+  "accepted_pages": 499,
+  "drafts_included": true,
+  "archive": "all-catalogues-980-pages.zip",
+  "archive_bytes": 3486396,
+  "archive_sha256": "5bd547f8924b0456590c3245d7cb7e7b7ab2bc363e73f3f7c3e3e0bb1ed07118",
+  "json_bytes": 32271422,
+  "all980_content_equal_to_actual_source_bound_candidates": true,
+  "catalogues": [
+    {
+      "id": "opn",
+      "source": {
+        "filename": "opn.pdf",
+        "sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+        "page_count": 60
+      },
+      "pages": 60,
+      "accepted_pages": 60
+    },
+    {
+      "id": "isolators",
+      "source": {
+        "filename": "Katalog-IZOLJaTORY.pdf",
+        "sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+        "page_count": 162
+      },
+      "pages": 162,
+      "accepted_pages": 161
+    },
+    {
+      "id": "small",
+      "source": {
+        "filename": "Malyj-katalog.pdf",
+        "sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+        "page_count": 228
+      },
+      "pages": 228,
+      "accepted_pages": 226
+    },
+    {
+      "id": "innovations",
+      "source": {
+        "filename": "Katalog-Innovacionnye-izdelija-2021-2022.pdf",
+        "sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+        "page_count": 216
+      },
+      "pages": 216,
+      "accepted_pages": 52
+    },
+    {
+      "id": "armature",
+      "source": {
+        "filename": "Katalog-ARMATURA.pdf",
+        "sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "page_count": 314
+      },
+      "pages": 314,
+      "accepted_pages": 0
+    }
+  ],
+  "notice_ru": "Все сохранённые разборы. Непроверенные страницы включены и явно отмечены статусом; это не окончательно проверенный каталог. Версии создавших данные агентов находятся в candidate_producer/review_producer, а не в имени папки очереди. Исходные значения не изменены."
+}

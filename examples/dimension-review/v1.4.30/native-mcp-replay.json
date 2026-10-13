@@ -1,0 +1,20 @@
+{
+  "status": "PASS_NATIVE_MCP_RETAINED_REPLAY",
+  "program": {
+    "package_version": "1.4.30",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "a7553d87cba0cadc8b5f196fecec3003fc5c1103fabef75db66b57c431c0116f",
+    "python_version": "3.12.13"
+  },
+  "model_calls": 0,
+  "elapsed_seconds": 2.427,
+  "physical_page": 27,
+  "source_sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+  "candidate_sha256": "b8212442574eef8e18cf4f764182057a92ae473565fe5e9a5195368eaa678ce9",
+  "candidate_targets": 48,
+  "independent_source_targets": 56,
+  "old_pass_refused_before_save": true,
+  "candidate_unchanged": true,
+  "scope": "Native MCP tool replay of saved observer and review bytes; not a fresh Vision-model accuracy test"
+}
