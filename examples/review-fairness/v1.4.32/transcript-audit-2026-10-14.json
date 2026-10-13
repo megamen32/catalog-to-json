@@ -1,0 +1,206 @@
+{
+  "observed_unix": 1791933396.2059674,
+  "scope": "Three manually rendered original pages; four native role sessions. Retained logs only; no added model requests or benchmark runs. Active session metrics are a snapshot.",
+  "token_accounting": "Prompt totals include repeated context and cache hits. They are not unique extracted tokens or estimated paid uncached tokens. Anthropic null prompt total is preserved, not reported as zero.",
+  "cases": [
+    {
+      "catalogue": "small",
+      "pdf_page": 4,
+      "role": "extractor",
+      "attempt": 11,
+      "version": "1.4.15",
+      "model": "MiniMax-M3.1-Flash-Preview",
+      "completed": true,
+      "elapsed_seconds": 704.12,
+      "messages_at_snapshot": 122,
+      "successful_provider_responses": 61,
+      "tool_calls": 73,
+      "tools": {
+        "catalog__load_skill": 1,
+        "read_text_file": 3,
+        "catalog-parsers__parser_capabilities": 1,
+        "catalog__read_page_json": 1,
+        "catalog__read_review": 1,
+        "catalog__view_page": 1,
+        "catalog__read_external_audit": 1,
+        "bash": 2,
+        "catalog__view_region": 55,
+        "catalog__get_json_schema": 1,
+        "catalog__save_section": 3,
+        "catalog__finalize_page": 2,
+        "catalog__extract_direct": 1
+      },
+      "zoom_calls": 55,
+      "exact_duplicate_zoom_calls": 1,
+      "save_rejections": {
+        "schema": 1,
+        "required_evidence_or_other": 1
+      },
+      "prompt_tokens_including_cache": null,
+      "uncached_input_tokens_reported": 78414,
+      "cached_input_tokens": 3092433,
+      "completion_tokens": 25283,
+      "transcript_sha256": "cea2db1cacd90870203cda0c43b9c3a55df6065cfab0bed7c7f60b03137cc7d7"
+    },
+    {
+      "catalogue": "small",
+      "pdf_page": 4,
+      "role": "reviewer",
+      "attempt": 11,
+      "version": "1.4.32",
+      "model": "glm-5.3-flash",
+      "completed": true,
+      "elapsed_seconds": 468.066,
+      "messages_at_snapshot": 56,
+      "successful_provider_responses": 28,
+      "tool_calls": 34,
+      "tools": {
+        "catalog__load_skill": 1,
+        "catalog__view_page": 1,
+        "catalog__get_json_schema": 2,
+        "catalog__view_region": 14,
+        "catalog__save_source_observation": 2,
+        "catalog__read_page_json": 1,
+        "catalog__read_external_audit": 1,
+        "bash": 6,
+        "catalog__correct_source_observation": 3,
+        "catalog__save_review": 3
+      },
+      "zoom_calls": 14,
+      "exact_duplicate_zoom_calls": 0,
+      "save_rejections": {
+        "schema": 2,
+        "contradictory_counts": 1,
+        "required_evidence_or_other": 1
+      },
+      "prompt_tokens_including_cache": 1097700,
+      "uncached_input_tokens_reported": null,
+      "cached_input_tokens": 1032128,
+      "completion_tokens": 25581,
+      "transcript_sha256": "807f25449ade8d8b59d59b83c95fae323f898d01a6f9c8f454e894d644f80881"
+    },
+    {
+      "catalogue": "innovations",
+      "pdf_page": 181,
+      "role": "reviewer",
+      "attempt": 0,
+      "version": "1.4.31",
+      "model": "glm-5.3-flash",
+      "completed": true,
+      "elapsed_seconds": 297.856,
+      "messages_at_snapshot": 46,
+      "successful_provider_responses": 23,
+      "tool_calls": 29,
+      "tools": {
+        "catalog__load_skill": 1,
+        "catalog__read_page_json": 2,
+        "catalog__view_page": 1,
+        "catalog__get_json_schema": 2,
+        "catalog__read_source_layout": 1,
+        "catalog__read_source_artifact": 4,
+        "catalog__view_region": 8,
+        "catalog__save_source_observation": 4,
+        "catalog__read_external_audit": 1,
+        "catalog__correct_source_observation": 2,
+        "catalog__inspect_dimension_review_targets": 1,
+        "catalog__save_review": 2
+      },
+      "zoom_calls": 8,
+      "exact_duplicate_zoom_calls": 2,
+      "save_rejections": {
+        "required_evidence_or_other": 4,
+        "schema": 1
+      },
+      "prompt_tokens_including_cache": 833250,
+      "uncached_input_tokens_reported": null,
+      "cached_input_tokens": 770112,
+      "completion_tokens": 17089,
+      "transcript_sha256": "2bba4e176548514b471a7a65ed2b0274366e9dd4c1bc9b7a0243aa1bd70a0dcd"
+    },
+    {
+      "catalogue": "armature",
+      "pdf_page": 152,
+      "role": "reviewer",
+      "attempt": 0,
+      "version": "1.4.31",
+      "model": "glm-5.3-flash",
+      "completed": true,
+      "elapsed_seconds": 291.663,
+      "messages_at_snapshot": 50,
+      "successful_provider_responses": 25,
+      "tool_calls": 32,
+      "tools": {
+        "catalog__load_skill": 1,
+        "catalog-parsers__parser_capabilities": 1,
+        "catalog__view_page": 1,
+        "catalog__get_json_schema": 2,
+        "catalog__save_source_observation": 8,
+        "catalog__read_source_layout": 1,
+        "catalog__read_source_artifact": 4,
+        "catalog__view_region": 10,
+        "catalog__read_page_json": 1,
+        "catalog__read_external_audit": 1,
+        "catalog__save_review": 2
+      },
+      "zoom_calls": 10,
+      "exact_duplicate_zoom_calls": 1,
+      "save_rejections": {
+        "required_evidence_or_other": 6,
+        "schema": 1
+      },
+      "prompt_tokens_including_cache": 803036,
+      "uncached_input_tokens_reported": null,
+      "cached_input_tokens": 755392,
+      "completion_tokens": 13915,
+      "transcript_sha256": "49613e55dc5b177a85698b617bbeb04ae05a44db52a2593c77a6606e68ab8ab0"
+    }
+  ],
+  "findings": [
+    {
+      "case": "small4 automatic audit.compare_source",
+      "status": "confirmed_index_alignment_defect",
+      "detail": "compare_source zips source/candidate tables by array index. Source table0 is9-column specification; candidate table0 is4-column UI panel and candidate table1 is the specification. Auto-appended issues therefore compare unrelated headers/cells. Their paths must not be followed as source truth before explicit table alignment.",
+      "review11_issue_count": 93,
+      "example": {
+        "path": "tables[0].columns[0].label",
+        "source": "Поз.",
+        "candidate": "Марка"
+      },
+      "containment": "Source-bound external audit lead warns against deleting/reformatting data based on mismatched table counts/order; extractor12 actually read it. Matcher source is not changed by this read-only audit."
+    },
+    {
+      "case": "innovations181 reviewer31",
+      "status": "useful_and_source_confirmed",
+      "detail": "Original visibly reads шлейфовых. Reviewer found candidate0 шлейфовые plus an incorrect source-typo note. Corrected candidate1 preserves42 table cells and literal printed variants АС70/72 and АС95/141."
+    },
+    {
+      "case": "armature152 reviewer31",
+      "status": "inefficient_for_product_extraction",
+      "detail": "291.663s, repeated blind-observation saves and logo zooms; final repair concerned inserted dashes in branding. Text/photo page, no product table or dimensioned drawing. Literal difference is real; making it a full blocking repair is expensive for the catalogue objective."
+    },
+    {
+      "case": "small4 extractor15",
+      "status": "inefficient",
+      "detail": "704.120s,55 crops and73 tools; repeated overlapping crops of small screenshot annotations. Source contains software demonstration/UI screenshot rather than only a product sheet."
+    },
+    {
+      "case": "small4 reviewer32",
+      "status": "inefficient_and_disputed_finding",
+      "detail": "Large candidate response spilled to SDK temporary file, followed by6 shell reads. Blind source record initially1 table, final verdict claimed3; native save guard refused contradictory counts. Reviewer requested unproven З→Э substitutions using a different table as confirmation. Manual original crop reads З; glyph is recorded as disputed lead, not benchmark gold."
+    },
+    {
+      "case": "all3 reviewer sessions",
+      "status": "avoidable_contract_retries",
+      "detail": "Each first save_review attempted a schema-invalid verdict/shape before fetching review schema. Strict rejection protected deliverables but generated avoidable output and retries."
+    }
+  ],
+  "improvement_priorities": [
+    "Read review schema/template before the first attempted save.",
+    "Provide a compact paginated candidate view with table/row mapping instead of forcing shell navigation through spilled full JSON.",
+    "Map all original regions before freezing source counts; preserve logical-vs-physical table correspondence.",
+    "Never normalize ambiguous identifiers from neighbouring tables; use exact local original evidence or uncertainty.",
+    "Route decorative logos and unreadable illustrative screenshot details separately from blocking product facts, without deleting source content or weakening engineering checks."
+  ],
+  "action_taken": "Added source-bound external audit leads for small4. No candidate values hand-edited, no result accepted manually, no production restart. External-audit receipt confirms extractor12 read the leads. The index-matching implementation remains an owned follow-up; acceptance rules were not relaxed.",
+  "accuracy_claim": "No new global accuracy percentage or controlled31vs32 comparison inferred from this sample."
+}

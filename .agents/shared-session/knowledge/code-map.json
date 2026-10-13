@@ -173,6 +173,40 @@
       ],
       "summary": "Independent source comparison rejects real quantity/unit/condition changes while tolerating decimal presentation and verified metadata relocation; complete source parent headers required.",
       "verified_at": "2026-10-12T12:02:59.562798+03:00"
+    },
+    "transcript-audit-table-alignment": {
+      "confidence": "verified",
+      "evidence": [
+        "examples/review-fairness/v1.4.32/transcript-audit-2026-10-14.json"
+      ],
+      "git_head": "7cb5b1818fc07baea02d7925c1a1f33de5ce2e2d",
+      "key": "transcript-audit-table-alignment",
+      "kind": "failure-shield",
+      "locations": [
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "77df8792b762fd4c297cc8e509d294c24acb6ce8b583003e30e691ab8da23a52",
+          "path": "src/catalog_json/audit.py",
+          "symbol": "compare_source"
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "3c8fd058bfb73b6126ab5d8c7346e799ff9894ef404e4d4f0f9b1ed4c5e9317d",
+          "path": "src/catalog_json/tools.py",
+          "symbol": "CatalogTools.save"
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "3c8fd058bfb73b6126ab5d8c7346e799ff9894ef404e4d4f0f9b1ed4c5e9317d",
+          "path": "src/catalog_json/tools.py",
+          "symbol": "CatalogTools.external_audit"
+        }
+      ],
+      "summary": "Native session tool_calls is a dict; usage is in fast-agent-usage channels and prompt totals include cache. audit.compare_source zips source/candidate tables by array position; reordered multi-table pages get false cell diffs automatically appended by CatalogTools.save. small4 source9-column spec vs candidate4-column panel reproduces it. External source-bound leads in work/external-audit.json are read by extractor12; matcher implementation still needs an unambiguous alignment fix.",
+      "verified_at": "2026-10-14T02:19:10.413409+03:00"
     }
   },
   "schema_version": 1

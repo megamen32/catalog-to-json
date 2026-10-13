@@ -1,5 +1,7 @@
 ## Current continuation, 2026-10-14 02:07MSK: GLM recovered and native review resumed
 
+Manual transcript/original audit of3 pages: useful real word repair innovations181, inefficient logos armature152,55zoom/704s extractor15 and34calls/468s reviewer32 on small4. Confirmed owned defect: audit.compare_source pairs tables by index, producing false cell issues when source/candidate order differs. Follow-up implementation priority: unambiguous table mapping before comparison, keep ambiguous cases blocked; also early review-schema guidance and compact candidate reads. Source-bound containment leads on small4 are read by extractor12, no manual candidate edit or relaxed acceptance. Detailed measurements: examples/review-fairness/v1.4.32/transcript-audit-2026-10-14.json. Full catalogue review remains running/incomplete.
+
 Fresh explicit CodingEndpoint glm-5.3-flash probe returned200OK/30tokens. Removed only our own quota admission hold; same32 service resumed without restart. Native reviewer32 small4 attempt11 has at least2 successful model responses and0 recorded errors; fresh_repair lane selected.503 accepted/980 drafts retained; full review remains incomplete and no new page acceptance claimed yet. Evidence: examples/runtime-profiles/glm-recovered-2026-10-14.json. Earlier provider reset-date prediction is historical, superseded by live success.
 
 ## Historical blocker, 2026-10-14: GLM weekly/monthly quota exhausted
