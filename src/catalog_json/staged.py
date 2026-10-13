@@ -480,6 +480,10 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                                          'source_audit_rejected':rejection is not None})
                     path=item['work']/f'review-{attempt}.json';r['review_sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
                     r['review_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.reviewer,role_contract(agents,'reviewer'))
+                    dimension_evidence=r['review_producer'].get('dimension_evidence')
+                    if dimension_evidence:
+                        r['dimension_review']=json.loads((item['work']/dimension_evidence['file']).read_text())
+                    else:r.pop('dimension_review',None)
                     if artifact.accepts(candidate) and rejection is None:
                         item['reviewed_audit']=reviewed_audit_digest(item,agents)
                         if external_audit_digest(item['work'])!=item['reviewed_audit']:

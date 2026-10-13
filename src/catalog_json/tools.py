@@ -14,6 +14,7 @@ from .direct import inspect_page
 from .audit import compare_source
 from .observation_quotes import branding_quote_evidence
 from .review_consistency import structural_disagreements
+from .dimension_review import DimensionReview,dimension_targets,missing_dimension_evidence
 
 SKILLS = Path(__file__).parent / 'skills'
 if not SKILLS.exists():
@@ -60,11 +61,12 @@ def source_chunk(text,offset,length):
 
 class CatalogTools:
     def __init__(self, source=None, output=None, role='extractor', page=None, attempt=0,model=None,contract_sha256=None):
-        self.model=model;self.contract_sha256=contract_sha256;self.region_evidence={};self.branding_figure_quotes={}
+        self.model=model;self.contract_sha256=contract_sha256;self.region_evidence={};self.branding_figure_quotes={};self.dimension_reviews={}
         self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.disclosed={};self.latest_zoom={};self.corrections={};self.grids={};self.source_artifacts={};self.region_reads={};self.edit_baselines={};self.invalid_edit_baselines=set();self.source=None;self.output=None
         if source and output:self.open(source,output)
 
     def open(self,source,output):
+        self.dimension_reviews={}
         source=Path(source).resolve();output=Path(output).resolve()
         if output==source or source.parent==output:raise ValueError('Choose a separate output directory')
         with pymupdf.open(source) as doc:count=len(doc)
@@ -176,6 +178,48 @@ class CatalogTools:
         write_json(work/'direct.json',data);self.log(page,'extract_direct',routing_reasons=reasons)
         return data
 
+    def dimension_inventory(self,page):
+        candidate=PageContent.model_validate(self.read(page,'page')['candidate'])
+        return {'targets':dimension_targets(candidate),'instruction':'Inspect each repeated variant/view separately. Coverage is not proof of geometry correctness. Nonstandard labels and raster dimensions also require review; this inventory is a minimum, not an exhaustive detector.'}
+
+    def record_dimension(self,page,json_text):
+        if self.role!='reviewer':return {'saved':False,'error':'Only reviewer records dimension evidence'}
+        try:record=DimensionReview.model_validate_json(json_text)
+        except ValidationError as exc:return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False))}
+        disclosed=self.read(page,'page');candidate=PageContent.model_validate(disclosed['candidate'])
+        if record.figure_index>=len(candidate.figures):return {'saved':False,'error':'Unknown candidate figure'}
+        figure=candidate.figures[record.figure_index]
+        if record.label_index>=len(figure.labels):return {'saved':False,'error':'Unknown candidate label'}
+        if record.candidate_feature_quote not in figure.description and not (record.relation=='annotation' and record.candidate_feature_quote in figure.labels[record.label_index]):return {'saved':False,'error':'Quote the actual candidate description for this feature; do not invent a corrected association'}
+        box=record.source_box;feature=record.feature_box
+        import math
+        def valid_box(b):return all(math.isfinite(v) and 0<=v<=1 for v in b) and b[0]<b[2] and b[1]<b[3]
+        def inside(p):return len(p)==2 and all(math.isfinite(v) for v in p) and box[0]<=p[0]<=box[2] and box[1]<=p[1]<=box[3]
+        if not valid_box(box) or not valid_box(feature) or not inside(feature[:2]) or not inside(feature[2:]):return {'saved':False,'error':'Source crop must contain the measured feature box'}
+        if record.relation=='annotation' and any(s in figure.labels[record.label_index] for s in ('Ø','ø','φ','⌀','∅','±')):return {'saved':False,'error':'Diameter/tolerance labels cannot be classified as non-dimensional annotation'}
+        if not all(inside(p) for p in record.tip_points) or (record.relation in ('linear','diameter') and (len(record.tip_points)!=2 or record.tip_points[0]==record.tip_points[1])) or (record.relation=='leader' and not record.tip_points):
+            return {'saved':False,'error':'Follow two distinct tips for a linear/diameter dimension; a leader may have one tip. All tips must lie in the inspected crop.'}
+        if not any(p==page and tuple(box)==b for p,b,rotation in self.region_evidence):return {'saved':False,'error':'First view_region on this exact original crop including both tips and contour'}
+        if record.path_ids:
+            self.drawing_paths(page,box,record.path_ids)
+            from .drawing_geometry import drawing_geometry
+            with pymupdf.open(self.source) as doc:
+                p=doc[page-1];native=drawing_geometry(p,box,self.source_digest)
+                points=[point for path in native['paths'] if path['id'] in record.path_ids for item in path['items'] for point in item['points']]
+                if any(not any(math.hypot((tip[0]-point[0])*p.rect.width,(tip[1]-point[1])*p.rect.height)<=1.5 for point in points) for tip in record.tip_points):
+                    return {'saved':False,'error':'Claimed tips do not match selected native path vertices; inspect arrowhead paths rather than guessing coordinates'}
+        work=self.work(page);path=work/f'candidate-{self.attempt}.json'
+        if not path.exists():return {'saved':False,'error':'Evidence requires an exact candidate for this attempt'}
+        payload=record.model_dump()|{'candidate_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'source_sha256':self.source_digest,'physical_page':page,'attempt':self.attempt,'candidate_label':figure.labels[record.label_index],'figure_title':figure.title,'basis':'native_geometry_and_vision' if record.path_ids else 'vision','limits':'Source-grounded reviewer assertion; coordinate coverage does not certify semantic ownership.'}
+        existing=self.dimension_reviews.setdefault(page,{}).get((record.figure_index,record.label_index))
+        if existing and existing!=payload and not record.correction_reason.strip():return {'saved':False,'error':'Explain the new source evidence before replacing this dimension assertion; previous negative evidence stays in history'}
+        self.dimension_reviews[page][record.figure_index,record.label_index]=payload
+        records=list(self.dimension_reviews[page].values());evidence_file=work/f'dimension-review-{self.attempt}.json'
+        if evidence_file.exists():write_json(work/'.history'/evidence_file.stem/(hashlib.sha256(evidence_file.read_bytes()).hexdigest()+'.json'),json.loads(evidence_file.read_text()))
+        write_json(evidence_file,{'source_sha256':self.source_digest,'candidate_sha256':payload['candidate_sha256'],'physical_page':page,'attempt':self.attempt,'relations':records})
+        self.log(page,'record_dimension_review',file=evidence_file.name,sha256=hashlib.sha256(evidence_file.read_bytes()).hexdigest(),figure_index=record.figure_index,label_index=record.label_index,agrees_with_candidate=record.agrees_with_candidate)
+        return {'saved':True,'agrees_with_candidate':record.agrees_with_candidate,'instruction':'A false association must be reported as a blocking figures issue. Preserve the source crop and fix only that relationship.'}
+
     def read(self,page,kind):
         if self.role=='reviewer' and kind=='page' and 'save_source_observation' not in self.seen.get(page,set()):
             raise ValueError('First independently inspect the original and save_source_observation BEFORE seeing the candidate')
@@ -270,6 +314,12 @@ class CatalogTools:
                              candidate_content_sha256=hashlib.sha256(json.dumps(disclosed['candidate'],sort_keys=True).encode()).hexdigest())
                     return {'saved':False,'error':'Final review contradicts its independent source observation. Do NOT tell the extractor to delete tables or duplicate table rows into figure labels. Reinspect the original region; correct_source_observation with source evidence if the observation classified a table as a figure, or correct the final counts/checks if they were wrong. Then save_review again. No candidate data was changed.',
                             'review_disagreements':conflicts}
+                if model.verdict=='pass' or any(c.category=='figures' and c.passed for c in model.checks):
+                    candidate=PageContent.model_validate(disclosed['candidate']);candidate_file=work/f'candidate-{self.attempt}.json'
+                    candidate_sha=hashlib.sha256(candidate_file.read_bytes()).hexdigest() if candidate_file.exists() else None
+                    records=list(self.dimension_reviews.get(page,{}).values())
+                    missing=missing_dimension_evidence(candidate,records,candidate_sha)
+                    if missing:return {'saved':False,'error':'A blanket figures PASS cannot certify dimension ownership. Inspect each listed source view/variant, follow tips and extension lines, and call record_dimension_review. If unresolved or wrong, mark figures failed and report the exact relationship; never borrow a label from another view.', 'missing_dimension_relations':missing}
                 if model.verdict=='pass' and disclosed['independent_comparison']:
                     return {'saved':False,'error':'Independent source observations contradict the claimed pass. Report ALL differences and any additional findings.', 'differences':disclosed['independent_comparison']}
             if kind=='review' and model.verdict!='pass':
@@ -286,6 +336,9 @@ class CatalogTools:
         if prior.exists():write_json(work/'.history'/prior.stem/(hashlib.sha256(prior.read_bytes()).hexdigest()+'.json'),json.loads(prior.read_text()))
         write_json(work/filename,model.model_dump())
         quote_metadata={}
+        if kind=='review' and self.dimension_reviews.get(page):
+            dimension_file=work/f'dimension-review-{self.attempt}.json'
+            quote_metadata={'dimension_file':dimension_file.name,'dimension_sha256':hashlib.sha256(dimension_file.read_bytes()).hexdigest()}
         if kind=='observation':
             quote_file=work/f'source-observation-quotes-{self.attempt}.json'
             if quote_file.exists():write_json(work/'.history'/quote_file.stem/(hashlib.sha256(quote_file.read_bytes()).hexdigest()+'.json'),json.loads(quote_file.read_text()))
@@ -487,6 +540,14 @@ def server(context):
             """Assemble validated sections into complete JSON. After a full save, apply only later section edits and retain all untouched tables/text/figures and omitted metadata. Same source/model/contract/attempt; new indices contiguous. An unbound read baseline is refused: rebuild ALL sections and explicitly set preserve_existing=False for a fresh page, or make a full save."""
             return context.finalize(page,title,printed_page,source_notes,uncertainties,preserve_existing)
     else:
+        @mcp.tool()
+        def inspect_dimension_review_targets(page: int) -> dict:
+            """List minimum candidate dimension relationships requiring separate source-view coverage. Each repeated figure/label has its own identity; nonstandard labels still require full original-image review."""
+            return context.dimension_inventory(page)
+        @mcp.tool()
+        def record_dimension_review(page: int,json_text: str) -> dict:
+            """Record source-bound relationship evidence. JSON: figure_index,label_index,view,relation(linear/diameter/leader/annotation),source_box,feature_box,tip_points,path_ids,source_feature,candidate_feature_quote,agrees_with_candidate,evidence, optional correction_reason. First view_region on source_box including tips/extension lines/contour; quote candidate description exactly. annotation classifies actual non-dimensional dates/identifiers after source inspection, with no invented arrows; diameter/tolerance cannot use it. Native path IDs optional for scans. Changed records need correction_reason; all revisions retained. False/unresolved relations prohibit blanket figures PASS."""
+            return context.record_dimension(page,json_text)
         @mcp.tool()
         def save_source_observation(page: int,json_text: str,literal_quotes: list[dict]|None=None) -> dict:
             """Save blind PageContent BEFORE candidate. Branding literal_quotes items use {block_index,box,visible_quote,basis:text_layer|vision,conflict:null|source_notes text,rotation:0}. For a nontechnical branding caption represented as a figure label, use {figure_index,label_index,source_kind:branding,...} instead of block_index. View each exact box first. Numbers/operators/diameter/view signs cannot be reclassified. Quote original language. Native text and visible quote remain separate; an actual conflict needs a source note and Vision evidence."""

@@ -1,0 +1,39 @@
+{
+  "program": "1.4.29",
+  "model_calls": 0,
+  "scope": "Retained false PASS replay; proves evidence coverage gate, not model geometry accuracy",
+  "source_sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+  "cases": [
+    {
+      "case": "matched21",
+      "physical_page": 27,
+      "candidate_sha256": "b8212442574eef8e18cf4f764182057a92ae473565fe5e9a5195368eaa678ce9",
+      "saved_review_sha256": "688aa33cccccb3a25e4ecff1c11451c6cc7ae9e6274177881e2ea743945433bb",
+      "historical_verdict": "pass",
+      "blanket_figures_pass_refused": true,
+      "missing_source_relationships": 48,
+      "candidate_unchanged": true
+    },
+    {
+      "case": "pilot27-r3-page27",
+      "physical_page": 27,
+      "candidate_sha256": "d0f4d76d2e47be95b0921e1870e800b92bec5078561060c375a82e87da708876",
+      "saved_review_sha256": "105f921f72f6b25461e4d229250c53e4b0d74118aa5fa045a287f43da87b2ba0",
+      "historical_verdict": "pass",
+      "blanket_figures_pass_refused": true,
+      "missing_source_relationships": 48,
+      "candidate_unchanged": true
+    },
+    {
+      "case": "pilot27-r3-page39",
+      "physical_page": 39,
+      "candidate_sha256": "a8efd45fca5d111de284bf3840fd5921bc263dbce69539eb762e227453221e00",
+      "saved_review_sha256": "6ef78bd562048c4eef09110ee7c1677ebd4eb372ef09950c2da59c76b75eeb36",
+      "historical_verdict": "pass",
+      "blanket_figures_pass_refused": true,
+      "missing_source_relationships": 13,
+      "candidate_unchanged": true
+    }
+  ],
+  "whole_drawing_accuracy_established": false
+}

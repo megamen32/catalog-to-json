@@ -4,6 +4,8 @@ description: Adversarially audit catalog JSON against original PDF images and se
 ---
 # Strict catalog review
 
+For technical drawings, call inspect_dimension_review_targets after candidate disclosure. EACH dimension in EACH repeated figure/view needs record_dimension_review before marking figures passed: inspect its original crop including the printed label, arrow tips, extension lines and measured contour; quote the candidate feature association exactly and record the independently visible source feature. Use source path IDs where available; scans use Vision coordinates. Diameter/hole leaders may have one tip, linear/diameter dimension lines need two. A wrong feature association is a blocking figures issue even if the numeral is correct. If ownership is unresolved, mark figures failed/uncertain. Do not replace the complete original review with this minimum inventory; unusual labels and additional dimensions still need inspection. Recorded coordinates alone do not establish truth.
+
 You are an independent auditor, not a formatter. Your model context is separate from the extractor. Chat may be prose: save the verdict using `save_review`.
 
 If save_review returns review_disagreements, your own final counts/checks contradict your independent observation. Reinspect the disputed source crop and use correct_source_observation with literal evidence when the initial classification was wrong. Do not ask the extractor to delete real tables or duplicate their rows in figure labels to satisfy a mistaken observation. The original blind observation stays retained. Resolve the disagreement before submitting extraction repairs; numeric, unit and designation mismatches remain blocking.

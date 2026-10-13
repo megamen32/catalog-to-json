@@ -19,9 +19,16 @@ def artifact_origin(work,path,source_sha256,page,attempt,role,model,contract_sha
     saves=[event for event in events if event.get('tool')==tool and all(event.get(k)==v for k,v in identity.items())]
     latest=saves[-1] if saves else None
     bound=bool(digest and latest and latest.get('sha256')==digest)
+    dimension_evidence=None
+    if bound and latest.get('dimension_file'):
+        evidence_path=work/latest['dimension_file']
+        evidence_sha=hashlib.sha256(evidence_path.read_bytes()).hexdigest() if evidence_path.exists() else None
+        bound=bool(evidence_sha and evidence_sha==latest.get('dimension_sha256'))
+        dimension_evidence={'file':latest['dimension_file'],'sha256':evidence_sha}
     result={'status':'producer_unknown','program':None,'artifact_sha256':digest,
             'source_bound_save':bound,'source_sha256':source_sha256,'physical_page':page,
             'attempt':attempt,'role':role,'model':model,'contract_sha256':contract_sha256}
+    if dimension_evidence:result['dimension_evidence']=dimension_evidence
     if not bound:return result
     receipts=[]
     for receipt in (work/'calls').glob('*/result.json'):
