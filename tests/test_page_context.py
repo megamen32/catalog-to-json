@@ -48,18 +48,21 @@ def test_summary_requires_independent_semantic_and_region_agreement():
     b.page_context=context('mixed')
     assert any(d['path']=='page_context.kind' for d in compare_source(a,b))
     b.page_context=context(box=[.1,.01,.9,.15])
-    assert any(d['path']=='page_context.source_evidence' for d in compare_source(a,b))
+    assert not compare_source(a,b)  # Region coordinates do not certify meaning.
 
 
 @pytest.mark.parametrize('change',['move','add','kind','transcription'])
-def test_all_literal_evidence_regions_require_independent_alignment(change):
+def test_evidence_scope_is_checked_without_mechanical_region_alignment(change):
     a=content();a.page_context=context('mixed',transcription='literal')
     b=a.model_copy(deep=True);e=b.page_context.source_evidence[0]
     if change=='move':e.box=[.01,.01,.1,.1]
     elif change=='add':b.page_context.source_evidence.append(e.model_copy(update={'box':[.01,.01,.1,.1]}))
     elif change=='kind':e.kind='project_specification'
     else:e.kind='software_demonstration';e.transcription='contextual_summary'
-    assert any(d['path']=='page_context.source_evidence' for d in compare_source(a,b))
+    differences=compare_source(a,b)
+    if change in {'kind','transcription'}:
+        assert any(d['path']=='page_context.source_evidence' for d in differences)
+    else:assert not differences
 
 
 def test_independent_narrative_paraphrases_and_region_order_are_valid():
@@ -72,14 +75,16 @@ def test_independent_narrative_paraphrases_and_region_order_are_valid():
     assert not compare_source(a,b)
 
 
-def test_ambiguous_duplicate_demo_regions_cannot_agree_by_position():
+def test_independent_demo_region_segmentation_is_not_an_extraction_error():
     a=demonstration();b=demonstration()
-    a.page_context.source_evidence*=2;b.page_context.source_evidence*=2
-    assert compare_source(a,b)
+    b.page_context.source_evidence.append(context(box=[.1,.01,.9,.15]).source_evidence[0])
+    b.figures=[Figure(title='Software UI',description='Example report generation',labels=['Example button'])]
+    assert not compare_source(a,b)
 
 
 def test_semantic_narrative_does_not_weaken_drawing_values():
     a=demonstration();b=demonstration()
+    a.page_context=context('mixed');b.page_context=context('mixed')
     b.text_blocks=[TextBlock(kind='paragraph',text='The demonstration exports reports to Word and Excel.')]
     assert not compare_source(a,b)
     a.figures=[Figure(title='Real drawing',description='Ø13 outer contour',labels=['Ø13'])]

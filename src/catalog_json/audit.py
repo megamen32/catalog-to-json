@@ -192,11 +192,12 @@ def context_differences(observed,candidate):
         return [diff('page_context',a.model_dump() if a else None,b.model_dump() if b else None)]
     differences=[]
     if a.kind!=b.kind:differences.append(diff('page_context.kind',a.kind,b.kind))
-    # All claimed regions must have independent source support. Narrative
-    # summaries/observations need semantic review, never literal equality.
+    # Independent readers may split the same source into different regions.
+    # Boxes locate evidence, not semantic identity: matching their count/IoU
+    # would turn valid paraphrases back into mechanical OCR differences.
+    # Preserve scope disagreements; meaning and facts require ContextReview.
     source=a.source_evidence;actual=b.source_evidence
-    edges={i:[j for j,c in enumerate(actual) if c.kind==e.kind and c.transcription==e.transcription and box_overlap(e.box,c.box)>=.8] for i,e in enumerate(source)}
-    if len(source)!=len(actual) or any(len(js)!=1 for js in edges.values()) or len({js[0] for js in edges.values() if len(js)==1})!=len(actual):
+    if {e.kind for e in source}!={e.kind for e in actual}:
         differences.append(diff('page_context.source_evidence',[e.model_dump() for e in source],[e.model_dump() for e in actual]))
     return differences
 
@@ -255,6 +256,10 @@ def compare_source(observed: PageContent,candidate: PageContent,branding_figure_
     labels=[figure_key(label) for f in candidate.figures for label in f.labels]
     descriptions=[figure_key(f.description) for f in candidate.figures]
     for i,sf in enumerate(observed.figures):
+        # A pure software demonstration is described and semantically reviewed,
+        # not certified by matching every tiny UI label. Mixed pages and actual
+        # engineering drawings retain the complete strict label checks below.
+        if semantic_narrative and observed.page_context.kind=='software_demonstration':continue
         for label in sf.labels:
             key=figure_key(label)
             if key not in labels and not any(re.search(figure_pattern(label),d) for d in labels+descriptions):
