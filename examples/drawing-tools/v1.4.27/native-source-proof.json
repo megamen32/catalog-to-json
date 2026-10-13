@@ -1,0 +1,255 @@
+{
+  "status": "PASS",
+  "version": "1.4.27",
+  "provider_calls": 0,
+  "accuracy_trial": false,
+  "source_sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+  "dimensions": [
+    {
+      "page": 27,
+      "box": [
+        0.54,
+        0.073,
+        0.711,
+        0.16
+      ],
+      "query": "45",
+      "transport_bytes": 3830,
+      "candidate_count": 2,
+      "nearest": {
+        "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page27-p710",
+        "item_index": 0,
+        "endpoints": [
+          [
+            0.6313678085988293,
+            0.12454161466763465
+          ],
+          [
+            0.6254025170916606,
+            0.12454161466763465
+          ]
+        ],
+        "length_pdf_points": 3.550994873046875,
+        "label_distance_pdf_points": 3.4322586059570312,
+        "nearby_filled_triangles_at_each_end": [
+          [
+            {
+              "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page27-p711",
+              "tip_candidate": [
+                0.6373331001059981,
+                0.12454145154763184
+              ]
+            }
+          ],
+          [
+            {
+              "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page27-p712",
+              "tip_candidate": [
+                0.6194378920459567,
+                0.12454156029430039
+              ]
+            }
+          ]
+        ]
+      },
+      "all_returned_coordinates_match_native_source": true
+    },
+    {
+      "page": 27,
+      "box": [
+        0.54,
+        0.073,
+        0.711,
+        0.16
+      ],
+      "query": "67.5",
+      "transport_bytes": 3833,
+      "candidate_count": 2,
+      "nearest": {
+        "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page27-p705",
+        "item_index": 0,
+        "endpoints": [
+          [
+            0.6582044174706414,
+            0.12454161466763465
+          ],
+          [
+            0.6432970586902371,
+            0.12454161466763465
+          ]
+        ],
+        "length_pdf_points": 8.873992919921932,
+        "label_distance_pdf_points": 3.4322586059570312,
+        "nearby_filled_triangles_at_each_end": [
+          [
+            {
+              "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page27-p706",
+              "tip_candidate": [
+                0.6641697089778101,
+                0.12454145154763184
+              ]
+            }
+          ],
+          [
+            {
+              "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page27-p707",
+              "tip_candidate": [
+                0.637331920981868,
+                0.12454156029430039
+              ]
+            }
+          ]
+        ]
+      },
+      "all_returned_coordinates_match_native_source": true
+    },
+    {
+      "page": 27,
+      "box": [
+        0.54,
+        0.073,
+        0.711,
+        0.16
+      ],
+      "query": "135",
+      "transport_bytes": 4975,
+      "candidate_count": 3,
+      "nearest": {
+        "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page27-p715",
+        "item_index": 0,
+        "endpoints": [
+          [
+            0.6164560409195036,
+            0.13629147471067224
+          ],
+          [
+            0.6582047250682406,
+            0.13629147471067224
+          ]
+        ],
+        "length_pdf_points": 24.85198974609375,
+        "label_distance_pdf_points": 3.4321365356445312,
+        "nearby_filled_triangles_at_each_end": [
+          [
+            {
+              "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page27-p716",
+              "tip_candidate": [
+                0.6104907494123348,
+                0.13629156533289602
+              ]
+            }
+          ],
+          [
+            {
+              "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page27-p717",
+              "tip_candidate": [
+                0.6641697089778101,
+                0.13629131159066943
+              ]
+            }
+          ]
+        ]
+      },
+      "all_returned_coordinates_match_native_source": true
+    },
+    {
+      "page": 39,
+      "box": [
+        0.45,
+        0.1,
+        0.8,
+        0.28
+      ],
+      "query": "274",
+      "transport_bytes": 2680,
+      "candidate_count": 1,
+      "nearest": {
+        "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page39-p2170",
+        "item_index": 0,
+        "endpoints": [
+          [
+            0.5331410779983435,
+            0.13655072676848545
+          ],
+          [
+            0.5331410779983435,
+            0.19527929261887061
+          ]
+        ],
+        "length_pdf_points": 49.4429931640625,
+        "label_distance_pdf_points": 5.598251342773494,
+        "nearby_filled_triangles_at_each_end": [
+          [
+            {
+              "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page39-p2171",
+              "tip_candidate": [
+                0.5331406166019447,
+                0.1299988034241571
+              ]
+            }
+          ],
+          [
+            {
+              "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page39-p2172",
+              "tip_candidate": [
+                0.5331415906610087,
+                0.2018306450431891
+              ]
+            }
+          ]
+        ]
+      },
+      "all_returned_coordinates_match_native_source": true
+    },
+    {
+      "page": 39,
+      "box": [
+        0.45,
+        0.1,
+        0.8,
+        0.28
+      ],
+      "query": "500",
+      "transport_bytes": 2681,
+      "candidate_count": 1,
+      "nearest": {
+        "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page39-p2176",
+        "item_index": 0,
+        "endpoints": [
+          [
+            0.5549298052025418,
+            0.21972409375238788
+          ],
+          [
+            0.7217162982228447,
+            0.21972409375238788
+          ]
+        ],
+        "length_pdf_points": 99.2839965820313,
+        "label_distance_pdf_points": 5.5982513427734375,
+        "nearby_filled_triangles_at_each_end": [
+          [
+            {
+              "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page39-p2177",
+              "tip_candidate": [
+                0.5456635300597703,
+                0.21972443811683828
+              ]
+            }
+          ],
+          [
+            {
+              "path_id": "s300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2-page39-p2178",
+              "tip_candidate": [
+                0.730982573365616,
+                0.2197237493879375
+              ]
+            }
+          ]
+        ]
+      },
+      "all_returned_coordinates_match_native_source": true
+    }
+  ],
+  "elapsed_seconds": 8.07
+}

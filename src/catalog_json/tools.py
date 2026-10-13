@@ -157,6 +157,13 @@ class CatalogTools:
         return self.source_payload(page,'drawing-paths',{'physical_page':page,'source_sha256':self.source_digest,'box':box,
                                   'coordinate_system':result['coordinate_system'],'paths':[paths[i] for i in path_ids]})
 
+    def dimension_candidates(self,page,box,label):
+        from .drawing_geometry import dimension_candidates
+        self.work(page)
+        with pymupdf.open(self.source) as doc:result=dimension_candidates(doc[page-1],box,label,self.source_digest)
+        self.log(page,'trace_dimension_candidates',box=box,label=label,matching_labels=len(result['matching_labels']))
+        return self.source_payload(page,'dimension-candidates',result)
+
     def direct(self,page):
         work=self.work(page)
         with pymupdf.open(self.source) as doc:
@@ -437,6 +444,10 @@ def server(context):
     def read_drawing_paths(page: int,box: list[float],path_ids: list[str]) -> dict:
         """Read exact native endpoints/control points, stroke/fill/style for1..40 indexed path IDs in the same original region. Large paths use read_source_artifact pagination; no segment is truncated. Small filled triangles may be arrowheads or other marks: verify the original."""
         return context.drawing_paths(page,box,path_ids)
+    @mcp.tool()
+    def trace_dimension_candidates(page: int,box: list[float],label: str) -> dict:
+        """Find literal shaft endpoints AND separate triangle tip candidates near one numeric dimension in a selected original region. Up to6 nearest parallel lines per label, each with filled triangle marks near both ends. Shaft ends may be head bases; use tip candidates and extension lines. Heuristic, not certified arrows or ownership: check original view_region. Empty results need Vision/full geometry index. Path IDs bind exact PDF and page; no feature names/units inferred."""
+        return context.dimension_candidates(page,box,label)
     @mcp.tool()
     def extract_direct(page: int) -> dict:
         """Run local AnyDoc; return structured candidate, fallible text and reasons for Vision. No credentials or cloud upload."""

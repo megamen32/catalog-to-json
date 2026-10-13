@@ -5,6 +5,7 @@ https://pymupdf.readthedocs.io/en/latest/page.html#Page.rotation_matrix
 No geometry, part names or dimension ownership are inferred from the text.
 """
 import math
+import re
 import pymupdf
 
 
@@ -66,3 +67,51 @@ def drawing_geometry(page,box,source_sha256=None):
             'coordinate_system':'normalized original page viewer, top-left origin; rotation applied',
             'words':words,'paths':paths,'small_filled_triangles':triangles,
             'limits':'Native source evidence, not inferred feature ownership. Segmented circles may have solid dashes metadata. Hidden text/vector content can differ from the visible original; inspect a zoom containing the label, both endpoints and measured contour. Raster drawings require Vision; empty native paths do not prove an absent drawing.'}
+
+
+def dimension_candidates(page,box,label,source_sha256=None):
+    """Shortlist literal line endpoints beside a numeric label, without naming a part."""
+    label=label.strip()
+    if not re.fullmatch(r'[φØø⌀]?\s*\d+(?:[.,]\d+)?',label):raise ValueError('Use one printed numeric dimension, optionally with its diameter glyph')
+    def key(text):return re.sub(r'^[φØø⌀]\s*','',text.strip()).replace(',','.')
+    data=drawing_geometry(page,box,source_sha256);width,height=page.rect.width,page.rect.height
+    def native(point):return [point[0]*width,point[1]*height]
+    triangles=[]
+    for triangle in data['small_filled_triangles']:
+        vertices=[native(v) for v in triangle['vertices']]
+        edges=sorted((math.dist(vertices[a],vertices[b]),a,b) for a,b in ((0,1),(1,2),(0,2)))
+        tip=None
+        if edges[0][0]<edges[1][0]*.5:
+            tip=next(i for i in range(3) if i not in edges[0][1:])
+        triangles.append((triangle['path_id'],vertices,None if tip is None else triangle['vertices'][tip]))
+    lines=[]
+    for path in data['paths']:
+        if path['stroke'] is None:continue
+        for item in path['items']:
+            if item['kind']!='l':continue
+            a,b=[native(p) for p in item['points']];dx=b[0]-a[0];dy=b[1]-a[1];length=math.hypot(dx,dy)
+            if length<.2:continue
+            attached=[]
+            for end in (a,b):
+                attached.append([{'path_id':identifier,'tip_candidate':tip} for identifier,vertices,tip in triangles if min(math.dist(end,v) for v in vertices)<=1.5])
+            if not all(attached):continue
+            lines.append((path,item,a,b,dx/length,dy/length,length,attached))
+    labels=[]
+    for word in data['words']:
+        if key(word['text'])!=key(label):continue
+        if word['direction'] is None:continue
+        x0,y0,x1,y1=word['box'];center=native([(x0+x1)/2,(y0+y1)/2]);direction=word['direction'];candidates=[]
+        for path,item,a,b,ux,uy,length,attached in lines:
+            if abs(ux*direction[1]-uy*direction[0])>.04:continue
+            vx=center[0]-a[0];vy=center[1]-a[1];projection=vx*ux+vy*uy;distance=abs(vx*uy-vy*ux)
+            margin=max((x1-x0)*width,(y1-y0)*height)/2
+            if not -margin<=projection<=length+margin or distance>40:continue
+            candidates.append({'path_id':path['id'],'item_index':item['index'],'endpoints':item['points'],
+                               'length_pdf_points':length,'label_distance_pdf_points':distance,
+                               'nearby_filled_triangles_at_each_end':attached})
+        candidates.sort(key=lambda c:c['label_distance_pdf_points'])
+        labels.append({'label':word,'candidate_count':len(candidates),'candidates':candidates[:6],
+                       'selection_limit':6,'selection':'nearest parallel source lines with small filled triangles near both ends; these are candidates, not certified dimension lines'})
+    return {'physical_page':page.number+1,'source_sha256':source_sha256,'box':list(box),'query':label,
+            'coordinate_system':data['coordinate_system'],'matching_labels':labels,
+            'limits':'Literal shaft endpoints; no measured-feature name, physical length or unit is inferred. A narrow triangle vertex opposite its uniquely short base is returned as a tip candidate, not a certified arrow. Shaft ends can lie at arrowhead bases: inspect tip candidates and extension lines, not just shaft ends. Marks can be unrelated; ranking is a heuristic and drawings need not be to scale. Verify the original. Empty candidates can mean a scan, outlined text, callout, different arrowhead geometry or unresolved evidence; use Vision/full geometry index. All source paths remain accessible through read_drawing_paths.'}
