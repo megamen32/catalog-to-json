@@ -1,0 +1,202 @@
+{
+  "source_audit_status": {
+    "whole_catalogue_independent_acceptance": false,
+    "source_confirmed_repair_states": [
+      {
+        "catalogue": "opn",
+        "physical_page": 1,
+        "current_candidate_sha256": "2ec12dda22003a7545e19c880723d69069a0935b941a4e431fb5e7644b4ea38c",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 4,
+        "current_candidate_sha256": "0005013474ab2cc410d6cfa396939918e9b97e1b917d5cd20fd9ebf7248e0f52",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 5,
+        "current_candidate_sha256": "cf46bd3405f69cc9d1a9d6d2e78b39fbafa3a78972ae84c2ca32456fba70bcfc",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 6,
+        "current_candidate_sha256": "be19eeba453083c8b8c076a5621223e8e361bc65a5befb211c8dbcdabd56dec9",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 15,
+        "current_candidate_sha256": "b030c92ce545a84d75bcc08af709ee46fccaa3d506ae9a68fbb4574721d1e005",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 16,
+        "current_candidate_sha256": "e67924c60a638da7655b2ab3c1cab57bfa9bfce8bf33772c98863dd6bd4e0844",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 17,
+        "current_candidate_sha256": "c517eae68adff0cdc4f230f3b5bccc31727701586d352c77db3e2f6b7a6e5507",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 22,
+        "current_candidate_sha256": "11dda13c0e7d5df0e48836d95d42bff14d5b199e813855bd6223ba8866703464",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 23,
+        "current_candidate_sha256": "fbddadfd57c97f82e304a91b06923161b617c85dbeb13aac0cf0e329fb1b9b88",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 25,
+        "current_candidate_sha256": "5e88389e1849061fb5dd38f8f392c280d2df6ccebff88c80eb495c7a98298fcf",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 27,
+        "current_candidate_sha256": "0d8f2a29f3d9cba9ad9dbe996d608f6b3242c85d67faf95b25798eaf490fbbd7",
+        "status": "under_native_agent_repair"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 30,
+        "current_candidate_sha256": "27e0fc79f73aad25164e62e2f7e38a60e5975c789daba1fe1bd85816f29a00a6",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 35,
+        "current_candidate_sha256": "a79d0a395a5d69176276a2a76b7066939dfb920e419be92b65033af7211a0ac0",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 36,
+        "current_candidate_sha256": "023720a265c42cee79bc21c08718ea47ccae98c0a1ff3b9a80670880955d9053",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 39,
+        "current_candidate_sha256": "0d5ae00b35dd721f3897ee8fd8342cf4476dc54cc10d6c550e675258bb85ae38",
+        "status": "under_native_agent_repair"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 40,
+        "current_candidate_sha256": "764e668555f8b2bc83d799766c9ac7c28db75e2bfccf7a2da0df93ce0c998039",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 43,
+        "current_candidate_sha256": "e395efd9ff2af0240c322914e85fc047231676c38488466ae697586a1ed636a9",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "opn",
+        "physical_page": 44,
+        "current_candidate_sha256": "cbeb49d8f99084289786e5b487dc2e887fad6ae700c854b277fd2a802e7261c7",
+        "status": "repaired_and_independently_rechecked_with_scope"
+      },
+      {
+        "catalogue": "isolators",
+        "physical_page": 77,
+        "current_candidate_sha256": "84aef02d94d7198f71468615105118ae3769b33b33eb1f94b68a41556068afec",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      },
+      {
+        "catalogue": "isolators",
+        "physical_page": 101,
+        "current_candidate_sha256": "1be47846d60eb421837548d008c2f09495aecb40d4beb91940dc3f68e6fd8893",
+        "status": "fresh_model_acceptance_awaiting_independent_recheck"
+      }
+    ],
+    "known_bad_bytes_rejected_by_scheduler": "1.4.20; source veto retained from1.4.19",
+    "model_review_is_not_independent_visual_acceptance": true
+  },
+  "exporter_program": {
+    "package_version": "1.4.27",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "74e2b403e6aececff5f06b4f84bf50c3509655e971cb633001b402f708660e18",
+    "python_version": "3.12.13"
+  },
+  "checkpoint_utc": "2026-10-13T030723Z",
+  "status": "incomplete",
+  "all_catalogues_complete": false,
+  "accepted_pages": 219,
+  "source_pages": 980,
+  "selection": "New producercomposition15 +reviewer148; historical accepted142 artifacts retain original provenance; no historical score inherited",
+  "catalogues": [
+    {
+      "id": "opn",
+      "source_sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+      "source_page_count": 60,
+      "accepted_pages": 58,
+      "json": "opn.json",
+      "json_sha256": "4505d49fa863ba06eb5fb645946517c8743138963314b79ad535e1b28f8bd4b0",
+      "wide_tables": 52,
+      "wide_literal_values_reopened_exact": true,
+      "excel": "opn-accepted-partial.xlsx",
+      "excel_sha256": "d80bfa722f33ab5ea1210e18558b12c9527fad78ba3d327767a4222f0c1f6b29",
+      "exported_cells": 3322,
+      "excel_reopened_exact": true
+    },
+    {
+      "id": "isolators",
+      "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+      "source_page_count": 162,
+      "accepted_pages": 157,
+      "json": "isolators.json",
+      "json_sha256": "f5c2f78a71c008180cb23e45a380f3edf496a81748b92a096a9621e6ee6f8e33",
+      "wide_tables": 139,
+      "wide_literal_values_reopened_exact": true,
+      "excel": "isolators-accepted-partial.xlsx",
+      "excel_sha256": "dc57c552b5399c5deef542fb1c3ac70c049c8ad63c298e85d72586e8a0948cac",
+      "exported_cells": 13648,
+      "excel_reopened_exact": true
+    },
+    {
+      "id": "small",
+      "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+      "source_page_count": 228,
+      "accepted_pages": 4,
+      "json": "small.json",
+      "json_sha256": "54b22f54df909eb287d691e66e1ef68be9aa470a98d07741701fb30569b3603f",
+      "wide_tables": 0,
+      "wide_literal_values_reopened_exact": true,
+      "excel": "small-accepted-partial.xlsx",
+      "excel_sha256": "3ecc40923b1b0069977a2942c820f47d71e7b8c2e374b010eb8f152e148fe9c7",
+      "exported_cells": 0,
+      "excel_reopened_exact": true
+    },
+    {
+      "id": "armature",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+      "source_page_count": 314,
+      "accepted_pages": 0,
+      "json": "armature.json",
+      "json_sha256": "d022714c8bc7bea730cf21a33b4f9d40d48778ebc15d1a2a5db03b9c99086165"
+    },
+    {
+      "id": "innovations",
+      "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+      "source_page_count": 216,
+      "accepted_pages": 0,
+      "json": "innovations.json",
+      "json_sha256": "344885ceaaae142a83337b535482ca24e6aea37440716f8f4d304522cc066917"
+    }
+  ]
+}
