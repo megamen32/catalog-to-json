@@ -1,6 +1,6 @@
 {
   "profile": "full-selected-15-review21",
-  "status": "prepared_not_yet_live",
+  "status": "live_waiting_first_new_review",
   "models": {
     "extractor": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
     "reviewer": "zai.glm-5.3-flash?reasoning=low"
@@ -66,5 +66,15 @@
   "inherited_accuracy": false,
   "role_choice": "Extractor15 retained. Reviewer21 adds validated independent literal-source observations and unit-equivalence fixes; native blind consumer409.592s verified180cells without previous false unit differences. No complete matched score superiority claimed. Reviewer25 failed independent drawing canary;26/27 retain drawing defects and are not promoted. Coordinator25 used for tested durable state handling only.",
   "historical_producer_versions_retained": true,
-  "source_acceptance_vetoes_retained": true
+  "source_acceptance_vetoes_retained": true,
+  "live_resume": {
+    "status": "PASS_LIVE_RESUME_WAITING_FIRST_NEW_REVIEW",
+    "observed_unix": 1791916900.6225836,
+    "same980_candidates_preserved": true,
+    "accepted_retained_count": 496,
+    "native_calls_interrupted": 0,
+    "full_catalogues_complete": false,
+    "first_new_review_verified": false
+  },
+  "transition_native_seconds": 912.538652420044
 }
