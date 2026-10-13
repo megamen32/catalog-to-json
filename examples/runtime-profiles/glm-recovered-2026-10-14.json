@@ -1,0 +1,51 @@
+{
+  "status": "PASS_NATIVE_GLM_RECOVERED",
+  "observed_unix": 1791932902.8465333,
+  "endpoint": "https://api.z.ai/api/coding/paas/v4/",
+  "model": "glm-5.3-flash",
+  "reviewer_version": "1.4.32",
+  "coordinator_version": "1.4.32",
+  "probe": {
+    "observed_utc": "2026-10-13T23:07:07.491279+00:00",
+    "endpoint": "https://api.z.ai/api/coding/paas/v4/chat/completions",
+    "model": "glm-5.3-flash",
+    "http_status": 200,
+    "retry_count": 0,
+    "total_tokens": 30,
+    "reply": "OK",
+    "action": "Remove only our confirmed-quota admission hold; same native32 process resumes"
+  },
+  "own_quota_hold_removed": true,
+  "service_restarted": false,
+  "native_production": {
+    "catalogue": "small",
+    "pdf_page": 4,
+    "attempt": 11,
+    "successful_provider_responses": 3,
+    "recorded_errors": 0,
+    "response_metadata": [
+      {
+        "model": "glm-5.3-flash",
+        "timestamp": 1791932857.2065005,
+        "total_tokens": 3673,
+        "tool_calls": 1
+      },
+      {
+        "model": "glm-5.3-flash",
+        "timestamp": 1791932862.039467,
+        "total_tokens": 6754,
+        "tool_calls": 2
+      },
+      {
+        "model": "glm-5.3-flash",
+        "timestamp": 1791932870.1473296,
+        "total_tokens": 12392,
+        "tool_calls": 2
+      }
+    ]
+  },
+  "current_accepted": 503,
+  "draft_count": 980,
+  "page_completed_in_this_check": false,
+  "full_catalogues_complete": false
+}

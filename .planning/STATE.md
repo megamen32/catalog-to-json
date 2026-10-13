@@ -1,4 +1,8 @@
-## Current blocker, 2026-10-14: GLM weekly/monthly quota exhausted
+## Current continuation, 2026-10-14 02:07MSK: GLM recovered and native review resumed
+
+Fresh explicit CodingEndpoint glm-5.3-flash probe returned200OK/30tokens. Removed only our own quota admission hold; same32 service resumed without restart. Native reviewer32 small4 attempt11 has at least2 successful model responses and0 recorded errors; fresh_repair lane selected.503 accepted/980 drafts retained; full review remains incomplete and no new page acceptance claimed yet. Evidence: examples/runtime-profiles/glm-recovered-2026-10-14.json. Earlier provider reset-date prediction is historical, superseded by live success.
+
+## Historical blocker, 2026-10-14: GLM weekly/monthly quota exhausted
 
 Live verification after backoff: innovations167 native32 review had0 successful provider responses and29 recorded429 errors, explicit1310 Weekly/Monthly Limit Exhausted; provider reset literal2026-10-18 23:38:31 has no timezone.503/980 accepted,477 pending. Existing admission-hold mechanism suppresses GLM retries through the current24h job deadline2026-10-15 01:15:31MSK; live gate/digest verified, other provider untouched, no model fallback. All work retained. External blocker: quota renewal/reset; smallest continuation is resume once restored or explicit verified independent-reviewer profile selection. No new benchmark/API calls for diagnosis. Evidence: examples/runtime-profiles/glm-quota-2026-10-14.json.
 
