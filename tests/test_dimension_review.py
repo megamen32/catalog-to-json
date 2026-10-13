@@ -68,3 +68,21 @@ def test_uninspected_crop_invalid_tips_and_false_association_cannot_pass(tmp_pat
     (r.work(1)/'dimension-review-0.json').write_text('{}')
     after=artifact_origin(r.work(1),r.work(1)/'review-0.json',r.source_digest,1,0,'reviewer',None,None)
     assert not after['source_bound_save']
+
+
+def test_batch_keeps_all_individual_checks_and_reports_partial_failure(tmp_path):
+    from test_tools import pdf,review
+    from catalog_json.tools import CatalogTools
+    from catalog_json.schema import Issue
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out');t.render(1);t.direct(1);c=drawing_content();assert t.save(1,c.model_dump_json(),'page')['saved']
+    r=CatalogTools(t.source,t.output,role='reviewer');r.render(1);assert r.save(1,c.model_dump_json(),'observation')['saved'];r.read(1,'page');r.render(1,[0,0,1,1])
+    base=dict(source_figure_index=0,source_label_index=0,figure_index=0,label_index=0,view='III',relation='diameter',source_box=[0,0,1,1],feature_box=[.2,.2,.8,.8],tip_points=[[.2,.5],[.8,.5]],source_feature='upper cylinder',candidate_feature_quote='upper cylinder',agrees_with_candidate=True,evidence='Both original tips inspected in this view')
+    bad={**base,'source_figure_index':1,'figure_index':1,'view':'IV','candidate_feature_quote':'upper skirt','tip_points':[[.2,.5]]}
+    result=r.record_dimensions(1,json.dumps([base,bad]));assert not result['saved'] and result['saved_count']==1 and result['failures'][0]['index']==1
+    assert not r.save(1,review().model_dump_json(),'review')['saved']
+    bad['tip_points']=[[.2,.5],[.8,.5]]
+    result=r.record_dimensions(1,json.dumps([bad]));assert result['saved'] and result['saved_count']==1
+    assert r.save(1,review().model_dump_json(),'review')['saved']
+    assert not r.record_dimensions(1,'{}')['saved']
+    assert not r.record_dimensions(1,json.dumps([base]*101))['saved']
+    assert not t.record_dimensions(1,json.dumps([base]))['saved']

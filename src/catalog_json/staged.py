@@ -18,7 +18,7 @@ from .schema import PageContent,Review
 from .tools import write_json,durable_directory
 from .provenance import program_version,artifact_origin
 from .processes import OwnedProcessTree
-from .fair_queue import FairWorkQueue
+from .fair_queue import FairWorkQueue,REVIEW_ORDER
 
 
 RATE_LIMIT=re.compile(r'(?:HTTP(?:/\d(?:\.\d)?)?[^\n]{0,100}\b429\b|Error\s+code:\s*429\b|RateLimitError|rate[ _-]limit(?:ed| error| exceeded| reached)|Too Many Requests)',re.I)
@@ -334,11 +334,17 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
     provider_slots={name:ProviderGate(max(role_counts[role] for role in providers if providers[role]==name),retry_delay,initial_provider_concurrency) for name in set(providers.values())}
     async def observe_rate_limit(role):await provider_slots[providers[role]].rate_limited()
     agents.rate_limit_observer=observe_rate_limit
-    extract=FairWorkQueue(ids);review=FairWorkQueue(ids);sequence=count()
+    policy_path=output/'queue-policy.json'
+    if policy_path.exists():
+        policy=json.loads(policy_path.read_text())
+        if type(policy.get('seed')) is not str or not policy['seed']:raise ValueError('Invalid queue random seed')
+    else:
+        policy={'seed':uuid.uuid4().hex,'order':REVIEW_ORDER};write_json(policy_path,policy)
+    extract=FairWorkQueue(ids);review=FairWorkQueue(ids,seed=policy['seed']);sequence=count()
     def enqueue_extraction(item,repair=False):extract.put_nowait((0 if repair else 1,next(sequence),item))
-    def enqueue_review(item,audit=False):
+    def enqueue_review(item,audit=False,fresh=False):
         repair=audit or bool(item['record'].get('review') or item['record'].get('attempts') or item.get('has_prior_review'))
-        review.put_nowait((0 if repair else 1,next(sequence),item))
+        review.put_nowait((2 if fresh else 0 if repair else 1,next(sequence),item))
     for entry in entries:
         cid=entry['id']
         if not cid.replace('-','').replace('_','').isalnum():raise ValueError('Unsafe catalogue ID')
@@ -402,7 +408,12 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                                       review_producer=artifact_origin(work,report_path,digest,page,candidate[0],'reviewer',agents.reviewer,role_contract(agents,'reviewer')),
                                       attempts=[dict(a) for a in old.get('attempts',[])],repair_feedback_reused=True)
                         enqueue_extraction(item,repair=True);continue
-                enqueue_review(item)
+                # A candidate written after the last completed review is a
+                # fresh repair even after a process/version handover.
+                cp=work/f'candidate-{candidate[0]}.json'
+                previous_reviews=list(work.glob('review-*.json'))
+                fresh=bool(candidate[0]>0 and previous_reviews and cp.stat().st_mtime>max(p.stat().st_mtime for p in previous_reviews))
+                enqueue_review(item,fresh=fresh)
             else:
                 # Unbound legacy output is retained as feedback, never minted as
                 # a new source/model result merely by asking another reviewer.
@@ -430,7 +441,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             digest=hashlib.sha256(json.dumps(payload,ensure_ascii=False).encode()).hexdigest()
             if snapshot_digests.get(cat['id'])!=digest:
                 write_json(Path(cat['output']),payload);snapshot_digests[cat['id']]=digest
-        state={'schema_version':'1.0','tested_program':version,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'contract_sha256':agents.contract_digest,'workflow_sha256':workflow,'method':{'separate_provider_queues':True,'review_order':'alternate first pass and repair; round robin catalogues at provider admission','concurrency_per_provider':max(role_counts.values()),'role_workers':role_counts,'provider_pacing':{name:slot.snapshot() for name,slot in provider_slots.items()},'operator_holds_sha256':holds_digest,'call_timeout_seconds':agents.timeout,'max_tokens':agents.max_tokens,'max_repairs':None,'deadline_seconds':deadline_seconds},'catalogs':catalogs,'complete':all(c['status']=='complete' for c in catalogs),'elapsed_seconds':round(time.monotonic()-started,3)}
+        state={'schema_version':'1.0','tested_program':version,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'contract_sha256':agents.contract_digest,'workflow_sha256':workflow,'method':{'separate_provider_queues':True,'review_order':REVIEW_ORDER,'queue_random_seed':policy['seed'],'concurrency_per_provider':max(role_counts.values()),'role_workers':role_counts,'provider_pacing':{name:slot.snapshot() for name,slot in provider_slots.items()},'operator_holds_sha256':holds_digest,'call_timeout_seconds':agents.timeout,'max_tokens':agents.max_tokens,'max_repairs':None,'deadline_seconds':deadline_seconds},'catalogs':catalogs,'complete':all(c['status']=='complete' for c in catalogs),'elapsed_seconds':round(time.monotonic()-started,3)}
         write_json(output/'batch.json',state);return state
 
     def save(item):write_json(item['work']/'result.json',item['record']);snapshot()
@@ -461,7 +472,10 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                         previous=item['work']/f'review-{attempt}.json'
                         if previous.exists():
                             history=item['work']/'review-history'/hashlib.sha256(previous.read_bytes()).hexdigest();history.mkdir(parents=True,exist_ok=True);shutil.copy2(previous,history/previous.name)
-                    r['status']='extracting' if role=='extractor' else 'reviewing';save(item)
+                    r['status']='extracting' if role=='extractor' else 'reviewing'
+                    r['last_admission']={'role':role,'lane':'fresh_repair' if task[0]==2 else 'repair' if task[0]==0 else 'first_pass',
+                        'selected_unix':time.time(),'queue_random_seed':policy['seed'] if role=='reviewer' else None}
+                    save(item)
                     rate_before=provider_slots[providers[role]].rate_limit_count
                     artifact=await call(agents,role,item['source'],item['out'],r['pdf_page'],attempt)
                 await provider_slots[providers[role]].succeeded(rate_limit_count=rate_before)
@@ -469,7 +483,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                 if role=='extractor':
                     r.update(content=artifact.model_dump(),status='awaiting_review',tested_program=version,
                         contract_sha256=agents.contract_digest,role_contracts={role:role_contract(agents,role) for role in providers})
-                    r.pop('runner_resume',None);enqueue_review(item)
+                    r.pop('runner_resume',None);enqueue_review(item,fresh=attempt>0)
                     path=item['work']/f'candidate-{attempt}.json'
                     r['candidate_sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
                     r['candidate_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.extractor,role_contract(agents,'extractor'))
@@ -505,7 +519,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                 # Provider pacing belongs to this worker only; the other keeps running.
                 save(item);await asyncio.sleep(min(900,retry_delay*2**min(failures-1,5)))
                 if role=='extractor':enqueue_extraction(item,repair=attempt>0)
-                else:enqueue_review(item)
+                else:enqueue_review(item,fresh=task[0]==2)
             finally:
                 r['elapsed_seconds']+=round(time.monotonic()-began,3);r.pop('active_role',None);save(item);queue.task_done()
             # A cached/local completion can return without yielding. Honor the

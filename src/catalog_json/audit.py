@@ -2,6 +2,7 @@
 import re
 import unicodedata
 import hashlib
+from collections import Counter
 from decimal import Decimal,InvalidOperation
 from .schema import PageContent
 from .observation_quotes import is_branding_caption
@@ -10,6 +11,16 @@ from .observation_quotes import is_branding_caption
 def text_key(value):
     text=unicodedata.normalize('NFKC',value).casefold()
     return re.sub(r'[^\w+±-]','',text)
+
+
+def branding_words(value):
+    # Layout order may differ between independent logo blocks. Preserve entire
+    # words, internal hyphens and multiplicity; never use this for engineering.
+    return Counter(re.findall(r'\w+(?:-\w+)*',unicodedata.normalize('NFKC',value).casefold()))
+
+
+def branding_present(value,blocks):
+    return is_branding_caption(value) and bool(branding_words(value)) and not (branding_words(value)-branding_words(' '.join(blocks)))
 
 
 def header_key(value):
@@ -175,13 +186,14 @@ def compare_source(observed: PageContent,candidate: PageContent,branding_figure_
                 identity=bool(re.search(r'\b(?:тип\w*|артикул\w*|марк\w*|обознач\w*|код\w*|наименован\w*|product|identity|designation)\b',' '.join(x for x in (sc.group,sc.label) if x),re.I))
                 if not same_value(a.value,b.value,identity):add(path+'.value',a.value,b.value)
     all_text=text_key(' '.join(b.text for b in candidate.text_blocks))
+    branding=[b.text for b in candidate.text_blocks if b.kind=='branding']
     for i,block in enumerate(observed.text_blocks):
+        if block.kind=='branding' and branding_present(block.text,branding):continue
         if text_key(block.text) not in all_text:add(f'text_blocks[source={i}]',block.text,'missing or changed wording')
     # One source drawing can legitimately be represented as several views or
     # one combined figure. Compare labels across figures, retaining numeric bounds.
     labels=[figure_key(label) for f in candidate.figures for label in f.labels]
     descriptions=[figure_key(f.description) for f in candidate.figures]
-    branding=[text_key(b.text) for b in candidate.text_blocks if b.kind=='branding']
     for i,sf in enumerate(observed.figures):
         for label in sf.labels:
             key=figure_key(label)
@@ -190,6 +202,6 @@ def compare_source(observed: PageContent,candidate: PageContent,branding_figure_
                 # quotation may change representation. Engineering labels never
                 # inherit evidence from a caption or unrelated prose.
                 if (label in (branding_figure_quotes or {}).get(i,set()) and
-                        is_branding_caption(label) and text_key(label) in branding):continue
+                        branding_present(label,branding)):continue
                 add(f'figures[{i}].labels',label,'missing or changed label/tolerance')
     return differences

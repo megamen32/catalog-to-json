@@ -230,6 +230,24 @@ class CatalogTools:
         self.log(page,'record_dimension_review',file=evidence_file.name,sha256=hashlib.sha256(evidence_file.read_bytes()).hexdigest(),figure_index=record.figure_index,label_index=record.label_index,agrees_with_candidate=record.agrees_with_candidate)
         return {'saved':True,'agrees_with_candidate':record.agrees_with_candidate,'instruction':'A false association must be reported as a blocking figures issue. Preserve the source crop and fix only that relationship.'}
 
+    def record_dimensions(self,page,json_text):
+        """Same per-relation validation, fewer model/tool round trips.
+
+        Successful entries remain durable; report every failed index explicitly.
+        Partial batches never bypass save_review's complete coverage gate.
+        """
+        if self.role!='reviewer':return {'saved':False,'error':'Only reviewer records dimension evidence'}
+        try:records=json.loads(json_text)
+        except (TypeError,ValueError):return {'saved':False,'error':'Expected a JSON array of dimension records'}
+        if not isinstance(records,list) or not 1<=len(records)<=100 or any(not isinstance(r,dict) for r in records):
+            return {'saved':False,'error':'Provide 1..100 dimension record objects'}
+        failures=[];saved=0
+        for index,record in enumerate(records):
+            result=self.record_dimension(page,json.dumps(record,ensure_ascii=False))
+            if result.get('saved'):saved+=1
+            else:failures.append({'index':index,**result})
+        return {'saved':not failures,'saved_count':saved,'failures':failures,'instruction':'All individual source/candidate, crop, tip, path and correction checks still apply. Partial successes are retained. Every failed record and every missing relation must be resolved before figures PASS.'}
+
     def read(self,page,kind):
         if self.role=='reviewer' and kind=='page' and 'save_source_observation' not in self.seen.get(page,set()):
             raise ValueError('First independently inspect the original and save_source_observation BEFORE seeing the candidate')
@@ -558,6 +576,10 @@ def server(context):
         def record_dimension_review(page: int,json_text: str) -> dict:
             """Record source-bound relationship evidence. JSON: source_figure_index,source_label_index,figure_index,label_index,view,relation(linear/diameter/leader/annotation),source_box,feature_box,tip_points,path_ids,source_feature,candidate_feature_quote,agrees_with_candidate,evidence, optional correction_reason. Map independent source and candidate targets separately. First view_region on source_box including tips/extension lines/contour; quote candidate description exactly. annotation classifies actual non-dimensional dates/identifiers after source inspection, with no invented arrows; diameter/tolerance cannot use it. Native path IDs optional for scans. Changed records need correction_reason; all revisions retained. False/unresolved relations prohibit blanket figures PASS."""
             return context.record_dimension(page,json_text)
+        @mcp.tool()
+        def record_dimension_reviews(page: int,json_text: str) -> dict:
+            """Preferred batch form of record_dimension_review: JSON array of 1..100 records with the same fields. First inspect exact crops/tips/contours. All individual validations, history and final coverage rules apply; no implied ownership. Returns compact saved_count and indexed failures. Partial successes stay saved; fix every failure before PASS."""
+            return context.record_dimensions(page,json_text)
         @mcp.tool()
         def save_source_observation(page: int,json_text: str,literal_quotes: list[dict]|None=None) -> dict:
             """Save blind PageContent BEFORE candidate. Branding literal_quotes items use {block_index,box,visible_quote,basis:text_layer|vision,conflict:null|source_notes text,rotation:0}. For a nontechnical branding caption represented as a figure label, use {figure_index,label_index,source_kind:branding,...} instead of block_index. View each exact box first. Numbers/operators/diameter/view signs cannot be reclassified. Quote original language. Native text and visible quote remain separate; an actual conflict needs a source note and Vision evidence."""

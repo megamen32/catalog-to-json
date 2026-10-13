@@ -1,0 +1,311 @@
+{
+  "program": "1.4.31",
+  "model_calls": 0,
+  "reviews": [
+    {
+      "catalogue": "innovations",
+      "page": 79,
+      "attempt": 0,
+      "observation_sha256": "79ca747401e8e803d6f8c3b3cefc08835745c4ca3423db1d1dc8dfd9c4f2ad11",
+      "candidate_sha256": "de6ca1a251f3447574621458a02e40386bcb98839df93b118bba42e0f2705a20",
+      "before_count": 5,
+      "after_count": 4,
+      "false_branding_findings_removed": [
+        {
+          "path": "text_blocks[source=1]",
+          "source_observation": "ФОРЭНЕРГО FORENERGO производственное объединение manufacturing association",
+          "candidate": "missing or changed wording"
+        }
+      ],
+      "other_findings_retained": [
+        {
+          "path": "tables[0].columns[10].group",
+          "source_observation": "Выдерживаемое напряжение, кВ",
+          "candidate": null
+        },
+        {
+          "path": "tables[1].columns[1].label",
+          "source_observation": "H",
+          "candidate": "Н"
+        },
+        {
+          "path": "tables[1].columns[3].label",
+          "source_observation": "B1",
+          "candidate": "В1"
+        },
+        {
+          "path": "tables[1].columns[6].label",
+          "source_observation": "B2",
+          "candidate": "В2"
+        }
+      ]
+    },
+    {
+      "catalogue": "armature",
+      "page": 3,
+      "attempt": 0,
+      "observation_sha256": "97f62f867d9a1ef78785c5875a31cbf9a71bc8fc69e8041efca2aaa498466077",
+      "candidate_sha256": "509b4167588646c0db7d5e49689cf465884c6a4b654e02a61a69cbc3920cec71",
+      "before_count": 7,
+      "after_count": 3,
+      "false_branding_findings_removed": [
+        {
+          "path": "figures[0].labels",
+          "source_observation": "ФОРЭНЕРГО",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "производственное объединение",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "FORENERGO",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "industrial group",
+          "candidate": "missing or changed label/tolerance"
+        }
+      ],
+      "other_findings_retained": [
+        {
+          "path": "tables[0].columns[0].qualifier",
+          "source_observation": "заголовок столбца в источнике не напечатан; колонка наименований пунктов оглавления",
+          "candidate": null
+        },
+        {
+          "path": "tables[0].columns[1].qualifier",
+          "source_observation": "заголовок столбца в источнике не напечатан; колонка номеров страниц",
+          "candidate": null
+        },
+        {
+          "path": "tables[0].rows[28].cells[column=0].value",
+          "source_observation": "Скобы типа СК-70-1Б и СК-120-1Б",
+          "candidate": "Скобы типа СК-70-15 и СК-120-15"
+        }
+      ]
+    },
+    {
+      "catalogue": "small",
+      "page": 25,
+      "attempt": 12,
+      "observation_sha256": "f4d1d961619e2c9219ca370aae7159bb6d7290e41c6e09b4d9a2cb4ba5cc5382",
+      "candidate_sha256": "eac995d8d7711af15ede30221e921d1d78467ac186296a0c72729bb0da74c425",
+      "before_count": 16,
+      "after_count": 16,
+      "false_branding_findings_removed": [],
+      "other_findings_retained": [
+        {
+          "path": "source_observation.uncertainties",
+          "source_observation": [],
+          "candidate": [
+            "Предлог «до/по» между датами срока действия на пятом бланке не разрешим в растре даже при максимальном увеличении (zoom 0.5–0.6 × 0.2–0.215)"
+          ]
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "СИСТЕМА ДОБРОВОЛЬНОЙ СЕРТИФИКАЦИИ …-ЭКСПЕРТ",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "Рег. № РОСС RU.31..6.04…0 от 14.11.2016 г.",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "СЕРТИФИКАТ (на четырёх частично перекрытых бланках)",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "№ РОСС RU… (нечитаемо)",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "Срок действия с 21.03.2025 до/по 20.07.2028 (месяц начала и предлог между датами в растре не разрешаются)",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "№ 0062159 (красным)",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "ПРОДУКЦИЯ (изоляторы, тип нечитаем)",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "ИЗГОТОВИТЕЛЬ ООО «ВОЛЬТА», реквизиты нечитаемы",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "ИСПЫТАТЕЛЬ (нечитаемо)",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "СЕРТИФИКАТ ВЫДАН (нечитаемо)",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "НА ОСНОВАНИИ (нечитаемо, упомянут закон о техническом регулировании)",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[0].labels",
+          "source_observation": "СООТВЕТСТВУЕТ ТРЕБОВАНИЯМ НОРМАТИВНЫХ ДОКУМЕНТОВ (номера нечитаемы)",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[1].labels",
+          "source_observation": "№ (не заполнен/нечитаем)",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[1].labels",
+          "source_observation": "изоляторы ИОС … УХЛ1, комплектующие (типы нечитаемы)",
+          "candidate": "missing or changed label/tolerance"
+        },
+        {
+          "path": "figures[1].labels",
+          "source_observation": "Р.Н. Барсуков (прочитано неуверенно)",
+          "candidate": "missing or changed label/tolerance"
+        }
+      ]
+    }
+  ],
+  "pending_at_replay": 477,
+  "first24_admissions": [
+    {
+      "lane": 1,
+      "catalogue": "innovations",
+      "page": 139
+    },
+    {
+      "lane": 2,
+      "catalogue": "isolators",
+      "page": 47
+    },
+    {
+      "lane": 1,
+      "catalogue": "armature",
+      "page": 63
+    },
+    {
+      "lane": 0,
+      "catalogue": "innovations",
+      "page": 50
+    },
+    {
+      "lane": 1,
+      "catalogue": "innovations",
+      "page": 175
+    },
+    {
+      "lane": 2,
+      "catalogue": "small",
+      "page": 4
+    },
+    {
+      "lane": 1,
+      "catalogue": "armature",
+      "page": 219
+    },
+    {
+      "lane": 0,
+      "catalogue": "armature",
+      "page": 2
+    },
+    {
+      "lane": 1,
+      "catalogue": "innovations",
+      "page": 157
+    },
+    {
+      "lane": 2,
+      "catalogue": "innovations",
+      "page": 4
+    },
+    {
+      "lane": 1,
+      "catalogue": "armature",
+      "page": 211
+    },
+    {
+      "lane": 0,
+      "catalogue": "innovations",
+      "page": 73
+    },
+    {
+      "lane": 1,
+      "catalogue": "innovations",
+      "page": 156
+    },
+    {
+      "lane": 2,
+      "catalogue": "armature",
+      "page": 3
+    },
+    {
+      "lane": 1,
+      "catalogue": "armature",
+      "page": 203
+    },
+    {
+      "lane": 2,
+      "catalogue": "small",
+      "page": 25
+    },
+    {
+      "lane": 1,
+      "catalogue": "innovations",
+      "page": 165
+    },
+    {
+      "lane": 2,
+      "catalogue": "innovations",
+      "page": 5
+    },
+    {
+      "lane": 1,
+      "catalogue": "armature",
+      "page": 91
+    },
+    {
+      "lane": 2,
+      "catalogue": "innovations",
+      "page": 8
+    },
+    {
+      "lane": 1,
+      "catalogue": "innovations",
+      "page": 159
+    },
+    {
+      "lane": 2,
+      "catalogue": "innovations",
+      "page": 10
+    },
+    {
+      "lane": 1,
+      "catalogue": "armature",
+      "page": 67
+    },
+    {
+      "lane": 2,
+      "catalogue": "innovations",
+      "page": 12
+    }
+  ],
+  "no_tasks_lost": true,
+  "scope": "Retained-output comparison and exact pending queue replay; no fresh model accuracy estimate"
+}

@@ -42,3 +42,25 @@ def test_numeric_figure_cannot_declare_itself_brand_quote(tmp_path):
     t=setup(tmp_path);source,_=pages('H±2')
     proof=[{'figure_index':0,'label_index':0,'source_kind':'branding','box':BOX,'visible_quote':'H±2','basis':'vision','conflict':None}]
     assert branding_quote_evidence(t,1,source,proof)[1]
+
+
+def test_interleaved_logo_words_and_split_blocks_are_not_missing_text():
+    source,candidate=pages('ФОРЭНЕРГО FORENERGO производственное объединение manufacturing association')
+    candidate.text_blocks=[TextBlock(kind='branding',text='FORENERGO manufacturing association'),
+                           TextBlock(kind='branding',text='ФОРЭНЕРГО производственное объединение')]
+    assert not compare_source(source,candidate,branding_figure_quotes={0:{source.figures[0].labels[0]}})
+    source.text_blocks=[TextBlock(kind='branding',text=source.figures[0].labels[0])];source.figures=[]
+    assert not compare_source(source,candidate)
+    candidate.text_blocks[0].text='FORENERGO association'
+    assert compare_source(source,candidate)
+
+
+def test_branding_word_boundaries_multiplicity_and_engineering_stay_strict():
+    from catalog_json.audit import branding_present
+    assert not branding_present('INSTA',['OTHER-INSTA'])
+    assert not branding_present('ООО ООО ИНСТА',['ООО ИНСТА'])
+    source,candidate=pages('Н±2');candidate.text_blocks=[TextBlock(kind='branding',text='Н±2')]
+    assert compare_source(source,candidate,branding_figure_quotes={0:{'Н±2'}})
+    source.text_blocks=[TextBlock(kind='paragraph',text='изделие первое второе')];source.figures=[]
+    candidate.text_blocks=[TextBlock(kind='branding',text='изделие второе первое')]
+    assert compare_source(source,candidate)

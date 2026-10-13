@@ -1,0 +1,42 @@
+{
+  "status": "PASS_NATIVE_MCP_BATCH_REPLAY",
+  "program": {
+    "package_version": "1.4.31",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "2a5818cbc8743f8a86b1e0e2e4003dc417740a1dcd7a2e367eea840eee90c642",
+    "python_version": "3.12.13"
+  },
+  "physical_page": 79,
+  "model_calls": 0,
+  "elapsed_seconds": 4.138,
+  "saved_relations": 7,
+  "batch_model_roundtrips": 1,
+  "previous_individual_roundtrips": 7,
+  "invalid_record_refused": true,
+  "false_branding_difference_removed": true,
+  "remaining_source_differences": [
+    {
+      "path": "tables[0].columns[10].group",
+      "source_observation": "Выдерживаемое напряжение, кВ",
+      "candidate": null
+    },
+    {
+      "path": "tables[1].columns[1].label",
+      "source_observation": "H",
+      "candidate": "Н"
+    },
+    {
+      "path": "tables[1].columns[3].label",
+      "source_observation": "B1",
+      "candidate": "В1"
+    },
+    {
+      "path": "tables[1].columns[6].label",
+      "source_observation": "B2",
+      "candidate": "В2"
+    }
+  ],
+  "candidate_unchanged": true,
+  "scope": "Replays original-image crops, retained blind quotes and dimension assertions; does not estimate fresh-model speed or accuracy"
+}
