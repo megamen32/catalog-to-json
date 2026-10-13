@@ -15,7 +15,7 @@ from types import SimpleNamespace
 import pymupdf
 from fast_agent.llm.model_factory import ModelFactory
 from .schema import PageContent,Review
-from .tools import write_json
+from .tools import write_json,durable_directory
 from .provenance import program_version,artifact_origin
 from .processes import OwnedProcessTree
 
@@ -320,7 +320,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
         raise ValueError('Initial provider concurrency must be an integer from 1 to 16')
     manifest=Path(manifest).resolve();output=Path(output).resolve()
     if output.exists() and any(output.iterdir()) and not resume:raise ValueError('Use a fresh staged queue or explicit resume')
-    output.mkdir(parents=True,exist_ok=True)
+    durable_directory(output)
     pacing_path=output/'batch.json'
     pacing_state=json.loads(pacing_path.read_text()) if resume and resume_compatible_profile and pacing_path.exists() else None
     pacing_modified=pacing_path.stat().st_mtime if pacing_state else None
@@ -419,14 +419,17 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             for name,state in pacing_state.get('method',{}).get('provider_pacing',{}).items():
                 if name in provider_slots:provider_slots[name].restore(state,time.time()-pacing_modified)
 
-    holds_digest=None
+    holds_digest=None;snapshot_digests={}
 
     def snapshot():
         for cat in catalogs:
             records=[pending[cat['id'],n]['record'] for n in range(1,cat['pages']+1)]
             accepted=sum(r['status']=='accepted' for r in records)
             cat.update(accepted_pages=accepted,draft_pages=sum('content' in r for r in records),status='complete' if accepted==cat['pages'] else 'running')
-            write_json(Path(cat['output']),{'schema_version':'1.0','stage':'reviewed_conversion','tested_program':version,'source':{'filename':Path(cat['source']).name,'sha256':cat['source_sha256'],'page_count':cat['pages']},'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'pages':records,'catalog_complete':accepted==cat['pages'],'complete_for_selection':accepted==cat['pages']})
+            payload={'schema_version':'1.0','stage':'reviewed_conversion','tested_program':version,'source':{'filename':Path(cat['source']).name,'sha256':cat['source_sha256'],'page_count':cat['pages']},'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'pages':records,'catalog_complete':accepted==cat['pages'],'complete_for_selection':accepted==cat['pages']}
+            digest=hashlib.sha256(json.dumps(payload,ensure_ascii=False).encode()).hexdigest()
+            if snapshot_digests.get(cat['id'])!=digest:
+                write_json(Path(cat['output']),payload);snapshot_digests[cat['id']]=digest
         state={'schema_version':'1.0','tested_program':version,'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'contract_sha256':agents.contract_digest,'workflow_sha256':workflow,'method':{'separate_provider_queues':True,'review_order':'manifest catalogue order; repairs and changed source audits before first-pass drafts','concurrency_per_provider':max(role_counts.values()),'role_workers':role_counts,'provider_pacing':{name:slot.snapshot() for name,slot in provider_slots.items()},'operator_holds_sha256':holds_digest,'call_timeout_seconds':agents.timeout,'max_tokens':agents.max_tokens,'max_repairs':None,'deadline_seconds':deadline_seconds},'catalogs':catalogs,'complete':all(c['status']=='complete' for c in catalogs),'elapsed_seconds':round(time.monotonic()-started,3)}
         write_json(output/'batch.json',state);return state
 
@@ -488,7 +491,11 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                     path=item['work']/f'review-{attempt}.json';r['review_sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
                     r['review_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.reviewer,role_contract(agents,'reviewer'))
                     if artifact.accepts(candidate) and rejection is None:
-                        r['status']='accepted';r.pop('source_audit_rejection',None);item['reviewed_audit']=reviewed_audit_digest(item,agents)
+                        item['reviewed_audit']=reviewed_audit_digest(item,agents)
+                        if external_audit_digest(item['work'])!=item['reviewed_audit']:
+                            r['status']='awaiting_review';r['external_audit_changed_at']=datetime.now(timezone.utc).isoformat()
+                            enqueue_review(item,audit=True)
+                        else:r['status']='accepted';r.pop('source_audit_rejection',None)
                     else:
                         if rejection:r['source_audit_rejection']=rejection
                         else:r.pop('source_audit_rejection',None)
@@ -507,6 +514,9 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                 else:enqueue_review(item)
             finally:
                 r['elapsed_seconds']+=round(time.monotonic()-began,3);r.pop('active_role',None);save(item);queue.task_done()
+            # A cached/local completion can return without yielding. Honor the
+            # deadline and other queues even while immediately rechecking leads.
+            await asyncio.sleep(0)
 
     await refresh_holds();snapshot();workers=[asyncio.create_task(worker(role,extract if role=='extractor' else review)) for role,n in role_counts.items() for _ in range(n)];interrupted=False
     try:

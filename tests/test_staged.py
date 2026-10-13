@@ -8,6 +8,15 @@ from catalog_json.tools import write_json
 from catalog_json.agents import AgentPair
 
 
+@pytest.fixture(autouse=True)
+def queue_clock_excludes_storage_latency(monkeypatch):
+    # These synthetic provider schedules have 1-3s deadlines and millisecond
+    # ordering. Disk durability is exercised separately by test_persistence
+    # and the real native MCP save roundtrip, not by these queue scenarios.
+    import os
+    monkeypatch.setattr(os,'fsync',lambda descriptor:None)
+
+
 class Agents:
     extractor='anthropic.test-extractor';reviewer='zai.test-reviewer';contract_digest='a'*64;timeout=3;max_tokens=1024
 
@@ -441,6 +450,29 @@ def test_changed_audit_during_review_requires_actual_fresh_read(tmp_path,monkeyp
     assert result['complete'] and calls.count(('reviewer',1,0))==2 and calls.count(('extractor',1,0))==1
 
 
+def test_deadline_cannot_accept_unread_source_lead(tmp_path,monkeypatch):
+    """Focused integration: late durable I/O cannot certify an unread lead; <1s/max5s."""
+    import time
+    from catalog_json import staged
+    queue=manifest(tmp_path);data=json.loads(queue.read_text())
+    source=tmp_path/'source.pdf'
+    with pymupdf.open(source) as pdf:
+        pdf.delete_pages(1,2);pdf.save(tmp_path/'single.pdf')
+    data['catalogs'][0].update(source=str(tmp_path/'single.pdf'),source_sha256=hashlib.sha256((tmp_path/'single.pdf').read_bytes()).hexdigest())
+    write_json(queue,data)
+    monkeypatch.setattr(staged,'reviewed_audit_digest',lambda item,agents:None)
+    async def call(agents,role,source,out,page,attempt):
+        value=PageContent(title='source',text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        if role=='reviewer':
+            write_json(out/'page-0001/external-audit.json',{'pdf_page':1,'findings':['Late source lead']})
+            # Simulate an I/O completion crossing the queue's time budget.
+            time.sleep(.08)
+        write_json(out/'page-0001'/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump())
+        return value
+    result=asyncio.run(staged_batch(queue,tmp_path/'out',Agents(),deadline_seconds=.04,call=call))
+    assert not result['complete'] and result['catalogs'][0]['accepted_pages']==0
+
+
 @pytest.mark.parametrize('changed',['none','source','contract','model'])
 def test_compatible_resume_restores_pacing_only_for_same_source_and_roles(tmp_path,changed):
     """Focused integration: restart preserves capacity feedback only for its profile; <1s/max5s."""
@@ -515,12 +547,16 @@ def test_bound_repair_feedback_survives_scheduler_resume_without_rechecking_same
     pause=False;calls.clear()
     result=asyncio.run(staged_batch(queue,out,Agents(),deadline_seconds=1,call=call,resume=True,resume_compatible_profile=True))
     assert result['complete']
-    if new_audit:assert calls[:3]==[('reviewer',1,0),('extractor',1,1),('reviewer',1,1)]
-    else:assert calls==[('extractor',1,1),('reviewer',1,1)]
+    if new_audit:assert [c for c in calls if c[1]==1]==[('reviewer',1,0),('extractor',1,1),('reviewer',1,1)]
+    else:assert [c for c in calls if c[1]==1]==[('extractor',1,1),('reviewer',1,1)]
 
 
-def test_source_confirmed_rejected_bytes_cannot_be_reaccepted_by_model_pass(tmp_path):
+def test_source_confirmed_rejected_bytes_cannot_be_reaccepted_by_model_pass(tmp_path,monkeypatch):
     """Focused integration: exact source-audited bad bytes require native repair; <1s/max5s."""
+    from catalog_json import staged
+    # Model the lead being consumed; native read-receipt binding is tested
+    # separately. A pass must still not waive these exact rejected bytes.
+    monkeypatch.setattr(staged,'reviewed_audit_digest',lambda item,agents:staged.external_audit_digest(item['work']))
     queue=manifest(tmp_path);calls=[]
     async def call(agents,role,source,out,page,attempt):
         calls.append((role,page,attempt));work=out/f'page-{page:04d}'
@@ -610,4 +646,4 @@ def test_rejected_passing_candidate_resume_repairs_without_duplicate_review(tmp_
     first=json.loads((out/'test/page-0001/result.json').read_text());assert first['next_attempt']==1 and first['review']['verdict']=='pass'
     pause=False;calls.clear()
     assert asyncio.run(staged_batch(queue,out,Agents(),deadline_seconds=1,call=call,resume=True,resume_compatible_profile=True))['complete']
-    assert calls==[('extractor',1,1),('reviewer',1,1)]
+    assert [c for c in calls if c[1]==1]==[('extractor',1,1),('reviewer',1,1)]

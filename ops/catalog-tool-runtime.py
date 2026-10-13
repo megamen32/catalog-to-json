@@ -8,7 +8,7 @@ import subprocess
 import sys
 
 PROFILE_VERSION='1.4.15'
-SUPPORTED_PROFILES={PROFILE_VERSION,'1.4.22'}
+SUPPORTED_PROFILES={PROFILE_VERSION,'1.4.22','1.4.25'}
 
 def digest(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -20,6 +20,8 @@ def fixed_component(path):
         raise ValueError('Delivery continuation profile requires the declared1.4.3 agent runtime')
     if data['profile_version']=='1.4.22' and data.get('program',{}).get('package_version')!='1.4.8':
         raise ValueError('Delivery continuation profile requires the declared1.4.8 fixed catalog tools')
+    if data['profile_version']=='1.4.25' and (data.get('legacy_program',{}).get('package_version')!='1.4.2' or data.get('program',{}).get('package_version')!='1.4.25'):
+        raise ValueError('Durable composition requires the declared1.4.2 agent and1.4.25 catalog tools')
     for filename,expected in data['file_sha256'].items():
         if digest(filename)!=expected:raise ValueError('Pinned catalog composition input changed')
     result=subprocess.run([data['python'],'-c',"import json,hashlib;from catalog_json.provenance import program_version;from catalog_json.schema import PageContent,Review;print(json.dumps({'program':program_version(),'schemas':{c.__name__:hashlib.sha256(json.dumps(c.model_json_schema(),sort_keys=True).encode()).hexdigest() for c in (PageContent,Review)}}))"],capture_output=True,text=True,timeout=10,check=True)

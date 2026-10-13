@@ -104,3 +104,11 @@ def test_continuation_profile_refuses_unfixed_native_tools(tmp_path):
     descriptor.write_text(json.dumps({'schema_version':'1.0','profile_version':'1.4.22','role':'extractor',
         'legacy_program':{'package_version':'1.4.3'},'program':{'package_version':'1.4.2'},'file_sha256':{}}))
     with pytest.raises(ValueError,match='fixed catalog tools'):bridge.fixed_component(descriptor)
+
+
+@pytest.mark.parametrize('agent,tools',[('1.4.3','1.4.25'),('1.4.2','1.4.8')])
+def test_durable_composition_refuses_mislabeled_components(tmp_path,agent,tools):
+    descriptor=tmp_path/'descriptor.json'
+    descriptor.write_text(json.dumps({'schema_version':'1.0','profile_version':'1.4.25','role':'extractor',
+        'legacy_program':{'package_version':agent},'program':{'package_version':tools},'file_sha256':{}}))
+    with pytest.raises(ValueError,match='Durable composition'):bridge.fixed_component(descriptor)

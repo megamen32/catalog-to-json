@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import time
 import pymupdf
@@ -18,11 +19,28 @@ if not SKILLS.exists():
     SKILLS = Path(__file__).resolve().parents[2] / 'skills'
 
 
+def sync_directory(path):
+    descriptor=os.open(path,os.O_RDONLY|getattr(os,'O_DIRECTORY',0))
+    try:os.fsync(descriptor)
+    finally:os.close(descriptor)
+
+
+def durable_directory(path):
+    path=Path(path);missing=[];ancestor=path
+    while not ancestor.exists():
+        missing.append(ancestor);ancestor=ancestor.parent
+    path.mkdir(parents=True,exist_ok=True)
+    for created in reversed(missing):sync_directory(created.parent)
+
+
 def write_json(path, data):
-    path=Path(path);path.parent.mkdir(parents=True,exist_ok=True)
+    path=Path(path);durable_directory(path.parent)
     pending=path.with_suffix(path.suffix+'.pending')
-    pending.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    with pending.open('w',encoding='utf-8') as stream:
+        stream.write(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+        stream.flush();os.fsync(stream.fileno())
     pending.replace(path)
+    sync_directory(path.parent)
 
 
 SOURCE_RESPONSE_BYTES=12000
@@ -49,7 +67,8 @@ class CatalogTools:
         source=Path(source).resolve();output=Path(output).resolve()
         if output==source or source.parent==output:raise ValueError('Choose a separate output directory')
         with pymupdf.open(source) as doc:count=len(doc)
-        self.source=source;self.source_digest=hashlib.sha256(source.read_bytes()).hexdigest();self.output=output;output.mkdir(parents=True,exist_ok=True);self.seen={};self.source_artifacts={};self.region_reads={};self.region_evidence={};self.branding_figure_quotes={};self.edit_baselines={};self.invalid_edit_baselines=set();self.grids={};self.disclosed={};self.latest_zoom={};self.corrections={}
+        durable_directory(output)
+        self.source=source;self.source_digest=hashlib.sha256(source.read_bytes()).hexdigest();self.output=output;self.seen={};self.source_artifacts={};self.region_reads={};self.region_evidence={};self.branding_figure_quotes={};self.edit_baselines={};self.invalid_edit_baselines=set();self.grids={};self.disclosed={};self.latest_zoom={};self.corrections={}
         return {'filename':source.name,'page_count':count,'role':self.role,'output':str(output)}
 
     def work(self,page):
@@ -57,12 +76,15 @@ class CatalogTools:
         if self.page is not None and page!=self.page:raise ValueError('This worker is assigned a different page')
         with pymupdf.open(self.source) as doc:
             if page<1 or page>len(doc):raise ValueError('Page out of range')
-        work=self.output/f'page-{page:04d}';work.mkdir(exist_ok=True);return work
+        work=self.output/f'page-{page:04d}';durable_directory(work);return work
 
     def log(self,page,tool,**metadata):
-        self.seen.setdefault(page,set()).add(tool)
-        with (self.work(page)/'tools.jsonl').open('a',encoding='utf-8') as f:
+        journal=self.work(page)/'tools.jsonl'
+        with journal.open('a',encoding='utf-8') as f:
             f.write(json.dumps({'time':time.time(),'role':self.role,'model':self.model,'source_sha256':self.source_digest,'contract_sha256':self.contract_sha256,'attempt':self.attempt,'page':page,'tool':tool,**metadata},ensure_ascii=False)+'\n')
+            f.flush();os.fsync(f.fileno())
+        sync_directory(journal.parent)
+        self.seen.setdefault(page,set()).add(tool)
 
     def render(self,page,box=None,rotation=0):
         work=self.work(page)
@@ -129,9 +151,9 @@ class CatalogTools:
             path=alternatives[-1]
         if self.role=='reviewer' and kind=='page':self.disclosed.setdefault(page,time.monotonic())
         self.log(page,'read_page_json' if kind=='page' else 'read_review',file=path.name)
-        data=json.loads(path.read_text())
+        raw=path.read_bytes();data=json.loads(raw)
         if self.role=='extractor' and kind=='page':
-            attempt=int(path.stem.split('-')[-1]);digest=hashlib.sha256(path.read_bytes()).hexdigest();event_path=self.work(page)/'tools.jsonl'
+            attempt=int(path.stem.split('-')[-1]);digest=hashlib.sha256(raw).hexdigest();event_path=self.work(page)/'tools.jsonl'
             events=[json.loads(l) for l in event_path.read_text().splitlines()] if event_path.exists() else []
             saves=[e for e in events if e.get('tool')=='save_page_json' and all(e.get(k)==v for k,v in {'page':page,'attempt':attempt,'role':'extractor','source_sha256':self.source_digest,'model':self.model,'contract_sha256':self.contract_sha256}.items())]
             if attempt<=self.attempt and saves and saves[-1].get('sha256')==digest:
@@ -148,9 +170,9 @@ class CatalogTools:
         path=self.work(page)/'external-audit.json'
         if not path.exists():return {'present':False}
         if self.role=='reviewer' and 'save_source_observation' not in self.seen.get(page,set()):raise ValueError('Save independent source observation before reading external audit leads')
-        data=json.loads(path.read_text())
+        raw=path.read_bytes();data=json.loads(raw)
         if data.get('pdf_page')!=page or data.get('source_sha256')!=hashlib.sha256(self.source.read_bytes()).hexdigest():raise ValueError('External audit belongs to another source/page')
-        self.log(page,'read_external_audit',sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+        self.log(page,'read_external_audit',sha256=hashlib.sha256(raw).hexdigest())
         return {'present':True,'findings':data['findings'],'instruction':'These are independent audit leads, not authority. Verify each against the original; never invent a missing value or accept a source claim blindly.'}
 
     def grid_differences(self,page,model):
