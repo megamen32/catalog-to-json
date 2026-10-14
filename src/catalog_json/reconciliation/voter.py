@@ -152,6 +152,7 @@ def explicit_retry_policy(on_rate_limit):
 async def run_voter(*, pack_path, sources_path, output_dir, role, config_path,
                     round_number=1, deadline_seconds=1200, attempt_number=1) -> Path:
     """One bounded fresh process per pack/role/round. Existing claims require reconciliation."""
+    _require_new_voter_role(role)
     if not 0 < deadline_seconds <= 1200:
         raise ValueError("Per-voter deadline must be in(0,1200]")
     if type(attempt_number) is not int or attempt_number < 1:
@@ -220,15 +221,21 @@ async def run_voter(*, pack_path, sources_path, output_dir, role, config_path,
     return receipt
 
 
+def _require_new_voter_role(role):
+    if role != "minimax":
+        raise ValueError("New FastAgent calls are MiniMax only; standalone GLM is retired. Codex and ZCode use native sessions")
+
+
 async def _worker(runtime):
+    claim = json.loads((runtime / "claim.json").read_text())
+    role = claim["role"]
+    _require_new_voter_role(role)
     import importlib.metadata
     from fast_agent import FastAgent
     from fast_agent.types import RequestParams
     from fast_agent.mcp.mcp_aggregator import MCPAttachOptions
     from catalog_json.models import register_model_capabilities
     import yaml
-    claim = json.loads((runtime / "claim.json").read_text())
-    role = claim["role"]
     started = time.time()
     deadline = time.monotonic() + max(0, claim["started_at"] + claim["deadline_seconds"] - started)
     pack = validate_pack(json.loads((runtime / "pack.json").read_text()))
@@ -261,6 +268,7 @@ async def _worker(runtime):
         "Для границ объединённых ячеек используй inspect_layout с native-словами и реальными векторными отрезками. "
         "Прослеживай ВСЮ объединённую ячейку, включая её продолжение за пределами строки одной модели. "
         "Отсутствие текста внутри полосы одной модели не равно пустой ячейке. Layout не заменяет обязательный просмотр исходного изображения. "
+        "Выбирая ours/oleg/equivalent/both, принимай исходные записи и предпочитай не передавать selected_value: это поле для замены данных, а не краткого пересказа решения. "
         "Нечитаемое оставляй unresolved. Если оба входа подтверждены в разных контекстах оригинала, сохрани both с явным разделением этих контекстов. Повтор одинакового изображения не создаёт нового доказательства. Для каждого case передай точный case_id, decision, reason и source_evidence по схеме save_verdict. case_sha256 инструмент добавит сам из неизменяемого pack; если передаёшь SHA, он обязан совпадать. "
         "Сохрани полный batch инструментом save_verdict; обычный ответ не завершает задачу. "
         "Исправляй ошибки инструмента в этом же контексте до успешного save. Не присваивай себе identity/model/runtime.")

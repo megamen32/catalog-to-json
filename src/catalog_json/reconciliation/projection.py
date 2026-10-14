@@ -8,9 +8,9 @@ from copy import deepcopy
 from .consensus import build_consensus, case_sha256, validate_pack, validate_vote
 
 
-def project_vote(parent_pack, parent_vote, child_pack):
+def project_vote(parent_pack, parent_vote, child_pack, *, required_roles=None):
     # Reuses all receipt, identity, source and complete-batch validation gates.
-    build_consensus(parent_pack, [parent_vote])
+    build_consensus(parent_pack, [parent_vote], required_roles=required_roles)
     validate_pack(child_pack)
     originals = {c['case_id']: c for c in parent_pack['cases']}
     for case in child_pack['cases']:

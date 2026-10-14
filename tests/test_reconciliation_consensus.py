@@ -15,7 +15,8 @@ import pymupdf
 import pytest
 
 from catalog_json.reconciliation.consensus import (
-    REQUIRED_ROLES, build_consensus, case_sha256, load_sources, save_vote, validate_pack, validate_vote,
+    LEGACY_REQUIRED_ROLES, REQUIRED_ROLES, build_consensus, case_sha256, load_sources, receipt_path,
+    save_vote, validate_identity, validate_pack, validate_vote,
 )
 from catalog_json.reconciliation.voter import (
     MODELS, adjudication_server_config, explicit_retry_policy, runtime_config, run_voter, validate_rejected_attempt,
@@ -50,8 +51,8 @@ def identity(role):
             "model": MODELS.get(role, "actual-native-model"), "runtime": "isolated-test-runtime-" + role}
 
 
-def voices(pack, payload, sources):
-    return [validate_vote(pack, payload, identity=identity(role), sources=sources) for role in REQUIRED_ROLES]
+def voices(pack, payload, sources, *, roles=LEGACY_REQUIRED_ROLES):
+    return [validate_vote(pack, payload, identity=identity(role), sources=sources) for role in roles]
 
 
 def test_canonical_case_digest_is_order_independent_but_exact(inputs):
@@ -89,24 +90,24 @@ def test_source_whitelist_checks_bytes_not_claimed_hash(inputs):
 def test_four_real_envelopes_required_and_no_majority(inputs):
     pack, payload, sources, *_ = inputs
     votes = voices(pack, payload, sources)
-    result = build_consensus(pack, votes[:3])
+    result = build_consensus(pack, votes[:3], required_roles=LEGACY_REQUIRED_ROLES)
     assert not result["complete"] and not result["all_resolved"]
     assert result["cases"][0]["missing_roles"] == ["minimax"]
-    assert build_consensus(pack, votes)["all_resolved"]
+    assert build_consensus(pack, votes, required_roles=LEGACY_REQUIRED_ROLES)["all_resolved"]
     other = copy.deepcopy(payload); other["verdicts"][0]["decision"] = "oleg"
     votes[-1] = validate_vote(pack, other, identity=identity("minimax"), sources=sources)
-    result = build_consensus(pack, votes)
+    result = build_consensus(pack, votes, required_roles=LEGACY_REQUIRED_ROLES)
     assert result["complete"] and not result["all_resolved"]
     assert result["cases"][0]["decision"] == "unresolved"
     assert result["cases"][1]["consensus"]
-    with pytest.raises(ValueError): build_consensus(pack, [payload] * 4)
-    with pytest.raises(ValueError): build_consensus(pack, [votes[0]] * 4)
+    with pytest.raises(ValueError): build_consensus(pack, [payload] * 4, required_roles=LEGACY_REQUIRED_ROLES)
+    with pytest.raises(ValueError): build_consensus(pack, [votes[0]] * 4, required_roles=LEGACY_REQUIRED_ROLES)
     # Four role labels with one reused session are not four independent voices.
     same_session = []
-    for role in REQUIRED_ROLES:
+    for role in LEGACY_REQUIRED_ROLES:
         fake_identity = identity(role); fake_identity["session_id"] = "one-session"
         same_session.append(validate_vote(pack, payload, identity=fake_identity, sources=sources))
-    with pytest.raises(ValueError, match="session"): build_consensus(pack, same_session)
+    with pytest.raises(ValueError, match="session"): build_consensus(pack, same_session, required_roles=LEGACY_REQUIRED_ROLES)
     wrong_model = identity("glm"); wrong_model["model"] = "openai.some-other-provider"
     with pytest.raises(ValueError, match="model identity"):
         validate_vote(pack, payload, identity=wrong_model, sources=sources)
@@ -116,23 +117,58 @@ def test_tampering_stale_input_and_unreadable_do_not_pass(inputs):
     pack, payload, sources, *_ = inputs
     votes = voices(pack, payload, sources)
     forged = copy.deepcopy(votes); forged[0]["identity"]["role"] = "minimax"
-    with pytest.raises(ValueError, match="receipt"): build_consensus(pack, forged)
+    with pytest.raises(ValueError, match="receipt"): build_consensus(pack, forged, required_roles=LEGACY_REQUIRED_ROLES)
     changed = copy.deepcopy(pack); changed["cases"][0]["ours"] = []
-    with pytest.raises(ValueError, match="pack SHA"): build_consensus(changed, votes)
+    with pytest.raises(ValueError, match="pack SHA"): build_consensus(changed, votes, required_roles=LEGACY_REQUIRED_ROLES)
     payload = copy.deepcopy(payload); payload["verdicts"][0]["decision"] = "unresolved"
-    assert not build_consensus(pack, voices(pack, payload, sources))["all_resolved"]
+    assert not build_consensus(pack, voices(pack, payload, sources), required_roles=LEGACY_REQUIRED_ROLES)["all_resolved"]
 
 
 def test_selected_null_is_distinct_and_rounds_cannot_mix(inputs, tmp_path):
     pack, payload, sources, *_ = inputs
     payload = copy.deepcopy(payload)
     for v in payload["verdicts"]: v["decision"] = "neither"; v["selected_value"] = None
-    assert build_consensus(pack, voices(pack, payload, sources))["cases"][0]["selected_value"] is None
+    assert build_consensus(pack, voices(pack, payload, sources), required_roles=LEGACY_REQUIRED_ROLES)["cases"][0]["selected_value"] is None
     votes = []
-    for i, role in enumerate(REQUIRED_ROLES):
+    for i, role in enumerate(LEGACY_REQUIRED_ROLES):
         p = save_vote(pack, payload, identity=identity(role), sources=sources, output_dir=tmp_path, round_number=1 if i else 2)
         votes.append(json.loads(p.read_text()))
-    with pytest.raises(ValueError, match="rounds"): build_consensus(pack, votes)
+    with pytest.raises(ValueError, match="rounds"): build_consensus(pack, votes, required_roles=LEGACY_REQUIRED_ROLES)
+
+
+def test_current_three_native_voices_are_default_and_still_unanimous(inputs):
+    pack, payload, sources, *_ = inputs
+    assert REQUIRED_ROLES == ("codex", "zcode", "minimax")
+    votes = voices(pack, payload, sources, roles=REQUIRED_ROLES)
+    # Native ZCode's actual model belongs to its session, never to this policy switch.
+    votes[1]["identity"]["model"] = "native-zcode-existing-session-model"
+    votes[1]["receipt_sha256"] = case_sha256({k: v for k, v in votes[1].items() if k != "receipt_sha256"})
+    result = build_consensus(pack, votes)
+    assert result["all_resolved"] and result["required_roles"] == list(REQUIRED_ROLES)
+    assert not build_consensus(pack, votes[:2])["complete"]
+    other = copy.deepcopy(payload); other["verdicts"][0]["decision"] = "oleg"
+    votes[-1] = validate_vote(pack, other, identity=identity("minimax"), sources=sources)
+    result = build_consensus(pack, votes)
+    assert result["complete"] and not result["all_resolved"]  # Two against one is not consensus.
+
+
+def test_legacy_glm_is_auditable_but_not_an_extra_current_voice(inputs, tmp_path):
+    pack, payload, sources, *_ = inputs
+    votes = voices(pack, payload, sources)
+    old_identity = identity("glm")
+    assert validate_identity(old_identity) == old_identity
+    assert receipt_path(pack, tmp_path, 2, "glm").name == "glm.json"
+    with pytest.raises(ValueError, match="profile"): build_consensus(pack, votes)
+    legacy = build_consensus(pack, votes, required_roles=LEGACY_REQUIRED_ROLES)
+    assert legacy["all_resolved"] and legacy["required_roles"] == list(LEGACY_REQUIRED_ROLES)
+
+
+@pytest.mark.parametrize("profile", [("codex", "minimax"), (), ["codex", "zcode", "zcode"],
+                                     ["codex", "zcode", "invented"], "codex,zcode,minimax"])
+def test_profile_cannot_silently_weaken_the_required_voices(inputs, profile):
+    pack, payload, sources, *_ = inputs
+    with pytest.raises(ValueError, match="profile"):
+        build_consensus(pack, voices(pack, payload, sources, roles=REQUIRED_ROLES), required_roles=profile)
 
 
 def test_mcp_tools_deliver_source_then_validate_complete_save(inputs, tmp_path):
@@ -271,7 +307,7 @@ def test_runtime_configuration_rejects_non_coding_endpoint(tmp_path):
     with pytest.raises(ValueError): runtime_config(config, "glm")
 
 
-@pytest.mark.parametrize("role,provider,variable", [("glm", "zai", "ZAI_API_KEY"), ("minimax", "anthropic", "MINIMAX_API_KEY")])
+@pytest.mark.parametrize("role,provider,variable", [("minimax", "anthropic", "MINIMAX_API_KEY")])
 def test_missing_credentials_fail_before_claim_or_http(tmp_path, monkeypatch, role, provider, variable):
     import yaml
     from catalog_json.reconciliation.voter import ENDPOINTS, deny_http_requests
@@ -286,6 +322,31 @@ def test_missing_credentials_fail_before_claim_or_http(tmp_path, monkeypatch, ro
     assert attempts == [] and not output.exists()
     monkeypatch.setenv(variable, "  ")
     with pytest.raises(ValueError, match="missing or empty"): runtime_config(config, role)
+
+
+@pytest.mark.parametrize("attempt", [1, 2])
+def test_new_glm_calls_refuse_before_credentials_claim_or_http(tmp_path, monkeypatch, attempt):
+    from catalog_json.reconciliation import voter
+    def forbidden_credentials(*args, **kwargs):
+        raise AssertionError("Retired GLM must be refused before reading credentials")
+    monkeypatch.setattr(voter, "runtime_config", forbidden_credentials)
+    output = tmp_path / "no-new-glm"
+    with voter.deny_http_requests() as attempts:
+        with pytest.raises(ValueError, match="GLM is retired"):
+            asyncio.run(voter.run_voter(pack_path=tmp_path / "unread-pack.json", sources_path=tmp_path / "unread-sources.json",
+                config_path=tmp_path / "unread-credentials.yaml", output_dir=output, role="glm", attempt_number=attempt))
+    assert attempts == [] and not output.exists()
+
+
+def test_direct_worker_cannot_replay_historical_glm(tmp_path):
+    from catalog_json.reconciliation import voter
+    claim = tmp_path / "claim.json"; claim.write_text(json.dumps({"role": "glm"}))
+    before = claim.read_bytes()
+    with voter.deny_http_requests() as attempts:
+        with pytest.raises(ValueError, match="GLM is retired"):
+            asyncio.run(voter._worker(tmp_path))
+    assert attempts == [] and claim.read_bytes() == before
+    assert [p.name for p in tmp_path.iterdir()] == ["claim.json"]
 
 
 @pytest.mark.parametrize("role,provider,variable,other", [("glm", "zai", "ZAI_API_KEY", "MINIMAX_API_KEY"),
@@ -351,25 +412,25 @@ def test_transport_attempt2_keeps_semantic_round_and_previous_bytes(inputs, tmp_
     from catalog_json.reconciliation.voter import ENDPOINTS
     pack, _, _, pack_file, sources_file = inputs
     output = tmp_path / "votes"
-    runtime = rejected_attempt_fixture(output, pack)
+    runtime = rejected_attempt_fixture(output, pack, role="minimax")
     frozen = {p.name: p.read_bytes() for p in runtime.iterdir()}
-    basis = validate_rejected_attempt(runtime, pack_sha256=case_sha256(pack), role="glm", round_number=2)
+    basis = validate_rejected_attempt(runtime, pack_sha256=case_sha256(pack), role="minimax", round_number=2)
     assert basis["classification"] == "provider_rejected_http401"
     config = tmp_path / "provider.yaml"
-    config.write_text(yaml.safe_dump({"zai": {"base_url": ENDPOINTS["glm"][1], "api_key": "fixture"}}))
+    config.write_text(yaml.safe_dump({"anthropic": {"base_url": ENDPOINTS["minimax"][1], "api_key": "fixture"}}))
     class NoProviderLaunch(Exception): pass
     async def prevent_model_process(*args, **kwargs): raise NoProviderLaunch()
     monkeypatch.setattr(asyncio, "create_subprocess_exec", prevent_model_process)
     with pytest.raises(NoProviderLaunch):
         asyncio.run(run_voter(pack_path=pack_file, sources_path=sources_file, output_dir=output,
-                             role="glm", config_path=config, round_number=2, attempt_number=2))
-    new = runtime.parent / "glm-attempt2"
+                             role="minimax", config_path=config, round_number=2, attempt_number=2))
+    new = runtime.parent / "minimax-attempt2"
     assert new.parents[3] == output  # Same depth as attempt1; same canonical round receipt.
     claim = json.loads((new / "claim.json").read_text())
     assert claim["round_number"] == 2 and claim["attempt_number"] == 2
     assert claim["retry_basis"] == basis and claim["session_id"] != "actual-old-session"
     assert all((runtime / name).read_bytes() == value for name, value in frozen.items())
-    assert not (runtime.parent.parent / "receipts" / "glm.json").exists()
+    assert not (runtime.parent.parent / "receipts" / "minimax.json").exists()
 
 
 def test_sdk_unknown_retry_is_disabled_and_429_is_observable():

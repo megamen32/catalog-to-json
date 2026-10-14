@@ -55,3 +55,17 @@ def test_tampered_parent_is_refused():
     vote['payload']['verdicts'][0]['decision'] = 'ours'
     with pytest.raises(ValueError, match='receipt'):
         project_vote(parent, vote, child)
+
+
+def test_historical_glm_projection_requires_explicit_legacy_profile():
+    from catalog_json.reconciliation.consensus import LEGACY_REQUIRED_ROLES, PROVIDER_MODELS
+    parent, vote, child = inputs()
+    vote['identity'].update(role='glm', model=PROVIDER_MODELS['glm'])
+    vote.pop('receipt_sha256')
+    vote['receipt_sha256'] = case_sha256(vote)
+    with pytest.raises(ValueError):
+        project_vote(parent, vote, child)
+    result = project_vote(parent, vote, child, required_roles=LEGACY_REQUIRED_ROLES)
+    assert result['identity'] == vote['identity']
+    assert result['round_number'] == vote['round_number']
+    assert result['projection']['new_model_calls'] == 0

@@ -8,7 +8,8 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
-REQUIRED_ROLES = ("codex", "zcode", "glm", "minimax")
+REQUIRED_ROLES = ("codex", "zcode", "minimax")
+LEGACY_REQUIRED_ROLES = ("codex", "zcode", "glm", "minimax")
 PROVIDER_MODELS = {"glm": "zai.glm-5.3-flash?reasoning=low",
                    "minimax": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium"}
 DECISIONS = {"ours", "oleg", "equivalent", "both", "neither", "unresolved"}
@@ -71,7 +72,7 @@ def load_sources(path: Path | str) -> dict:
 
 
 def validate_identity(identity: dict) -> dict:
-    if not isinstance(identity, dict) or identity.get("role") not in REQUIRED_ROLES:
+    if not isinstance(identity, dict) or identity.get("role") not in LEGACY_REQUIRED_ROLES:
         raise ValueError("Unknown actual voter role")
     for key in ("session_id", "model", "runtime"):
         if not isinstance(identity.get(key), str) or not identity[key].strip():
@@ -140,7 +141,7 @@ def validate_vote(pack: dict, payload: dict, *, identity: dict, sources: dict) -
 
 
 def receipt_path(pack, output_dir, round_number, role):
-    if type(round_number) is not int or round_number < 1 or role not in REQUIRED_ROLES:
+    if type(round_number) is not int or round_number < 1 or role not in LEGACY_REQUIRED_ROLES:
         raise ValueError("Invalid round or role")
     return Path(output_dir) / case_sha256(pack) / f"round{round_number}" / "receipts" / f"{role}.json"
 
@@ -163,7 +164,22 @@ def save_vote(pack, payload, *, identity, sources, output_dir, round_number=1) -
     return write_exclusive(receipt_path(pack, output_dir, round_number, identity["role"]), envelope)
 
 
-def build_consensus(pack: dict, votes: list[dict]) -> dict:
+def build_consensus(pack: dict, votes: list[dict], *, required_roles=None) -> dict:
+    """New work requires three voices; auditing old four-voice work is explicit.
+
+    Never infer the profile from supplied votes or silently discard an extra voice.
+    Legacy output fields and role ordering remain unchanged for historical proofs.
+    """
+    required = REQUIRED_ROLES
+    if required_roles is not None:
+        if (type(required_roles) not in (tuple, list)
+                or any(type(role) is not str for role in required_roles)
+                or len(set(required_roles)) != len(required_roles)):
+            raise ValueError("required_roles must select the current three-role or explicit legacy four-role profile")
+        if set(required_roles) == set(LEGACY_REQUIRED_ROLES):
+            required = LEGACY_REQUIRED_ROLES
+        elif set(required_roles) != set(REQUIRED_ROLES):
+            raise ValueError("required_roles must select the current three-role or explicit legacy four-role profile")
     validate_pack(pack)
     roles = {}
     sessions = set()
@@ -176,6 +192,8 @@ def build_consensus(pack: dict, votes: list[dict]) -> dict:
             raise ValueError("Vote receipt or pack SHA mismatch")
         identity = validate_identity(vote["identity"])
         role = identity["role"]
+        if role not in required:
+            raise ValueError("Vote role is outside the explicitly selected required_roles profile")
         if role in roles or identity["session_id"] in sessions:
             raise ValueError("Repeated role/session is not independent consensus")
         sessions.add(identity["session_id"])
@@ -185,7 +203,7 @@ def build_consensus(pack: dict, votes: list[dict]) -> dict:
         roles[role] = vote
     if len(rounds) > 1:
         raise ValueError("Do not combine different deliberation rounds")
-    missing = sorted(set(REQUIRED_ROLES) - set(roles))
+    missing = sorted(set(required) - set(roles))
     results = []
     for case in pack["cases"]:
         opinions = {role: next(v for v in vote["payload"]["verdicts"] if v["case_id"] == case["case_id"]) for role, vote in roles.items()}
@@ -211,5 +229,5 @@ def build_consensus(pack: dict, votes: list[dict]) -> dict:
             result["reason"] = "Missing independent voices" if missing else "Disagreement or unreadable source"
         results.append(result)
     return {"schema_version": "catalogue-consensus/1", "pack_id": pack["pack_id"], "pack_sha256": case_sha256(pack),
-            "required_roles": list(REQUIRED_ROLES), "complete": not missing,
+            "required_roles": list(required), "complete": not missing,
             "all_resolved": all(c["consensus"] for c in results), "cases": results}
