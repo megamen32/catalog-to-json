@@ -172,11 +172,53 @@
     "python_version": "3.12.13"
   },
   "native_model_throughput_gain": "Not established. Native201 reviewed on1511 in97.257s and independently checked16rows/80cells; no1513 native PASS claim yet.",
-  "handoff_status": "waiting_for_admitted_GLM_only",
+  "handoff_status": "new_unit_active",
   "native96_accepted": {
     "extractor_version": "1.5.3",
     "reviewer_version": "1.5.12",
     "candidate_and_review_sha256_verified": true,
     "root_original_visual_check_this_turn": false
+  },
+  "completed_handoff": {
+    "new_program": {
+      "package_version": "1.5.13",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "388e4b7dea7fc75a16d8aeee3f64f722f70d0518bda21b5ea9121fd690d0cc26",
+      "python_version": "3.12.13"
+    },
+    "no_native_calls_interrupted": true,
+    "compatible_accepted_verified": 518,
+    "artifact_pins": 1498,
+    "quota_hold_preserved": true
+  },
+  "official_minimax_reset_verified": true,
+  "real_native_minimax_resume": {
+    "observed_unix": 1791954103.041931,
+    "catalog": "isolators",
+    "physical_page": 47,
+    "attempt": 28,
+    "role": "extractor",
+    "program": {
+      "package_version": "1.5.13",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "388e4b7dea7fc75a16d8aeee3f64f722f70d0518bda21b5ea9121fd690d0cc26",
+      "python_version": "3.12.13"
+    },
+    "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+    "contract_sha256": "4dfdf43954cb8adf1b11456ab3262a152d1ef2fea7fdfb31ebca498d2e6cbeb7",
+    "after_official_reset": true,
+    "source_tools": [
+      "load_skill",
+      "view_page",
+      "read_review",
+      "read_page_json",
+      "read_external_audit",
+      "view_region",
+      "extract_direct"
+    ],
+    "history_sha256": "a15ac79f5b8a9430267c77283184fe050a50ab9c747e04cedcbb1436ad576500",
+    "scope": "Real native model source tool calls after reset, not completed extraction or final page acceptance"
   }
 }
