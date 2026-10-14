@@ -1,0 +1,135 @@
+{
+  "observed_local": "2026-10-14T05:21:15.997341+03:00",
+  "program": {
+    "package_version": "1.5.8",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "56b47ab11c142fdd0d89ade636eb52fff30220c3425401678e2bf74c18b69c62",
+    "python_version": "3.12.13"
+  },
+  "primary_roles": {
+    "extractor": {
+      "package_version": "1.5.8",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "56b47ab11c142fdd0d89ade636eb52fff30220c3425401678e2bf74c18b69c62",
+      "python_version": "3.12.13"
+    },
+    "reviewer": {
+      "package_version": "1.5.8",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "56b47ab11c142fdd0d89ade636eb52fff30220c3425401678e2bf74c18b69c62",
+      "python_version": "3.12.13"
+    }
+  },
+  "models": {
+    "extractor": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+    "reviewer": "zai.glm-5.3-flash?reasoning=low"
+  },
+  "reviewer_endpoint": "https://api.z.ai/api/coding/paas/v4/",
+  "counts_at_handoff": {
+    "opn": {
+      "accepted": 60,
+      "drafts": 60
+    },
+    "isolators": {
+      "accepted": 161,
+      "drafts": 162
+    },
+    "small": {
+      "accepted": 227,
+      "drafts": 228
+    },
+    "innovations": {
+      "accepted": 57,
+      "drafts": 216
+    },
+    "armature": {
+      "accepted": 4,
+      "drafts": 314
+    }
+  },
+  "accepted_at_handoff": 509,
+  "source_draft_pages_preserved": 980,
+  "pretransition_artifacts_verified": 1489,
+  "pretransition_artifacts_changed": 0,
+  "retained_native_mcp_quote_replay": {
+    "program": {
+      "package_version": "1.5.8",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "56b47ab11c142fdd0d89ade636eb52fff30220c3425401678e2bf74c18b69c62",
+      "python_version": "3.12.13"
+    },
+    "native_mcp_source_observation_saved": true,
+    "physical_page": 100,
+    "model_calls": 0,
+    "elapsed_seconds": 4.412,
+    "complete_quote_preserved": true,
+    "production_outputs_edited": false
+  },
+  "focused_checks": {
+    "passed": 47,
+    "elapsed_seconds": 13.85
+  },
+  "native158_final_page_acceptance": "pending, not yet claimed",
+  "handoff": {
+    "old_unit": "full-semantic156",
+    "new_unit": "full-semantic158",
+    "standby157_activated": false,
+    "completed_current_reviews_before_stop": true,
+    "unfinished_isolators47_extractor27_interrupted": true,
+    "native_cancellation_history_retained": true,
+    "old_unit_stop": "SIGINT grace then systemd cleanup; not described as wholly graceful",
+    "second_full_queue": false,
+    "owned_admission_holds_removed": true
+  },
+  "large_model_benchmark_run": false,
+  "accuracy_note": "No new global or drawing accuracy score. Progress and source/tool fixes only; all980 reviewed JSON/Excel delivery remains outstanding.",
+  "live_native158_source_lead_consumption": [
+    {
+      "catalog": "isolators",
+      "physical_page": 47,
+      "attempt": 27,
+      "native_role": "extractor",
+      "program_version": "1.5.8",
+      "first_three_tools": [
+        "catalog__load_skill",
+        "catalog__view_page",
+        "catalog__read_external_audit"
+      ],
+      "audit_before_detail": true,
+      "final_acceptance": "not claimed"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 86,
+      "attempt": 4,
+      "native_role": "extractor",
+      "program_version": "1.5.8",
+      "first_three_tools": [
+        "catalog__load_skill",
+        "catalog__view_page",
+        "catalog__read_external_audit"
+      ],
+      "audit_before_detail": true,
+      "final_acceptance": "not claimed"
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 188,
+      "attempt": 2,
+      "native_role": "extractor",
+      "program_version": "1.5.8",
+      "first_three_tools": [
+        "catalog__load_skill",
+        "catalog__view_page",
+        "catalog__read_external_audit"
+      ],
+      "audit_before_detail": true,
+      "final_acceptance": "not claimed"
+    }
+  ],
+  "published_source_revision": "5e1949e"
+}
