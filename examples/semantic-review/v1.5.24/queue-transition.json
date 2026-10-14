@@ -1,10 +1,10 @@
 {
-  "observed_at": "2026-10-14T19:33:50.361651+03:00",
+  "observed_at": "2026-10-14T20:29:20.807848+03:00",
   "unit": "catalog-worker@full-semantic1524.service",
   "version": "1.5.24",
-  "accepted_total": 477,
-  "independently_verified_revision_total": 422,
-  "completed_total": 899,
+  "accepted_total": 476,
+  "independently_verified_revision_total": 493,
+  "completed_total": 969,
   "catalogues": {
     "opn": {
       "accepted_pages": 60,
@@ -17,83 +17,75 @@
       }
     },
     "isolators": {
-      "accepted_pages": 121,
-      "independently_verified_revision_pages": 20,
-      "completed_pages": 141,
+      "accepted_pages": 122,
+      "independently_verified_revision_pages": 39,
+      "completed_pages": 161,
       "draft_pages": 162,
       "pages": 162,
       "statuses": {
-        "accepted": 121,
-        "superseded_by_independently_verified_revision": 20,
-        "awaiting_review": 18,
-        "reviewing": 2,
-        "awaiting_provider_admission": 1
+        "accepted": 122,
+        "superseded_by_independently_verified_revision": 39,
+        "reviewing": 1
       }
     },
     "small": {
       "accepted_pages": 196,
-      "independently_verified_revision_pages": 5,
-      "completed_pages": 201,
+      "independently_verified_revision_pages": 31,
+      "completed_pages": 227,
       "draft_pages": 228,
       "pages": 228,
       "statuses": {
         "accepted": 196,
-        "superseded_by_independently_verified_revision": 5,
-        "reviewing": 2,
-        "awaiting_review": 25
+        "superseded_by_independently_verified_revision": 31,
+        "reviewing": 1
       }
     },
     "armature": {
-      "accepted_pages": 26,
-      "independently_verified_revision_pages": 270,
-      "completed_pages": 296,
+      "accepted_pages": 25,
+      "independently_verified_revision_pages": 282,
+      "completed_pages": 307,
       "draft_pages": 314,
       "pages": 314,
       "statuses": {
-        "accepted": 26,
-        "extracting": 2,
-        "awaiting_review": 16,
-        "superseded_by_independently_verified_revision": 270
+        "accepted": 25,
+        "awaiting_provider_admission": 3,
+        "awaiting_review": 3,
+        "superseded_by_independently_verified_revision": 282,
+        "reviewing": 1
       }
     },
     "innovations": {
-      "accepted_pages": 74,
-      "independently_verified_revision_pages": 127,
-      "completed_pages": 201,
+      "accepted_pages": 73,
+      "independently_verified_revision_pages": 141,
+      "completed_pages": 214,
       "draft_pages": 216,
       "pages": 216,
       "statuses": {
-        "accepted": 74,
-        "superseded_by_independently_verified_revision": 127,
-        "reviewing": 2,
-        "awaiting_review": 13
+        "accepted": 73,
+        "superseded_by_independently_verified_revision": 141,
+        "reviewing": 1,
+        "awaiting_review": 1
       }
     }
   },
+  "delta_completed": {
+    "opn": 0,
+    "isolators": 1,
+    "small": 3,
+    "armature": 8,
+    "innovations": 2
+  },
   "manual_source_review": {
-    "total_distinct_pages": 486,
-    "cells_checked": 54170,
+    "total_distinct_pages": 513,
+    "cells_checked": 57111,
     "by_catalogue": {
       "armature": 296,
-      "innovations": 143,
-      "isolators": 30,
-      "small": 17
+      "innovations": 144,
+      "isolators": 41,
+      "small": 32
     },
-    "independent_passed": 431,
-    "independent_revise": 21
-  },
-  "transition": {
-    "status": "started_awaiting_manual_and_native_consumer_proof",
-    "finished_unix": 1791994471.3889523,
-    "elapsed_seconds": 987.255,
-    "new_version": "1.5.24",
-    "unit": "catalog-worker@full-semantic1524.service",
-    "old_unit": "catalog-worker@full-semantic1523.service",
-    "accepted_before": 477,
-    "retained_native_artifact_hashes_unchanged": 3807,
-    "native_calls_interrupted": 0,
-    "manual_completions_already_observed": 402,
-    "owner": "root-supporting-metadata24-transfer-1791993484"
+    "independent_passed": 494,
+    "independent_revise": 14
   },
   "actual_new_version_completed_calls": [
     {
@@ -126,7 +118,7 @@
       "role": "extractor",
       "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
       "artifact_sha256": "669619b5e78cb34771c19fb7900aa492a7c492e2ee3c470dffbbb2ea0fa50d95",
-      "status": "awaiting_review",
+      "status": "accepted",
       "verdict": null,
       "elapsed_seconds": 100.514,
       "rate_limit_events": 0,
@@ -137,10 +129,58 @@
       "physical_page": 47,
       "role": "reviewer",
       "model": "zai.glm-5.3-flash?reasoning=low",
-      "artifact_sha256": "9412e8f5e6954253bc73dc71b734336588514b1bd080b0882c1dad5331243da3",
-      "status": "awaiting_review",
+      "artifact_sha256": "ee3b8772fc5ee77095d8fe074e3922c8ebeabaaee745ddcfd4f98eb3edabce3a",
+      "status": "accepted",
+      "verdict": "pass",
+      "elapsed_seconds": 358.38,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 61,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "85c9db715b3d674ea13a21c8491b5934a72aee2892d349898729b391a6ba4130",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "pass",
+      "elapsed_seconds": 399.412,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 64,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "b4bce4dadcf06efc3d4088c8bb4017b1f3813f8570c1ca2ddd1c782f3cbe8d04",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 515.231,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 91,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "2596b6ed30740f70e805ee8713fc22113d7f383b6cacdbf8c520679ec7188e3f",
+      "status": "reviewing",
+      "verdict": null,
+      "elapsed_seconds": 356.679,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 91,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "e62775b6e69923a364cfb67c3956842cdcf32dd1b14958e7750b5b86a8268f48",
+      "status": "reviewing",
       "verdict": "uncertain",
-      "elapsed_seconds": 311.812,
+      "elapsed_seconds": 510.291,
       "rate_limit_events": 0,
       "receipt_verified": true
     },
@@ -169,12 +209,108 @@
       "receipt_verified": true
     },
     {
+      "catalog": "small",
+      "physical_page": 104,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "dbd0e4f53e079a33d3044e4bfea991420bf8cd8fdf9f6589268c16ec895a59ab",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": null,
+      "elapsed_seconds": 85.936,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "small",
+      "physical_page": 104,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "f64fcadf629bb7cac16052dc73d2a9af072030ed500443f991d7639ff7bd49ba",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 181.012,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "small",
+      "physical_page": 105,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "311ed0dc5136e86b859c886d786de42dea2a007be4c0e1ea35409bf1974e2ad6",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": null,
+      "elapsed_seconds": 260.534,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "small",
+      "physical_page": 105,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "944cd765c5f4c0e655f20cd9ac12e7c6395143ad26375e1b1f94145818eb6052",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "uncertain",
+      "elapsed_seconds": 325.48,
+      "rate_limit_events": 2,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "small",
+      "physical_page": 106,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "de22013ba47be4dcb0196077bbb62be9415bbac694e37914465c27cec95b2c7a",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": null,
+      "elapsed_seconds": 251.629,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "small",
+      "physical_page": 106,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "ff2739aba21ea14887dc96d28f74c18e7700462c0c3bed684e20196cd44461ce",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 590.318,
+      "rate_limit_events": 3,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "small",
+      "physical_page": 115,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "42a3a52e59abe992a882ef473ac3d45da98f94d303861d0e3959e1dd9bd2c7fb",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 450.297,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 8,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "a170a6f1c21591803d7b321376cb1172919b087a952cd2c2cd96565fcdecdf13",
+      "status": "awaiting_provider_admission",
+      "verdict": null,
+      "elapsed_seconds": 199.473,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
       "catalog": "armature",
       "physical_page": 8,
       "role": "reviewer",
       "model": "zai.glm-5.3-flash?reasoning=low",
       "artifact_sha256": "1a63295fc12cbedeec6b390dfb9d9d72ee8b5f6bc6e38667ac8c3ab7121ea2a6",
-      "status": "extracting",
+      "status": "awaiting_provider_admission",
       "verdict": "revise",
       "elapsed_seconds": 86.488,
       "rate_limit_events": 0,
@@ -185,10 +321,10 @@
       "physical_page": 9,
       "role": "extractor",
       "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
-      "artifact_sha256": "0a474206e46d13d6b18adaf5a54c9f13550d0fadb8d1197b27f365f1d0a3e1e8",
+      "artifact_sha256": "144ce1937f248bc8176921a5f0f0137ecb698d36ace02abdf5224439940d4c4e",
       "status": "awaiting_review",
       "verdict": null,
-      "elapsed_seconds": 166.693,
+      "elapsed_seconds": 117.856,
       "rate_limit_events": 0,
       "receipt_verified": true
     },
@@ -197,10 +333,22 @@
       "physical_page": 9,
       "role": "reviewer",
       "model": "zai.glm-5.3-flash?reasoning=low",
-      "artifact_sha256": "62503e5e9bcee707391d305cd7258a61d7b086611557ce88102bec9c409013c9",
+      "artifact_sha256": "6ff5d429bb1d46bdf9af1640390af966b98ea069a3e44b2a6ff22fc9ebf2c12c",
       "status": "awaiting_review",
-      "verdict": "revise",
-      "elapsed_seconds": 327.697,
+      "verdict": "uncertain",
+      "elapsed_seconds": 438.11,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 11,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "0aec46fc6fc69988b5031d8550d9bc9ae0a159f3ec339e633d4bc8e4449daea8",
+      "status": "accepted",
+      "verdict": null,
+      "elapsed_seconds": 96.622,
       "rate_limit_events": 0,
       "receipt_verified": true
     },
@@ -209,10 +357,238 @@
       "physical_page": 11,
       "role": "reviewer",
       "model": "zai.glm-5.3-flash?reasoning=low",
-      "artifact_sha256": "22f7aeabcf1d03eb05360e06227c0a544386104be0d53f9e997c56abb9084651",
-      "status": "extracting",
+      "artifact_sha256": "4be548cd3edd1a7ec0ca5eba1ed00500f931fb54681bc4aac47ed2e975cd951c",
+      "status": "accepted",
+      "verdict": "pass",
+      "elapsed_seconds": 135.725,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 13,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "65361a7c4d6695ca61cf225383eb440d0a20ad6486fdf889e3a5be3025dad239",
+      "status": "reviewing",
+      "verdict": null,
+      "elapsed_seconds": 277.493,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 13,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "488c49c81de9e63555c80a50ef3f894ed084e6b7997fedeea6b5470f3fdbce0c",
+      "status": "reviewing",
       "verdict": "revise",
-      "elapsed_seconds": 137.476,
+      "elapsed_seconds": 138.604,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 19,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "b7eb5b3c1bf4c5e9bcc52f994929c865ea0e57937dbd6abf54ce413cfcf48ca5",
+      "status": "awaiting_provider_admission",
+      "verdict": null,
+      "elapsed_seconds": 85.306,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 19,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "485f5f15c7c5ffd2892e35aefc9194a7908ba46624b26998adbf15fa98c49e83",
+      "status": "awaiting_provider_admission",
+      "verdict": "revise",
+      "elapsed_seconds": 289.129,
+      "rate_limit_events": 1,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 36,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "f266ed355b9bcd431ac2ccac1656c5ebbc3250a5b7d7b01b55d9efd64150042e",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": null,
+      "elapsed_seconds": 84.512,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 36,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "8dbc26a4d03bbec1fbb97ece2af20e739e04369d1875ccae8a4e7af2be1fed1d",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 559.454,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 40,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "f844d4d193888038d777a1037759e94b92ade10ce4c9e18b607da7381992ac30",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": null,
+      "elapsed_seconds": 154.858,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 40,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "9cbb8dc3ecb7e9c51d0f276fbd58540e4833e2f7c9ea439a8f6785302e713fff",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 88.187,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 56,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "e402bc62e06f6fc577791e6eb7b134a5b2735378baee6d73b4c56d0e76af6a7e",
+      "status": "awaiting_review",
+      "verdict": null,
+      "elapsed_seconds": 183.817,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 56,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "54be13f37a30531148956a9e15bb39ceaf88f3ead4e399e4f3e8b6ba3f350710",
+      "status": "awaiting_review",
+      "verdict": "revise",
+      "elapsed_seconds": 77.589,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 93,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "b7f931782bd4e51efc36a305989c196125a12071cb204253f73bf17acce7f349",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "pass",
+      "elapsed_seconds": 109.806,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 97,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "376bb55b525790ca708f5447b03d5914aac8174af06d4bd1a8e36cd87225c9d3",
+      "status": "awaiting_review",
+      "verdict": null,
+      "elapsed_seconds": 168.279,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 97,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "c78fa8ac20d89c7f4e51e57e5d2dba2551243e666b324a2c0329a62b39986575",
+      "status": "awaiting_review",
+      "verdict": "uncertain",
+      "elapsed_seconds": 858.133,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 169,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "41fb83a30ef358dd9e841f5a9cc080c5a455244b88d207533015b43787fe496c",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 414.764,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 228,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "cfc39f60da384643f41fd059093d4eb5515d8fd8a4f385afc7b0bbda08154799",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": null,
+      "elapsed_seconds": 220.38,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 228,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "767efed9b1888b86e5f1fb9b2d171de408609be4878f69c3843d907ee59b2c2e",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 383.192,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 283,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "80684d5675bb0ec910625f1c4670cab0984e1a4bfb33c31191bf27bef9544dae",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 423.994,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 313,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "e9f6dd3c8d2b202b450eb0083fa900745a9b085986d9e08d2103be414ecca584",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": null,
+      "elapsed_seconds": 120.142,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 313,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "a4cd04a7d66066284ec934427d993a6de276f1cf9b95fc9f9a57ed0ebbf80234",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 130.14,
       "rate_limit_events": 0,
       "receipt_verified": true
     },
@@ -242,6 +618,66 @@
     },
     {
       "catalog": "innovations",
+      "physical_page": 28,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "7c8c0e3e8892b9d318fad86953069e3890017ebb939dd4f3794039e30a36dc1f",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": null,
+      "elapsed_seconds": 128.206,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 28,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "8fab11a7fc7b09e62888eaf371b70d9b711a06b6e8e4841727a1d7f0af66cd40",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 294.149,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 45,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "c9f0d8c143877aac72345c03094e8b52ef9cf6eca09349b647a3f4d06f75c7cd",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "pass",
+      "elapsed_seconds": 717.793,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 49,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "d6bfc5a1cbabc91f25b607efb47ab58a24fa5f2703041f4954ac296935b0ccf7",
+      "status": "accepted",
+      "verdict": "pass",
+      "elapsed_seconds": 648.75,
+      "rate_limit_events": 2,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 105,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "d702bf4aa3332c61db4b23d898e8557dbc919f8a01c1eb3aeb58b8c8b790a623",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "pass",
+      "elapsed_seconds": 113.707,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
       "physical_page": 110,
       "role": "extractor",
       "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
@@ -263,20 +699,390 @@
       "elapsed_seconds": 115.769,
       "rate_limit_events": 0,
       "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 118,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "6fc60c30a630c8dcabc7e254b3ec14cccb1442c9678dd7375e5591c67a82204d",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 554.132,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 133,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "1d6500277f4b5bdd5d49a6101e705d4e8b15527d90b05dd39fd7eb87940bd083",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": null,
+      "elapsed_seconds": 116.191,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 133,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "7ee7da4e278aaf42525f55020fa72e8dac7570e14bd6fcec0d863eb02135047d",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 179.561,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 137,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "bff62a2057f8c68cf664da39552a44cf576867bdbf7d929ca07d1da25deb800b",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": null,
+      "elapsed_seconds": 102.733,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 137,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "5d8ca03198c361f1ef2bbcf3008c2f3f0ea0e8cbf42cfd025f63784e0564c97c",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "pass",
+      "elapsed_seconds": 440.014,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 144,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "ada0dc384a83d4bb3bd55c7aadc6a3056ef0b46dc19ec387111c633aaf01735a",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": null,
+      "elapsed_seconds": 80.666,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 144,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "07c3632b0b921c00e91a267ac7ccd1c4635ff2f74505544aa8b38b463c6c6d95",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 545.875,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 159,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "f377487e0fb32efc4f0b8013daa6e5973fdf0d1f826dbcbc4a7c1786dfe2419f",
+      "status": "awaiting_review",
+      "verdict": null,
+      "elapsed_seconds": 151.865,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 159,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "fd3bc10e1e290f69e3bfaca4c84d5549599f43ce30a0031e95c224638f8303ed",
+      "status": "awaiting_review",
+      "verdict": "revise",
+      "elapsed_seconds": 91.194,
+      "rate_limit_events": 0,
+      "receipt_verified": true
     }
   ],
-  "confirmed_issues_and_work": [
-    "Root independently accepted mod3 extra6:636cells;mod1backlog8:1006cells;small40:77cells;small100/101:69cells.",
-    "Root authored last9+26:1493cells,eightoflast9independentPASS;49/isolators91source-sign unresolved. EarlierfalsePASS110/118reopened,root110r3/118r2sharedL1/L2plane fixed,324tablecells unchanged;independentexactdeltaPASSreceived. Rootcrosscheckedisolators34/61/64/91/92/96:851cells,5PASS/91REVISE;97/98/99/100/106/107:664cells6PASS.",
-    "Found and corrected operator skip error: workers read stale result.json accepted markers. Verified CURRENT catalog.json96/106/159isolators103/211small awaiting_review and restored all remaining page work; no native files manually altered.",
-    "Source24 reviewer support annotations/date fix delivered: 54 focused checks plus root5;first actual CodingEndpoint review24 completed86.488s,no429,verdictrevise retained.",
-    "Old23→24 controlled transfer987.255s,0interruptedcalls,3807retainednativeSHAsunchanged;477compatibleacceptedverified. Failed earlier preflight retained,old23 stayedlive until safe retry."
+  "native_transcript_summary": [
+    {
+      "sha256": "e9f5d547b38de5fcc91f29f67cb1b9846d13ce7a44f97276c2584fd880976ac6",
+      "tool_count": 11,
+      "tool_counts": {
+        "catalog__load_skill": 1,
+        "catalog__view_page": 1,
+        "catalog__view_region": 3,
+        "catalog__get_json_schema": 1,
+        "catalog__save_source_observation": 1,
+        "catalog__read_external_audit": 1,
+        "catalog__read_page_json": 1,
+        "catalog__save_review": 2
+      },
+      "model_responses": 9,
+      "prompt_tokens": 177271,
+      "completion_tokens": 3614,
+      "reported_uncached_prompt_tokens": null,
+      "reported_cache_read_tokens": 154752
+    },
+    {
+      "sha256": "8e85fc1a3bc3f1379de63e7adc1388daec7b5b89237f5c5a6e91cce36ecdd1f0",
+      "tool_count": 29,
+      "tool_counts": {
+        "catalog__load_skill": 1,
+        "catalog__view_page": 1,
+        "catalog__view_region": 7,
+        "catalog__save_source_observation": 2,
+        "catalog__get_json_schema": 2,
+        "catalog__read_page_json": 1,
+        "catalog__read_external_audit": 2,
+        "bash": 2,
+        "catalog__read_source_layout": 1,
+        "catalog__read_source_artifact": 3,
+        "catalog__record_dimension_reviews": 5,
+        "catalog__save_review": 2
+      },
+      "model_responses": 24,
+      "prompt_tokens": 1028682,
+      "completion_tokens": 26207,
+      "reported_uncached_prompt_tokens": null,
+      "reported_cache_read_tokens": 954176
+    },
+    {
+      "sha256": "24db8cbc1fbbcbadfa9c8ebf5cdaea029d3056822cb96ee5fe23a63f8865ace6",
+      "tool_count": 14,
+      "tool_counts": {
+        "catalog__load_skill": 1,
+        "catalog__view_page": 1,
+        "catalog__read_external_audit": 1,
+        "catalog__read_page_json": 1,
+        "catalog__read_review": 1,
+        "catalog__get_json_schema": 1,
+        "read_text_file": 2,
+        "catalog__view_region": 1,
+        "catalog__save_page_json": 4,
+        "catalog__extract_direct": 1
+      },
+      "model_responses": 11,
+      "prompt_tokens": null,
+      "completion_tokens": 26132,
+      "reported_uncached_prompt_tokens": 59283,
+      "reported_cache_read_tokens": 312176
+    }
   ],
-  "next_step": "All980 delivery remains open. Root crossreviews new mod3 small and mod1isolators;mod0 independently reviews root9/mod1remaining;mod1 authors remainingisolators;mod3 authors remainingsmall. Root9eightPASS;49andisolators91source-sign remain unresolved. Root110r3/118r2exactindependentPASS followsreopenedfalsePASS. Continue MiniMax/GLM24,no newlargebenchmark.",
+  "transition": {
+    "status": "started_awaiting_manual_and_native_consumer_proof",
+    "finished_unix": 1791994471.3889523,
+    "elapsed_seconds": 987.255,
+    "new_version": "1.5.24",
+    "unit": "catalog-worker@full-semantic1524.service",
+    "old_unit": "catalog-worker@full-semantic1523.service",
+    "accepted_before": 477,
+    "retained_native_artifact_hashes_unchanged": 3807,
+    "native_calls_interrupted": 0,
+    "manual_completions_already_observed": 402,
+    "owner": "root-supporting-metadata24-transfer-1791993484"
+  },
+  "latest_public_snapshot": {
+    "zip": "examples/catalogs/all-pages-2026-10-14T172333Z/all-catalogues-980-pages.zip",
+    "zip_sha256": "dcfdf4a64448a727766cc50ba31b01cf967b475744b9a6d6c5d065344c5061a7",
+    "zip_bytes": 10446071,
+    "archive_CRC": "passed",
+    "extracted_files": 8,
+    "json_pages_validated": 980,
+    "excel_workbooks_reopened": 5,
+    "independent_review_attribution_roundtrip": true,
+    "excel_data_cells_exact_roundtrip": 83712,
+    "figure_descriptions_in_json": 1973,
+    "manual_pages_integrated": 508,
+    "manual_independently_source_verified": 494,
+    "native_queue_accepted_pages": 475,
+    "independent_accepted": 966,
+    "all_pages_independently_reviewed": false,
+    "model_calls": 0,
+    "elapsed_seconds": 110.395,
+    "peak_rss_bytes": 534552576,
+    "public_commit": "a6ef17a1fe3225d50c2756147756bd9c5da8f7c4",
+    "public_url": "https://raw.githubusercontent.com/megamen32/catalog-to-json/a6ef17a1fe3225d50c2756147756bd9c5da8f7c4/examples/catalogs/all-pages-2026-10-14T172333Z/all-catalogues-980-pages.zip",
+    "public_download_verified_at": "2026-10-14T20:29:06.112954+03:00",
+    "http_status": 200,
+    "download_crc": "passed",
+    "download_members": 8,
+    "download_pages": 980,
+    "download_pending_source_pages": 14,
+    "download_manifest_file_hashes_verified": true
+  },
+  "latest_public_pending": [
+    {
+      "catalog": "isolators",
+      "physical_page": 47,
+      "uncertainties": [
+        "В миниатюрах восьми документов неразборчивы отдельные рукописные номера/даты, полные номера ТУ и некоторые разряды перечней марок. В нижнем втором документе различимо ПС 300, последняя буква не подтверждена. Для точной полной транскрипции вспомогательных реквизитов требуется более качественный оригинал документов; типы и числа не угаданы."
+      ],
+      "current_content_sha256": "a47addbe20dbdc9ce53f8e6f89a9d4a8e00a0ebc0f2dbb0b6b18a5d4932c90ab",
+      "author": "catalog_tail_mod3"
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 91,
+      "uncertainties": [
+        "Не разрешён знак перед верхним отклонением1.3 у отверстия Ø17 верхней проушины: на оригинале только вертикальный штрих. Нижнее отклонение0 читается. Нельзя выводить плюс или минус по ожидаемому допуску/соседним страницам."
+      ],
+      "current_content_sha256": "33da34431cb4f6bd143276964a26a2b49302a8c8541d73f3e8ad582a98019ff6",
+      "author": "catalog_tail_mod1"
+    },
+    {
+      "catalog": "small",
+      "physical_page": 174,
+      "uncertainties": [
+        "У верхнего отверстия Ø17 знак перед верхними цифрами1.3 неразборчив: собственный40×оригинал показывает лишь вертикальную черту. Нижнее отклонение0 различимо. Требуется более качественный источник для точного знака; минус или плюс не угаданы."
+      ],
+      "current_content_sha256": "1c072dcfa1078d90034c9de06fb6ec35fb52a83fc3c3fcdd6bb115d89a33b7b9",
+      "author": "catalog_tail_mod3"
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 49,
+      "uncertainties": [
+        "Знакверхнегоотклонения1.3дляØ17верхнейпроушины:24×растеризованныйвекторныйглифнепозволяетrootуверенноотличитьзнак;нужнанезависимаясверка. Номинал17/нижнее0читаются."
+      ],
+      "current_content_sha256": "9eb997da32f710ffb2ebb98dc798666e553f381666bb7778f77fd36e9631a69c",
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163"
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 156,
+      "uncertainties": [
+        "Дополнительные мелкие знаки рядом с повёрнутой маркировкой 3РГД на корпусе не прочитаны полностью: увеличенный исходный растр не даёт уверенного буквального чтения."
+      ],
+      "current_content_sha256": "6f4ce9daa4c81a75b01b799e90e23a813b37aebee888ee4440d8cedabbb60bd2",
+      "author": "catalog_tail_mod0"
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 159,
+      "uncertainties": [
+        "Мелкие клейма на предметных изображениях имеют недостаточную читаемость для достоверного определения конкретных марок изделий."
+      ],
+      "current_content_sha256": "9b7ff66e8d726619ec36f91babd059a24eb223bded711c3b8a467cd0358522eb",
+      "author": "catalog_tail_mod3"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 8,
+      "uncertainties": [
+        "Полный суффикс мелкой синей маркировки белого изделия после «ИОС-20-2000…» не подтверждён: исходная фотография размыта даже при40×. На голубой детали видна «ИНСТА», но продолжение справа обрезано; полная маркировка не установлена."
+      ],
+      "current_content_sha256": "fde232d678ca4d126f50066b9ce41c3e8ef7d3301dddbd17be34bd9b2cef78bf",
+      "author": "catalog_tail_mod0"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 9,
+      "uncertainties": [
+        "Полные мелкие тексты дипломов и круговые надписи всех медалей не читаются надёжно в исходных растровых иллюстрациях; нижний год левой группы дипломов не установлен."
+      ],
+      "current_content_sha256": "80fe62e8a4a835feef0cfbfceb639efd49944122cedc56444956f57a92577816",
+      "author": "catalog_tail_mod1"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 11,
+      "uncertainties": [
+        "Мелкие номера, сроки, подписи и текстовые поля внутри фотографий сертификатов не разрешаются надёжно. Содержимое узкой обрезанной фотографии у правого края листа не устанавливается."
+      ],
+      "current_content_sha256": "773a7163a5953fdc19920135d456e58b59b4b3433bc83a1e7c98893386616274",
+      "author": "catalog_tail_mod3"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 13,
+      "uncertainties": [
+        "Полные реквизиты и мелкие номера на растровых иллюстрациях сертификатов не прочитаны надёжно; полного буквального разбора встроенных документов нет."
+      ],
+      "current_content_sha256": "3f241bfb204120adfd0bf34c40a03435e9d60ee2d9455edbe19b0f893df92158",
+      "author": "catalog_tail_mod1"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 19,
+      "uncertainties": [
+        "Мелкие поля четырёх сертификатов и свидетельства — полные регистрационные номера, сроки действия, перечни продукции, город, дата выдачи и фамилии подписантов — не имеют надёжной читаемости в исходных растровых сканах. Их нельзя считать подтверждёнными реквизитами."
+      ],
+      "current_content_sha256": "1c26290db744c0f90b845877be6fc308f8c800358269c97465ea1038a2160c05",
+      "author": "catalog_tail_mod3"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 56,
+      "uncertainties": [
+        "Полные буквальные марки в мелких литых клеймах трёх предметных фотографий не подтверждены из-за качества исходных снимков; на правом корпусе читается МЗВА, остальное не угадывалось."
+      ],
+      "current_content_sha256": "5c907a4b2939164cccc8ed5652715563da812393b71da097e9ffc69ac08456af",
+      "author": "catalog_tail_mod0"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 97,
+      "uncertainties": [
+        "Полное значение верхнего горизонтального размера главного вида не установлено из-за отсутствующих штрихов цифр в оригинале.",
+        "Начальный знак перед 16 в сечении А-А не установлен; нельзя без дополнительного доказательства трактовать его как цифру 2 либо знак диаметра.",
+        "Полное число вертикального размера торцевого вида не установлено: штрихи цифр повреждены, прежнее авторское чтение 139,5 не подтверждено независимой проверкой и снято."
+      ],
+      "current_content_sha256": "7d45247d0353af5a9eb0f60565cb1725c627bd3faec699341636223f5ed0e361",
+      "author": "catalog_tail_mod1"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 253,
+      "uncertainties": [
+        "Наклонная маркировка на раме3РГД возле верхнего левого круглого узла не читается полностью в исходном растровом рисунке даже при увеличении;текст не восстановлен. РазмерыL,D,марки таблиц и функция изделия читаются."
+      ],
+      "current_content_sha256": "981af3bef9997aeff9e90be3028c5a8f1524a198474a9d4b9988fad719cb9793",
+      "author": "catalog_tail_mod1"
+    }
+  ],
+  "pending_regressions": {
+    "total": 767,
+    "new_cases_this_slice": 6,
+    "published_commit": "bd86d20e3f17288e2677f1f6ae9da96f1daa9679",
+    "model_reruns": 0,
+    "old_accuracy_denominators_unchanged": true
+  },
+  "confirmed_issues_and_work": [
+    "Root independently reviewed all29 assigned isolators:3378cells,28PASS;91 sign remains source-limited. Also source reviewed small103/104/105:178cells and innovations28:42cells.",
+    "Reopened false previous PASS on isolators32. Main H begins at neckØ50 and variantВ at separate corpus top under strap; authorr2 exact2-field correction independently accepted,120tablecells unchanged. Armature40 stale summary removed after formalREVISE;36/40 actual geometry independently accepted.",
+    "Two-author source repairs arm205/217:33cells unchanged; arm169-r4 actual17.5 point and bolt-axis→S2end independentlyPASS,324cells unchanged. Innovations133/137 latest outputs had no independent reports:mod0 fully checked219cells,now exactPASS.",
+    "Operator integration skipped revisions marked unchanged_native_candidate even when they contained actual corrections:93/310 installed as distinct author references. Evidence-only refresh preserves formerproof bytes and contentSHA; workflow waits cleared only after actual independentPASS. No native bytes or model receipts edited.",
+    "Legacy root27 was incorrectly preferred over newer nativeaccepted19/reviewer21 in ZIP. Root reopened full original and rechecked152cells/Rz8/allgeometry; new ZIP preserves actual accepted nativeproducer. Real source-limit revisions still override unsafe historicalpasses; no unknown code or tolerance guessed.",
+    "Three full actual24 transcripts audited:arm8 11tools/86.488s;small100 29tools/433.217s and repeated dimension/schema repairs;isol47 14tools and save-schema recovery. Unnecessary schema/zoom calls remain a cost; no new paid benchmark. Missing MiniMax prompt.total remains null,neverzero.",
+    "Cross-page semantic resolution accepted by another author:arm225 clamp from exact ЭРН-110-2 row arm227;arm228 andinnov144 from exact ЭРН-220-1 row arm230. Glyph U+0033 established by direct selectable component listing;additional PDF explicitly attributed. New authors/reviews retain previous ambiguity snapshots."
+  ],
+  "new_large_benchmark_runs": 0,
+  "next_step": "All independently assigned source-limit confirmations are complete. Fourteen selected outputs retain genuine unreadable or occluded source details; a clearer original drawing/document is required for full literal acceptance. Existing MiniMax/GLM24 work and the quiet half-hour watcher continue. Inspect genuinely new completed native evidence, accept only source-proven corrections, and do not repeat identical zooms or completed reviews. No new large model benchmark.",
   "known_limits": [
-    "Completed count is disjoint acceptednative plus independently accepted authored revisions,not an accuracypercentage.",
-    "Currentcatalog.json is authoritative; stale page result.json markers must never cause a skip.",
-    "Published873snapshot predates newest review receipts;all980included withactualperpageproducer/source/page.",
-    "Source49 upper1.3sign is unresolved,not guessed;other source-microtext pending remains unaccepted."
-  ]
+    "Queue completion and independently accepted delivered content are different:known source defects in latest authored revisions override oldnativePASS in delivery. Neither count is measured accuracy.",
+    "Every original draft and actual per-page producer/version/source/page retained.",
+    "Only resolved source corrections get PASS; blurredmicrotext,missingglyphstrokes and cropped text stayuncertain.",
+    "Native transcripts remain private; publishedregressions pendingadjudication,not newgold."
+  ],
+  "provider_routes_verified": {
+    "extractor_model": "MiniMax M3.1 Flash Preview",
+    "extractor_base_url": "https://api.minimax.io/anthropic",
+    "reviewer_model": "GLM 5.3 Flash",
+    "reviewer_base_url": "https://api.z.ai/api/coding/paas/v4/",
+    "runtime_version": "1.5.24"
+  },
+  "remaining_source_evidence_boundary": {
+    "selected_pages_requiring_clarification": 14,
+    "all_have_independent_source_reviews": true,
+    "all_assigned_manual_and_independent_tasks_completed": true,
+    "all980accepted": false,
+    "watch_timer_intentionally_retained": true,
+    "native169_latest_review": "GLM24 correctly rejected existing extractor1.5.13 NAC150/24 wrong clamp; manually selected744a6667 revision already has correct НАС-150-1Б. Current native bytes preserved;existing regression case already retains exact961a9184 input."
+  }
 }
