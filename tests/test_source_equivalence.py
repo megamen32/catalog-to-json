@@ -27,6 +27,20 @@ def test_source_equivalent_representation_does_not_block_review(observed,candida
     assert not compare_source(observed,candidate)
 
 
+def test_exact_comma_clauses_can_move_between_label_and_qualifier():
+    """Fast unit: retained armature179 false header issues; expected1s/emergency10s."""
+    source=page(label='Масса шлейфа, при L=7м, не более',unit='кг')
+    candidate=page(label='Масса шлейфа',unit='кг',qualifier='не более, при L=7м')
+    original=source.model_dump(),candidate.model_dump()
+    assert not compare_source(source,candidate)
+    assert not compare_source(candidate,source)
+    assert original==(source.model_dump(),candidate.model_dump())
+    for changed in ['не менее, при L=7м','не более, при L=8м','не более',
+                    'не более, при L=7мм','не более, при L=7м, при T=20°C']:
+        assert compare_source(source,page(label='Масса шлейфа',unit='кг',qualifier=changed))
+    assert compare_source(source,page(label='Масса шлейфа',unit='г',qualifier='не более, при L=7м'))
+
+
 @pytest.mark.parametrize('observed,candidate',[
     (page(),page(unit='кА')),
     (page(unit='кДж/кВ'),page(unit='кДжкВ')),

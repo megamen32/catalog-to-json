@@ -94,6 +94,23 @@ def physical_text(value,column):
 def column_key(value,column):return header_key(physical_text(value,column))
 
 
+def same_header_partition(a,b):
+    """Exact comma clauses may move between label/qualifier in one column.
+
+    Keep units and parent ownership fixed. Do not split decimal commas, sort
+    words, change case/prefixes, or infer a missing condition.
+    """
+    if not a.unit or not b.unit or unit_key(a.unit)!=unit_key(b.unit) or a.group!=b.group:return False
+    split=r'(?<!\d),|,(?!\d)'
+    def exact(text):return re.sub(r'\s+','',unicodedata.normalize('NFKC',text))
+    if exact(re.split(split,a.label)[0])!=exact(re.split(split,b.label)[0]):return False
+    def clauses(column):
+        return Counter(exact(part)
+                       for value in (column.label,column.qualifier) if value
+                       for part in re.split(split,value) if part.strip())
+    return clauses(a)==clauses(b)
+
+
 def unit_pattern(value):
     parts=[]
     for part in re.findall(r'[A-Za-zА-Яа-яµμ]+|[^\s]',value):
@@ -232,6 +249,7 @@ def compare_source(observed: PageContent,candidate: PageContent,branding_figure_
         if len(source.rows)!=len(table.rows):add(prefix+'.rows',len(source.rows),len(table.rows))
         for ci,(sc,cc) in enumerate(zip(source.columns,table.columns)):
             cp=prefix+f'.columns[{ci}]'
+            if same_header_partition(sc,cc):continue
             if condition_keys(sc)!=condition_keys(cc):
                 add(cp+'.conditions',{'group':sc.group,'label':sc.label,'qualifier':sc.qualifier},
                     {'group':cc.group,'label':cc.label,'qualifier':cc.qualifier})
