@@ -9,6 +9,7 @@ import argparse
 from collections import defaultdict, Counter
 from decimal import Decimal, InvalidOperation
 import hashlib
+import gzip
 import json
 from pathlib import Path
 import re
@@ -215,11 +216,21 @@ def main():
     parser.add_argument('--oleg', type=Path, required=True)
     parser.add_argument('--ours', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--compact', action='store_true',
+                        help='Gzip fact store and ledger; cases reference immutable fact IDs rather than repeat raw records')
     args = parser.parse_args(); args.output.mkdir(parents=True, exist_ok=True)
     facts, sources, ours = load_facts(args.oleg, args.ours)
     ledger, cases = compare_facts(facts)
-    for name, rows in [('facts.jsonl', facts), ('alignment-ledger.jsonl', ledger), ('cases.jsonl', cases)]:
-        with (args.output/name).open('w') as stream:
+    case_rows = cases
+    if args.compact:
+        case_rows = ({**{k:v for k,v in case.items() if k not in ('ours','oleg')},
+                      'ours_fact_ids':[f['fact_id'] for f in case['ours']],
+                      'oleg_fact_ids':[f['fact_id'] for f in case['oleg']]} for case in cases)
+    for name, rows in [('facts.jsonl', facts), ('alignment-ledger.jsonl', ledger), ('cases.jsonl', case_rows)]:
+        path = args.output/(name+'.gz' if args.compact else name)
+        # Retain previous diagnostics; a new run must use a fresh output directory.
+        opener = gzip.open if args.compact else open
+        with opener(path, 'xt', encoding='utf-8') as stream:
             for row in rows:stream.write(json.dumps(row, ensure_ascii=False, allow_nan=False)+'\n')
     summary = {'source_sha256_sets_equal': True, 'source_count': len(sources),
                'ours_physical_pages': sum(len(c['pages']) for c in ours['catalogs']),
@@ -227,6 +238,9 @@ def main():
                'alignment_counts': dict(Counter(x['status'] for x in ledger)),
                'case_count': len(cases), 'semantic_alignment_complete': False,
                'all_unmatched_facts_retained': True, 'consensus_votes': 0,
+               'comparison_source_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+               'input_ours_zip_sha256': hashlib.file_digest(args.ours.open('rb'), 'sha256').hexdigest(),
+               'compact_fact_references': args.compact,
                'warning': 'Unmatched and ambiguous are questions, not proven extraction errors. No four-party consensus yet.'}
     (args.output/'summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2)+'\n')
     print(json.dumps(summary, ensure_ascii=False))

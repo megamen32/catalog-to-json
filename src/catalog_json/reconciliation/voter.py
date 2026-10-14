@@ -19,6 +19,17 @@ ENDPOINTS = {"glm": ("zai", "https://api.z.ai/api/coding/paas/v4"),
              "minimax": ("anthropic", "https://api.minimax.io/anthropic")}
 
 
+def adjudication_server_config(runtime, output, round_number, *, python=None):
+    """MCP deliberately filters parent env; explicitly bind this checkout's tool code."""
+    runtime = Path(runtime).resolve()
+    return {"command": python or sys.executable, "args": [
+        "-m", "catalog_json.reconciliation.voter_tools", "--pack", str(runtime / "pack.json"),
+        "--sources", str(runtime / "sources.json"), "--identity", str(runtime / "identity.json"),
+        "--output", str(Path(output).resolve()), "--round", str(round_number)],
+        "env": {"PYTHONPATH": str(Path(__file__).resolve().parents[2])},
+        "cwd": str(runtime), "load_on_start": False}
+
+
 def runtime_config(config_path, role):
     """Keep only the authorized provider; discard plugins, servers and fallback aliases."""
     import yaml
@@ -155,10 +166,7 @@ async def _worker(runtime):
                 "contract_sha256": contract_sha, "config_sha256": claim["config_sha256"]}
     write_exclusive(runtime / "identity.json", identity)
     cfg = runtime_config(runtime / "provider.yaml", role)
-    cfg["mcp"]["servers"] = {"adjudication": {"command": sys.executable, "args": [
-        "-m", "catalog_json.reconciliation.voter_tools", "--pack", str(runtime / "pack.json"),
-        "--sources", str(runtime / "sources.json"), "--identity", str(runtime / "identity.json"),
-        "--output", str(output), "--round", str(claim["round_number"])], "load_on_start": False}}
+    cfg["mcp"]["servers"] = {"adjudication": adjudication_server_config(runtime, output, claim["round_number"])}
     config_file = runtime / "fast-agent.yaml"
     fd = os.open(config_file, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     with os.fdopen(fd, "w") as stream:
@@ -231,9 +239,95 @@ async def _worker(runtime):
         write_exclusive(runtime / "execution.json", record)
 
 
+@contextmanager
+def deny_http_requests():
+    """A startup proof must never proceed to any HTTP request, including metadata."""
+    import httpx
+    attempts = []
+    original_async, original_sync = httpx.AsyncClient.send, httpx.Client.send
+
+    async def async_send(*args, **kwargs):
+        attempts.append("async_http")
+        raise RuntimeError("HTTP is forbidden during startup proof")
+
+    def sync_send(*args, **kwargs):
+        attempts.append("sync_http")
+        raise RuntimeError("HTTP is forbidden during startup proof")
+
+    httpx.AsyncClient.send, httpx.Client.send = async_send, sync_send
+    try:
+        yield attempts
+    finally:
+        httpx.AsyncClient.send, httpx.Client.send = original_async, original_sync
+
+
+async def preflight_runtime(runtime, proof_dir, *, saved_server=False):
+    """Read an existing attempt, boot only MCP under deny-HTTP, never generate/save a vote.
+
+    saved_server=True reproduces the exact retained MCP config before a correction.
+    All new proof/home/config files go to a fresh directory, never the old attempt.
+    """
+    import yaml
+    import resource
+    from fast_agent import FastAgent
+    from fast_agent.mcp.mcp_aggregator import MCPAttachOptions
+    from catalog_json.models import register_model_capabilities
+    runtime, proof_dir = Path(runtime).resolve(), Path(proof_dir).resolve()
+    proof_dir.mkdir(parents=True, exist_ok=False)
+    claim = json.loads((runtime / "claim.json").read_text())
+    role = claim["role"]
+    config = runtime_config(runtime / "provider.yaml", role)
+    config["mcp"]["servers"] = {"adjudication": (
+        yaml.safe_load((runtime / "fast-agent.yaml").read_text())["mcp"]["servers"]["adjudication"]
+        if saved_server else adjudication_server_config(runtime, runtime.parents[3], claim["round_number"]))}
+    cfg = proof_dir / "fast-agent.yaml"
+    with os.fdopen(os.open(cfg, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), "w") as stream:
+        yaml.safe_dump(config, stream)
+    retained = {str(p): hashlib.sha256(p.read_bytes()).hexdigest()
+                for p in runtime.rglob("*") if p.is_file()}
+    register_model_capabilities()
+    status, error, tools = "startup_failed", None, []
+    with deny_http_requests() as attempts:
+        try:
+            fast = FastAgent("preflight-" + role, config_path=str(cfg), parse_cli_args=False,
+                             quiet=True, home=proof_dir / "home", workspace=runtime, skills_directory=[])
+            fast.agent(name=role, model=MODELS[role], instruction="Startup proof only; no generation.",
+                       servers=["adjudication"], skills=[], shell=False, subagents=False,
+                       harness_tools=False, human_input=False)(lambda: None)
+            async with asyncio.timeout(60):
+                async with fast.run() as app:
+                    await app.attach_mcp_server(role, "adjudication", options=MCPAttachOptions(startup_timeout_seconds=30))
+                    tools = [t.name for t in (await app[role].list_tools()).tools]
+                    if len(tools) != 4 or not all(any(name in t for t in tools) for name in (
+                            "get_cases", "view_page", "zoom_page", "save_verdict")):
+                        raise RuntimeError("Unexpected MCP tool inventory")
+                    status = "passed"
+        except (Exception, SystemExit) as exc:
+            error = type(exc).__name__ + ": " + str(exc)
+    unchanged = all(Path(p).is_file() and hashlib.sha256(Path(p).read_bytes()).hexdigest() == digest
+                    for p, digest in retained.items())
+    proof = {"schema_version": "adjudication-startup-proof/1", "status": status,
+             "role": role, "pack_sha256": claim["pack_sha256"], "saved_server": saved_server,
+             "actual_python": sys.executable, "actual_cwd": os.getcwd(),
+             "actual_address_space_limit": list(resource.getrlimit(resource.RLIMIT_AS)),
+             "actual_cpu_affinity": sorted(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else None,
+             "mcp_command": config["mcp"]["servers"]["adjudication"]["command"],
+             "mcp_cwd": config["mcp"]["servers"]["adjudication"].get("cwd"),
+             "mcp_pythonpath_explicit": "PYTHONPATH" in config["mcp"]["servers"]["adjudication"].get("env", {}),
+             "http_requests_attempted": len(attempts), "http_requests_sent": 0,
+             "generate_called": False, "tools": tools, "retained_attempt_unchanged": unchanged,
+             "retained_files_sha256": retained, "error": error}
+    write_exclusive(proof_dir / "startup-proof.json", proof)
+    return 0 if status == "passed" and not attempts and unchanged else 2
+
+
 def main(argv=None):
     p = argparse.ArgumentParser()
-    p.add_argument("--worker", type=Path, required=True)
+    mode = p.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--worker", type=Path)
+    mode.add_argument("--preflight-runtime", type=Path)
+    p.add_argument("--proof-dir", type=Path)
+    p.add_argument("--saved-server", action="store_true")
     args = p.parse_args(argv)
     # Limits apply only to this new child, not the caller or live native queue.
     import resource
@@ -242,6 +336,10 @@ def main(argv=None):
     resource.setrlimit(resource.RLIMIT_AS, (limit, limit))
     if hasattr(os, "sched_getaffinity"):
         os.sched_setaffinity(0, {min(os.sched_getaffinity(0))})
+    if args.preflight_runtime:
+        if not args.proof_dir:
+            p.error("--preflight-runtime requires a fresh --proof-dir")
+        return asyncio.run(preflight_runtime(args.preflight_runtime, args.proof_dir, saved_server=args.saved_server))
     return asyncio.run(_worker(args.worker.resolve()))
 
 

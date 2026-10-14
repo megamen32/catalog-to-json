@@ -1,6 +1,6 @@
 """Fast unit/focused integration: exact source votes, no partial or majority acceptance.
 
-Expected <10s, emergency100s; no provider requests or live queue writes.
+Expected20s, emergency200s; no provider requests or live queue writes.
 """
 import asyncio
 import copy
@@ -9,6 +9,7 @@ import json
 import os
 from pathlib import Path
 import sys
+import subprocess
 
 import pymupdf
 import pytest
@@ -16,7 +17,7 @@ import pytest
 from catalog_json.reconciliation.consensus import (
     REQUIRED_ROLES, build_consensus, case_sha256, load_sources, save_vote, validate_pack, validate_vote,
 )
-from catalog_json.reconciliation.voter import MODELS, explicit_retry_policy, runtime_config
+from catalog_json.reconciliation.voter import MODELS, adjudication_server_config, explicit_retry_policy, runtime_config
 from catalog_json.reconciliation.voter_tools import VoterTools, server
 
 
@@ -236,11 +237,11 @@ def test_native_fastagent_boots_only_adjudication_tools_without_network(inputs, 
     who = tmp_path / "identity.json"; who.write_text(json.dumps(identity(role)))
     provider, endpoint = ENDPOINTS[role]
     config = tmp_path / "fast-agent.yaml"
+    # Use the production builder: the old handwritten test config injected
+    # PYTHONPATH that the actual worker forgot, hiding installed-runtime failure.
     config.write_text(yaml.safe_dump({provider: {"base_url": endpoint, "api_key": "fixture"},
-        "llm_retries": 0, "mcp": {"servers": {"adjudication": {"command": sys.executable,
-        "args": ["-m", "catalog_json.reconciliation.voter_tools", "--pack", str(pack_file),
-                 "--sources", str(sources_file), "--identity", str(who), "--output", str(tmp_path / "votes")],
-        "env": {"PYTHONPATH": str(Path(__file__).resolve().parents[1] / "src")}, "load_on_start": False}}}}))
+        "llm_retries": 0, "mcp": {"servers": {"adjudication":
+            adjudication_server_config(tmp_path, tmp_path / "votes", 1)}}}))
 
     async def forbidden_http(*args, **kwargs):
         raise AssertionError("No model/network request is authorized in this test")
@@ -258,3 +259,42 @@ def test_native_fastagent_boots_only_adjudication_tools_without_network(inputs, 
             assert len(result.tools) == 4
             assert all(any(name in t.name for name in ("get_cases", "view_page", "zoom_page", "save_verdict")) for t in result.tools)
     asyncio.run(boot())
+
+
+def test_actual_installed_runtime_cli_env_cwd_limits_without_http(inputs, tmp_path):
+    """Regression for real pilot: installed1524 package lacks reconciliation."""
+    import yaml
+    root = Path(__file__).resolve().parents[1]
+    python = root / ".tmp/full-digitization/semantic-v1.5.24/env/bin/python"
+    if not python.exists():
+        pytest.skip("Actual retained1524 interpreter not available")
+    pack, _, _, pack_file, sources_file = inputs
+    runtime = tmp_path / "retained-attempt"
+    runtime.mkdir()
+    (runtime / "pack.json").write_bytes(pack_file.read_bytes())
+    (runtime / "sources.json").write_bytes(sources_file.read_bytes())
+    (runtime / "identity.json").write_text(json.dumps(identity("glm")))
+    (runtime / "claim.json").write_text(json.dumps({"role": "glm", "round_number": 1, "pack_sha256": case_sha256(pack)}))
+    (runtime / "provider.yaml").write_text(yaml.safe_dump({"zai": {
+        "base_url": "https://api.z.ai/api/coding/paas/v4/", "api_key": "fixture"}}))
+    legacy = adjudication_server_config(runtime, tmp_path / "votes", 1, python=str(python))
+    legacy.pop("env"); legacy.pop("cwd")
+    (runtime / "fast-agent.yaml").write_text(yaml.safe_dump({"mcp": {"servers": {"adjudication": legacy}}}))
+    frozen = {p.name: p.read_bytes() for p in runtime.iterdir()}
+    for saved in (True, False):
+        proof_dir = tmp_path / ("saved-proof" if saved else "fixed-proof")
+        args = [str(python), "-m", "catalog_json.reconciliation.voter", "--preflight-runtime", str(runtime),
+                "--proof-dir", str(proof_dir)]
+        if saved: args.append("--saved-server")
+        run = subprocess.run(args, cwd=runtime, env={**os.environ, "PYTHONPATH": str(root / "src")},
+                             capture_output=True, timeout=60)
+        proof = json.loads((proof_dir / "startup-proof.json").read_text())
+        assert run.returncode == (2 if saved else 0)
+        assert proof["http_requests_attempted"] == proof["http_requests_sent"] == 0
+        assert proof["generate_called"] is False and proof["retained_attempt_unchanged"]
+        assert proof["actual_cwd"] == str(runtime)
+        assert proof["actual_address_space_limit"] == [2 * 1024**3] * 2
+        assert len(proof["actual_cpu_affinity"]) == 1
+        assert proof["status"] == ("startup_failed" if saved else "passed")
+        assert len(proof["tools"]) == (0 if saved else 4)
+    assert all((runtime / name).read_bytes() == value for name, value in frozen.items())
