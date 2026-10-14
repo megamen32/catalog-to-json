@@ -425,6 +425,60 @@
       "hazards": [
         "Saved-error replay/native MCP delivery is not a native model accuracy score. Preserve all strict source/numeric/geometry/PASS guards."
       ]
+    },
+    "native-tool-contract-discovery": {
+      "confidence": "verified",
+      "evidence": [
+        "58focused checks18.09s; installed1514nativeMCP contracts and unchanged blindness/freshness guards2.497s; zero model calls."
+      ],
+      "git_head": "dbbe1c3eb1735f22cb27e4f7b897241b3416a65b",
+      "key": "native-tool-contract-discovery",
+      "kind": "failure-shield",
+      "locations": [
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "b6886c0ff9e2358e033b4d3d2d6bd624d87402b4e778361dc3725338d08ae0b8",
+          "path": "src/catalog_json/tools.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "c162b96aef1209bf2c4c9e87bcfec56ce1e337d80d535ec62ff124715322634a",
+          "path": "tests/test_structured_payload.py",
+          "symbol": ""
+        }
+      ],
+      "summary": "Retained native136/88 guessed observation wrapper and DimensionReview fields.1.5.14 exposes exact schemas/examples before writes within16000byte reviewer envelope; no validators relaxed or placeholder evidence accepted.",
+      "verified_at": "2026-10-14T08:43:39.758632+03:00"
+    },
+    "native-max-tokens-orphan-tool": {
+      "confidence": "verified",
+      "evidence": [
+        "Typed actual retained SDK response and native converter replay reproduce orphan; source test red before guard,111 focused checks29.59s green after guard."
+      ],
+      "git_head": "d9babf2d8dede4991d99c1806d78084ece92de01",
+      "key": "native-max-tokens-orphan-tool",
+      "kind": "failure-shield",
+      "locations": [
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "8816adf3d87639b7f815c3fb3d25f4e6ec9ad382fd8fd18d46a83bece8b2c296",
+          "path": "src/catalog_json/agents.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "8c6dab11b383178526fad04045f7704a69f8f67d5ef9f1a210d0e030899e916f",
+          "path": "tests/test_staged.py",
+          "symbol": ""
+        }
+      ],
+      "summary": "MiniMax164400/2013 came from SDK maxTokens: raw Anthropic tool_use persisted, structured tool_calls not dispatched. Converter replays raw tool_use then ordinary user continuation has no result.1515 stops only this raw-tool token boundary before second generate, retains artifacts, never fabricates results or executes partial payload. Plain text token boundary and genuine repairs stay supported.",
+      "verified_at": "2026-10-14T08:47:06.794698+03:00"
     }
   },
   "schema_version": 1

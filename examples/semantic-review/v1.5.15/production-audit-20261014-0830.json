@@ -1,0 +1,266 @@
+{
+  "observed_local": "2026-10-14T08:49:43.344500+03:00",
+  "counts": {
+    "opn": {
+      "accepted": 60,
+      "pages": 60,
+      "accepted_delta": 0,
+      "compatible_drafts": 60,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 60,
+      "native_completed": {
+        "extractor": 146,
+        "reviewer": 164
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "isolators": {
+      "accepted": 161,
+      "pages": 162,
+      "accepted_delta": 0,
+      "compatible_drafts": 162,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 162,
+      "native_completed": {
+        "reviewer": 345,
+        "extractor": 390
+      },
+      "native_completed_delta": {
+        "extractor": 1,
+        "reviewer": 1
+      }
+    },
+    "small": {
+      "accepted": 228,
+      "pages": 228,
+      "accepted_delta": 0,
+      "compatible_drafts": 228,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 228,
+      "native_completed": {
+        "extractor": 539,
+        "reviewer": 518
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "innovations": {
+      "accepted": 65,
+      "pages": 216,
+      "accepted_delta": 2,
+      "compatible_drafts": 216,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 216,
+      "native_completed": {
+        "reviewer": 164,
+        "extractor": 466
+      },
+      "native_completed_delta": {
+        "extractor": 4,
+        "reviewer": 5
+      }
+    },
+    "armature": {
+      "accepted": 10,
+      "pages": 314,
+      "accepted_delta": 3,
+      "compatible_drafts": 224,
+      "compatible_drafts_delta": 35,
+      "original_draft_pages_preserved": 314,
+      "native_completed": {
+        "extractor": 550,
+        "reviewer": 24
+      },
+      "native_completed_delta": {
+        "extractor": 37,
+        "reviewer": 4
+      }
+    }
+  },
+  "accepted": 524,
+  "accepted_delta": 5,
+  "fixes_published": [
+    "dbbe1c3/v1.5.14 exact MCP observation/dimension contracts, synchronized plugin manifests",
+    "d9babf2/v1.5.15 stops only raw-tool maxTokens orphan before invalid continuation"
+  ],
+  "focused_checks": {
+    "passed": 111,
+    "seconds": 29.59,
+    "category": "focused integration and fast unit",
+    "model_calls": 0
+  },
+  "installed_native_mcp_proof": {
+    "version": "1.5.15",
+    "exact_observation_and_dimension_contracts_discovered": true,
+    "review_envelope_below16000": true,
+    "native_stdio_MCP": true,
+    "unchanged_post_comparison_quote_reused": true,
+    "blind_quote_cannot_waive_first_post_comparison_inspection": true,
+    "changed_quote_needs_fresh_exact_region": true,
+    "blind_original_preserved": true,
+    "model_calls": 0,
+    "elapsed_seconds": 2.544
+  },
+  "retained_typed_sdk_replay": {
+    "version": "1.5.15",
+    "actual_retained_typed_SDK_response_replayed": true,
+    "generate_count": 1,
+    "second_provider_request_prevented": true,
+    "partial_payload_not_executed": true,
+    "tool_result_not_fabricated": true,
+    "model_calls": 0,
+    "seconds": 0.001
+  },
+  "original_regions_viewed": [
+    "innovations88 all4rows/24cells and385/45/D views",
+    "armature178 full page and4x dimension5 crop, crimp direction corrected but invented five-hole count remains",
+    "innovations189 all17rows/68cells and merged product/mass pairs; table bytes semantically unchanged fromcandidate1; note now17",
+    "innovations136 complete page, single product row and105/14/38/70/16/17/66 drawing labels"
+  ],
+  "confirmed_findings": [
+    "Native178candidate2 invents number of holes5 from linear dimension; exact hash veto installed and replayed, native correction still required",
+    "Native88review806.561s/23filetool refusals; native136229.044s/8refusals. Schema lookup omitted observation wrapper and DimensionReview shapes;1514additive disclosure fixes discovery, not source values",
+    "Native189repair108.516s now correctly says17physical rows; all17x4table cells unchanged; independent current reviewer not complete",
+    "Native164maxTokens retains raw save_page_json tool_use but SDK dispatches no call; converter replays raw tool_use, missing-file continuation has no result and receives400/2013. Actual typed native response replay confirms1515refuses second generate, preserves artifacts; no fake result or execution of partial data."
+  ],
+  "new_regression_cases": [
+    "arm178-dimension-five-not-hole-count",
+    "arm164-provider-tool-result-order-after-truncation",
+    "innov136-missing-observation-dimension-contract-discovery",
+    "arm164-truncated-raw-tooluse-orphan"
+  ],
+  "pending_inbox_cases": 32,
+  "benchmark_commit": "894b320",
+  "large_model_benchmark_run": false,
+  "production_values_manually_edited": false,
+  "accuracy_note": "No new aggregate/drawing percentage; contract discovery proof is not model accuracy or speed gain. Native178/189repairs are not independent PASS.",
+  "runtime_at_observation": {
+    "coordinator": "1.5.13",
+    "extractor": "1.5.13",
+    "reviewer": "1.5.13",
+    "models": {
+      "extractor": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "reviewer": "zai.glm-5.3-flash?reasoning=low"
+    },
+    "endpoint": "https://api.z.ai/api/coding/paas/v4/"
+  },
+  "new_runtime_ready": {
+    "version": "1.5.15",
+    "source_commit": "d9babf2",
+    "published": true,
+    "native_MCP_and_actual_SDK_replay_passed": true,
+    "production_native_PASS_claimed": false,
+    "transition_status": "waiting_for_all_admitted_native_calls",
+    "old_calls_interrupted": false,
+    "predecessor_accepted_profiles": 84,
+    "frozen_job_pins": 355,
+    "v1514_never_started": true
+  },
+  "manual_source_veto": {
+    "page": 178,
+    "catalog": "armature",
+    "candidate_sha256": "ba7afb1d474a348ce7b71669e82334220cb1d530ad46b676cfb323514f9beacc",
+    "new_case": "arm178-dimension-five-not-hole-count",
+    "saved_candidate_replay_refuses_acceptance": true
+  },
+  "transcript_metrics": [
+    {
+      "messages": 98,
+      "role": "reviewer",
+      "attempt": 1,
+      "program_version": "1.5.13",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "seconds": 806.561,
+      "tools": {
+        "catalog__load_skill": 1,
+        "catalog__view_page": 1,
+        "catalog__view_region": 16,
+        "catalog__save_source_observation": 13,
+        "catalog__get_json_schema": 1,
+        "catalog__read_source_layout": 1,
+        "catalog__read_page_json": 1,
+        "catalog__read_external_audit": 1,
+        "bash": 3,
+        "catalog__inspect_dimension_review_targets": 1,
+        "catalog__record_dimension_reviews": 7,
+        "catalog__trace_dimension_candidates": 2,
+        "catalog__save_review": 4,
+        "catalog__correct_source_observation": 4,
+        "catalog__enable_helpers": 1
+      },
+      "refused_tool_results": 23
+    },
+    {
+      "messages": 58,
+      "role": "extractor",
+      "attempt": 2,
+      "program_version": "1.5.13",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "seconds": 263.454,
+      "tools": {
+        "catalog__load_skill": 1,
+        "catalog__view_page": 1,
+        "catalog__read_external_audit": 1,
+        "catalog__read_page_json": 1,
+        "catalog__read_review": 1,
+        "catalog__view_region": 6,
+        "catalog__get_json_schema": 2,
+        "catalog__save_section": 21,
+        "catalog__finalize_page": 1,
+        "catalog__read_source_table": 2,
+        "bash": 2,
+        "catalog__save_page_json": 3,
+        "catalog__extract_direct": 1
+      },
+      "refused_tool_results": 6
+    },
+    {
+      "messages": 26,
+      "role": "extractor",
+      "attempt": 2,
+      "program_version": "1.5.13",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "seconds": 108.516,
+      "tools": {
+        "catalog__load_skill": 1,
+        "catalog__view_page": 1,
+        "catalog__read_external_audit": 1,
+        "catalog__read_page_json": 1,
+        "catalog__read_review": 1,
+        "catalog__view_region": 1,
+        "bash": 3,
+        "catalog__finalize_page": 1,
+        "catalog__save_page_json": 3,
+        "catalog__extract_direct": 1,
+        "catalog__get_json_schema": 1
+      },
+      "refused_tool_results": 3
+    },
+    {
+      "messages": 38,
+      "role": "reviewer",
+      "attempt": 1,
+      "program_version": "1.5.13",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "seconds": 229.044,
+      "tools": {
+        "catalog__load_skill": 1,
+        "catalog__view_page": 1,
+        "catalog__view_region": 7,
+        "catalog__save_source_observation": 5,
+        "catalog__get_json_schema": 1,
+        "catalog__read_page_json": 1,
+        "catalog__read_external_audit": 1,
+        "catalog__record_dimension_reviews": 5,
+        "catalog__trace_dimension_candidates": 7,
+        "catalog__save_review": 1
+      },
+      "refused_tool_results": 8
+    }
+  ]
+}
