@@ -1,0 +1,362 @@
+[
+  {
+    "case": {
+      "kind": "content_value_or_scope_candidate",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+      "physical_pages": [
+        118
+      ],
+      "ours": [
+        {
+          "side": "ours",
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "catalog": "armature",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "pointer": "/catalogs/4/pages/117/content/tables/0/rows/24/cells/1",
+          "owner": "АСЦ-72",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 240/32",
+          "unit": null,
+          "condition": null,
+          "table_index": 0,
+          "row_index": 24,
+          "column_index": 1,
+          "table_title": "Зажимы соединительные автоматические типа АСЦ",
+          "column": {
+            "id": "wire",
+            "label": "Марка провода по ГОСТ 839-80",
+            "unit": null,
+            "group": null,
+            "qualifier": null
+          },
+          "row_values": [
+            "АСЦ-72",
+            "АС 240/32",
+            "20,4-22,48",
+            "Фиолетовый",
+            "57",
+            "820",
+            "3,2"
+          ],
+          "owner_column_index": 0,
+          "owner_scope": "",
+          "candidate_sha256": "a53f6d5341b29290707aa8647c0422632629542bcfd2f2d68b74fb3429c90e13",
+          "fact_id": "O-96b409e0696aea02aa129022",
+          "full_input_fact_sha256": "d72814e3b826a24452490eea454ff61bb7e9777c3c67a2e9fc3dc3ed381fcc5a",
+          "raw_semantic_context": {
+            "state": "value"
+          }
+        }
+      ],
+      "oleg": [
+        {
+          "side": "oleg",
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "catalog": "armature",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "pointer": "characteristics.jsonl:47282/raw",
+          "owner": "АСЦ-72",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 240/32\nАС 240/39\nАС 240/56",
+          "unit": "",
+          "condition": "",
+          "observation_id": "C-4bbfd43e2ec9ce88b6e4fabd",
+          "window_id": "W-ab320bd9f75373262013b32e",
+          "group_id": "G-dfe0a0f2c54674e68877ad68",
+          "product_id": "P-4153b2db12dbfe61d45b16dc",
+          "group_title": "зажимы соединительные автоматические типа АСЦ",
+          "raw_value_present": true,
+          "fact_id": "L-0cfdcb72fa2e8f084fb60912",
+          "full_input_fact_sha256": "7bdcb68d67674b7124b65db820aa8cad1058e96fd4c78b2fc999b0a7bdeea9a1",
+          "raw_semantic_context": {
+            "name": "Марка провода по ГОСТ 839-80",
+            "raw_value": "АС 240/32\nАС 240/39\nАС 240/56",
+            "unit": "",
+            "condition": "",
+            "scope": "",
+            "scope_evidence": "",
+            "header_path": [
+              {
+                "raw_text": "Марка провода по ГОСТ 839-80",
+                "role": "column",
+                "unit": "",
+                "condition": "",
+                "evidence": [
+                  {
+                    "page": 118,
+                    "region": [
+                      0.09,
+                      0.475,
+                      0.93,
+                      0.52
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value_state": "printed_value",
+            "origin": "table_cell"
+          }
+        }
+      ],
+      "original_ledger_links": [
+        {
+          "ours_fact_id": "O-96b409e0696aea02aa129022",
+          "oleg_fact_ids": [
+            "L-0cfdcb72fa2e8f084fb60912"
+          ]
+        }
+      ],
+      "question": "Проверь по оригиналу ВСЕ перечисленные модели, колонки, условия и объединения. Отличи ошибку значения/кода от различия списка/подстрок, алфавита, формы и условий. Если обе записи относятся к разным контекстам — both с явным разделением; пропуски — только по полной объединённой ячейке. Не считай видимые похожие буквы автоматически взаимозаменяемыми. Выбери ours/oleg/equivalent/both без selected_value, если принимаешь исходные записи; neither/unresolved если правильного однозначного выбора нет.",
+      "case_id": "C-75fee46f4cd60aa0766767d6"
+    },
+    "pack_sha256": "b07298060fa71facdfcee4465934d3fa41223c9a63dab90b0e1d1545523a7fad",
+    "complete": true
+  },
+  {
+    "case": {
+      "kind": "content_value_or_scope_candidate",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+      "physical_pages": [
+        118
+      ],
+      "ours": [
+        {
+          "side": "ours",
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "catalog": "armature",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "pointer": "/catalogs/4/pages/117/content/tables/0/rows/25/cells/1",
+          "owner": "АСЦ-72",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 240/39",
+          "unit": null,
+          "condition": null,
+          "table_index": 0,
+          "row_index": 25,
+          "column_index": 1,
+          "table_title": "Зажимы соединительные автоматические типа АСЦ",
+          "column": {
+            "id": "wire",
+            "label": "Марка провода по ГОСТ 839-80",
+            "unit": null,
+            "group": null,
+            "qualifier": null
+          },
+          "row_values": [
+            "АСЦ-72",
+            "АС 240/39",
+            "20,4-22,48",
+            "Фиолетовый",
+            "57",
+            "820",
+            "3,2"
+          ],
+          "owner_column_index": 0,
+          "owner_scope": "",
+          "candidate_sha256": "a53f6d5341b29290707aa8647c0422632629542bcfd2f2d68b74fb3429c90e13",
+          "fact_id": "O-5a145df86db2fd8c6e4a67f7",
+          "full_input_fact_sha256": "627e62f544fbd086652749c76299929ce36abbb86ce2564efe43a58552e48be1",
+          "raw_semantic_context": {
+            "state": "value"
+          }
+        }
+      ],
+      "oleg": [
+        {
+          "side": "oleg",
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "catalog": "armature",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "pointer": "characteristics.jsonl:47282/raw",
+          "owner": "АСЦ-72",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 240/32\nАС 240/39\nАС 240/56",
+          "unit": "",
+          "condition": "",
+          "observation_id": "C-4bbfd43e2ec9ce88b6e4fabd",
+          "window_id": "W-ab320bd9f75373262013b32e",
+          "group_id": "G-dfe0a0f2c54674e68877ad68",
+          "product_id": "P-4153b2db12dbfe61d45b16dc",
+          "group_title": "зажимы соединительные автоматические типа АСЦ",
+          "raw_value_present": true,
+          "fact_id": "L-0cfdcb72fa2e8f084fb60912",
+          "full_input_fact_sha256": "7bdcb68d67674b7124b65db820aa8cad1058e96fd4c78b2fc999b0a7bdeea9a1",
+          "raw_semantic_context": {
+            "name": "Марка провода по ГОСТ 839-80",
+            "raw_value": "АС 240/32\nАС 240/39\nАС 240/56",
+            "unit": "",
+            "condition": "",
+            "scope": "",
+            "scope_evidence": "",
+            "header_path": [
+              {
+                "raw_text": "Марка провода по ГОСТ 839-80",
+                "role": "column",
+                "unit": "",
+                "condition": "",
+                "evidence": [
+                  {
+                    "page": 118,
+                    "region": [
+                      0.09,
+                      0.475,
+                      0.93,
+                      0.52
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value_state": "printed_value",
+            "origin": "table_cell"
+          }
+        }
+      ],
+      "original_ledger_links": [
+        {
+          "ours_fact_id": "O-5a145df86db2fd8c6e4a67f7",
+          "oleg_fact_ids": [
+            "L-0cfdcb72fa2e8f084fb60912"
+          ]
+        }
+      ],
+      "question": "Проверь по оригиналу ВСЕ перечисленные модели, колонки, условия и объединения. Отличи ошибку значения/кода от различия списка/подстрок, алфавита, формы и условий. Если обе записи относятся к разным контекстам — both с явным разделением; пропуски — только по полной объединённой ячейке. Не считай видимые похожие буквы автоматически взаимозаменяемыми. Выбери ours/oleg/equivalent/both без selected_value, если принимаешь исходные записи; neither/unresolved если правильного однозначного выбора нет.",
+      "case_id": "C-92591de3580e9bfd3ca8d7a0"
+    },
+    "pack_sha256": "8086c1c0a501cf54c2fef0cc3bce2aedb8b42fd17c66ee5ec74a0bd67830ea94",
+    "complete": true
+  },
+  {
+    "case": {
+      "kind": "content_value_or_scope_candidate",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+      "physical_pages": [
+        118
+      ],
+      "ours": [
+        {
+          "side": "ours",
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "catalog": "armature",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "pointer": "/catalogs/4/pages/117/content/tables/0/rows/26/cells/1",
+          "owner": "АСЦ-72",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 240/56",
+          "unit": null,
+          "condition": null,
+          "table_index": 0,
+          "row_index": 26,
+          "column_index": 1,
+          "table_title": "Зажимы соединительные автоматические типа АСЦ",
+          "column": {
+            "id": "wire",
+            "label": "Марка провода по ГОСТ 839-80",
+            "unit": null,
+            "group": null,
+            "qualifier": null
+          },
+          "row_values": [
+            "АСЦ-72",
+            "АС 240/56",
+            "20,4-22,48",
+            "Фиолетовый",
+            "57",
+            "820",
+            "3,2"
+          ],
+          "owner_column_index": 0,
+          "owner_scope": "",
+          "candidate_sha256": "a53f6d5341b29290707aa8647c0422632629542bcfd2f2d68b74fb3429c90e13",
+          "fact_id": "O-98b007737cc634634527511e",
+          "full_input_fact_sha256": "888225f422fbb630266a5397db6628f1af836b9d02fb0ad43307a55ac6351072",
+          "raw_semantic_context": {
+            "state": "value"
+          }
+        }
+      ],
+      "oleg": [
+        {
+          "side": "oleg",
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "catalog": "armature",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "pointer": "characteristics.jsonl:47282/raw",
+          "owner": "АСЦ-72",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 240/32\nАС 240/39\nАС 240/56",
+          "unit": "",
+          "condition": "",
+          "observation_id": "C-4bbfd43e2ec9ce88b6e4fabd",
+          "window_id": "W-ab320bd9f75373262013b32e",
+          "group_id": "G-dfe0a0f2c54674e68877ad68",
+          "product_id": "P-4153b2db12dbfe61d45b16dc",
+          "group_title": "зажимы соединительные автоматические типа АСЦ",
+          "raw_value_present": true,
+          "fact_id": "L-0cfdcb72fa2e8f084fb60912",
+          "full_input_fact_sha256": "7bdcb68d67674b7124b65db820aa8cad1058e96fd4c78b2fc999b0a7bdeea9a1",
+          "raw_semantic_context": {
+            "name": "Марка провода по ГОСТ 839-80",
+            "raw_value": "АС 240/32\nАС 240/39\nАС 240/56",
+            "unit": "",
+            "condition": "",
+            "scope": "",
+            "scope_evidence": "",
+            "header_path": [
+              {
+                "raw_text": "Марка провода по ГОСТ 839-80",
+                "role": "column",
+                "unit": "",
+                "condition": "",
+                "evidence": [
+                  {
+                    "page": 118,
+                    "region": [
+                      0.09,
+                      0.475,
+                      0.93,
+                      0.52
+                    ]
+                  }
+                ]
+              }
+            ],
+            "value_state": "printed_value",
+            "origin": "table_cell"
+          }
+        }
+      ],
+      "original_ledger_links": [
+        {
+          "ours_fact_id": "O-98b007737cc634634527511e",
+          "oleg_fact_ids": [
+            "L-0cfdcb72fa2e8f084fb60912"
+          ]
+        }
+      ],
+      "question": "Проверь по оригиналу ВСЕ перечисленные модели, колонки, условия и объединения. Отличи ошибку значения/кода от различия списка/подстрок, алфавита, формы и условий. Если обе записи относятся к разным контекстам — both с явным разделением; пропуски — только по полной объединённой ячейке. Не считай видимые похожие буквы автоматически взаимозаменяемыми. Выбери ours/oleg/equivalent/both без selected_value, если принимаешь исходные записи; neither/unresolved если правильного однозначного выбора нет.",
+      "case_id": "C-03b36d0b5dbfb84cb0119738"
+    },
+    "pack_sha256": "5ac40a1011af709643d2b22f09e920cd0fd910ebe659a7fff56ca1038cdcf9f0",
+    "complete": true
+  }
+]

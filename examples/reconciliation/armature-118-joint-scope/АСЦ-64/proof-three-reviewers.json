@@ -1,0 +1,395 @@
+{
+  "schema_version": "catalogue-joint-scope-approval/1",
+  "pack_sha256": "05df420bd9355fc35c33c422d01360aec352e18d0226df92c30adfe9aea7ea0c",
+  "proposal_sha256": "7f7bb0413b4168d2477389142f98ccf91748fa76cbfa90ab5a2e2826ff85169c",
+  "covered_original_case_ids": [
+    "C-0e60274f1236861ff31e2eda",
+    "C-27719662e8e739a148a5f51d",
+    "C-c7fa95639b258fea603bf955"
+  ],
+  "proposal": {
+    "schema_version": "catalogue-variant-option-bindings/1",
+    "canonical_action": "Keep every original variant cell unchanged; expose the other original list ONLY as model-level options. Never copy the whole list into an individual variant cell.",
+    "bindings": [
+      {
+        "model": "АСЦ-64",
+        "property": "Марка провода по ГОСТ 839-80",
+        "option_list_fact_id": "L-d1f0f4a6b959021cc96d30f8",
+        "members": [
+          {
+            "variant_fact_id": "O-8a3442f923ee77a9e42e8156",
+            "member_start": 0,
+            "member_end": 7
+          },
+          {
+            "variant_fact_id": "O-c448d912b84d21f9dc754024",
+            "member_start": 8,
+            "member_end": 18
+          },
+          {
+            "variant_fact_id": "O-42c38bd284d78cf5f7ff582b",
+            "member_start": 19,
+            "member_end": 27
+          }
+        ]
+      }
+    ],
+    "covered_original_cases": [
+      {
+        "case_id": "C-0e60274f1236861ff31e2eda",
+        "case_sha256": "5d7640249e3e35ef8a68099db1f22529fd85b0fc539f2c9cff320914f9bfac57",
+        "pack_sha256": "92241fb473384cd5bb49a415f88539cb8220ad731bf01518cbde74b79b019e4c",
+        "ours_fact_ids": [
+          "O-8a3442f923ee77a9e42e8156"
+        ],
+        "oleg_fact_ids": [
+          "L-d1f0f4a6b959021cc96d30f8"
+        ]
+      },
+      {
+        "case_id": "C-27719662e8e739a148a5f51d",
+        "case_sha256": "d1b3e76751c5543713923dd7da26eb95acefe489882919c9a9f7a27699ac5a30",
+        "pack_sha256": "4f787de3b77831f3ed5958be6e0cff61c861e9ce0b7ba8a0ffb5f3e56fe971b1",
+        "ours_fact_ids": [
+          "O-c448d912b84d21f9dc754024"
+        ],
+        "oleg_fact_ids": [
+          "L-d1f0f4a6b959021cc96d30f8"
+        ]
+      },
+      {
+        "case_id": "C-c7fa95639b258fea603bf955",
+        "case_sha256": "15f538f1184f6f92b1a5bba0b44946f41d8f31ed7cfba198f22b742af141983b",
+        "pack_sha256": "f4fc18f7fab22ec8b94bbdc5859bea12972f19c1bcee132ea9bad7bbf7158197",
+        "ours_fact_ids": [
+          "O-42c38bd284d78cf5f7ff582b"
+        ],
+        "oleg_fact_ids": [
+          "L-d1f0f4a6b959021cc96d30f8"
+        ]
+      }
+    ]
+  },
+  "consensus": {
+    "schema_version": "catalogue-consensus/1",
+    "pack_id": "joint-armature-118-АСЦ-64",
+    "pack_sha256": "05df420bd9355fc35c33c422d01360aec352e18d0226df92c30adfe9aea7ea0c",
+    "required_roles": [
+      "codex",
+      "zcode",
+      "minimax"
+    ],
+    "complete": true,
+    "all_resolved": true,
+    "cases": [
+      {
+        "case_id": "J-d430d3c5c33d2e7b0cdb0fae",
+        "case_sha256": "ec3fedb6311c425496061bea36fd6bf8e2d0b028d220ccf119a07680f2cc063e",
+        "consensus": true,
+        "decision": "both",
+        "missing_roles": [],
+        "votes": {
+          "codex": "44476f4fe8be783aac44776c2fca491d8f7a3898050ee9cfd6003ade8c58daae",
+          "zcode": "1e887cbe436f1df9d9d4d7f29006e8f29650f0cf7102f5d2a394c4573ad6adce",
+          "minimax": "bbc11b7304c71f5d57af54a56f5716607238116e225f666b574173fa533db360"
+        },
+        "selected_value": {
+          "ours": [
+            {
+              "fact_id": "O-8a3442f923ee77a9e42e8156",
+              "side": "ours",
+              "pointer": "/catalogs/4/pages/117/content/tables/0/rows/3/cells/1",
+              "owner": "АСЦ-64",
+              "name": "Марка провода по ГОСТ 839-80",
+              "value": "АС 50/8",
+              "unit": null,
+              "condition": null,
+              "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+              "physical_pages": [
+                118
+              ],
+              "kind": "model_parameter",
+              "full_input_fact_sha256": "b1f93c77119020a3fd5dee6fbb656f491a82f6d9a9671b50ce4d563cc3d417f4"
+            },
+            {
+              "fact_id": "O-c448d912b84d21f9dc754024",
+              "side": "ours",
+              "pointer": "/catalogs/4/pages/117/content/tables/0/rows/4/cells/1",
+              "owner": "АСЦ-64",
+              "name": "Марка провода по ГОСТ 839-80",
+              "value": "АС 63/10,5",
+              "unit": null,
+              "condition": null,
+              "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+              "physical_pages": [
+                118
+              ],
+              "kind": "model_parameter",
+              "full_input_fact_sha256": "7106dd3dfe87ae5497657df869d2ac2263e3861709a1ad2a86b7a4d352464bf1"
+            },
+            {
+              "fact_id": "O-42c38bd284d78cf5f7ff582b",
+              "side": "ours",
+              "pointer": "/catalogs/4/pages/117/content/tables/0/rows/5/cells/1",
+              "owner": "АСЦ-64",
+              "name": "Марка провода по ГОСТ 839-80",
+              "value": "АС 70/11",
+              "unit": null,
+              "condition": null,
+              "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+              "physical_pages": [
+                118
+              ],
+              "kind": "model_parameter",
+              "full_input_fact_sha256": "d892b619fe5fa9780504c426e2a32289d2cc27097d53da6885fb68bd213aaf91"
+            }
+          ],
+          "oleg": [
+            {
+              "fact_id": "L-d1f0f4a6b959021cc96d30f8",
+              "side": "oleg",
+              "pointer": "characteristics.jsonl:47258/raw",
+              "owner": "АСЦ-64",
+              "name": "Марка провода по ГОСТ 839-80",
+              "value": "АС 50/8\nАС 63/10,5\nАС 70/11",
+              "unit": "",
+              "condition": "",
+              "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+              "physical_pages": [
+                118
+              ],
+              "kind": "model_parameter",
+              "full_input_fact_sha256": "8141a4c9ae94ad08cd331c1018c1927185166bd9702e258c7257d06296a67e05"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "original_votes": [
+    {
+      "schema_version": "catalogue-consensus-vote/1",
+      "pack_id": "joint-armature-118-АСЦ-64",
+      "pack_sha256": "05df420bd9355fc35c33c422d01360aec352e18d0226df92c30adfe9aea7ea0c",
+      "identity": {
+        "role": "codex",
+        "session_id": "01a12c30-e58f-7861-8a2d-966c92630163",
+        "model": "native Codex root; exact provider model ID unavailable",
+        "runtime": "Codex Desktop native root",
+        "phase": "fresh post-independent approval of the exact joint representation",
+        "source_image": "reviews/codex/consensus-discussion-zooms/page-0118/region-fccd21cad48d.png"
+      },
+      "payload": {
+        "pack_id": "joint-armature-118-АСЦ-64",
+        "verdicts": [
+          {
+            "case_id": "J-d430d3c5c33d2e7b0cdb0fae",
+            "case_sha256": "ec3fedb6311c425496061bea36fd6bf8e2d0b028d220ccf119a07680f2cc063e",
+            "decision": "both",
+            "reason": "Лично повторно просмотрел полный оригинал и увеличение таблицыАСЦ наp118: все 3 отдельные проводные подстроки модели АСЦ-64 перечислены именно в её общем блоке. Все члены исходного спискаОлега соответствуют этим же вариантам, в том же порядке; rawзначения совпадают буквально с явно привязанными character-spans. Принимаю ОБА уровня: каждый исходный наш вариант остаётся отдельной строкой, списокОлега добавляется ТОЛЬКО как полный набор допустимых проводов для модели с явными memberbindings. Значение конкретной вариантной ячейки не заменять полным списком; ни одной новой марки/цифры/единицы здесь не создаётся. Это единая source-bound модель данных, а не голосование за потерю одного из двух уровней.",
+            "source_evidence": [
+              {
+                "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+                "page": 118,
+                "bbox": [
+                  0.07,
+                  0.5,
+                  0.93,
+                  0.95
+                ],
+                "observation": "Лично повторно просмотрел полный оригинал и увеличение таблицыАСЦ наp118: все 3 отдельные проводные подстроки модели АСЦ-64 перечислены именно в её общем блоке. Все члены исходного спискаОлега соответствуют этим же вариантам, в том же порядке; rawзначения совпадают буквально с явно привязанными character-spans. Принимаю ОБА уровня: каждый исходный наш вариант остаётся отдельной строкой, списокОлега добавляется ТОЛЬКО как полный набор допустимых проводов для модели с явными memberbindings. Значение конкретной вариантной ячейки не заменять полным списком; ни одной новой марки/цифры/единицы здесь не создаётся. Это единая source-bound модель данных, а не голосование за потерю одного из двух уровней."
+              }
+            ]
+          }
+        ]
+      },
+      "source_manifest": [
+        {
+          "sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+          "page_count": 228
+        },
+        {
+          "sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+          "page_count": 60
+        },
+        {
+          "sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "page_count": 216
+        },
+        {
+          "sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+          "page_count": 162
+        },
+        {
+          "sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "page_count": 314
+        }
+      ],
+      "saved_at": "2026-10-14T21:32:58.949116+00:00",
+      "round_number": 1,
+      "receipt_sha256": "44476f4fe8be783aac44776c2fca491d8f7a3898050ee9cfd6003ade8c58daae"
+    },
+    {
+      "schema_version": "catalogue-consensus-vote/1",
+      "pack_id": "joint-armature-118-АСЦ-64",
+      "pack_sha256": "05df420bd9355fc35c33c422d01360aec352e18d0226df92c30adfe9aea7ea0c",
+      "identity": {
+        "role": "zcode",
+        "session_id": "sess_0dd4a3ee-bc7d-4008-b9fa-c25146ec5392",
+        "model": "account:zai-individual-coding-plan/GLM-5.3-Flash$max",
+        "runtime": "zcode native",
+        "other_models_launched": 0,
+        "model_calls": 0,
+        "authored_metadata_file": "/home/roomhacker/apps/catalog-to-json/.tmp/oleg-consensus-20261014/reviews/zcode/joint-scope/joint-armature-118-АСЦ-64-metadata.json",
+        "recorded_at": "2026-10-14T21:40:38Z"
+      },
+      "payload": {
+        "pack_id": "joint-armature-118-АСЦ-64",
+        "verdicts": [
+          {
+            "case_id": "J-d430d3c5c33d2e7b0cdb0fae",
+            "case_sha256": "ec3fedb6311c425496061bea36fd6bf8e2d0b028d220ccf119a07680f2cc063e",
+            "decision": "both",
+            "reason": "Личная верификация joint-proposal по источнику (стр.118, рендер reviews/zcode/joint-scope/p118-blocks-marka-column.png) и по структуре: (1) именованная ячейка АСЦ-64 — вертикально объединённый блок y482.7–520.1 (в колонке наименований границ внутри блока нет), в блоке напечатано ровно 3 марок, каждая — в СОБСТВЕННОЙ подстрочке колонки «Марка провода» (x144.7–226.1, построчные линейки y482.7…520.1); (2) набор членов списка Олега (3 шт.) побuatesленно равен набору напечатанных марок блока (сверка без пробелов и по порядку); (3) каждый member_start/member_end вырезает из списка Олега ровно значение соответствующего нашего вариантного факта (спаны точны, canonical rows не изменены); (4) все 3 исходных case_sha256 (C-0e60274f1236861ff31e2eda, C-27719662e8e739a148a5f51d, C-c7fa95639b258fea603bf955) пересчитаны и совпали с оригинальными пакетами content-armature-118; (5) список модели нигде не копируется в ячейку варианта — proposal только связывает уровни (binding), канонические построчные факты остаются вариантными, список живёт на уровне модели (option_list_fact_id, owner=АСЦ-64). Оба уровня подтверждены источником, маппинг правилен → both в смысле «оба уровня подтверждены и связь вариант↔член списка верна».",
+            "source_evidence": [
+              {
+                "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+                "page": 118,
+                "bbox": [
+                  0.0947,
+                  0.5733,
+                  0.2431,
+                  0.6178
+                ],
+                "observation": "объединённая ячейка наименования АСЦ-64 (y482.7–520.1) — уровень модели"
+              },
+              {
+                "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+                "page": 118,
+                "bbox": [
+                  0.2431,
+                  0.5733,
+                  0.3798,
+                  0.6178
+                ],
+                "observation": "колонка «Марка провода»: 3 построчных ячеек-вариантов внутри блока; набор == членам списка Олега"
+              },
+              {
+                "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+                "page": 118,
+                "bbox": [
+                  0.0806,
+                  0.5226,
+                  0.5711,
+                  0.9443
+                ],
+                "observation": "рендер всей зоны (p118-blocks-marka-column.png): имена моделей в объединённых ячейках, марки в отдельных подстроках"
+              }
+            ]
+          }
+        ]
+      },
+      "source_manifest": [
+        {
+          "sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+          "page_count": 228
+        },
+        {
+          "sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+          "page_count": 60
+        },
+        {
+          "sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "page_count": 216
+        },
+        {
+          "sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+          "page_count": 162
+        },
+        {
+          "sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "page_count": 314
+        }
+      ],
+      "saved_at": "2026-10-14T21:41:08.290027+00:00",
+      "round_number": 1,
+      "receipt_sha256": "1e887cbe436f1df9d9d4d7f29006e8f29650f0cf7102f5d2a394c4573ad6adce"
+    },
+    {
+      "schema_version": "catalogue-consensus-vote/1",
+      "pack_id": "joint-armature-118-АСЦ-64",
+      "pack_sha256": "05df420bd9355fc35c33c422d01360aec352e18d0226df92c30adfe9aea7ea0c",
+      "identity": {
+        "role": "minimax",
+        "session_id": "0fb1e6f6-ff86-4983-af5b-6ffb27d468e6",
+        "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+        "attempt_number": 1,
+        "runtime": "FastAgent0.10.43:/home/roomhacker/apps/catalog-to-json/.tmp/full-digitization/semantic-v1.5.24/env/bin/python:/home/roomhacker/apps/catalog-to-json/.tmp/oleg-consensus-20261014/adjudication/05df420bd9355fc35c33c422d01360aec352e18d0226df92c30adfe9aea7ea0c/round1/runtime/minimax",
+        "contract_sha256": "eaa3745c9737c05f470df2eecd1aed8a6b715e03690b8d85b0128636d2e9d339",
+        "config_sha256": "aeac1f34a0febb5d2425e9f05e801fad79e3ec2cfa0b3fd90981c247b9fcdd5c"
+      },
+      "payload": {
+        "pack_id": "joint-armature-118-АСЦ-64",
+        "verdicts": [
+          {
+            "case_id": "J-d430d3c5c33d2e7b0cdb0fae",
+            "decision": "both",
+            "reason": "Both representations are supported by the original table on p.118. Model АСЦ-64 spans exactly three sub-rows of the 'Марка провода по ГОСТ 839-80' column, in top-to-bottom order: АС 50/8, АС 63/10,5, АС 70/11 — exactly the three canonical variant rows kept unchanged (rows 3,4,5 cells 1). The same three marks are also legitimately exposed as model-level options of the property 'Марка провода по ГОСТ 839-80'. Scope is correct (these three marks belong only to АСЦ-64; АСЦ-63 above ends with АС 40/6,7 and АСЦ-65 below starts with АС 95/16) and owner is correct. The proposed character offsets into the model-level option string are exact: 'АС 50/8' spans 0–7, 'АС 63/10,5' spans 8–18, 'АС 70/11' spans 19–27, matching the three source marks in the original order; no mark is duplicated into any individual variant cell and no engineering value is invented.",
+            "source_evidence": [
+              {
+                "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+                "page": 118,
+                "bbox": [
+                  0.08,
+                  0.555,
+                  0.55,
+                  0.61
+                ],
+                "observation": "Table row group 'АСЦ-64' lists three wire marks in order: АС 50/8, АС 63/10,5, АС 70/11, with merged value cells 8,64-12,07 / Желтый / 33,5 / 410 / 0,6; neighbouring groups are АСЦ-63 (АС 25/4,2, АС 35/6,2, АС 40/6,7) and АСЦ-65 (АС 95/16, АС 100/16,7)."
+              },
+              {
+                "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+                "page": 118,
+                "bbox": [
+                  0.08,
+                  0.575,
+                  0.55,
+                  0.625
+                ],
+                "observation": "Native layout: 'АСЦ-64' name cell and the '8,64-12,07' cell merge over the whole band; horizontal separators exist only inside the 'Марка провода по ГОСТ 839-80' column (x 0.236-0.370) at y 0.5765, 0.5910, 0.6054, delimiting the three marks АС 50/8 (y 0.5637-0.5754), АС 63/10,5 (0.5782-0.5899), АС 70/11 (0.5927-0.6044)."
+              }
+            ],
+            "case_sha256": "ec3fedb6311c425496061bea36fd6bf8e2d0b028d220ccf119a07680f2cc063e"
+          }
+        ]
+      },
+      "source_manifest": [
+        {
+          "sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+          "page_count": 228
+        },
+        {
+          "sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+          "page_count": 60
+        },
+        {
+          "sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "page_count": 216
+        },
+        {
+          "sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+          "page_count": 162
+        },
+        {
+          "sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "page_count": 314
+        }
+      ],
+      "saved_at": "2026-10-14T21:34:31.388959+00:00",
+      "round_number": 1,
+      "receipt_sha256": "bbc11b7304c71f5d57af54a56f5716607238116e225f666b574173fa533db360"
+    }
+  ],
+  "new_model_opinions": true,
+  "catalogue_values_changed": false
+}

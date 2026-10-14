@@ -1,0 +1,154 @@
+{
+  "schema_version": "catalogue-discrepancy-pack/1",
+  "pack_id": "joint-armature-118-АСЦ-63",
+  "reviewer_policy": {
+    "required_roles": [
+      "codex",
+      "zcode",
+      "minimax"
+    ],
+    "standalone_glm": false
+  },
+  "cases": [
+    {
+      "kind": "joint-variant-and-model-options",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+      "physical_pages": [
+        118
+      ],
+      "ours": [
+        {
+          "fact_id": "O-c2ddc85968982bf7f1fde7a4",
+          "side": "ours",
+          "pointer": "/catalogs/4/pages/117/content/tables/0/rows/0/cells/1",
+          "owner": "АСЦ-63",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 25/4,2",
+          "unit": null,
+          "condition": null,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "full_input_fact_sha256": "9a404dad6783b0e784b1c229cb902d3089c0285eec6d5af615727407b9c44136"
+        },
+        {
+          "fact_id": "O-913111b6904bec4f19e846e8",
+          "side": "ours",
+          "pointer": "/catalogs/4/pages/117/content/tables/0/rows/1/cells/1",
+          "owner": "АСЦ-63",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 35/6,2",
+          "unit": null,
+          "condition": null,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "full_input_fact_sha256": "67f3f5da0488202b5ff3712f7e99f4cb9c83f99054daa52890d7e255aa38d520"
+        },
+        {
+          "fact_id": "O-085b533c3a26c6d1d3075a5e",
+          "side": "ours",
+          "pointer": "/catalogs/4/pages/117/content/tables/0/rows/2/cells/1",
+          "owner": "АСЦ-63",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 40/6,7",
+          "unit": null,
+          "condition": null,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "full_input_fact_sha256": "d43957ced47e9b467041bbe430fa5bba072e28ec64cb2bdb136a644712953c30"
+        }
+      ],
+      "oleg": [
+        {
+          "fact_id": "L-a2b0db0aa231a45f3898de61",
+          "side": "oleg",
+          "pointer": "characteristics.jsonl:47252/raw",
+          "owner": "АСЦ-63",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 25/4,2\nАС 35/6,2\nАС 40/6,7",
+          "unit": "",
+          "condition": "",
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "full_input_fact_sha256": "4f5471fc99860a92563b42d52f5d7306996ab09e12ac233288306bf1c4da942c"
+        }
+      ],
+      "proposal": {
+        "schema_version": "catalogue-variant-option-bindings/1",
+        "canonical_action": "Keep every original variant cell unchanged; expose the other original list ONLY as model-level options. Never copy the whole list into an individual variant cell.",
+        "bindings": [
+          {
+            "model": "АСЦ-63",
+            "property": "Марка провода по ГОСТ 839-80",
+            "option_list_fact_id": "L-a2b0db0aa231a45f3898de61",
+            "members": [
+              {
+                "variant_fact_id": "O-c2ddc85968982bf7f1fde7a4",
+                "member_start": 0,
+                "member_end": 9
+              },
+              {
+                "variant_fact_id": "O-913111b6904bec4f19e846e8",
+                "member_start": 10,
+                "member_end": 19
+              },
+              {
+                "variant_fact_id": "O-085b533c3a26c6d1d3075a5e",
+                "member_start": 20,
+                "member_end": 29
+              }
+            ]
+          }
+        ],
+        "covered_original_cases": [
+          {
+            "case_id": "C-1f469eb83d85d6fbe3e8c18d",
+            "case_sha256": "28cda15ace81e74ca4fe698905adff6db537d29e3cc2aa5fba4bf2e4c4586739",
+            "pack_sha256": "758269635230b3df819a7579672ef351e2c4bfa0fe9f5100c139448453de5cb8",
+            "ours_fact_ids": [
+              "O-c2ddc85968982bf7f1fde7a4"
+            ],
+            "oleg_fact_ids": [
+              "L-a2b0db0aa231a45f3898de61"
+            ]
+          },
+          {
+            "case_id": "C-8b5d5712531775be1bc1c401",
+            "case_sha256": "dfa54b0f9c38e88f96e8292f9d530982761529ea3c42b28c456c02af807bec74",
+            "pack_sha256": "38cae5d92d03c1fc06f167d69017ba38663a12422dc5d9d9454a84415a4ba012",
+            "ours_fact_ids": [
+              "O-913111b6904bec4f19e846e8"
+            ],
+            "oleg_fact_ids": [
+              "L-a2b0db0aa231a45f3898de61"
+            ]
+          },
+          {
+            "case_id": "C-4a1fcf7922989874978baaf5",
+            "case_sha256": "706af426b1ac935bf5fee9b935d63b56810b9cd17273ff3509f0057c21f7eedc",
+            "pack_sha256": "9d5bb100a6ffbe7455734f78f7955c74c743f89c32f66273288b5c6f8112c126",
+            "ours_fact_ids": [
+              "O-085b533c3a26c6d1d3075a5e"
+            ],
+            "oleg_fact_ids": [
+              "L-a2b0db0aa231a45f3898de61"
+            ]
+          }
+        ]
+      },
+      "question": "Post-independent source discussion. Judge this ENTIRE proposed joint representation, not a competition between a row and a model. Inspect the original table, all listed models and variants. If BOTH the individual variant cells and their explicit model-option bindings are supported, choose both and explain that the canonical variant rows remain unchanged. If any member/scope/order is wrong, use unresolved/neither with the exact defect. Retaining the full list is not permission to copy it into one variant cell. No proposed engineering value is invented.",
+      "case_id": "J-6fdffc0e07f3c4599a3d368a"
+    }
+  ]
+}

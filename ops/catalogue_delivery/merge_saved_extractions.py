@@ -10,6 +10,7 @@ from openpyxl import Workbook, load_workbook
 from catalog_json.reconciliation.consensus import build_consensus, case_sha256, receipt_path
 from catalog_json.reconciliation.formats import exact_json_equal, resolve_pointer
 from catalog_json.reconciliation.materialize import materialize_side
+from catalog_json.reconciliation.joint_scope import approve_variant_proposal
 from catalog_json.export import to_xlsx
 from catalog_json.schema import PageContent
 
@@ -37,7 +38,8 @@ def reviewed_cases(task, root):
             if entry['role'] not in ROLES or type(entry['round_number']) is not int or entry['round_number'] < 1:
                 raise ValueError('Invalid actual native opinion round')
             selections[key] = entry
-    for name in ('three-reviewers-ready-manifest.json', 'current-production-ready-manifest.json'):
+    for name in ('three-reviewers-ready-manifest.json', 'current-production-ready-manifest.json',
+                 'post-source-discussion-ready-manifest.json'):
         path = task / name
         if not path.exists(): continue
         manifest = load(path)
@@ -118,11 +120,74 @@ def public_record(record):
         'all_three_present': record['complete'], 'decision': record['decision'],
         'ours': case['ours'], 'oleg': case['oleg'], 'reviewers': reviewers,
         'actual_rounds': record['actual_rounds'],
+        'resolved': record.get('resolved', record['accepted']),
+        'joint_resolution': record.get('joint_resolution'),
         'materialization_proof_sha256': record.get('materialization_proof_sha256')}
+
+def joint_approvals(task, root, records):
+    """Fresh three-party scope proofs resolve parents without rewriting old votes."""
+    path = task / 'joint-scope-ready-manifest.json'
+    if not path.exists(): return []
+    manifest = load(path)
+    if tuple(manifest['required_roles']) != ROLES or manifest['standalone_glm']:
+        raise ValueError('Unapproved joint review roles')
+    parents = {r['case']['case_id']: r for r in records}; result = []; covered = set()
+    for item in manifest['packs']:
+        file = root / item['path']; pack = load(file)
+        if sha(file) != item['file_sha256'] or case_sha256(pack) != item['pack_sha256']:
+            raise ValueError('Joint proposal input changed')
+        original = [parents[c] for c in item['covered_original_cases']]
+        votes = []
+        for role in ROLES:
+            number = item['minimax_round'] if role == 'minimax' else item['selected_native_opinion_rounds'][role]
+            receipt = receipt_path(pack, task / 'adjudication', number, role)
+            if receipt.exists():
+                vote = load(receipt); build_consensus(pack, [vote]); votes.append(vote)
+        if len(votes) != len(ROLES): continue
+        consensus = build_consensus(pack, votes)
+        if not consensus['all_resolved'] or consensus['cases'][0]['decision'] != 'both': continue
+        proof = approve_variant_proposal(pack, votes, original)
+        ids = proof['covered_original_case_ids']
+        if covered.intersection(ids): raise ValueError('Two joint proposals cover the same parent case')
+        covered.update(ids)
+        case = pack['cases'][0]
+        reviewers = public_record({'case': case, 'pack_sha256': case_sha256(pack),
+            'accepted': True, 'complete': True, 'decision': 'both',
+            'votes': {v['identity']['role']: v for v in votes},
+            'opinions': {v['identity']['role']: v['payload']['verdicts'][0] for v in votes},
+            'actual_rounds': {v['identity']['role']: v['round_number'] for v in votes}})['reviewers']
+        result.append({'proof_sha256': case_sha256(proof), 'pack_sha256': case_sha256(pack),
+            'case_id': case['case_id'], 'source_sha256': case['source_sha256'],
+            'physical_pages': case['physical_pages'], 'proposal': proof['proposal'],
+            'variant_facts': case['ours'], 'model_option_facts': case['oleg'],
+            'reviewers': reviewers, 'catalogue_values_changed': False})
+    return result
+
+def apply_joint_resolutions(records, approvals):
+    """A scope agreement is explicit additional evidence, never a changed old vote."""
+    parents = {r['case']['case_id']: r for r in records}; dispositions = {}
+    for approval in approvals:
+        for item in approval['proposal']['covered_original_cases']:
+            record = parents[item['case_id']]
+            if case_sha256(record['case']) != item['case_sha256'] or record['pack_sha256'] != item['pack_sha256']:
+                raise ValueError('Scope proof does not bind this retained parent')
+            if record.get('joint_resolution'): raise ValueError('Duplicate joint resolution')
+            record['resolved'] = True
+            record['joint_resolution'] = {'proof_sha256': approval['proof_sha256'],
+                'case_id': approval['case_id'], 'decision': 'both',
+                'action': 'Keep variant cells unchanged; retain separately bound model options',
+                'reviewers': approval['reviewers']}
+            for atom in record['case']['ours'] + record['case']['oleg']:
+                dispositions.setdefault(atom['fact_id'], []).append({'case_id': item['case_id'],
+                    'decision': 'both', 'joint_proof_sha256': approval['proof_sha256']})
+    return dispositions
 
 def apply_accepted(bundle, records):
     changes = []; protected = {}; dispositions = {}
     for record in records:
+        # The fresh whole-proposal agreement supersedes a parent's earlier
+        # scalar choice. Its explicit action is to keep every variant intact.
+        if record.get('joint_resolution'): continue
         if not record['accepted']: continue
         case = record['case']; decision = record['decision']
         for atom in case['ours'] + case['oleg']:
@@ -170,8 +235,10 @@ def apply_accepted(bundle, records):
 
 def build(root, task, out, *, allow_pending=False):
     start = time.monotonic(); records = reviewed_cases(task, root)
+    approvals = joint_approvals(task, root, records)
+    joint_dispositions = apply_joint_resolutions(records, approvals)
     alignment = load(task / 'comparison-property-scope-safe/summary.json')
-    pending = [r for r in records if not r['accepted']]
+    pending = [r for r in records if not r.get('resolved', r['accepted'])]
     full = alignment.get('semantic_alignment_complete') is True and not pending
     if not full and not allow_pending:
         raise ValueError('Final delivery refused: source-bound alignment and/or three-party adjudication are still incomplete')
@@ -179,6 +246,7 @@ def build(root, task, out, *, allow_pending=False):
     if sha(original) != 'dcfdf4a64448a727766cc50ba31b01cf967b475744b9a6d6c5d065344c5061a7': raise ValueError('Baseline archive SHA changed')
     with zipfile.ZipFile(original) as z: bundle = json.loads(z.read('all-catalogues-980-pages.json'))
     changes, dispositions = apply_accepted(bundle, records)
+    for fid, entries in joint_dispositions.items(): dispositions.setdefault(fid, []).extend(entries)
     count = sum(len(c['pages']) for c in bundle['catalogs'])
     if count != 980: raise ValueError('All 980 pages must survive reconciliation')
     for catalog in bundle['catalogs']:
@@ -187,7 +255,10 @@ def build(root, task, out, *, allow_pending=False):
     summary = {'schema_version': 'catalogue-reconciliation-snapshot/1',
         'created_at': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'final_consensus_merge': full,
         'required_reviewers': list(ROLES), 'page_count': count,
-        'retained_case_count': len(records), 'three_party_accepted_cases': len(records)-len(pending),
+        'retained_case_count': len(records), 'three_party_accepted_cases': sum(r['accepted'] for r in records),
+        'three_party_resolved_cases': len(records)-len(pending),
+        'joint_scope_approved_groups': len(approvals),
+        'joint_scope_resolved_cases': sum(bool(r.get('joint_resolution')) for r in records),
         'pending_cases': len(pending), 'canonical_cells_changed': len(changes),
         'alignment_candidates_not_proven_errors': alignment['alignment_counts'],
         'total_real_discrepancies': None, 'semantic_alignment_complete': alignment['semantic_alignment_complete'],
@@ -204,6 +275,7 @@ def build(root, task, out, *, allow_pending=False):
     bundle['reconciliation'] = summary; bundle['snapshot_stage'] = 'reconciled_complete' if full else 'reconciliation_partial'
     bundle['complete_for_selection'] = False if not full else bundle['complete_for_selection']
     bundle['reconciliation_cases'] = [public_record(r) for r in records]
+    bundle['joint_scope_approvals'] = approvals
     bundle['corrections'] = changes
     out.mkdir(parents=True, exist_ok=False)
     workbook_paths = []
@@ -217,6 +289,18 @@ def build(root, task, out, *, allow_pending=False):
             tab.append([change['physical_page'], change['json_pointer'], str(change['before']['value']),
                 str(change['after']['value']), *[change['reviewers'][r]['model'] for r in ROLES], 'Три согласованных мнения по изменённому полю'])
         tab.append([None,'Полный консенсус по всем расхождениям',None,None,None,None,None,full])
+        options = book.create_sheet('Варианты модели')
+        options.append(['Страница PDF','Модель','Характеристика','Исходный список Олега','Значение варианта','JSON указатель варианта','Доказательство','Codex','ZCode','MiniMax'])
+        for approval in approvals:
+            if not any(p['source_sha256'] == approval['source_sha256'] for p in catalog['pages']): continue
+            atoms = {a['fact_id']: a for a in approval['variant_facts'] + approval['model_option_facts']}
+            for binding in approval['proposal']['bindings']:
+                option = atoms[binding['option_list_fact_id']]
+                for member in binding['members']:
+                    variant = atoms[member['variant_fact_id']]
+                    options.append([approval['physical_pages'][0], binding['model'], binding['property'],
+                        option['value'], variant['value'], variant['pointer'], approval['proof_sha256'],
+                        *[approval['reviewers'][r]['model'] for r in ROLES]])
         book.save(file); del book; gc.collect(); workbook_paths.append(file)
     archive = out / 'catalogues-unified.zip'; manifest_files = {}
     with zipfile.ZipFile(archive, 'x', compression=zipfile.ZIP_DEFLATED, compresslevel=6) as z:
@@ -260,7 +344,7 @@ def build(root, task, out, *, allow_pending=False):
                 else:put(json.dumps(load(file),ensure_ascii=False,separators=(',',':'),allow_nan=False).encode())
             put(b'}}')
         manifest_files['catalogue.json']={'sha256':h.hexdigest(),'bytes':size,'oleg_observations':n}
-        reports={'corrections.json':changes, 'reconciliation-report.json':{'summary':summary,'cases':[public_record(r) for r in records]},
+        reports={'corrections.json':changes, 'reconciliation-report.json':{'summary':summary,'cases':[public_record(r) for r in records], 'joint_scope_approvals': approvals},
             'README.txt':'Единый снимок пяти каталогов (980 физических страниц).\n'+('Итоговый консенсус завершён.\n' if full else 'ВНИМАНИЕ: промежуточный снимок; полный консенсус ещё не завершён.\n')+
             'catalogue.json — основная постраничная выдача, исправления, три мнения по каждому разобранному случаю и сохранённые наблюдения Олега.\nПять Excel содержат те же таблицы, тексты, чертежи, происхождение и исправления.\nВ отчёте отдельно показаны принятые случаи и оставшиеся споры. Кандидаты сопоставления не являются числом ошибок.\n'}
         for name,value in reports.items():
@@ -291,7 +375,21 @@ def build(root, task, out, *, allow_pending=False):
             expected=[{cell['column_id']:cell['value'] for cell in row['cells']}[column['id']] for page in catalog['pages'] for table in page['content']['tables'] for row in table['rows'] for column in table['columns']]
             actual=[r[4] for r in book['Данные'].iter_rows(min_row=2,values_only=True)]
             if len(expected)!=len(actual) or any(a!=(None if b=='' else b) or (b is not None and b!='' and type(a) is not type(b)) for a,b in zip(actual,expected)):raise ValueError('Excel differs from canonical JSON')
-            checked_cells+=len(actual);book.close()
+            checked_cells+=len(actual)
+            expected_options=[]
+            for approval in decoded['joint_scope_approvals']:
+                if not any(p['source_sha256']==approval['source_sha256'] for p in catalog['pages']): continue
+                atoms={a['fact_id']:a for a in approval['variant_facts']+approval['model_option_facts']}
+                for binding in approval['proposal']['bindings']:
+                    option=atoms[binding['option_list_fact_id']]
+                    for member in binding['members']:
+                        variant=atoms[member['variant_fact_id']]
+                        expected_options.append((approval['physical_pages'][0],binding['model'],binding['property'],
+                            option['value'],variant['value'],variant['pointer'],approval['proof_sha256'],
+                            *[approval['reviewers'][r]['model'] for r in ROLES]))
+            actual_options=list(book['Варианты модели'].iter_rows(min_row=2,values_only=True))
+            if actual_options!=expected_options:raise ValueError('Excel lost model-option bindings or reviewer identities')
+            book.close()
     receipt={'archive':str(archive.resolve()),'sha256':sha(archive),'bytes':archive.stat().st_size,
         'page_count':980,'canonical_cells_changed':len(changes),'excel_cells_roundtrip_checked':checked_cells,
         'oleg_observations_retained':n,'archive_crc':'passed','manifest_all_members_verified':True,

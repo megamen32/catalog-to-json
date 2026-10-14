@@ -1,0 +1,250 @@
+{
+  "schema_version": "catalogue-discrepancy-pack/1",
+  "pack_id": "joint-armature-118-АСЦ-71",
+  "reviewer_policy": {
+    "required_roles": [
+      "codex",
+      "zcode",
+      "minimax"
+    ],
+    "standalone_glm": false
+  },
+  "cases": [
+    {
+      "kind": "joint-variant-and-model-options",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+      "physical_pages": [
+        118
+      ],
+      "ours": [
+        {
+          "fact_id": "O-bf822ab034d9e75f82e1206b",
+          "side": "ours",
+          "pointer": "/catalogs/4/pages/117/content/tables/0/rows/18/cells/1",
+          "owner": "АСЦ-71",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 185/24",
+          "unit": null,
+          "condition": null,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "full_input_fact_sha256": "953e0edfe920403c757bc364aeeed56d6581f6cb46d5584e4d3c3b91e9b87d24"
+        },
+        {
+          "fact_id": "O-dda92bf5cfe4c5d1e5cb521a",
+          "side": "ours",
+          "pointer": "/catalogs/4/pages/117/content/tables/0/rows/19/cells/1",
+          "owner": "АСЦ-71",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 185/29",
+          "unit": null,
+          "condition": null,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "full_input_fact_sha256": "7f051925a347b8d28a6bbbdb276f70ba61fa8aac165d7ca9d6f8917d1bca3741"
+        },
+        {
+          "fact_id": "O-f748879229b5c4869e23cfae",
+          "side": "ours",
+          "pointer": "/catalogs/4/pages/117/content/tables/0/rows/20/cells/1",
+          "owner": "АСЦ-71",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 185/43",
+          "unit": null,
+          "condition": null,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "full_input_fact_sha256": "a98688b7fa0e3357c05cc0e7d6991c9ef4aae7337fac449a878202b26758eebd"
+        },
+        {
+          "fact_id": "O-2cf1fc037c31ddb93266124d",
+          "side": "ours",
+          "pointer": "/catalogs/4/pages/117/content/tables/0/rows/21/cells/1",
+          "owner": "АСЦ-71",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 200/11,1",
+          "unit": null,
+          "condition": null,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "full_input_fact_sha256": "7ce977a420bf455da76de746b74630289c514ddb1de6b745d7d8f74bcff53d13"
+        },
+        {
+          "fact_id": "O-6cd0ebabb5bfcedb79961944",
+          "side": "ours",
+          "pointer": "/catalogs/4/pages/117/content/tables/0/rows/22/cells/1",
+          "owner": "АСЦ-71",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 200/32,6",
+          "unit": null,
+          "condition": null,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "full_input_fact_sha256": "a5d087713c4ff7bf77ab1d8fc4f54dcde9e8d80a61f9cc863db7fa8af3c5a1ec"
+        },
+        {
+          "fact_id": "O-fb6deb3cc47ba4043fbe282c",
+          "side": "ours",
+          "pointer": "/catalogs/4/pages/117/content/tables/0/rows/23/cells/1",
+          "owner": "АСЦ-71",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 205/27",
+          "unit": null,
+          "condition": null,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "full_input_fact_sha256": "70bdcd887ad571b4dee46f699495dc02001e27f23a6b0c60e6882c3dd32b809d"
+        }
+      ],
+      "oleg": [
+        {
+          "fact_id": "L-5578647ddc3cc78011e99a40",
+          "side": "oleg",
+          "pointer": "characteristics.jsonl:47276/raw",
+          "owner": "АСЦ-71",
+          "name": "Марка провода по ГОСТ 839-80",
+          "value": "АС 185/24\nАС 185/29\nАС 185/43\nАС 200/11,1\nАС 200/32,6\nАС 205/27",
+          "unit": "",
+          "condition": "",
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "physical_pages": [
+            118
+          ],
+          "kind": "model_parameter",
+          "full_input_fact_sha256": "ca9b532247067b8a0da99fe426f54718ceabdb3588e0e29d726ac6bb2a85957d"
+        }
+      ],
+      "proposal": {
+        "schema_version": "catalogue-variant-option-bindings/1",
+        "canonical_action": "Keep every original variant cell unchanged; expose the other original list ONLY as model-level options. Never copy the whole list into an individual variant cell.",
+        "bindings": [
+          {
+            "model": "АСЦ-71",
+            "property": "Марка провода по ГОСТ 839-80",
+            "option_list_fact_id": "L-5578647ddc3cc78011e99a40",
+            "members": [
+              {
+                "variant_fact_id": "O-bf822ab034d9e75f82e1206b",
+                "member_start": 0,
+                "member_end": 9
+              },
+              {
+                "variant_fact_id": "O-dda92bf5cfe4c5d1e5cb521a",
+                "member_start": 10,
+                "member_end": 19
+              },
+              {
+                "variant_fact_id": "O-f748879229b5c4869e23cfae",
+                "member_start": 20,
+                "member_end": 29
+              },
+              {
+                "variant_fact_id": "O-2cf1fc037c31ddb93266124d",
+                "member_start": 30,
+                "member_end": 41
+              },
+              {
+                "variant_fact_id": "O-6cd0ebabb5bfcedb79961944",
+                "member_start": 42,
+                "member_end": 53
+              },
+              {
+                "variant_fact_id": "O-fb6deb3cc47ba4043fbe282c",
+                "member_start": 54,
+                "member_end": 63
+              }
+            ]
+          }
+        ],
+        "covered_original_cases": [
+          {
+            "case_id": "C-85ae717a1492f7fc531d9e7b",
+            "case_sha256": "d55543c8bb132d0845ea99359bb95ada5f1afd0734b98f89b727047f27947ef5",
+            "pack_sha256": "01892fb45bd8b2e186f378eca85a068633da630f06a5311d0ff4952aa5d8db8b",
+            "ours_fact_ids": [
+              "O-bf822ab034d9e75f82e1206b"
+            ],
+            "oleg_fact_ids": [
+              "L-5578647ddc3cc78011e99a40"
+            ]
+          },
+          {
+            "case_id": "C-8ab05fccc2aacb0352b2114f",
+            "case_sha256": "0a329a9afc29c19d2e782e201e84cec8edd11e5312b2a03ff9f4fa3acac9c2ae",
+            "pack_sha256": "c8c97ab9271b129e8ab99170dcfece703d6706f0036ff86054a16ab72b10f69a",
+            "ours_fact_ids": [
+              "O-dda92bf5cfe4c5d1e5cb521a"
+            ],
+            "oleg_fact_ids": [
+              "L-5578647ddc3cc78011e99a40"
+            ]
+          },
+          {
+            "case_id": "C-45d6beec2fa6c36f91b25a4e",
+            "case_sha256": "db64ec5e0035f01698f82f211b75d58510c2c94f6a9e3da0d059d473ef59bedd",
+            "pack_sha256": "dba5bd2e62f8d9f590bd69f2113c284d5f9bd672dfe6c0f63b0408bf013e513f",
+            "ours_fact_ids": [
+              "O-f748879229b5c4869e23cfae"
+            ],
+            "oleg_fact_ids": [
+              "L-5578647ddc3cc78011e99a40"
+            ]
+          },
+          {
+            "case_id": "C-104ee04b2157b41e747e3e31",
+            "case_sha256": "f1e2f0d7dcfeead5340d41629639874f2d9ad6b1ca6f58be25cca0ecc942f25d",
+            "pack_sha256": "4936f6aa09527d03ac80f0e97670299a977e61cc1a0ad84a4e7f036c60038f30",
+            "ours_fact_ids": [
+              "O-2cf1fc037c31ddb93266124d"
+            ],
+            "oleg_fact_ids": [
+              "L-5578647ddc3cc78011e99a40"
+            ]
+          },
+          {
+            "case_id": "C-fe8023536f7e1196d3ebfece",
+            "case_sha256": "df434df28547285bc542bde000ef016f4fc310d506d216125c4ab8911fdd86f2",
+            "pack_sha256": "f1d0b0c4c1f5424ecc343244c966f3a798b7678c741d0abc6f8fb6c6a220d94d",
+            "ours_fact_ids": [
+              "O-6cd0ebabb5bfcedb79961944"
+            ],
+            "oleg_fact_ids": [
+              "L-5578647ddc3cc78011e99a40"
+            ]
+          },
+          {
+            "case_id": "C-ba3bd8b0967b3cd71fe3f7e8",
+            "case_sha256": "a0b91b58bedc83b94de1547b45603a43fb6216918ffce98f570b99407474e8ca",
+            "pack_sha256": "61d1545a78e25ba18516f2ee2368c27849b9881d537a3ca66f36e64c64d682ef",
+            "ours_fact_ids": [
+              "O-fb6deb3cc47ba4043fbe282c"
+            ],
+            "oleg_fact_ids": [
+              "L-5578647ddc3cc78011e99a40"
+            ]
+          }
+        ]
+      },
+      "question": "Post-independent source discussion. Judge this ENTIRE proposed joint representation, not a competition between a row and a model. Inspect the original table, all listed models and variants. If BOTH the individual variant cells and their explicit model-option bindings are supported, choose both and explain that the canonical variant rows remain unchanged. If any member/scope/order is wrong, use unresolved/neither with the exact defect. Retaining the full list is not permission to copy it into one variant cell. No proposed engineering value is invented.",
+      "case_id": "J-93cde5e452f20249889b9a78"
+    }
+  ]
+}
