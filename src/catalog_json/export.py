@@ -27,8 +27,8 @@ def to_xlsx(catalog,path: Path,allow_unverified=False):
                        'Извлекатель','Версия извлекателя','SHA кода извлекателя','Проверяющий','Версия проверяющего','SHA кода проверяющего',
                        'Последнее извлечение, с','Последняя проверка, с'])
     def producer(page,key):
-        origin=page.get(key,{})
-        if origin.get('status')!='receipt_verified':return ['не подтверждён','не подтверждена',None,None]
+        origin=page.get(key) or {}
+        if origin.get('status') not in {'receipt_verified','manual_source_review_verified'}:return ['не подтверждён','не подтверждена',None,None]
         program=origin.get('program',{});elapsed=None
         if all(isinstance(origin.get(k),(int,float)) for k in ('started_at','finished_at')):
             elapsed=round(origin['finished_at']-origin['started_at'],3)

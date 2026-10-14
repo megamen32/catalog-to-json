@@ -12,4 +12,4 @@ Root owns source changes in tools.py, review_consistency.py, fair_queue.py, stag
 4. Replay retained small4 and drawings27/39 without model requests. Relevant fast-unit/focused-integration run expected30s, maximum180s under project limits.
 5. Publish owned changes, freeze versioned runtime, transition at finished-call boundary without interrupting native calls; prove actual source-bound new review and admission of armature. Preserve all980 drafts and accepted hashes.
 
-No broad benchmark, no manual edits of catalogue values, no credential/transcript publication.
+No broad benchmark, no hand-editing native producer artifacts, no credential/transcript publication. Direct owner correction14October: root personally reviews tail pages; separately attributed, exact-bound unchanged-candidate Codex reviews can finish ordinary non-drawing pages. Root-authored corrections stay separately attributed and need independent adoption. Preserve original producer bytes.

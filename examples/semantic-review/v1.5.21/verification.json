@@ -1,0 +1,32 @@
+{
+  "focused_checks": {
+    "unique_tests_passed": 80,
+    "base_group": {
+      "passed": 79,
+      "elapsed_seconds": 13.42
+    },
+    "manual_and_export_group": {
+      "passed": 14,
+      "elapsed_seconds": 3.13,
+      "overlap_with_base_group": 13
+    },
+    "category": "fast unit and focused integration",
+    "expected_seconds": 30,
+    "maximum_seconds": 300
+  },
+  "installed_runtime": {
+    "program": {
+      "package_version": "1.5.21",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "2301687f1a836b45b5310748b9eff0562539e6ca5d5cae7237a5b8e7ae0f4f91",
+      "python_version": "3.12.13"
+    },
+    "role_contract": "867b3f790ecc8921609cf97aa738eda3b36ee55598d694455416842fad03be98"
+  },
+  "pinned_files_verified": 391,
+  "preserved_native_accepted_at_preflight": 436,
+  "native_model_calls": 0,
+  "manual_source_reviews": 5,
+  "production_rollout": "not yet activated at source publication"
+}

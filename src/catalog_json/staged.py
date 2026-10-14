@@ -19,6 +19,7 @@ from .tools import write_json,durable_directory
 from .provenance import program_version,artifact_origin
 from .processes import OwnedProcessTree
 from .fair_queue import FairWorkQueue,REVIEW_ORDER
+from .manual_review import source_review_update
 
 
 RATE_LIMIT=re.compile(r'(?:HTTP(?:/\d(?:\.\d)?)?[^\n]{0,100}\b429\b|Error\s+code:\s*429\b|RateLimitError|rate[ _-]limit(?:ed| error| exceeded| reached)|Too Many Requests)',re.I)
@@ -376,7 +377,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             if old:record['prior_execution']=old
             item={'id':cid,'source':source,'out':out,'work':work,'record':record,'reviewed_audit':external_audit_digest(work),
                   'has_prior_review':bool(old.get('review') or old.get('attempts') or list(work.glob('review-*.json')))};pending[cid,page]=item
-            accepted_profile=accepted_profile_agents(work,old,agents,digest,page) if old.get('status')=='accepted' and (old.get('cache_key')==key or resume_compatible_profile) else None
+            accepted_profile=accepted_profile_agents(work,old,agents,digest,page) if not old.get('manual_source_review') and old.get('status')=='accepted' and (old.get('cache_key')==key or resume_compatible_profile) else None
             if accepted_profile is not None:
                 candidate=validated_candidate(work,digest,page,agents.extractor,role_contract(accepted_profile,'extractor'));report_path=work/f"review-{old['next_attempt']}.json"
                 saves=[json.loads(line) for line in (work/'tools.jsonl').read_text().splitlines()] if (work/'tools.jsonl').exists() else []
@@ -409,6 +410,9 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                     record['retained_extraction']={'fresh_model_call':False,'extractor_contract_sha256':role_contract(candidate_profile,'extractor'),
                         'review_required':True,'reason':'Explicit receipt-verified predecessor extraction; current independent reviewer must verify it'}
                 record['candidate_sha256']=record['candidate_producer']['artifact_sha256']
+                root_review=source_review_update(work,record)
+                if root_review is not None:
+                    record.update(root_review);continue
                 rejection=source_audit_rejection(work,digest,page,record['candidate_sha256'])
                 if rejection:
                     record.update(status='needs_review',next_attempt=candidate[0]+1,source_audit_rejection=rejection,
@@ -476,6 +480,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             task=await queue.get();item=task[2]
             r=item['record'];attempt=r['next_attempt'];began=time.monotonic()
             try:
+                if r['status']=='accepted':continue
                 r.update(status='awaiting_provider_admission',active_role=role);save(item)
                 async with provider_slots[providers[role]]:
                     preferred=queue.at_admission(task)
@@ -484,7 +489,11 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                         r['elapsed_seconds']+=round(time.monotonic()-began,3);save(item)
                         task=preferred;item=task[2];r=item['record'];attempt=r['next_attempt'];began=time.monotonic()
                         r['active_role']=role
+                    if r['status']=='accepted':continue
                     if role=='reviewer':
+                        root_review=source_review_update(item['work'],r)
+                        if root_review is not None:
+                            r.update(root_review);item['reviewed_audit']=external_audit_digest(item['work']);continue
                         rejection=source_audit_rejection(item['work'],r['source_sha256'],r['pdf_page'],r.get('candidate_sha256'))
                         if rejection:
                             r['attempts'].append({'candidate':f'candidate-{attempt}.json','review':None,
@@ -512,6 +521,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                     r['candidate_producer']=artifact_origin(item['work'],path,r['source_sha256'],r['pdf_page'],attempt,role,agents.extractor,role_contract(agents,'extractor'))
                 else:
                     candidate=PageContent.model_validate(r['content']);r['review']=artifact.model_dump()
+                    r['reviewer']=agents.reviewer;r.pop('manual_source_review',None)
                     rejection=source_audit_rejection(item['work'],r['source_sha256'],r['pdf_page'],r['candidate_sha256'])
                     r['attempts'].append({'candidate':f'candidate-{attempt}.json','review':f'review-{attempt}.json',
                                          'source_audit_rejected':rejection is not None})
@@ -558,6 +568,10 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                 # the affected accepted page. Retain its exact extractor bytes.
                 for item in pending.values():
                     r=item['record']
+                    if r['status']!='accepted' and not r.get('active_role'):
+                        root_review=source_review_update(item['work'],r)
+                        if root_review is not None:
+                            r.update(root_review);item['reviewed_audit']=external_audit_digest(item['work']);save(item)
                     if r['status']=='accepted' and external_audit_digest(item['work'])!=item['reviewed_audit']:
                         rejection=source_audit_rejection(item['work'],r['source_sha256'],r['pdf_page'],r['candidate_sha256'])
                         r['external_audit_changed_at']=datetime.now(timezone.utc).isoformat()

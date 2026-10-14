@@ -1,0 +1,244 @@
+{
+  "observed_unix": 1791972258.1692805,
+  "compatible_native_accepted": 436,
+  "manual_source_reviews_valid": [
+    {
+      "catalog": "armature",
+      "physical_page": 304,
+      "native_extractor": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.5.17",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "250a5f879c4c07bb339e5791b2e6b59062426df6bcef56df7b50cb0af47cfc87",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "3f1267a3f61e9096cbd9885e44dab3ce4ab7046f4670666d73573d240bb4c87a",
+        "source_bound_save": true,
+        "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "physical_page": 304,
+        "attempt": 1,
+        "role": "extractor",
+        "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+        "contract_sha256": "5f66dfaacd6c43b74ca531095c704b2a738db593b26901fc493f46c9409796e6",
+        "receipt": "calls/01251fb27c594297a6beb43b0776c5f0/result.json",
+        "started_at": 1791964918.9997263,
+        "finished_at": 1791965110.4644816
+      },
+      "reviewer": {
+        "status": "manual_source_review_verified",
+        "model": "Codex native session 01a12c30-e58f-7861-8a2d-966c92630163",
+        "harness": "codex",
+        "session_id": "01a12c30-e58f-7861-8a2d-966c92630163",
+        "program": {
+          "package_version": "root-tail-source-review-2026-10-14.r1",
+          "source_code_sha256": null
+        },
+        "role": "reviewer",
+        "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "physical_page": 304,
+        "attempt": 1,
+        "artifact_sha256": "8cb1993dd2b751befcf33ae971d0cb3dc1d228cd781817a026966f4a6b5db072",
+        "reviewed_candidate_sha256": "3f1267a3f61e9096cbd9885e44dab3ce4ab7046f4670666d73573d240bb4c87a",
+        "receipt": "root-source-review.json",
+        "completed_at": "2026-10-14T12:58:52.708707+03:00"
+      },
+      "source_values_changed": false,
+      "model_calls": 0
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 305,
+      "native_extractor": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.5.17",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "250a5f879c4c07bb339e5791b2e6b59062426df6bcef56df7b50cb0af47cfc87",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "f8b923bd9278de322cad89495e6a065e9143df5209f1a661524fc917634dfb6b",
+        "source_bound_save": true,
+        "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "physical_page": 305,
+        "attempt": 1,
+        "role": "extractor",
+        "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+        "contract_sha256": "5f66dfaacd6c43b74ca531095c704b2a738db593b26901fc493f46c9409796e6",
+        "receipt": "calls/953807b6b0ce417d8c25b448e8bda04b/result.json",
+        "started_at": 1791964950.701614,
+        "finished_at": 1791965351.7915967
+      },
+      "reviewer": {
+        "status": "manual_source_review_verified",
+        "model": "Codex native session 01a12c30-e58f-7861-8a2d-966c92630163",
+        "harness": "codex",
+        "session_id": "01a12c30-e58f-7861-8a2d-966c92630163",
+        "program": {
+          "package_version": "root-tail-source-review-2026-10-14.r1",
+          "source_code_sha256": null
+        },
+        "role": "reviewer",
+        "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "physical_page": 305,
+        "attempt": 1,
+        "artifact_sha256": "c6a10b62edb9b8ea145022cc6154a2d18dc2d4ceb58c9beffa1f5023e6e66ce5",
+        "reviewed_candidate_sha256": "f8b923bd9278de322cad89495e6a065e9143df5209f1a661524fc917634dfb6b",
+        "receipt": "root-source-review.json",
+        "completed_at": "2026-10-14T12:58:52.700988+03:00"
+      },
+      "source_values_changed": false,
+      "model_calls": 0
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 308,
+      "native_extractor": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.5.17",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "250a5f879c4c07bb339e5791b2e6b59062426df6bcef56df7b50cb0af47cfc87",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "0898fc9aea816b887fea830c2a2def67c697f92ce1be9e58363a381da929204e",
+        "source_bound_save": true,
+        "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "physical_page": 308,
+        "attempt": 1,
+        "role": "extractor",
+        "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+        "contract_sha256": "5f66dfaacd6c43b74ca531095c704b2a738db593b26901fc493f46c9409796e6",
+        "receipt": "calls/c93c7e9cf56e4327a27338e8e05e9d9a/result.json",
+        "started_at": 1791965136.4624548,
+        "finished_at": 1791965489.9687421
+      },
+      "reviewer": {
+        "status": "manual_source_review_verified",
+        "model": "Codex native session 01a12c30-e58f-7861-8a2d-966c92630163",
+        "harness": "codex",
+        "session_id": "01a12c30-e58f-7861-8a2d-966c92630163",
+        "program": {
+          "package_version": "root-tail-source-review-2026-10-14.r1",
+          "source_code_sha256": null
+        },
+        "role": "reviewer",
+        "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "physical_page": 308,
+        "attempt": 1,
+        "artifact_sha256": "42dc102fdab35c812943727edd9bb4f3a3f21a658d5ae5a06e650dd5748214f9",
+        "reviewed_candidate_sha256": "0898fc9aea816b887fea830c2a2def67c697f92ce1be9e58363a381da929204e",
+        "receipt": "root-source-review.json",
+        "completed_at": "2026-10-14T12:49:31.095086+03:00"
+      },
+      "source_values_changed": false,
+      "model_calls": 0
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 310,
+      "native_extractor": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.5.17",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "250a5f879c4c07bb339e5791b2e6b59062426df6bcef56df7b50cb0af47cfc87",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "6f068f8659217efa035a653a697acd9ae68cb4d324d4a86a41cf247fa66ffc37",
+        "source_bound_save": true,
+        "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "physical_page": 310,
+        "attempt": 1,
+        "role": "extractor",
+        "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+        "contract_sha256": "5f66dfaacd6c43b74ca531095c704b2a738db593b26901fc493f46c9409796e6",
+        "receipt": "calls/975ec7e437484c1591773fb521f6312e/result.json",
+        "started_at": 1791965238.7614129,
+        "finished_at": 1791965553.6776881
+      },
+      "reviewer": {
+        "status": "manual_source_review_verified",
+        "model": "Codex native session 01a12c30-e58f-7861-8a2d-966c92630163",
+        "harness": "codex",
+        "session_id": "01a12c30-e58f-7861-8a2d-966c92630163",
+        "program": {
+          "package_version": "root-tail-source-review-2026-10-14.r1",
+          "source_code_sha256": null
+        },
+        "role": "reviewer",
+        "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "physical_page": 310,
+        "attempt": 1,
+        "artifact_sha256": "9df23c996e6765191725f09824006a22b5f7a984189ad2b83360b94745d277fa",
+        "reviewed_candidate_sha256": "6f068f8659217efa035a653a697acd9ae68cb4d324d4a86a41cf247fa66ffc37",
+        "receipt": "root-source-review.json",
+        "completed_at": "2026-10-14T12:49:31.088984+03:00"
+      },
+      "source_values_changed": false,
+      "model_calls": 0
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 311,
+      "native_extractor": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.5.17",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "250a5f879c4c07bb339e5791b2e6b59062426df6bcef56df7b50cb0af47cfc87",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "1223eaa69e185912c4a42e39805e62ba64a4e30d5fe973bf2650c90923f3e52e",
+        "source_bound_save": true,
+        "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "physical_page": 311,
+        "attempt": 1,
+        "role": "extractor",
+        "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+        "contract_sha256": "5f66dfaacd6c43b74ca531095c704b2a738db593b26901fc493f46c9409796e6",
+        "receipt": "calls/863c4f70a72b4d66b9570551b9927ea2/result.json",
+        "started_at": 1791965254.2396884,
+        "finished_at": 1791965961.3643184
+      },
+      "reviewer": {
+        "status": "manual_source_review_verified",
+        "model": "Codex native session 01a12c30-e58f-7861-8a2d-966c92630163",
+        "harness": "codex",
+        "session_id": "01a12c30-e58f-7861-8a2d-966c92630163",
+        "program": {
+          "package_version": "root-tail-source-review-2026-10-14.r1",
+          "source_code_sha256": null
+        },
+        "role": "reviewer",
+        "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+        "physical_page": 311,
+        "attempt": 1,
+        "artifact_sha256": "5ee0c2f2f2170188a3a00511282168aa4b6bae0fb785755c5b8b9e1c834b29aa",
+        "reviewed_candidate_sha256": "1223eaa69e185912c4a42e39805e62ba64a4e30d5fe973bf2650c90923f3e52e",
+        "receipt": "root-source-review.json",
+        "completed_at": "2026-10-14T12:49:31.085942+03:00"
+      },
+      "source_values_changed": false,
+      "model_calls": 0
+    }
+  ],
+  "new_source_code": {
+    "program": {
+      "package_version": "1.5.21",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "2301687f1a836b45b5310748b9eff0562539e6ca5d5cae7237a5b8e7ae0f4f91",
+      "python_version": "3.12.13"
+    },
+    "role_contract": "867b3f790ecc8921609cf97aa738eda3b36ee55598d694455416842fad03be98"
+  },
+  "pinned_files_verified": 391,
+  "model_calls": 0,
+  "production_results_edited": false
+}

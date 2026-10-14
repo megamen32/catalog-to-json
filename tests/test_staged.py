@@ -2,7 +2,7 @@
 import asyncio,hashlib,json
 import pymupdf
 import pytest
-from catalog_json.schema import PageContent,Review,Check,CHECKS,Issue
+from catalog_json.schema import PageContent,Review,Check,CHECKS,Issue,TextBlock
 from catalog_json.staged import staged_batch,validated_candidate
 from catalog_json.tools import write_json
 from catalog_json.agents import AgentPair
@@ -232,7 +232,7 @@ def test_separate_role_contracts_reuse_only_actual_extractor_contract(tmp_path):
     a=Agents();a.contract_digest='combined';a.role_contracts={'extractor':'extractor-contract','reviewer':'reviewer-contract'}
     for page in range(1,4):
         t=CatalogTools(source,out/'test',page=page,model=a.extractor,contract_sha256='extractor-contract');t.render(page);t.direct(page)
-        assert t.save(page,PageContent(title=str(page),text_blocks=[],tables=[],figures=[]).model_dump_json(),'page')['saved']
+        assert t.save(page,PageContent(title=str(page),text_blocks=[TextBlock(kind='paragraph',text='Fixture catalogue paragraph')],tables=[],figures=[]).model_dump_json(),'page')['saved']
     calls=[]
     async def call(agents,role,source,out,page,attempt):
         calls.append(role);value=passed();write_json(out/f'page-{page:04d}'/f'review-{attempt}.json',value.model_dump());return value
@@ -343,7 +343,7 @@ def test_changed_contract_reextracts_instead_of_relabelling_prior_candidate(tmp_
     queue=manifest(tmp_path);out=tmp_path/'out';work=out/'test/page-0001'
     source=Path(json.loads(queue.read_text())['catalogs'][0]['source'])
     old=CatalogTools(source,out/'test',page=1,model=Agents.extractor);old.render(1);old.direct(1)
-    assert old.save(1,PageContent(title='prior',text_blocks=[],tables=[],figures=[]).model_dump_json(),'page')['saved']
+    assert old.save(1,PageContent(title='prior',text_blocks=[TextBlock(kind='paragraph',text='Fixture catalogue paragraph')],tables=[],figures=[]).model_dump_json(),'page')['saved']
     write_json(work/'result.json',{'contract_sha256':'prior-contract','next_attempt':0,'status':'awaiting_review'})
     calls=[]
     async def call(agents,role,source,out,page,attempt):
@@ -362,7 +362,7 @@ def test_failed_new_contract_attempt_cannot_unlock_old_candidate_on_second_resum
     queue=manifest(tmp_path);out=tmp_path/'out';work=out/'test/page-0001'
     source=Path(json.loads(queue.read_text())['catalogs'][0]['source'])
     old=CatalogTools(source,out/'test',page=1,model=Agents.extractor);old.render(1);old.direct(1)
-    assert old.save(1,PageContent(title='prior',text_blocks=[],tables=[],figures=[]).model_dump_json(),'page')['saved']
+    assert old.save(1,PageContent(title='prior',text_blocks=[TextBlock(kind='paragraph',text='Fixture catalogue paragraph')],tables=[],figures=[]).model_dump_json(),'page')['saved']
     write_json(work/'result.json',{'contract_sha256':'prior-contract','next_attempt':0,'status':'awaiting_review'})
     async def failed(*args):raise RuntimeError('Failed before current-contract save')
     asyncio.run(staged_batch(queue,out,Agents(),resume=True,call=failed,retry_delay=.5,deadline_seconds=.08))
@@ -384,7 +384,7 @@ def test_current_contract_saved_candidate_survives_stale_result_marker(tmp_path)
     queue=manifest(tmp_path);out=tmp_path/'out';work=out/'test/page-0001'
     source=Path(json.loads(queue.read_text())['catalogs'][0]['source'])
     tool=CatalogTools(source,out/'test',page=1,model=Agents.extractor,contract_sha256=Agents.contract_digest);tool.render(1);tool.direct(1)
-    assert tool.save(1,PageContent(title='current',text_blocks=[],tables=[],figures=[]).model_dump_json(),'page')['saved']
+    assert tool.save(1,PageContent(title='current',text_blocks=[TextBlock(kind='paragraph',text='Fixture catalogue paragraph')],tables=[],figures=[]).model_dump_json(),'page')['saved']
     write_json(work/'result.json',{'contract_sha256':'stale-marker','next_attempt':0,'status':'awaiting_review'})
     calls=[]
     async def call(agents,role,source,out,page,attempt):
