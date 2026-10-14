@@ -1,0 +1,20 @@
+{
+  "zip": "examples/catalogs/all-pages-2026-10-14T172333Z/all-catalogues-980-pages.zip",
+  "zip_sha256": "dcfdf4a64448a727766cc50ba31b01cf967b475744b9a6d6c5d065344c5061a7",
+  "zip_bytes": 10446071,
+  "archive_CRC": "passed",
+  "extracted_files": 8,
+  "json_pages_validated": 980,
+  "excel_workbooks_reopened": 5,
+  "independent_review_attribution_roundtrip": true,
+  "excel_data_cells_exact_roundtrip": 83712,
+  "figure_descriptions_in_json": 1973,
+  "manual_pages_integrated": 508,
+  "manual_independently_source_verified": 494,
+  "native_queue_accepted_pages": 475,
+  "independent_accepted": 966,
+  "all_pages_independently_reviewed": false,
+  "model_calls": 0,
+  "elapsed_seconds": 110.395,
+  "peak_rss_bytes": 534552576
+}
