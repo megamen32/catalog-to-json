@@ -4,7 +4,7 @@ No provider calls. Source inputs/receipts are never edited. A partial snapshot i
 explicitly opt-in; full delivery additionally requires full alignment coverage.
 """
 from __future__ import annotations
-import argparse, collections, copy, datetime, gc, gzip, hashlib, io, json, os, resource, time, zipfile
+import argparse, collections, copy, datetime, gc, gzip, hashlib, io, json, os, resource, subprocess, time, zipfile
 from pathlib import Path
 from openpyxl import Workbook, load_workbook
 from catalog_json.reconciliation.consensus import build_consensus, case_sha256, receipt_path
@@ -25,7 +25,8 @@ def sha(path):
 def load(path): return json.loads(Path(path).read_text())
 def dump(value): return json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + '\n'
 
-def reviewed_cases(task, root):
+def reviewed_cases(task, root, *, manifest_names=('three-reviewers-ready-manifest.json',
+        'current-production-ready-manifest.json', 'post-source-discussion-ready-manifest.json')):
     """Only explicit manifests; later discussion can replace the SAME full case."""
     chosen = {}
     selection_file = task / 'native-post-source-opinion-selection.json'
@@ -38,8 +39,7 @@ def reviewed_cases(task, root):
             if entry['role'] not in ROLES or type(entry['round_number']) is not int or entry['round_number'] < 1:
                 raise ValueError('Invalid actual native opinion round')
             selections[key] = entry
-    for name in ('three-reviewers-ready-manifest.json', 'current-production-ready-manifest.json',
-                 'post-source-discussion-ready-manifest.json'):
+    for name in manifest_names:
         path = task / name
         if not path.exists(): continue
         manifest = load(path)
@@ -264,7 +264,11 @@ def build(root, task, out, *, allow_pending=False):
         'total_real_discrepancies': None, 'semantic_alignment_complete': alignment['semantic_alignment_complete'],
         'direct_disagreement_rate': load(task / 'direct-disagreement-rate.json') if (task / 'direct-disagreement-rate.json').exists() else None,
         'input_ours_zip_sha256': sha(original), 'input_oleg_zip_sha256': sha(task/'input/forenergo-our-extraction.zip'),
-        'builder_source_sha256': sha(__file__), 'model_calls_during_export': 0,
+        'builder_source_sha256': sha(__file__),
+        'builder_git_commit': subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip(),
+        'builder_source_modified': subprocess.run(['git','-C',str(root),'diff','--quiet','HEAD','--',
+            'ops/catalogue_delivery/merge_saved_extractions.py','src/catalog_json/reconciliation/joint_scope.py'],check=False).returncode != 0,
+        'model_calls_during_export': 0,
         'warning': 'Промежуточное сведение: итоговое количество реальных расхождений ещё не установлено. Непроверенные наблюдения Олега сохранены с происхождением; они не выданы за принятые факты.' if not full else None}
     bundle['baseline_independently_accepted_pages'] = bundle['independently_accepted_pages']
     bundle['independently_accepted_pages'] = sum(bool(v.get('reviewed_current_content')) for c in bundle['catalogs'] for v in c['pages'])
