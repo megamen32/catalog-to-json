@@ -1,0 +1,164 @@
+{
+  "observed_local": "2026-10-14T06:21:16.967835+03:00",
+  "counts": {
+    "opn": {
+      "accepted": 60,
+      "pages": 60,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 60,
+      "native_completed": {
+        "extractor": 146,
+        "reviewer": 164
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "isolators": {
+      "accepted": 161,
+      "pages": 162,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 162,
+      "native_completed": {
+        "extractor": 388,
+        "reviewer": 343
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "small": {
+      "accepted": 228,
+      "pages": 228,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 228,
+      "native_completed": {
+        "extractor": 539,
+        "reviewer": 518
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "innovations": {
+      "accepted": 60,
+      "pages": 216,
+      "accepted_delta": 2,
+      "original_draft_pages_preserved": 216,
+      "native_completed": {
+        "extractor": 462,
+        "reviewer": 149
+      },
+      "native_completed_delta": {
+        "extractor": 14,
+        "reviewer": 2
+      }
+    },
+    "armature": {
+      "accepted": 7,
+      "pages": 314,
+      "accepted_delta": 3,
+      "original_draft_pages_preserved": 314,
+      "native_completed": {
+        "extractor": 492,
+        "reviewer": 19
+      },
+      "native_completed_delta": {
+        "extractor": 23,
+        "reviewer": 4
+      }
+    }
+  },
+  "accepted": 516,
+  "accepted_delta": 5,
+  "resolved_case": {
+    "catalog": "innovations",
+    "physical_page": 4,
+    "status": "accepted",
+    "candidate_sha256": "d940ee6b325d6e8853b558fd4e52e49a06018608f7a84d92ebdcb5050e3ddb46",
+    "review_sha256": "1ee02c5e86bc09dea716ec96279ac6f9047b8805af4a35ff6a31db99fb53445d",
+    "extractor_version": "1.5.3",
+    "reviewer_version": "1.5.8",
+    "native_review_seconds": 1042.973,
+    "source_observation_save_calls": 51,
+    "confirmed_original_code": "ШАСТ",
+    "candidate_changed_for_false_ЩАСТ_remark": false
+  },
+  "confirmed_defect": "More than20 invalid JSON strings in native158 observation tool calls; eventual successful review needed51 saves/1042.973s.159 accepts data objects and keeps all guards; no auto-repair of invalid strings.",
+  "fixes_published": [
+    "v1.5.9/4b911d3"
+  ],
+  "installed_native_mcp_proof": {
+    "program": {
+      "package_version": "1.5.9",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "f5f0879481c5c45730d168c7edf956c8a1784eeed1c5ea6bcad7d8c4355101b0",
+      "python_version": "3.12.13"
+    },
+    "native_mcp_object_and_legacy_saves": true,
+    "schema_blind_pass_annotation_guards": true,
+    "malformed_string_not_repaired": true,
+    "simultaneous_payload_refused": true,
+    "model_calls": 0,
+    "elapsed_seconds": 4.673
+  },
+  "pretransition_artifacts_verified": 1496,
+  "pretransition_artifacts_changed": 0,
+  "accepted_predecessors_verified": 516,
+  "transition": {
+    "old_unit": "full-semantic158",
+    "new_unit": "full-semantic159",
+    "unfinished_native_calls_intentionally_interrupted": [
+      "armature164 extractor1",
+      "innovations100 reviewer1"
+    ],
+    "all_other_admitted_calls_finished": true,
+    "cancelled_histories_and_original_drafts_retained": true,
+    "stop_used_bounded_systemd_cleanup": true,
+    "second_full_queue": false,
+    "owned_admission_holds_removed": true
+  },
+  "large_model_benchmark_run": false,
+  "accuracy_note": "No new global/drawing percentage. New accepted pages and API delivery proof are separate claims.",
+  "primary_program": {
+    "package_version": "1.5.9",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "f5f0879481c5c45730d168c7edf956c8a1784eeed1c5ea6bcad7d8c4355101b0",
+    "python_version": "3.12.13"
+  },
+  "native_model_data_adoption": [
+    {
+      "catalog": "isolators",
+      "physical_page": 47,
+      "attempt": 27,
+      "role": "reviewer",
+      "program_version": "1.5.9",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "native_tool": "catalog__save_source_observation",
+      "payload_argument": "data",
+      "saved": true,
+      "save_attempts_before_this_success": 2,
+      "artifact_sha256": "c0b9d156f32396b04dc100855317f2d7f7834b58decee82b8f60742a33b10830",
+      "proof_scope": "real model source-observation tool save; final independent review still pending"
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 189,
+      "attempt": 1,
+      "role": "reviewer",
+      "program_version": "1.5.9",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "native_tool": "catalog__save_source_observation",
+      "payload_argument": "data",
+      "saved": true,
+      "save_attempts_before_this_success": 3,
+      "artifact_sha256": "1cde77100782a32efec4db57f5768060b2dca2afb0e192d13f5790e1a86febed",
+      "proof_scope": "real model source-observation tool save; final independent review still pending"
+    }
+  ]
+}
