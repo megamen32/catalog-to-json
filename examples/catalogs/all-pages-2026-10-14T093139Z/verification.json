@@ -16,5 +16,14 @@
   "peak_rss_bytes": 156131328,
   "normalized_excel_rows_and_states_verified": 83732,
   "empty_strings_displayed_as_empty_excel_cells": 5,
-  "empty_string_note": "Excel displays empty strings as empty cells; JSON values and explicit states are preserved, normalized Excel state column also checked."
+  "empty_string_note": "Excel displays empty strings as empty cells; JSON values and explicit states are preserved, normalized Excel state column also checked.",
+  "public_download_verification": {
+    "url": "https://raw.githubusercontent.com/megamen32/catalog-to-json/fb4b5332255e6ff54a827ea9357fe43adcf95ab8/examples/catalogs/all-pages-2026-10-14T093139Z/all-catalogues-980-pages.zip",
+    "http_status": 200,
+    "sha256": "160c65af09f07f56022e05212cafdf2d8490b40d6be11ee0b95bda79c1d81421",
+    "bytes": 9501248,
+    "remote_zip_CRC": "passed",
+    "remote_download_matches_verified_local": true,
+    "observed_unix": 1791970619.5657885
+  }
 }
