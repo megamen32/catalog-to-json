@@ -80,3 +80,131 @@ def test_undeclared_manufacturer_scope_cannot_be_auto_accepted():
     right=fact('oleg','Load','12',raw={})
     ledger,_=compare_facts([left,right])
     assert ledger[0]['status']=='ambiguous_alignment'
+
+
+def _header_pair():
+    group='Остающееся напряжение (кВ), при грозовых импульсах тока длит. 8/20 величиной:'
+    left={**fact('ours',group+' 2,5 кА','22,6'), 'unit':'кВ', 'condition':'2,5 кА',
+          'column':{'label':group+' 2,5 кА','group':group,'qualifier':'2,5 кА','unit':'кВ'}}
+    right={**fact('oleg','2,5 кА','22,6'), 'unit':'кВ',
+           'condition':'при грозовых импульсах тока длит. 8/20 величиной 2,5 кА',
+           'raw':{'origin':'table_cell','header_path':[
+               {'role':'group','raw_text':group,'unit':'кВ','condition':''},
+               {'role':'column','raw_text':'2,5 кА','unit':'','condition':'при грозовых импульсах тока длит. 8/20 величиной 2,5 кА'}]}}
+    return left,right
+
+
+def test_unique_explicit_header_address_links_without_discarding_conditions():
+    left,right=_header_pair()
+    ledger,cases=compare_facts([left,right])
+    assert ledger[0]['oleg_fact_ids']==[right['fact_id']]
+    assert ledger[0]['status']=='value_or_applicability_conflict'
+    assert cases[0]['ours'][0]['condition']=='2,5 кА'
+    assert cases[0]['oleg'][0]['condition']==right['condition']
+
+
+def test_header_address_does_not_choose_a_subrow_or_overlapping_window_by_value():
+    left,right=_header_pair()
+    second={**left,'fact_id':'second-row','value':'99'}
+    ledger,_=compare_facts([left,second,right])
+    assert all(not r['oleg_fact_ids'] for r in ledger if r['ours_fact_id'])
+    duplicate={**right,'fact_id':'other-window','value':'99'}
+    ledger,_=compare_facts([left,right,duplicate])
+    assert ledger[0]['oleg_fact_ids']==[]
+
+
+def test_header_address_requires_literal_group_qualifier_unit_and_owner():
+    left,right=_header_pair()
+    variants=[{**right,'owner':'С3'}, {**right,'unit':'мВ'},
+              {**right,'raw':{**right['raw'],'header_path':[{'role':'group','raw_text':'Other group'},right['raw']['header_path'][1]]}}]
+    for variant in variants:
+        assert compare_facts([left,variant])[0][0]['oleg_fact_ids']==[]
+    changed={**left,'column':{**left['column'],'qualifier':'35 кА'}}
+    assert compare_facts([changed,right])[0][0]['oleg_fact_ids']==[]
+
+
+def test_same_voltage_leaf_is_not_same_parameter_armature311():
+    left={**fact('ours','20 кВ','2,3'),'owner':35,'condition':'для СИП-3-20 кВ',
+          'column':{'label':'20 кВ','unit':'мм','group':'Толщина изоляции','qualifier':'для СИП-3-20 кВ'}}
+    right={**fact('oleg','20 кВ','11,3-11,7'),'owner':'35',
+           'raw':{'header_path':[{'role':'group','raw_text':'Наружный диаметр жилы с изоляцией, мм'},
+                                 {'role':'column','raw_text':'20 кВ'}]}}
+    ledger,_=compare_facts([left,right])
+    assert [r['status'] for r in ledger]==['unmatched_ours_observation','unmatched_oleg_observation']
+
+
+def test_missing_property_parent_cannot_be_auto_accepted_on_leaf_only():
+    left=fact('ours','20 кВ','2,3')
+    right=fact('oleg','20 кВ','2,3',raw={'header_path':[{'role':'group','raw_text':'Толщина изоляции'},{'role':'column','raw_text':'20 кВ'}]})
+    assert compare_facts([left,right])[0][0]['status']=='ambiguous_alignment'
+
+
+def _small_input(tmp_path, table, *, models=(), characteristics=()):
+    from catalog_json.reconciliation.compare import load_facts
+    source='a'*64;oleg=tmp_path/'oleg';oleg.mkdir()
+    (oleg/'sources.json').write_text(json.dumps({'sources':[{'id':'s','sha256':source}]}))
+    data={'product_groups':[{'id':'g','raw':{'title':'Group','evidence':[{'page':1}]}}],
+          'products':[{'id':m,'source_id':'s','window_id':'w','group_id':'g','raw':{'designation':m,'evidence':[{'page':1}]}} for m in models],
+          'characteristics':list(characteristics),'group_characteristics':[]}
+    for name,rows in data.items():(oleg/(name+'.jsonl')).write_text(''.join(json.dumps(r)+'\n' for r in rows))
+    raw={'catalogs':[{'id':'test','source':{'sha256':source},'pages':[{'pdf_page':1,'candidate_sha256':'b'*64,'reviewed_current_content':True,'content':{'tables':[table]}}]}]}
+    ours=tmp_path/'ours.zip'
+    with zipfile.ZipFile(ours,'w') as z:z.writestr('all-catalogues-980-pages.json',json.dumps(raw))
+    return load_facts(oleg,ours)[0]
+
+
+def test_contact_cells_are_retained_without_inferred_product_owner(tmp_path):
+    cols=[{'id':'a','label':'Телефон','unit':None},{'id':'b','label':'E-mail','unit':None}]
+    table={'title':'Контактная информация','columns':cols,'rows':[{'cells':[
+        {'column_id':'a','value':'+7 (35134) 4-22-44 доб. (1116)','state':'value'},
+        {'column_id':'b','value':'info@mzva.ru','state':'value'}]}]}
+    facts=_small_input(tmp_path,table)
+    assert len(facts)==2 and all(f['kind']=='table_context' and f['owner']=='' for f in facts)
+    assert facts[0]['raw']['value']=='+7 (35134) 4-22-44 доб. (1116)'
+    assert facts[0]['pointer'].endswith('/rows/0/cells/0')
+
+
+def test_contact_values_in_unlabelled_table_do_not_become_product_anchors(tmp_path):
+    table={'columns':[{'id':'x','label':'','unit':None}], 'rows':[{'cells':[{'column_id':'x','value':v,'state':'value'}]} for v in ['www.mzva.ru','https://example.org','info@mzva.ru','+7 (495) 780-51-65']]}
+    facts=_small_input(tmp_path,table)
+    assert len(facts)==4 and all(f['kind']=='table_context' for f in facts)
+
+
+def test_contact_product_word_does_not_suppress_a_real_designation(tmp_path):
+    table={'title':'Контактные зажимы','columns':[{'id':'x','label':'Обозначение','unit':None}], 'rows':[{'cells':[{'column_id':'x','value':'КС-20','state':'value'}]}]}
+    facts=_small_input(tmp_path,table)
+    assert facts[0]['kind']=='model_designation' and facts[0]['owner']=='КС-20'
+
+
+def test_implicit_manufacturer_bands_do_not_borrow_hf207_small65(tmp_path):
+    cols=[{'id':str(i),'label':name,'unit':unit,'group':None} for i,(name,unit) in enumerate([
+        ('',None),('МЗВА-ЧЭМЗ',None),('Сечение, мм2 / Диаметр, мм',None),('Разрушающая нагрузка','кН'),
+        ('АРМАТЕХ ВК',None),('Сечение, мм2 / Диаметр, мм',None),('Разрушающая нагрузка','кН')])]
+    vals=['Хомут','HF207','–','10,0','–','–','–']
+    table={'title':'Сравнение зажимов МЗВА-ЧЭМЗ и АРМАТЕХ ВК','columns':cols,
+           'rows':[{'cells':[{'column_id':c['id'],'value':v,'state':'dash' if v=='–' else 'value'} for c,v in zip(cols,vals)]}]}
+    characteristic={'id':'load','source_id':'s','window_id':'w','group_id':'g','product_id':'HF207',
+         'raw':{'name':'Разрушающая нагрузка','raw_value':'10,0','unit':'кН','condition':'','evidence':[{'page':1}],
+                'header_path':[{'role':'group','raw_text':'МЗВА-ЧЭМЗ'}]}}
+    facts=_small_input(tmp_path,table,models=['HF207'],characteristics=[characteristic])
+    ours=[f for f in facts if f['side']=='ours']
+    assert ours[3]['owner']=='HF207' and ours[3]['owner_scope']=='МЗВА-ЧЭМЗ'
+    assert ours[6]['owner']=='' and ours[6]['kind']=='table_context'
+    assert ours[6]['raw']['value']=='–' and ours[6]['owner_scope']=='АРМАТЕХ ВК'
+    ledger,_=compare_facts(facts)
+    assert next(r for r in ledger if r['ours_fact_id']==ours[6]['fact_id'])['oleg_fact_ids']==[]
+
+
+def test_header_unit_metadata_and_group_symbol_case_are_not_erased():
+    left,right=_header_pair()
+    wrong={**right,'raw':{**right['raw'],'header_path':[{**right['raw']['header_path'][0],'unit':'мВ'},right['raw']['header_path'][1]]}}
+    assert compare_facts([left,wrong])[0][0]['oleg_fact_ids']==[]
+    left={**fact('ours','H','10'),'column':{'group':'Диаметр D'}}
+    right=fact('oleg','H','10',raw={'header_path':[{'role':'group','raw_text':'Диаметр d'}]})
+    assert compare_facts([left,right])[0][0]['oleg_fact_ids']==[]
+
+
+def test_numeric_product_code_is_not_classified_as_a_phone(tmp_path):
+    table={'title':'Изделия','columns':[{'id':'x','label':'Обозначение','unit':None}], 'rows':[{'cells':[{'column_id':'x','value':'8-1234567890','state':'value'}]}]}
+    facts=_small_input(tmp_path,table)
+    assert facts[0]['kind']=='model_designation'

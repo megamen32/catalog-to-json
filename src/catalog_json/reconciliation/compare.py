@@ -78,7 +78,7 @@ def _rows(path):
                 yield json.loads(line)
 
 
-def column_owner_anchors(columns):
+def column_owner_anchors(columns, table_title=''):
     """Parallel manufacturer blocks own different products in the same row.
 
     Require explicit group metadata and an untyped designation column, never
@@ -100,7 +100,23 @@ def column_owner_anchors(columns):
             continue
         anchors[group] = anchor
     if len(anchors) < 2:
-        return {}
+        # Without group fields, require two explicitly titled manufacturer
+        # columns and identical following property bands. Never carry the
+        # first product through a second manufacturer's blank designation.
+        title = unit_identity(table_title)
+        starts = [i for i, c in enumerate(columns) if not c.get('unit')
+                  and isinstance(c.get('label'), str) and c['label'].strip()
+                  and unit_identity(c['label']) in title]
+        if 'сравнение' not in title.casefold() or len(starts) != 2:
+            return {}
+        a, b = starts
+        def band(start, end):
+            return [(c.get('label'), c.get('unit'), c.get('qualifier'))
+                    for c in columns[start + 1:end]]
+        if b - a < 2 or band(a, b) != band(b, len(columns)):
+            return {}
+        return {i: (start, columns[start]['label'])
+                for start, end in [(a, b), (b, len(columns))] for i in range(start, end)}
     return {i: (anchor, group) for group, anchor in anchors.items()
             for i in [anchor, *groups[group]]}
 
@@ -109,6 +125,81 @@ def _declared_groups(fact):
     return {label(h.get('raw_text')) for h in fact.get('raw', {}).get('header_path', [])
             if isinstance(h, dict) and h.get('role') == 'group' and h.get('raw_text')}
 
+
+
+def _contact_label(value):
+    text = label(value)
+    return bool(re.search(r'\b(?:телефон|факс|phone|fax|e-?mail|сайт|website|url)\b|\bтел\.', text)
+                or text in ('контакты', 'контактная информация', 'контактные данные'))
+
+
+def _contact_value(value):
+    if not isinstance(value, str):
+        return False
+    if re.search(r'(?:https?://|www\.)\S+|[^\s@]+@[^\s@]+\.[^\s@]+', value, re.I):
+        return True
+    phone = re.sub(r'^(?:тел(?:ефон|\.)?|phone|факс|fax)\s*:?\s*', '', value.strip(), flags=re.I)
+    labelled = phone != value.strip()
+    return bool(re.fullmatch(r'[+\d()\s.\-–]+(?:доб\.?\s*\(?\d+\)?)?', phone, re.I)
+                and len(re.findall(r'\d', phone)) >= 10
+                and (phone.startswith('+') or labelled or
+                     (phone.startswith(('7', '8')) and re.search(r'\(\d{3,5}\)', phone))))
+
+
+def _unavailable_anchor(cell):
+    return cell.get('state') in ('blank', 'dash') or cell.get('value') in (None, '', '-', '–', '—')
+
+
+def _property_groups(fact, owner_scope=''):
+    """Declared property parents, keeping symbol case and parent order."""
+    if fact['side'] == 'ours':
+        groups = [fact.get('column', {}).get('group')]
+    else:
+        groups = [h.get('raw_text') for h in fact.get('raw', {}).get('header_path', [])
+                  if isinstance(h, dict) and h.get('role') == 'group']
+    return tuple(unit_identity(g) for g in groups if g and unit_identity(g) != unit_identity(owner_scope))
+
+
+def _property_scope_state(left, right):
+    if left['kind'] != 'model_parameter':
+        return True
+    a = _property_groups(left, left.get('owner_scope', ''))
+    b = _property_groups(right, left.get('owner_scope', ''))
+    if a and b:
+        return a == b
+    return True if not a and not b else None
+
+
+def _header_address(fact):
+    """Only an explicit group/leaf concatenation; no fuzzy header parsing.
+
+    Conditions remain separate claims and still participate in comparison.
+    Uniqueness is checked by address before looking at the cell value.
+    """
+    if fact['kind'] != 'model_parameter' or len(fact['physical_pages']) != 1:
+        return None
+    if fact['side'] == 'ours':
+        col = fact.get('column', {})
+        group, leaf = col.get('group'), col.get('qualifier')
+        if not isinstance(group, str) or not group or not isinstance(leaf, str) or not leaf:
+            return None
+        if col.get('label') != group + ' ' + leaf or fact['name'] != col['label']:
+            return None
+        if type(col.get('unit')) is not type(fact['unit']) or col.get('unit') != fact['unit']:
+            return None
+    else:
+        path = fact.get('raw', {}).get('header_path', [])
+        if len(path) != 2 or [h.get('role') for h in path] != ['group', 'column']:
+            return None
+        if any(h.get('unit') not in (None, '') and
+               (type(h['unit']) is not type(fact['unit']) or h['unit'] != fact['unit']) for h in path):
+            return None
+        group, leaf = [h.get('raw_text') for h in path]
+        if not isinstance(group, str) or not group or not isinstance(leaf, str) or not leaf or fact['name'] != leaf:
+            return None
+    return (fact['source_sha256'], fact['physical_pages'][0],
+            json.dumps(fact['owner'], ensure_ascii=False), group, leaf,
+            json.dumps(fact['unit'], ensure_ascii=False))
 
 def load_facts(oleg_dir, ours_zip):
     """Retain all material claims; byte/record roundtrips live in formats.py."""
@@ -163,7 +254,7 @@ def load_facts(oleg_dir, ours_zip):
             prefix = f'/catalogs/{ci}/pages/{pi}/content'
             for ti, table in enumerate(content.get('tables', [])):
                 cols = table['columns']; matrix = [{c['column_id']: c for c in row['cells']} for row in table['rows']]
-                local_owners = column_owner_anchors(cols)
+                local_owners = column_owner_anchors(cols, table.get('title', ''))
                 names = known_names[source_sha, number]
                 header_hits = [designation(c['label']) in names for c in cols]
                 transposed = sum(header_hits) >= 2 and sum(header_hits) >= len(cols)-2
@@ -188,6 +279,13 @@ def load_facts(oleg_dir, ours_zip):
                         kind = ('table_context' if local_owners and cj not in local_owners else
                                 'model_designation' if (local_owners and cj == local_anchor) or
                                 (not local_owners and ((not transposed and cj == primary) or (transposed and cj == 0))) else 'model_parameter')
+                        contact_anchor = (_contact_label(table.get('title', ''))
+                                          or _contact_label(cols[local_anchor].get('label', ''))
+                                          or _contact_value(owner_value))
+                        missing_local_anchor = bool(local_owners and cj in local_owners and
+                            _unavailable_anchor(row.get(cols[local_anchor]['id'], {})))
+                        if contact_anchor or missing_local_anchor:
+                            kind, owner_value = 'table_context', ''
                         add('ours', source_sha, [number], kind,
                             f'{prefix}/tables/{ti}/rows/{ri}/cells/{next(i for i,c in enumerate(table["rows"][ri]["cells"]) if c["column_id"]==col["id"])}', owner_value,
                             'designation' if kind == 'model_designation' and not transposed else prop,
@@ -216,6 +314,11 @@ def compare_facts(facts):
             for p in f['physical_pages']:
                 right[f['source_sha256'], p, designation(f['owner']),
                       property_label(f['name'], f['unit'])].append(f)
+    header_left = defaultdict(list); header_right = defaultdict(list)
+    for f in facts:
+        address = _header_address(f)
+        if address is not None:
+            (header_left if f['side'] == 'ours' else header_right)[address].append(f)
     used_oleg = set(); ledger = []; cases = []
     for f in facts:
         if f['side'] != 'ours':
@@ -229,7 +332,15 @@ def compare_facts(facts):
         scope = label(f.get('owner_scope'))
         if scope:
             matches = [x for x in matches if not _declared_groups(x) or scope in _declared_groups(x)]
-        unverified_scope = bool(scope and any(scope not in _declared_groups(x) for x in matches))
+        matches = [x for x in matches if _property_scope_state(f, x) is not False]
+        if not matches:
+            address = _header_address(f)
+            if address is not None and len(header_left[address]) == 1 and len(header_right[address]) == 1:
+                candidate = header_right[address][0]
+                if (not scope or scope in _declared_groups(candidate)) and _property_scope_state(f, candidate) is True:
+                    matches = [candidate]
+        unverified_scope = bool((scope and any(scope not in _declared_groups(x) for x in matches))
+                                or any(_property_scope_state(f, x) is None for x in matches))
         # Repeated observations remain individually linked; no winner by order.
         identities = {(value_identity(x['value']), unit_identity(x['unit']), unit_identity(x['condition'])) for x in matches}
         identity = value_identity(f['value']), unit_identity(f['unit']), unit_identity(f['condition'])

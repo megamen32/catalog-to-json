@@ -1,0 +1,46 @@
+{
+  "schema_version": "catalogue-side-bindings/1",
+  "pack_sha256": "4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f",
+  "cases": [
+    {
+      "case_id": "pilot-arm169-row-context",
+      "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+      "side": "ours",
+      "bindings": [
+        {
+          "role": "minimax",
+          "selected_pointer": "/150~119",
+          "pack_pointer": "/cases/0/ours/0/raw/cells/4/value"
+        },
+        {
+          "role": "minimax",
+          "selected_kind": "key",
+          "selected_pointer": "/150~119",
+          "pack_pointer": "/cases/0/ours/0/raw/cells/1/value"
+        },
+        {
+          "role": "minimax",
+          "selected_pointer": "/150~124",
+          "pack_pointer": "/cases/0/ours/1/raw/cells/4/value"
+        },
+        {
+          "role": "minimax",
+          "selected_kind": "key",
+          "selected_pointer": "/150~124",
+          "pack_pointer": "/cases/0/ours/1/raw/cells/1/value"
+        },
+        {
+          "role": "minimax",
+          "selected_pointer": "/150~134",
+          "pack_pointer": "/cases/0/ours/2/raw/cells/4/value"
+        },
+        {
+          "role": "minimax",
+          "selected_kind": "key",
+          "selected_pointer": "/150~134",
+          "pack_pointer": "/cases/0/ours/2/raw/cells/1/value"
+        }
+      ]
+    }
+  ]
+}

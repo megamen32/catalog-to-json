@@ -1,0 +1,55 @@
+{
+  "identity": {
+    "model": "account:zai-individual-coding-plan/GLM-5.3$max",
+    "native_payload_sha256": "988ccc9d2d32b6a55bd352aa8ffa41eea78add1549f9e330df744da7fbf080de",
+    "role": "zcode",
+    "runtime": "native ZCode via AgentHerder; independent source review reaffirmed in actual native round2",
+    "session_id": "sess_0dd4a3ee-bc7d-4008-b9fa-c25146ec5392"
+  },
+  "pack_id": "arm169-row-linkage-consensus-v1",
+  "pack_sha256": "4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f",
+  "payload": {
+    "pack_id": "arm169-row-linkage-consensus-v1",
+    "verdicts": [
+      {
+        "case_id": "pilot-arm169-row-context",
+        "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+        "decision": "ours",
+        "reason": "Повторная независимая проверка стр.169 (текстовый слой + векторные линейки) воспроизводит геометрию объединённых ячеек и подтверждает наше представление. Подстроки сечений: «150/19» y0=552.1, «150/24» y0=562.9, «150/34» y0=573.7 (x=167.1). В колонке натяжных зажимов (x=327.8..397.5) горизонтальные линейки есть на y=551.5, 573.0, 583.8 и НЕТ на y=562.3, тогда как в колонке сечений (x=153.6..204.2) линейка y=562.3 присутствует: значит, ячейка зажима НАС-150-1Б объединена через подстроки 150/19+150/24 (текст «НАС-150-1Б» y0=557.5 центрирован в полосе 551.5..573.0), а НАС-150-2Б занимает ровно подстроку 150/34 (y0=573.7). Наши строки явно связывают 150/19→НАС-150-1Б, 150/24→НАС-150-1Б, 150/34→НАС-150-2Б; у Олега все пять характеристик несут один общий row_evidence-регион, привязка сечение→зажим отсутствует и её восстановление потребовало бы догадки. Selected_value не нужен: наша сторона целиком выражает правильную связь.",
+        "source_evidence": [
+          {
+            "bbox": [
+              0.2508,
+              0.642,
+              0.6489,
+              0.6828
+            ],
+            "observation": "Слова текстового слоя: «150/19» y0=552.1, «150/24» y0=562.9, «150/34» y0=573.7 при x=167.1; «НАС-150-1Б» y0=557.5, «НАС-150-2Б» y0=573.7 при x=342.1. Линейки колонки зажимов (x 327.8..397.5): y=551.5, 573.0, 583.8; линейки y=562.3 в этой колонке нет (в колонке сечений x 153.6..204.2 она есть). Bbox — нормализованные координаты полной страницы [x0,y0,x1,y1].",
+            "page": 169,
+            "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+          }
+        ]
+      }
+    ]
+  },
+  "projection": {
+    "case_sha256": {
+      "pilot-arm169-row-context": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb"
+    },
+    "new_independent_voice": false,
+    "new_model_calls": 0,
+    "original_opinion_saved_at": "2026-10-14T18:46:49.100434+00:00",
+    "parent_pack_sha256": "5d2e860422ed13fd4ab8a7901559c768cb38dae69e1b7b1dcb6f5ff30dd5fd47",
+    "parent_receipt_sha256": "ff822b4609e67381930f72d72593f24633338bcead3bdd315a314cfcf495fa21"
+  },
+  "receipt_sha256": "95da2220ff9a257ef046011d11c07c66da549f916e33c118e8901991988a7976",
+  "round_number": 2,
+  "saved_at": "2026-10-14T19:04:19.621813+00:00",
+  "schema_version": "catalogue-consensus-vote/1",
+  "source_manifest": [
+    {
+      "page_count": 314,
+      "sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    }
+  ]
+}

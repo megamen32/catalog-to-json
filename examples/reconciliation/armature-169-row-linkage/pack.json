@@ -1,0 +1,582 @@
+{
+  "schema_version": "catalogue-discrepancy-pack/1",
+  "pack_id": "arm169-row-linkage-consensus-v1",
+  "derived_from_pack_sha256": "5d2e860422ed13fd4ab8a7901559c768cb38dae69e1b7b1dcb6f5ff30dd5fd47",
+  "cases": [
+    {
+      "case_id": "pilot-arm169-row-context",
+      "kind": "row_relationship",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+      "physical_pages": [
+        169
+      ],
+      "question": "Сохранена ли однозначная связь каждой строки сечения150/19,150/24,150/34 с типом натяжного зажима? Какое представление пригодно для безопасного выбора зажима без догадки о соответствии нескольких значений? Не подменяй выбором одного зажима для всей группы.",
+      "ours": [
+        {
+          "pointer": "/catalogs/4/pages/168/content/tables/0/rows/4",
+          "raw": {
+            "cells": [
+              {
+                "column_id": "c1",
+                "value": "ШСИП-110-(16-17,5)-9-L",
+                "state": "value"
+              },
+              {
+                "column_id": "c2",
+                "value": "150/19",
+                "state": "value"
+              },
+              {
+                "column_id": "c3",
+                "value": "16-17,5",
+                "state": "value"
+              },
+              {
+                "column_id": "c4",
+                "value": "А4АБ 150-185",
+                "state": "value"
+              },
+              {
+                "column_id": "c5",
+                "value": "НАС-150-1Б",
+                "state": "value"
+              },
+              {
+                "column_id": "c6",
+                "value": 287,
+                "state": "value"
+              },
+              {
+                "column_id": "c7",
+                "value": 200,
+                "state": "value"
+              },
+              {
+                "column_id": "c8",
+                "value": 70,
+                "state": "value"
+              },
+              {
+                "column_id": "c9",
+                "value": 439,
+                "state": "value"
+              },
+              {
+                "column_id": "c10",
+                "value": "8,5",
+                "state": "value"
+              },
+              {
+                "column_id": "c11",
+                "value": 10,
+                "state": "value"
+              },
+              {
+                "column_id": "c12",
+                "value": "13,6",
+                "state": "value"
+              }
+            ]
+          }
+        },
+        {
+          "pointer": "/catalogs/4/pages/168/content/tables/0/rows/5",
+          "raw": {
+            "cells": [
+              {
+                "column_id": "c1",
+                "value": "ШСИП-110-(16-17,5)-9-L",
+                "state": "value"
+              },
+              {
+                "column_id": "c2",
+                "value": "150/24",
+                "state": "value"
+              },
+              {
+                "column_id": "c3",
+                "value": "16-17,5",
+                "state": "value"
+              },
+              {
+                "column_id": "c4",
+                "value": "А4АБ 150-185",
+                "state": "value"
+              },
+              {
+                "column_id": "c5",
+                "value": "НАС-150-1Б",
+                "state": "value"
+              },
+              {
+                "column_id": "c6",
+                "value": 287,
+                "state": "value"
+              },
+              {
+                "column_id": "c7",
+                "value": 200,
+                "state": "value"
+              },
+              {
+                "column_id": "c8",
+                "value": 70,
+                "state": "value"
+              },
+              {
+                "column_id": "c9",
+                "value": 439,
+                "state": "value"
+              },
+              {
+                "column_id": "c10",
+                "value": "8,5",
+                "state": "value"
+              },
+              {
+                "column_id": "c11",
+                "value": 10,
+                "state": "value"
+              },
+              {
+                "column_id": "c12",
+                "value": "13,6",
+                "state": "value"
+              }
+            ]
+          }
+        },
+        {
+          "pointer": "/catalogs/4/pages/168/content/tables/0/rows/6",
+          "raw": {
+            "cells": [
+              {
+                "column_id": "c1",
+                "value": "ШСИП-110-(16-17,5)-9-L",
+                "state": "value"
+              },
+              {
+                "column_id": "c2",
+                "value": "150/34",
+                "state": "value"
+              },
+              {
+                "column_id": "c3",
+                "value": "16-17,5",
+                "state": "value"
+              },
+              {
+                "column_id": "c4",
+                "value": "А4АБ 150-185",
+                "state": "value"
+              },
+              {
+                "column_id": "c5",
+                "value": "НАС-150-2Б",
+                "state": "value"
+              },
+              {
+                "column_id": "c6",
+                "value": 287,
+                "state": "value"
+              },
+              {
+                "column_id": "c7",
+                "value": 200,
+                "state": "value"
+              },
+              {
+                "column_id": "c8",
+                "value": 70,
+                "state": "value"
+              },
+              {
+                "column_id": "c9",
+                "value": 439,
+                "state": "value"
+              },
+              {
+                "column_id": "c10",
+                "value": "8,5",
+                "state": "value"
+              },
+              {
+                "column_id": "c11",
+                "value": 10,
+                "state": "value"
+              },
+              {
+                "column_id": "c12",
+                "value": "13,6",
+                "state": "value"
+              }
+            ]
+          }
+        }
+      ],
+      "oleg": [
+        {
+          "source_id": "forenergo-line-fittings-2025",
+          "window_id": "W-c48f17bf2662534f83769b0d",
+          "id": "C-4cb83c0cfe10753f28754924",
+          "group_id": "G-d745401d2275168aae10b075",
+          "characteristic_index": 0,
+          "raw_value_type": "string",
+          "raw": {
+            "name": "Сечение, мм²",
+            "raw_value": "150/19",
+            "unit": "мм²",
+            "condition": "",
+            "scope": "Shared or subdivided table cell within printed designation group",
+            "scope_evidence": "Merged group cell or matching subrow visible on the designation row group.",
+            "evidence": [
+              {
+                "page": 169,
+                "region": [
+                  0.25,
+                  0.7046666666666667,
+                  0.33,
+                  0.7422222222222222
+                ]
+              }
+            ],
+            "uncertainties": [],
+            "header_path": [
+              {
+                "raw_text": "Марка провода АС по ГОСТ 839",
+                "role": "group",
+                "unit": "",
+                "condition": "",
+                "evidence": [
+                  {
+                    "page": 169,
+                    "region": [
+                      0.25,
+                      0.502,
+                      0.53,
+                      0.591
+                    ]
+                  }
+                ]
+              },
+              {
+                "raw_text": "Сечение, мм²",
+                "role": "column",
+                "unit": "мм²",
+                "condition": "",
+                "evidence": [
+                  {
+                    "page": 169,
+                    "region": [
+                      0.25,
+                      0.55,
+                      0.33,
+                      0.591
+                    ]
+                  }
+                ]
+              }
+            ],
+            "row_evidence": [
+              {
+                "page": 169,
+                "region": [
+                  0.25,
+                  0.7046666666666667,
+                  0.33,
+                  0.7422222222222222
+                ]
+              }
+            ],
+            "value_state": "printed_value",
+            "origin": "table_cell"
+          },
+          "product_id": "P-7554491132889ca52011f8e1",
+          "original_pointer": "characteristics.jsonl:63725/raw"
+        },
+        {
+          "source_id": "forenergo-line-fittings-2025",
+          "window_id": "W-c48f17bf2662534f83769b0d",
+          "id": "C-352b1dfa011e32ea238a5412",
+          "group_id": "G-d745401d2275168aae10b075",
+          "characteristic_index": 1,
+          "raw_value_type": "string",
+          "raw": {
+            "name": "Сечение, мм²",
+            "raw_value": "150/24",
+            "unit": "мм²",
+            "condition": "",
+            "scope": "Shared or subdivided table cell within printed designation group",
+            "scope_evidence": "Merged group cell or matching subrow visible on the designation row group.",
+            "evidence": [
+              {
+                "page": 169,
+                "region": [
+                  0.25,
+                  0.7046666666666667,
+                  0.33,
+                  0.7422222222222222
+                ]
+              }
+            ],
+            "uncertainties": [],
+            "header_path": [
+              {
+                "raw_text": "Марка провода АС по ГОСТ 839",
+                "role": "group",
+                "unit": "",
+                "condition": "",
+                "evidence": [
+                  {
+                    "page": 169,
+                    "region": [
+                      0.25,
+                      0.502,
+                      0.53,
+                      0.591
+                    ]
+                  }
+                ]
+              },
+              {
+                "raw_text": "Сечение, мм²",
+                "role": "column",
+                "unit": "мм²",
+                "condition": "",
+                "evidence": [
+                  {
+                    "page": 169,
+                    "region": [
+                      0.25,
+                      0.55,
+                      0.33,
+                      0.591
+                    ]
+                  }
+                ]
+              }
+            ],
+            "row_evidence": [
+              {
+                "page": 169,
+                "region": [
+                  0.25,
+                  0.7046666666666667,
+                  0.33,
+                  0.7422222222222222
+                ]
+              }
+            ],
+            "value_state": "printed_value",
+            "origin": "table_cell"
+          },
+          "product_id": "P-7554491132889ca52011f8e1",
+          "original_pointer": "characteristics.jsonl:63726/raw"
+        },
+        {
+          "source_id": "forenergo-line-fittings-2025",
+          "window_id": "W-c48f17bf2662534f83769b0d",
+          "id": "C-998fb950fd9554a4eef9ffcd",
+          "group_id": "G-d745401d2275168aae10b075",
+          "characteristic_index": 2,
+          "raw_value_type": "string",
+          "raw": {
+            "name": "Сечение, мм²",
+            "raw_value": "150/34",
+            "unit": "мм²",
+            "condition": "",
+            "scope": "Shared or subdivided table cell within printed designation group",
+            "scope_evidence": "Merged group cell or matching subrow visible on the designation row group.",
+            "evidence": [
+              {
+                "page": 169,
+                "region": [
+                  0.25,
+                  0.7046666666666667,
+                  0.33,
+                  0.7422222222222222
+                ]
+              }
+            ],
+            "uncertainties": [],
+            "header_path": [
+              {
+                "raw_text": "Марка провода АС по ГОСТ 839",
+                "role": "group",
+                "unit": "",
+                "condition": "",
+                "evidence": [
+                  {
+                    "page": 169,
+                    "region": [
+                      0.25,
+                      0.502,
+                      0.53,
+                      0.591
+                    ]
+                  }
+                ]
+              },
+              {
+                "raw_text": "Сечение, мм²",
+                "role": "column",
+                "unit": "мм²",
+                "condition": "",
+                "evidence": [
+                  {
+                    "page": 169,
+                    "region": [
+                      0.25,
+                      0.55,
+                      0.33,
+                      0.591
+                    ]
+                  }
+                ]
+              }
+            ],
+            "row_evidence": [
+              {
+                "page": 169,
+                "region": [
+                  0.25,
+                  0.7046666666666667,
+                  0.33,
+                  0.7422222222222222
+                ]
+              }
+            ],
+            "value_state": "printed_value",
+            "origin": "table_cell"
+          },
+          "product_id": "P-7554491132889ca52011f8e1",
+          "original_pointer": "characteristics.jsonl:63727/raw"
+        },
+        {
+          "source_id": "forenergo-line-fittings-2025",
+          "window_id": "W-c48f17bf2662534f83769b0d",
+          "id": "C-96e2da221d3d201549fd78f1",
+          "group_id": "G-d745401d2275168aae10b075",
+          "characteristic_index": 5,
+          "raw_value_type": "string",
+          "raw": {
+            "name": "Наименование натяжного зажима, с которым может применяться шлейф",
+            "raw_value": "НАС-150-1Б",
+            "unit": "",
+            "condition": "",
+            "scope": "Shared or subdivided table cell within printed designation group",
+            "scope_evidence": "Merged group cell or matching subrow visible on the designation row group.",
+            "evidence": [
+              {
+                "page": 169,
+                "region": [
+                  0.54,
+                  0.7046666666666667,
+                  0.65,
+                  0.7422222222222222
+                ]
+              }
+            ],
+            "uncertainties": [],
+            "header_path": [
+              {
+                "raw_text": "Наименование натяжного зажима, с которым может применяться шлейф",
+                "role": "column",
+                "unit": "",
+                "condition": "",
+                "evidence": [
+                  {
+                    "page": 169,
+                    "region": [
+                      0.54,
+                      0.502,
+                      0.65,
+                      0.591
+                    ]
+                  }
+                ]
+              }
+            ],
+            "row_evidence": [
+              {
+                "page": 169,
+                "region": [
+                  0.54,
+                  0.7046666666666667,
+                  0.65,
+                  0.7422222222222222
+                ]
+              }
+            ],
+            "value_state": "printed_value",
+            "origin": "table_cell"
+          },
+          "product_id": "P-7554491132889ca52011f8e1",
+          "original_pointer": "characteristics.jsonl:63730/raw"
+        },
+        {
+          "source_id": "forenergo-line-fittings-2025",
+          "window_id": "W-c48f17bf2662534f83769b0d",
+          "id": "C-b7cbd2531bbe1cd4edcc3c1a",
+          "group_id": "G-d745401d2275168aae10b075",
+          "characteristic_index": 6,
+          "raw_value_type": "string",
+          "raw": {
+            "name": "Наименование натяжного зажима, с которым может применяться шлейф",
+            "raw_value": "НАС-150-2Б",
+            "unit": "",
+            "condition": "",
+            "scope": "Shared or subdivided table cell within printed designation group",
+            "scope_evidence": "Merged group cell or matching subrow visible on the designation row group.",
+            "evidence": [
+              {
+                "page": 169,
+                "region": [
+                  0.54,
+                  0.7046666666666667,
+                  0.65,
+                  0.7422222222222222
+                ]
+              }
+            ],
+            "uncertainties": [],
+            "header_path": [
+              {
+                "raw_text": "Наименование натяжного зажима, с которым может применяться шлейф",
+                "role": "column",
+                "unit": "",
+                "condition": "",
+                "evidence": [
+                  {
+                    "page": 169,
+                    "region": [
+                      0.54,
+                      0.502,
+                      0.65,
+                      0.591
+                    ]
+                  }
+                ]
+              }
+            ],
+            "row_evidence": [
+              {
+                "page": 169,
+                "region": [
+                  0.54,
+                  0.7046666666666667,
+                  0.65,
+                  0.7422222222222222
+                ]
+              }
+            ],
+            "value_state": "printed_value",
+            "origin": "table_cell"
+          },
+          "product_id": "P-7554491132889ca52011f8e1",
+          "original_pointer": "characteristics.jsonl:63731/raw"
+        }
+      ]
+    }
+  ]
+}

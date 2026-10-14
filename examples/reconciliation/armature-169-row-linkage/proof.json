@@ -1,0 +1,656 @@
+{
+  "binding_sha256": "126b4ad8af212e6b462e0fde0590950ccdc3384a8bfea298d05d53aef361de5c",
+  "bindings": {
+    "cases": [
+      {
+        "bindings": [
+          {
+            "pack_pointer": "/cases/0/ours/0/raw/cells/4/value",
+            "role": "minimax",
+            "selected_pointer": "/150~119"
+          },
+          {
+            "pack_pointer": "/cases/0/ours/0/raw/cells/1/value",
+            "role": "minimax",
+            "selected_kind": "key",
+            "selected_pointer": "/150~119"
+          },
+          {
+            "pack_pointer": "/cases/0/ours/1/raw/cells/4/value",
+            "role": "minimax",
+            "selected_pointer": "/150~124"
+          },
+          {
+            "pack_pointer": "/cases/0/ours/1/raw/cells/1/value",
+            "role": "minimax",
+            "selected_kind": "key",
+            "selected_pointer": "/150~124"
+          },
+          {
+            "pack_pointer": "/cases/0/ours/2/raw/cells/4/value",
+            "role": "minimax",
+            "selected_pointer": "/150~134"
+          },
+          {
+            "pack_pointer": "/cases/0/ours/2/raw/cells/1/value",
+            "role": "minimax",
+            "selected_kind": "key",
+            "selected_pointer": "/150~134"
+          }
+        ],
+        "case_id": "pilot-arm169-row-context",
+        "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+        "side": "ours"
+      }
+    ],
+    "pack_sha256": "4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f",
+    "schema_version": "catalogue-side-bindings/1"
+  },
+  "cases": [
+    {
+      "accepted_side": "ours",
+      "case_id": "pilot-arm169-row-context",
+      "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+      "compatibility": {
+        "codex": {
+          "bound_keys": 0,
+          "bound_leaves": 0,
+          "mode": "omitted"
+        },
+        "glm": {
+          "bound_keys": 0,
+          "bound_leaves": 0,
+          "mode": "omitted"
+        },
+        "minimax": {
+          "bound_keys": 3,
+          "bound_leaves": 3,
+          "mode": "compatible_projection"
+        },
+        "zcode": {
+          "bound_keys": 0,
+          "bound_leaves": 0,
+          "mode": "omitted"
+        }
+      },
+      "materialized_atoms": [
+        {
+          "pointer": "/catalogs/4/pages/168/content/tables/0/rows/4",
+          "raw": {
+            "cells": [
+              {
+                "column_id": "c1",
+                "state": "value",
+                "value": "ШСИП-110-(16-17,5)-9-L"
+              },
+              {
+                "column_id": "c2",
+                "state": "value",
+                "value": "150/19"
+              },
+              {
+                "column_id": "c3",
+                "state": "value",
+                "value": "16-17,5"
+              },
+              {
+                "column_id": "c4",
+                "state": "value",
+                "value": "А4АБ 150-185"
+              },
+              {
+                "column_id": "c5",
+                "state": "value",
+                "value": "НАС-150-1Б"
+              },
+              {
+                "column_id": "c6",
+                "state": "value",
+                "value": 287
+              },
+              {
+                "column_id": "c7",
+                "state": "value",
+                "value": 200
+              },
+              {
+                "column_id": "c8",
+                "state": "value",
+                "value": 70
+              },
+              {
+                "column_id": "c9",
+                "state": "value",
+                "value": 439
+              },
+              {
+                "column_id": "c10",
+                "state": "value",
+                "value": "8,5"
+              },
+              {
+                "column_id": "c11",
+                "state": "value",
+                "value": 10
+              },
+              {
+                "column_id": "c12",
+                "state": "value",
+                "value": "13,6"
+              }
+            ]
+          }
+        },
+        {
+          "pointer": "/catalogs/4/pages/168/content/tables/0/rows/5",
+          "raw": {
+            "cells": [
+              {
+                "column_id": "c1",
+                "state": "value",
+                "value": "ШСИП-110-(16-17,5)-9-L"
+              },
+              {
+                "column_id": "c2",
+                "state": "value",
+                "value": "150/24"
+              },
+              {
+                "column_id": "c3",
+                "state": "value",
+                "value": "16-17,5"
+              },
+              {
+                "column_id": "c4",
+                "state": "value",
+                "value": "А4АБ 150-185"
+              },
+              {
+                "column_id": "c5",
+                "state": "value",
+                "value": "НАС-150-1Б"
+              },
+              {
+                "column_id": "c6",
+                "state": "value",
+                "value": 287
+              },
+              {
+                "column_id": "c7",
+                "state": "value",
+                "value": 200
+              },
+              {
+                "column_id": "c8",
+                "state": "value",
+                "value": 70
+              },
+              {
+                "column_id": "c9",
+                "state": "value",
+                "value": 439
+              },
+              {
+                "column_id": "c10",
+                "state": "value",
+                "value": "8,5"
+              },
+              {
+                "column_id": "c11",
+                "state": "value",
+                "value": 10
+              },
+              {
+                "column_id": "c12",
+                "state": "value",
+                "value": "13,6"
+              }
+            ]
+          }
+        },
+        {
+          "pointer": "/catalogs/4/pages/168/content/tables/0/rows/6",
+          "raw": {
+            "cells": [
+              {
+                "column_id": "c1",
+                "state": "value",
+                "value": "ШСИП-110-(16-17,5)-9-L"
+              },
+              {
+                "column_id": "c2",
+                "state": "value",
+                "value": "150/34"
+              },
+              {
+                "column_id": "c3",
+                "state": "value",
+                "value": "16-17,5"
+              },
+              {
+                "column_id": "c4",
+                "state": "value",
+                "value": "А4АБ 150-185"
+              },
+              {
+                "column_id": "c5",
+                "state": "value",
+                "value": "НАС-150-2Б"
+              },
+              {
+                "column_id": "c6",
+                "state": "value",
+                "value": 287
+              },
+              {
+                "column_id": "c7",
+                "state": "value",
+                "value": 200
+              },
+              {
+                "column_id": "c8",
+                "state": "value",
+                "value": 70
+              },
+              {
+                "column_id": "c9",
+                "state": "value",
+                "value": 439
+              },
+              {
+                "column_id": "c10",
+                "state": "value",
+                "value": "8,5"
+              },
+              {
+                "column_id": "c11",
+                "state": "value",
+                "value": 10
+              },
+              {
+                "column_id": "c12",
+                "state": "value",
+                "value": "13,6"
+              }
+            ]
+          }
+        }
+      ],
+      "original_opinions": {
+        "codex": {
+          "case_id": "pilot-arm169-row-context",
+          "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+          "decision": "ours",
+          "reason": "Оригинал сохраняет объединённый НАС-150-1Б для строк 150/19 и 150/24, а НАС-150-2Б относится к 150/34. Наши отдельные строки сохраняют эту связь; списки Олега не задают однозначные пары.",
+          "source_evidence": [
+            {
+              "bbox": [
+                0.07,
+                0.63,
+                0.92,
+                0.69
+              ],
+              "observation": "Оригинал сохраняет объединённый НАС-150-1Б для строк 150/19 и 150/24, а НАС-150-2Б относится к 150/34. Наши отдельные строки сохраняют эту связь; списки Олега не задают однозначные пары.",
+              "page": 169,
+              "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+            }
+          ]
+        },
+        "glm": {
+          "case_id": "pilot-arm169-row-context",
+          "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+          "decision": "ours",
+          "reason": "Таблица содержит отдельные подстроки для 150/19, 150/24, 150/34 с НАС-150-1Б, НАС-150-1Б, НАС-150-2Б; построчная связь сохранена у ours, oleg объединяет в групповую ячейку без различения 1Б/2Б.",
+          "source_evidence": [
+            {
+              "bbox": [
+                0.55,
+                0.6,
+                0.75,
+                0.7
+              ],
+              "observation": "Строки 150/19, 150/24, 150/34: НАС-150-1Б, НАС-150-1Б, НАС-150-2Б.",
+              "page": 169,
+              "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+            }
+          ]
+        },
+        "minimax": {
+          "case_id": "pilot-arm169-row-context",
+          "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+          "decision": "ours",
+          "reason": "На стр. 169 в таблице шлейфов колонка «Сечение, мм²» содержит три отдельные строки 150/19, 150/24 и 150/34. В колонке «Наименование натяжного зажима, с которым может применяться шлейф» ячейка НАС-150-1Б визуально объединена (вертикальный шов не проходит) и охватывает две строки сечений 150/19 и 150/24, тогда как НАС-150-2Б — отдельная ячейка, привязанная к строке 150/34 (и далее 185/24); общая объединённая ячейка группы «А4АБ 150-185» не содержит марок зажимов, т.е. марки не размножаются на все сечения группы. Представление ours сохраняет эту связь построчно (150/19→НАС-150-1Б, 150/24→НАС-150-1Б, 150/34→НАС-150-2Б) и потому пригодно для безопасного выбора зажима без догадки. У oleg все четыре характеристики группы (150/19, 150/34, НАС-150-1Б, НАС-150-2Б) несут один и тот же прямоугольник доказательства (сечение: [0.25,0.7047,0.33,0.7422]; оба зажима: [0.54,0.7047,0.65,0.7422]), то есть построчная привязка утрачена и соответствие «сечение↔зажим» пришлось бы угадывать по нескольким значениям в одной группе — что прямо запрещено условием.",
+          "selected_value": {
+            "150/19": "НАС-150-1Б",
+            "150/24": "НАС-150-1Б",
+            "150/34": "НАС-150-2Б"
+          },
+          "source_evidence": [
+            {
+              "bbox": [
+                0.24,
+                0.61,
+                0.68,
+                0.72
+              ],
+              "observation": "Три подписанные строки сечений 150/19, 150/24, 150/34; в колонке натяжного зажима НАС-150-1Б занимает одну ячейку, разделённую горизонтальным швом только после строки 150/24 (то есть охватывает 150/19 и 150/24), а НАС-150-2Б находится в следующей отдельной ячейке на уровне строки 150/34; ячейка «А4АБ 150-185» объединена и марок зажимов не содержит.",
+              "page": 169,
+              "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+            },
+            {
+              "bbox": [
+                0.52,
+                0.61,
+                0.7,
+                0.72
+              ],
+              "observation": "Крупно: ячейка «НАС-150-1Б» вертикально объединена (нет горизонтальной линии между уровнями 150/19 и 150/24), «НАС-150-2Б» — отдельная ячейка, начинающаяся со строки 150/34.",
+              "page": 169,
+              "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+            }
+          ]
+        },
+        "zcode": {
+          "case_id": "pilot-arm169-row-context",
+          "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+          "decision": "ours",
+          "reason": "Повторная независимая проверка стр.169 (текстовый слой + векторные линейки) воспроизводит геометрию объединённых ячеек и подтверждает наше представление. Подстроки сечений: «150/19» y0=552.1, «150/24» y0=562.9, «150/34» y0=573.7 (x=167.1). В колонке натяжных зажимов (x=327.8..397.5) горизонтальные линейки есть на y=551.5, 573.0, 583.8 и НЕТ на y=562.3, тогда как в колонке сечений (x=153.6..204.2) линейка y=562.3 присутствует: значит, ячейка зажима НАС-150-1Б объединена через подстроки 150/19+150/24 (текст «НАС-150-1Б» y0=557.5 центрирован в полосе 551.5..573.0), а НАС-150-2Б занимает ровно подстроку 150/34 (y0=573.7). Наши строки явно связывают 150/19→НАС-150-1Б, 150/24→НАС-150-1Б, 150/34→НАС-150-2Б; у Олега все пять характеристик несут один общий row_evidence-регион, привязка сечение→зажим отсутствует и её восстановление потребовало бы догадки. Selected_value не нужен: наша сторона целиком выражает правильную связь.",
+          "source_evidence": [
+            {
+              "bbox": [
+                0.2508,
+                0.642,
+                0.6489,
+                0.6828
+              ],
+              "observation": "Слова текстового слоя: «150/19» y0=552.1, «150/24» y0=562.9, «150/34» y0=573.7 при x=167.1; «НАС-150-1Б» y0=557.5, «НАС-150-2Б» y0=573.7 при x=342.1. Линейки колонки зажимов (x 327.8..397.5): y=551.5, 573.0, 583.8; линейки y=562.3 в этой колонке нет (в колонке сечений x 153.6..204.2 она есть). Bbox — нормализованные координаты полной страницы [x0,y0,x1,y1].",
+              "page": 169,
+              "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+            }
+          ]
+        }
+      },
+      "physical_pages": [
+        169
+      ],
+      "reason": "compatible_projection",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    }
+  ],
+  "is_new_vote": false,
+  "original_votes": [
+    {
+      "identity": {
+        "deliberation_round": 2,
+        "model": "native Codex root; exact provider model ID unavailable",
+        "reaffirmation": "Original source and independent sealed round1 judgement revalidated after startup fix; no content change",
+        "role": "codex",
+        "runtime": "Codex Desktop native root",
+        "session_id": "01a12c30-e58f-7861-8a2d-966c92630163",
+        "source_review": "Original PDF page169 and two personally inspected crops, independent opinion sealed before other verdicts"
+      },
+      "pack_id": "arm169-row-linkage-consensus-v1",
+      "pack_sha256": "4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f",
+      "payload": {
+        "pack_id": "arm169-row-linkage-consensus-v1",
+        "verdicts": [
+          {
+            "case_id": "pilot-arm169-row-context",
+            "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+            "decision": "ours",
+            "reason": "Оригинал сохраняет объединённый НАС-150-1Б для строк 150/19 и 150/24, а НАС-150-2Б относится к 150/34. Наши отдельные строки сохраняют эту связь; списки Олега не задают однозначные пары.",
+            "source_evidence": [
+              {
+                "bbox": [
+                  0.07,
+                  0.63,
+                  0.92,
+                  0.69
+                ],
+                "observation": "Оригинал сохраняет объединённый НАС-150-1Б для строк 150/19 и 150/24, а НАС-150-2Б относится к 150/34. Наши отдельные строки сохраняют эту связь; списки Олега не задают однозначные пары.",
+                "page": 169,
+                "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+              }
+            ]
+          }
+        ]
+      },
+      "projection": {
+        "case_sha256": {
+          "pilot-arm169-row-context": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb"
+        },
+        "new_independent_voice": false,
+        "new_model_calls": 0,
+        "original_opinion_saved_at": "2026-10-14T18:24:21.542222+00:00",
+        "parent_pack_sha256": "5d2e860422ed13fd4ab8a7901559c768cb38dae69e1b7b1dcb6f5ff30dd5fd47",
+        "parent_receipt_sha256": "93941d0d230add7e0f712419e752865a1e6f3cf6cd593df2f7f6485465f74b7c"
+      },
+      "receipt_sha256": "54808816c6027643bcaee07e1e6f0dbf03a9b9c8811a82185a537cc2301362c4",
+      "round_number": 2,
+      "saved_at": "2026-10-14T19:04:19.597323+00:00",
+      "schema_version": "catalogue-consensus-vote/1",
+      "source_manifest": [
+        {
+          "page_count": 314,
+          "sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "model": "account:zai-individual-coding-plan/GLM-5.3$max",
+        "native_payload_sha256": "988ccc9d2d32b6a55bd352aa8ffa41eea78add1549f9e330df744da7fbf080de",
+        "role": "zcode",
+        "runtime": "native ZCode via AgentHerder; independent source review reaffirmed in actual native round2",
+        "session_id": "sess_0dd4a3ee-bc7d-4008-b9fa-c25146ec5392"
+      },
+      "pack_id": "arm169-row-linkage-consensus-v1",
+      "pack_sha256": "4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f",
+      "payload": {
+        "pack_id": "arm169-row-linkage-consensus-v1",
+        "verdicts": [
+          {
+            "case_id": "pilot-arm169-row-context",
+            "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+            "decision": "ours",
+            "reason": "Повторная независимая проверка стр.169 (текстовый слой + векторные линейки) воспроизводит геометрию объединённых ячеек и подтверждает наше представление. Подстроки сечений: «150/19» y0=552.1, «150/24» y0=562.9, «150/34» y0=573.7 (x=167.1). В колонке натяжных зажимов (x=327.8..397.5) горизонтальные линейки есть на y=551.5, 573.0, 583.8 и НЕТ на y=562.3, тогда как в колонке сечений (x=153.6..204.2) линейка y=562.3 присутствует: значит, ячейка зажима НАС-150-1Б объединена через подстроки 150/19+150/24 (текст «НАС-150-1Б» y0=557.5 центрирован в полосе 551.5..573.0), а НАС-150-2Б занимает ровно подстроку 150/34 (y0=573.7). Наши строки явно связывают 150/19→НАС-150-1Б, 150/24→НАС-150-1Б, 150/34→НАС-150-2Б; у Олега все пять характеристик несут один общий row_evidence-регион, привязка сечение→зажим отсутствует и её восстановление потребовало бы догадки. Selected_value не нужен: наша сторона целиком выражает правильную связь.",
+            "source_evidence": [
+              {
+                "bbox": [
+                  0.2508,
+                  0.642,
+                  0.6489,
+                  0.6828
+                ],
+                "observation": "Слова текстового слоя: «150/19» y0=552.1, «150/24» y0=562.9, «150/34» y0=573.7 при x=167.1; «НАС-150-1Б» y0=557.5, «НАС-150-2Б» y0=573.7 при x=342.1. Линейки колонки зажимов (x 327.8..397.5): y=551.5, 573.0, 583.8; линейки y=562.3 в этой колонке нет (в колонке сечений x 153.6..204.2 она есть). Bbox — нормализованные координаты полной страницы [x0,y0,x1,y1].",
+                "page": 169,
+                "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+              }
+            ]
+          }
+        ]
+      },
+      "projection": {
+        "case_sha256": {
+          "pilot-arm169-row-context": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb"
+        },
+        "new_independent_voice": false,
+        "new_model_calls": 0,
+        "original_opinion_saved_at": "2026-10-14T18:46:49.100434+00:00",
+        "parent_pack_sha256": "5d2e860422ed13fd4ab8a7901559c768cb38dae69e1b7b1dcb6f5ff30dd5fd47",
+        "parent_receipt_sha256": "ff822b4609e67381930f72d72593f24633338bcead3bdd315a314cfcf495fa21"
+      },
+      "receipt_sha256": "95da2220ff9a257ef046011d11c07c66da549f916e33c118e8901991988a7976",
+      "round_number": 2,
+      "saved_at": "2026-10-14T19:04:19.621813+00:00",
+      "schema_version": "catalogue-consensus-vote/1",
+      "source_manifest": [
+        {
+          "page_count": 314,
+          "sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "attempt_number": 2,
+        "config_sha256": "aeac1f34a0febb5d2425e9f05e801fad79e3ec2cfa0b3fd90981c247b9fcdd5c",
+        "contract_sha256": "0359b30a5ebfada904ead0aa54b14fce7d3354312b8e5f55757e85b569bb0f09",
+        "model": "zai.glm-5.3-flash?reasoning=low",
+        "role": "glm",
+        "runtime": "FastAgent0.10.43:/home/roomhacker/apps/catalog-to-json/.tmp/full-digitization/semantic-v1.5.24/env/bin/python:/home/roomhacker/apps/catalog-to-json/.tmp/oleg-consensus-20261014/adjudication/5d2e860422ed13fd4ab8a7901559c768cb38dae69e1b7b1dcb6f5ff30dd5fd47/round2/runtime/glm-attempt2",
+        "session_id": "586d1f25-158e-4759-8f45-0ae8a178a1df"
+      },
+      "pack_id": "arm169-row-linkage-consensus-v1",
+      "pack_sha256": "4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f",
+      "payload": {
+        "pack_id": "arm169-row-linkage-consensus-v1",
+        "verdicts": [
+          {
+            "case_id": "pilot-arm169-row-context",
+            "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+            "decision": "ours",
+            "reason": "Таблица содержит отдельные подстроки для 150/19, 150/24, 150/34 с НАС-150-1Б, НАС-150-1Б, НАС-150-2Б; построчная связь сохранена у ours, oleg объединяет в групповую ячейку без различения 1Б/2Б.",
+            "source_evidence": [
+              {
+                "bbox": [
+                  0.55,
+                  0.6,
+                  0.75,
+                  0.7
+                ],
+                "observation": "Строки 150/19, 150/24, 150/34: НАС-150-1Б, НАС-150-1Б, НАС-150-2Б.",
+                "page": 169,
+                "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+              }
+            ]
+          }
+        ]
+      },
+      "projection": {
+        "case_sha256": {
+          "pilot-arm169-row-context": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb"
+        },
+        "new_independent_voice": false,
+        "new_model_calls": 0,
+        "original_opinion_saved_at": "2026-10-14T18:38:35.763680+00:00",
+        "parent_pack_sha256": "5d2e860422ed13fd4ab8a7901559c768cb38dae69e1b7b1dcb6f5ff30dd5fd47",
+        "parent_receipt_sha256": "c0e9b13e32b288c0e2d6e7a9e031f48cae78b67648d0a79c7ce4a2f9fbf23edf"
+      },
+      "receipt_sha256": "1207809660134b2155ea39bbd18c2ee318bb7fa23c75230e6afd897eb1616085",
+      "round_number": 2,
+      "saved_at": "2026-10-14T19:04:19.641005+00:00",
+      "schema_version": "catalogue-consensus-vote/1",
+      "source_manifest": [
+        {
+          "page_count": 314,
+          "sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+        }
+      ]
+    },
+    {
+      "identity": {
+        "attempt_number": 1,
+        "config_sha256": "aeac1f34a0febb5d2425e9f05e801fad79e3ec2cfa0b3fd90981c247b9fcdd5c",
+        "contract_sha256": "eb985672e5e045d0277d18728ace7a3e7ef3a40e14191af15f62de44e334b8b9",
+        "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+        "role": "minimax",
+        "runtime": "FastAgent0.10.43:/home/roomhacker/apps/catalog-to-json/.tmp/full-digitization/semantic-v1.5.24/env/bin/python:/home/roomhacker/apps/catalog-to-json/.tmp/oleg-consensus-20261014/adjudication/4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f/round2/runtime/minimax",
+        "session_id": "a8101963-ecc2-48b1-b5b9-7be562f3d7d6"
+      },
+      "pack_id": "arm169-row-linkage-consensus-v1",
+      "pack_sha256": "4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f",
+      "payload": {
+        "pack_id": "arm169-row-linkage-consensus-v1",
+        "verdicts": [
+          {
+            "case_id": "pilot-arm169-row-context",
+            "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+            "decision": "ours",
+            "reason": "На стр. 169 в таблице шлейфов колонка «Сечение, мм²» содержит три отдельные строки 150/19, 150/24 и 150/34. В колонке «Наименование натяжного зажима, с которым может применяться шлейф» ячейка НАС-150-1Б визуально объединена (вертикальный шов не проходит) и охватывает две строки сечений 150/19 и 150/24, тогда как НАС-150-2Б — отдельная ячейка, привязанная к строке 150/34 (и далее 185/24); общая объединённая ячейка группы «А4АБ 150-185» не содержит марок зажимов, т.е. марки не размножаются на все сечения группы. Представление ours сохраняет эту связь построчно (150/19→НАС-150-1Б, 150/24→НАС-150-1Б, 150/34→НАС-150-2Б) и потому пригодно для безопасного выбора зажима без догадки. У oleg все четыре характеристики группы (150/19, 150/34, НАС-150-1Б, НАС-150-2Б) несут один и тот же прямоугольник доказательства (сечение: [0.25,0.7047,0.33,0.7422]; оба зажима: [0.54,0.7047,0.65,0.7422]), то есть построчная привязка утрачена и соответствие «сечение↔зажим» пришлось бы угадывать по нескольким значениям в одной группе — что прямо запрещено условием.",
+            "selected_value": {
+              "150/19": "НАС-150-1Б",
+              "150/24": "НАС-150-1Б",
+              "150/34": "НАС-150-2Б"
+            },
+            "source_evidence": [
+              {
+                "bbox": [
+                  0.24,
+                  0.61,
+                  0.68,
+                  0.72
+                ],
+                "observation": "Три подписанные строки сечений 150/19, 150/24, 150/34; в колонке натяжного зажима НАС-150-1Б занимает одну ячейку, разделённую горизонтальным швом только после строки 150/24 (то есть охватывает 150/19 и 150/24), а НАС-150-2Б находится в следующей отдельной ячейке на уровне строки 150/34; ячейка «А4АБ 150-185» объединена и марок зажимов не содержит.",
+                "page": 169,
+                "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+              },
+              {
+                "bbox": [
+                  0.52,
+                  0.61,
+                  0.7,
+                  0.72
+                ],
+                "observation": "Крупно: ячейка «НАС-150-1Б» вертикально объединена (нет горизонтальной линии между уровнями 150/19 и 150/24), «НАС-150-2Б» — отдельная ячейка, начинающаяся со строки 150/34.",
+                "page": 169,
+                "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+              }
+            ]
+          }
+        ]
+      },
+      "receipt_sha256": "8c87e87e26faa4bfdbd70017ba754e6abac72570cfc8bea128de7f7c87fe10d3",
+      "round_number": 2,
+      "saved_at": "2026-10-14T19:09:09.535248+00:00",
+      "schema_version": "catalogue-consensus-vote/1",
+      "source_manifest": [
+        {
+          "page_count": 314,
+          "sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+        }
+      ]
+    }
+  ],
+  "pack_id": "arm169-row-linkage-consensus-v1",
+  "pack_sha256": "4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f",
+  "reason": "compatible_projection",
+  "receipt_sha256": {
+    "codex": "54808816c6027643bcaee07e1e6f0dbf03a9b9c8811a82185a537cc2301362c4",
+    "glm": "1207809660134b2155ea39bbd18c2ee318bb7fa23c75230e6afd897eb1616085",
+    "minimax": "8c87e87e26faa4bfdbd70017ba754e6abac72570cfc8bea128de7f7c87fe10d3",
+    "zcode": "95da2220ff9a257ef046011d11c07c66da549f916e33c118e8901991988a7976"
+  },
+  "round_number": 2,
+  "schema_version": "catalogue-side-materialization/1",
+  "strict_consensus": {
+    "all_resolved": false,
+    "cases": [
+      {
+        "case_id": "pilot-arm169-row-context",
+        "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+        "consensus": false,
+        "decision": "unresolved",
+        "missing_roles": [],
+        "reason": "Disagreement or unreadable source",
+        "votes": {
+          "codex": "54808816c6027643bcaee07e1e6f0dbf03a9b9c8811a82185a537cc2301362c4",
+          "glm": "1207809660134b2155ea39bbd18c2ee318bb7fa23c75230e6afd897eb1616085",
+          "minimax": "8c87e87e26faa4bfdbd70017ba754e6abac72570cfc8bea128de7f7c87fe10d3",
+          "zcode": "95da2220ff9a257ef046011d11c07c66da549f916e33c118e8901991988a7976"
+        }
+      }
+    ],
+    "complete": true,
+    "pack_id": "arm169-row-linkage-consensus-v1",
+    "pack_sha256": "4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f",
+    "required_roles": [
+      "codex",
+      "zcode",
+      "glm",
+      "minimax"
+    ],
+    "schema_version": "catalogue-consensus/1"
+  },
+  "proof_sha256": "d20d99b66891507b6ec218572fbc6ad3e6d9389fcc21ddebe3092c9fab72977d"
+}

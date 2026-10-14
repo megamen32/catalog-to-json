@@ -1,0 +1,57 @@
+{
+  "identity": {
+    "attempt_number": 2,
+    "config_sha256": "aeac1f34a0febb5d2425e9f05e801fad79e3ec2cfa0b3fd90981c247b9fcdd5c",
+    "contract_sha256": "0359b30a5ebfada904ead0aa54b14fce7d3354312b8e5f55757e85b569bb0f09",
+    "model": "zai.glm-5.3-flash?reasoning=low",
+    "role": "glm",
+    "runtime": "FastAgent0.10.43:/home/roomhacker/apps/catalog-to-json/.tmp/full-digitization/semantic-v1.5.24/env/bin/python:/home/roomhacker/apps/catalog-to-json/.tmp/oleg-consensus-20261014/adjudication/5d2e860422ed13fd4ab8a7901559c768cb38dae69e1b7b1dcb6f5ff30dd5fd47/round2/runtime/glm-attempt2",
+    "session_id": "586d1f25-158e-4759-8f45-0ae8a178a1df"
+  },
+  "pack_id": "arm169-row-linkage-consensus-v1",
+  "pack_sha256": "4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f",
+  "payload": {
+    "pack_id": "arm169-row-linkage-consensus-v1",
+    "verdicts": [
+      {
+        "case_id": "pilot-arm169-row-context",
+        "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+        "decision": "ours",
+        "reason": "Таблица содержит отдельные подстроки для 150/19, 150/24, 150/34 с НАС-150-1Б, НАС-150-1Б, НАС-150-2Б; построчная связь сохранена у ours, oleg объединяет в групповую ячейку без различения 1Б/2Б.",
+        "source_evidence": [
+          {
+            "bbox": [
+              0.55,
+              0.6,
+              0.75,
+              0.7
+            ],
+            "observation": "Строки 150/19, 150/24, 150/34: НАС-150-1Б, НАС-150-1Б, НАС-150-2Б.",
+            "page": 169,
+            "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+          }
+        ]
+      }
+    ]
+  },
+  "projection": {
+    "case_sha256": {
+      "pilot-arm169-row-context": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb"
+    },
+    "new_independent_voice": false,
+    "new_model_calls": 0,
+    "original_opinion_saved_at": "2026-10-14T18:38:35.763680+00:00",
+    "parent_pack_sha256": "5d2e860422ed13fd4ab8a7901559c768cb38dae69e1b7b1dcb6f5ff30dd5fd47",
+    "parent_receipt_sha256": "c0e9b13e32b288c0e2d6e7a9e031f48cae78b67648d0a79c7ce4a2f9fbf23edf"
+  },
+  "receipt_sha256": "1207809660134b2155ea39bbd18c2ee318bb7fa23c75230e6afd897eb1616085",
+  "round_number": 2,
+  "saved_at": "2026-10-14T19:04:19.641005+00:00",
+  "schema_version": "catalogue-consensus-vote/1",
+  "source_manifest": [
+    {
+      "page_count": 314,
+      "sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    }
+  ]
+}

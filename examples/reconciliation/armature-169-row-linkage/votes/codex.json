@@ -1,0 +1,57 @@
+{
+  "identity": {
+    "deliberation_round": 2,
+    "model": "native Codex root; exact provider model ID unavailable",
+    "reaffirmation": "Original source and independent sealed round1 judgement revalidated after startup fix; no content change",
+    "role": "codex",
+    "runtime": "Codex Desktop native root",
+    "session_id": "01a12c30-e58f-7861-8a2d-966c92630163",
+    "source_review": "Original PDF page169 and two personally inspected crops, independent opinion sealed before other verdicts"
+  },
+  "pack_id": "arm169-row-linkage-consensus-v1",
+  "pack_sha256": "4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f",
+  "payload": {
+    "pack_id": "arm169-row-linkage-consensus-v1",
+    "verdicts": [
+      {
+        "case_id": "pilot-arm169-row-context",
+        "case_sha256": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb",
+        "decision": "ours",
+        "reason": "Оригинал сохраняет объединённый НАС-150-1Б для строк 150/19 и 150/24, а НАС-150-2Б относится к 150/34. Наши отдельные строки сохраняют эту связь; списки Олега не задают однозначные пары.",
+        "source_evidence": [
+          {
+            "bbox": [
+              0.07,
+              0.63,
+              0.92,
+              0.69
+            ],
+            "observation": "Оригинал сохраняет объединённый НАС-150-1Б для строк 150/19 и 150/24, а НАС-150-2Б относится к 150/34. Наши отдельные строки сохраняют эту связь; списки Олега не задают однозначные пары.",
+            "page": 169,
+            "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+          }
+        ]
+      }
+    ]
+  },
+  "projection": {
+    "case_sha256": {
+      "pilot-arm169-row-context": "84f930339afbe04401a56fdabf859a66b882040dc02c36347447c190947394bb"
+    },
+    "new_independent_voice": false,
+    "new_model_calls": 0,
+    "original_opinion_saved_at": "2026-10-14T18:24:21.542222+00:00",
+    "parent_pack_sha256": "5d2e860422ed13fd4ab8a7901559c768cb38dae69e1b7b1dcb6f5ff30dd5fd47",
+    "parent_receipt_sha256": "93941d0d230add7e0f712419e752865a1e6f3cf6cd593df2f7f6485465f74b7c"
+  },
+  "receipt_sha256": "54808816c6027643bcaee07e1e6f0dbf03a9b9c8811a82185a537cc2301362c4",
+  "round_number": 2,
+  "saved_at": "2026-10-14T19:04:19.597323+00:00",
+  "schema_version": "catalogue-consensus-vote/1",
+  "source_manifest": [
+    {
+      "page_count": 314,
+      "sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    }
+  ]
+}
