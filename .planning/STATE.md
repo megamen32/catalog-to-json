@@ -1,3 +1,7 @@
+## CURRENT OWNER CORRECTION —15.10.2026
+
+Whole980-page reconciliation now SPLIT among three owners, no per-case quorum until later independent audit. Codex innovations+isolators378; ZCodeFlash opn+small288; MiniMax armature314. Full immutable packet manifest covers195701facts/133946ledger rows including all28743residual parameters. Preparation is not completion. Shared original-page/zoom/table/drawing tools actually worked through GPTAdmin for root; page-work MCP binds exact complete inputs and defers final audit. See `.agents/tasks/20261014-oleg-consensus-merge.md` newest section and `ops/catalogue_delivery/operator-tools.md`. Do not return to earlier226-case quorum or new extraction. Earlier partialZIP remains partial.
+
 ## Единый архив выдан как промежуточный результат — 15.10.2026
 
 Опубликован и повторно скачан с GitHub `examples/catalogs/consensus-2026-10-15T005239MSK/catalogues-unified.zip` (37 332 384байта), commit e625bd448bd04f9e3736a2cef38b16930c1deff1. Источник сборщика ea799a97d0afe6ca1ecebac3f5be11d4dcf16651. Все980страниц,5Excel,83 712ячеек строго сверены сJSON; исходные92 847наблюдений Олега и7его таблиц прошли обратное восстановление. Все членыZIP/CRC/SHA проверены локально и в публичном скачивании. В ZIP16изменённых значений и6новых joint-proof по27случаям118. Это НЕфинал: снимок на00:52:39МСК содержит170resolved/56pending из226подготовленных случаев. Не путать с полной точностью или всем реестром.

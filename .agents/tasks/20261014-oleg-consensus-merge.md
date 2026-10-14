@@ -1,3 +1,12 @@
+## Последнее прямое исправление владельца: разделение работы,15.10.2026
+
+Пользователь: "quorum make you too slow now. split work with them for now. and final checks will be later."
+Это заменяет требования трёх голосов на каждом случае НА ТЕКУЩЕМ ЭТАПЕ; прежние правила ниже — история. Обработать ВСЕ195701фактов/133946ledgerrows/980страниц, не только226случаев. Root Codex: innovations216+isolators162; native ZCodeFlash: opn60+small228; MiniMaxM3.1FlashPreview: armature314. Финальная независимая проверка отдельно позднее, owner_work не выдавать за consensus.
+
+Реальные полные неизменяемые пакеты `.tmp/oleg-consensus-20261014/full-alignment-work-v2/manifest.json`; все28743несопоставленные modelparameters включены. Подготовка980пакетов НЕ980выполненных страниц. Общие source-tools доступны через GPTAdmin CatalogSourceTools, root реально получил исходное увеличение isolators108. Общий контракт `page_work.py` и одностраничный MCP `page_work_tools.py` сохраняют typedinput, provenance, owneridentity; финальный audit=false. Пользователь просит всем эти инструменты, не запускать дополнительную четвёртую сессию без нужды. NativeZCode получил полный288-page scope и доступ к инструментам.
+
+Новый конечный бюджет полных owner-work: scratch4GiB по свежему замеру1.773GB/FS218.87GB; RAMaggregate14GiB/CPU2/tasks512/swap0 и20GiBhostreserve прежние. MiniMaxinitial1context,2GiBworker+1GiBsourceMCP,1200s/page,24hjob; accepted/UNKNOWNнеповторять. Новых большихбенчмарков/извлечений нет.
+
 # Сведение разборов Олега и нашей программы по консенсусу
 
 Прямое поручение владельца 14.10.2026: забрать с личного M1 `/Users/user/Downloads/forenergo-our-extraction.zip`, выбрать лучший из двух форматов, обратимо привести представления, найти ВСЕ расхождения, для каждого получить независимые оценки root Codex, native ZCode (он же участник GLM) и MiniMaxM3.1FlashPreview, затем выполнить merge с сохранением происхождения. Это текущие ТРИ участника по последнему прямому уточнению; отдельный GLM в старых запусках был лишним. Это продолжение оцифровки пяти каталогов, не новый проект и не новый большой бенчмарк. Фоновую оцифровку и её артефакты сохранять.

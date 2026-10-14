@@ -25,3 +25,34 @@ Focused integration `tests/test_operator_tools.py` checks original PNG/layout,
 source change/page limits, scratch admission, and actual MCP tool registration.
 Observed3 checks1.14s; expected10s, emergency100s. This does not establish any
 extraction accuracy score or completion of the catalogue reconciliation.
+
+## Current-session access and page-owner work
+
+On2026-10-15 the existing GPTAdmin child `CatalogSourceTools` returned its real
+11-tool registry and an original isolators108 PNG crop through the Hub. Native
+Codex can use this proxy in its current session; a new native session is not
+needed merely to access these tools. ZCode uses the same explicit discovered
+target and source whitelist. No specialized global MCP configuration was added.
+
+`python -m catalog_json.reconciliation.page_work_tools --packet PAGE.json
+--sources SOURCES.json --identity IDENTITY.json --output OWNER_OUTPUT` adds six
+page-work tools to the same11 evidence tools. One instance is bound to one
+physical source page and host-supplied owner identity. Exact original facts and
+contexts are paginated without silent truncation; bounded group staging can be
+repaired before save. Completion requires an actual original image operation,
+all input facts exactly once, exact input SHA and a matching owner. It explicitly
+defers the independent final audit. Outputs never overwrite prior owner work.
+
+The `catalog-merge` skill is included in the existing Agent Plugin's `skills/`
+directory and the Python wheel. It documents the same substrate for Codex,
+ZCode and FastAgent, without duplicating a fourth GLM participant.
+
+Full-page work uses the existing aggregate14GiB RAM/CPU2/tasks512/swap0 budget.
+One MiniMax provider context initially,2GiB worker plus1GiB evidence child,
+one CPU affinity each,1200s emergency page deadline and24h finite job.
+Task scratch is explicitly4GiB (formerly2GiB for the smaller case cohort).
+Fresh2026-10-14T22:23Z measurements:34,373,308,416bytes available RAM,
+1,772,994,354bytes task files,218,873,831,424bytes free filesystem.
+This leaves the20GiB host reserve; no cgroup limits or sibling workers are
+changed. The additional disk allowance covers full980-page packets and owner
+work, not a new benchmark. Admission stops before4GiB or on UNKNOWN/429.
