@@ -1,0 +1,282 @@
+{
+  "observed_at": "2026-10-14T19:33:50.361651+03:00",
+  "unit": "catalog-worker@full-semantic1524.service",
+  "version": "1.5.24",
+  "accepted_total": 477,
+  "independently_verified_revision_total": 422,
+  "completed_total": 899,
+  "catalogues": {
+    "opn": {
+      "accepted_pages": 60,
+      "independently_verified_revision_pages": 0,
+      "completed_pages": 60,
+      "draft_pages": 60,
+      "pages": 60,
+      "statuses": {
+        "accepted": 60
+      }
+    },
+    "isolators": {
+      "accepted_pages": 121,
+      "independently_verified_revision_pages": 20,
+      "completed_pages": 141,
+      "draft_pages": 162,
+      "pages": 162,
+      "statuses": {
+        "accepted": 121,
+        "superseded_by_independently_verified_revision": 20,
+        "awaiting_review": 18,
+        "reviewing": 2,
+        "awaiting_provider_admission": 1
+      }
+    },
+    "small": {
+      "accepted_pages": 196,
+      "independently_verified_revision_pages": 5,
+      "completed_pages": 201,
+      "draft_pages": 228,
+      "pages": 228,
+      "statuses": {
+        "accepted": 196,
+        "superseded_by_independently_verified_revision": 5,
+        "reviewing": 2,
+        "awaiting_review": 25
+      }
+    },
+    "armature": {
+      "accepted_pages": 26,
+      "independently_verified_revision_pages": 270,
+      "completed_pages": 296,
+      "draft_pages": 314,
+      "pages": 314,
+      "statuses": {
+        "accepted": 26,
+        "extracting": 2,
+        "awaiting_review": 16,
+        "superseded_by_independently_verified_revision": 270
+      }
+    },
+    "innovations": {
+      "accepted_pages": 74,
+      "independently_verified_revision_pages": 127,
+      "completed_pages": 201,
+      "draft_pages": 216,
+      "pages": 216,
+      "statuses": {
+        "accepted": 74,
+        "superseded_by_independently_verified_revision": 127,
+        "reviewing": 2,
+        "awaiting_review": 13
+      }
+    }
+  },
+  "manual_source_review": {
+    "total_distinct_pages": 486,
+    "cells_checked": 54170,
+    "by_catalogue": {
+      "armature": 296,
+      "innovations": 143,
+      "isolators": 30,
+      "small": 17
+    },
+    "independent_passed": 431,
+    "independent_revise": 21
+  },
+  "transition": {
+    "status": "started_awaiting_manual_and_native_consumer_proof",
+    "finished_unix": 1791994471.3889523,
+    "elapsed_seconds": 987.255,
+    "new_version": "1.5.24",
+    "unit": "catalog-worker@full-semantic1524.service",
+    "old_unit": "catalog-worker@full-semantic1523.service",
+    "accepted_before": 477,
+    "retained_native_artifact_hashes_unchanged": 3807,
+    "native_calls_interrupted": 0,
+    "manual_completions_already_observed": 402,
+    "owner": "root-supporting-metadata24-transfer-1791993484"
+  },
+  "actual_new_version_completed_calls": [
+    {
+      "catalog": "isolators",
+      "physical_page": 34,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "7030c5f27456556dd7b3204a04abda39142f44e1c31b89176ce610d4c9dea7b2",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": null,
+      "elapsed_seconds": 223.575,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 34,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "3e39a98aa5091a32819ee99b48cd15f145d9a41fefc5bb4f81871479b92b1ede",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 703.029,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 47,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "669619b5e78cb34771c19fb7900aa492a7c492e2ee3c470dffbbb2ea0fa50d95",
+      "status": "awaiting_review",
+      "verdict": null,
+      "elapsed_seconds": 100.514,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 47,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "9412e8f5e6954253bc73dc71b734336588514b1bd080b0882c1dad5331243da3",
+      "status": "awaiting_review",
+      "verdict": "uncertain",
+      "elapsed_seconds": 311.812,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "small",
+      "physical_page": 100,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "0ba0ed53b4ee82e38beb11acf08038a93d1edf457ef75a32e8cc5c60d51e39c3",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 433.217,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "small",
+      "physical_page": 101,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "4653b5e7a214eb34116137e449dd4710eee0ca512311421dedb2f2e3d8adafa0",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 496.943,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 8,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "1a63295fc12cbedeec6b390dfb9d9d72ee8b5f6bc6e38667ac8c3ab7121ea2a6",
+      "status": "extracting",
+      "verdict": "revise",
+      "elapsed_seconds": 86.488,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 9,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "0a474206e46d13d6b18adaf5a54c9f13550d0fadb8d1197b27f365f1d0a3e1e8",
+      "status": "awaiting_review",
+      "verdict": null,
+      "elapsed_seconds": 166.693,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 9,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "62503e5e9bcee707391d305cd7258a61d7b086611557ce88102bec9c409013c9",
+      "status": "awaiting_review",
+      "verdict": "revise",
+      "elapsed_seconds": 327.697,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 11,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "22f7aeabcf1d03eb05360e06227c0a544386104be0d53f9e997c56abb9084651",
+      "status": "extracting",
+      "verdict": "revise",
+      "elapsed_seconds": 137.476,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 25,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "74a273d33bdf0e1ab41152f84ae7dbff548066a26ea60f4b0880b71c12a66aa1",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 579.095,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 27,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "181e41513b40b8473da256000a80d0fe0e8fba31a82558833bf4ac2e7c39bbee",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "pass",
+      "elapsed_seconds": 397.005,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 110,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "artifact_sha256": "274c1f14cbfb8eb74791dbcef1f01e83686b3013e4d53f4ccad1cea6174e25b0",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": null,
+      "elapsed_seconds": 244.419,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 110,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "artifact_sha256": "143ebf21996db62e1920d7d12d34e8d144050a0078397e557892e5ec1acde157",
+      "status": "superseded_by_independently_verified_revision",
+      "verdict": "revise",
+      "elapsed_seconds": 115.769,
+      "rate_limit_events": 0,
+      "receipt_verified": true
+    }
+  ],
+  "confirmed_issues_and_work": [
+    "Root independently accepted mod3 extra6:636cells;mod1backlog8:1006cells;small40:77cells;small100/101:69cells.",
+    "Root authored last9+26:1493cells,eightoflast9independentPASS;49/isolators91source-sign unresolved. EarlierfalsePASS110/118reopened,root110r3/118r2sharedL1/L2plane fixed,324tablecells unchanged;independentexactdeltaPASSreceived. Rootcrosscheckedisolators34/61/64/91/92/96:851cells,5PASS/91REVISE;97/98/99/100/106/107:664cells6PASS.",
+    "Found and corrected operator skip error: workers read stale result.json accepted markers. Verified CURRENT catalog.json96/106/159isolators103/211small awaiting_review and restored all remaining page work; no native files manually altered.",
+    "Source24 reviewer support annotations/date fix delivered: 54 focused checks plus root5;first actual CodingEndpoint review24 completed86.488s,no429,verdictrevise retained.",
+    "Old23→24 controlled transfer987.255s,0interruptedcalls,3807retainednativeSHAsunchanged;477compatibleacceptedverified. Failed earlier preflight retained,old23 stayedlive until safe retry."
+  ],
+  "next_step": "All980 delivery remains open. Root crossreviews new mod3 small and mod1isolators;mod0 independently reviews root9/mod1remaining;mod1 authors remainingisolators;mod3 authors remainingsmall. Root9eightPASS;49andisolators91source-sign remain unresolved. Root110r3/118r2exactindependentPASS followsreopenedfalsePASS. Continue MiniMax/GLM24,no newlargebenchmark.",
+  "known_limits": [
+    "Completed count is disjoint acceptednative plus independently accepted authored revisions,not an accuracypercentage.",
+    "Currentcatalog.json is authoritative; stale page result.json markers must never cause a skip.",
+    "Published873snapshot predates newest review receipts;all980included withactualperpageproducer/source/page.",
+    "Source49 upper1.3sign is unresolved,not guessed;other source-microtext pending remains unaccepted."
+  ]
+}

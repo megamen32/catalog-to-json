@@ -1,58 +1,93 @@
 {
-  "observed_at": "2026-10-14T17:46:23.885342+03:00",
+  "observed_at": "2026-10-14T18:29:34.963579+03:00",
   "unit": "catalog-worker@full-semantic1523.service",
   "version": "1.5.23",
-  "accepted_total": 470,
-  "independently_verified_revision_total": 242,
-  "completed_total": 712,
+  "accepted_total": 476,
+  "independently_verified_revision_total": 318,
+  "completed_total": 794,
   "catalogues": {
     "opn": {
       "accepted_pages": 60,
       "independently_verified_revision_pages": 0,
       "completed_pages": 60,
       "draft_pages": 60,
-      "pages": 60
+      "pages": 60,
+      "statuses": {
+        "accepted": 60
+      }
     },
     "isolators": {
       "accepted_pages": 120,
-      "independently_verified_revision_pages": 0,
-      "completed_pages": 120,
+      "independently_verified_revision_pages": 4,
+      "completed_pages": 124,
       "draft_pages": 162,
-      "pages": 162
+      "pages": 162,
+      "statuses": {
+        "accepted": 120,
+        "awaiting_review": 31,
+        "reviewing": 2,
+        "superseded_by_independently_verified_revision": 4,
+        "awaiting_provider_admission": 5
+      }
     },
     "small": {
       "accepted_pages": 195,
-      "independently_verified_revision_pages": 0,
-      "completed_pages": 195,
+      "independently_verified_revision_pages": 1,
+      "completed_pages": 196,
       "draft_pages": 228,
-      "pages": 228
+      "pages": 228,
+      "statuses": {
+        "accepted": 195,
+        "awaiting_review": 31,
+        "extracting": 1,
+        "superseded_by_independently_verified_revision": 1
+      }
     },
     "armature": {
-      "accepted_pages": 25,
-      "independently_verified_revision_pages": 232,
-      "completed_pages": 257,
+      "accepted_pages": 28,
+      "independently_verified_revision_pages": 247,
+      "completed_pages": 275,
       "draft_pages": 314,
-      "pages": 314
+      "pages": 314,
+      "statuses": {
+        "accepted": 28,
+        "awaiting_review": 39,
+        "superseded_by_independently_verified_revision": 247
+      }
     },
     "innovations": {
-      "accepted_pages": 70,
-      "independently_verified_revision_pages": 10,
-      "completed_pages": 80,
+      "accepted_pages": 73,
+      "independently_verified_revision_pages": 66,
+      "completed_pages": 139,
       "draft_pages": 216,
-      "pages": 216
+      "pages": 216,
+      "statuses": {
+        "accepted": 73,
+        "awaiting_review": 76,
+        "reviewing": 1,
+        "superseded_by_independently_verified_revision": 66
+      }
     }
   },
   "manual_source_review": {
-    "total_distinct_pages": 377,
-    "cells_checked": 43773,
+    "total_distinct_pages": 411,
+    "cells_checked": 46661,
     "by_catalogue": {
-      "armature": 293,
-      "innovations": 78,
-      "isolators": 6
+      "armature": 295,
+      "innovations": 108,
+      "isolators": 7,
+      "small": 1
     },
-    "independent_passed": 247,
-    "independent_revise": 9,
-    "root_next_physical_page": 18
+    "independent_passed": 335,
+    "independent_revise": 16,
+    "root_next_pages": [
+      122,
+      118,
+      114,
+      110,
+      106,
+      50
+    ]
   },
   "transition": {
     "status": "started_awaiting_manual_and_native_consumer_proof",
@@ -68,16 +103,33 @@
     "owner": "root-manual-completion23-transfer-1791988409"
   },
   "manual_work_this_cycle": [
-    "Revised own armature42/38/34/30/26/22/66 as separate authored versions;545 table cells unchanged.",
-    "Independently reviewed95/91/87/83/79/75:418 cells; PASS95/91/83/79, revise87 dimension95 and75 contradictory figure captions."
+    "Root independently reviewed mod1 innovations97/93/89/85/77/73:708cells,85pointedray correction acceptedr2; all6PASS.",
+    "Root authored innovations214…154 and146/142/138/134/130/126: source-owned dimensions, glyphs and complete summary consistency revised and independently accepted.",
+    "All actual author references are integrated; exact latest report validated before applying. Historical malformed reports remain retained but cannot override a valid newer proof."
   ],
-  "next_step": "Root own18/14/10/6/2, then innovations modulo2; three workers continue actual pages and independent acceptance. Integrate latest exact-SHA corrections. Cosmetic prose spacing alone no longer blocks semantic acceptance.",
+  "next_step": "Root own122/118/114/110/106/50 then46descending; mod1extra98…54;mod3isolators/small0or2;mod0innovations0afterrelease24. Integrate independent corrections and continue all980; no new large benchmark.",
   "known_limits": [
-    "All980 are not yet accepted/delivered as final.",
-    "Native accepted and manual-author revisions are separate outcomes; completed is the disjoint actual queue sum.",
-    "Public654 snapshot predates latest fixes and must be refreshed."
+    "All980 are not yet fully accepted.",
+    "Completed means disjoint native accepted plus independently accepted authored revisions, not an accuracy score.",
+    "Latest public738 snapshot predates newest corrections; update unified ZIP after next meaningful batch."
   ],
   "actual_completed_calls_23": [
+    {
+      "catalog": "isolators",
+      "pdf_page": 47,
+      "role": "extractor",
+      "artifact_sha256": "749709c5a819d47b058fb7825829feb8d3d967a05485f0879638f55efc4b5023",
+      "status": "awaiting_review",
+      "finished_at": 1791991545.3142986
+    },
+    {
+      "catalog": "isolators",
+      "pdf_page": 47,
+      "role": "reviewer",
+      "artifact_sha256": "ea51d8907e9a6294de27956453554059ef95ef76779bcf28dd98d9ea7f795d35",
+      "status": "awaiting_review",
+      "finished_at": 1791990111.3849685
+    },
     {
       "catalog": "small",
       "pdf_page": 40,
@@ -95,11 +147,67 @@
       "finished_at": 1791988909.4747572
     },
     {
+      "catalog": "small",
+      "pdf_page": 78,
+      "role": "reviewer",
+      "artifact_sha256": "4d4caa4e83edb43438537a370a958604db4c663fdcabce01fef0a176a03f5361",
+      "status": "extracting",
+      "finished_at": 1791991001.4726899
+    },
+    {
+      "catalog": "armature",
+      "pdf_page": 8,
+      "role": "extractor",
+      "artifact_sha256": "9409e38b05e1e80878f9362b8efc27e3caa9251d7edd9fef79f1ec8840d5a720",
+      "status": "awaiting_review",
+      "finished_at": 1791989583.8122535
+    },
+    {
+      "catalog": "armature",
+      "pdf_page": 8,
+      "role": "reviewer",
+      "artifact_sha256": "e79b854ac6e463a514657543dccca51613156ce1f3541fe09ee3bb07b2d99a01",
+      "status": "awaiting_review",
+      "finished_at": 1791989426.004806
+    },
+    {
+      "catalog": "armature",
+      "pdf_page": 9,
+      "role": "reviewer",
+      "artifact_sha256": "c3db08d16b34a0775b61e168da49ed344e201233dfd27d71e22e0dfbd8fe94e2",
+      "status": "accepted",
+      "finished_at": 1791991253.9616036
+    },
+    {
+      "catalog": "armature",
+      "pdf_page": 11,
+      "role": "extractor",
+      "artifact_sha256": "479ce0deafe17d3aae4e71b3cbad311f15e2003bcffe086844981be538f070e7",
+      "status": "awaiting_review",
+      "finished_at": 1791991587.7661169
+    },
+    {
+      "catalog": "armature",
+      "pdf_page": 11,
+      "role": "reviewer",
+      "artifact_sha256": "61dbc8ce27799987d6fc8c99bde3a70e8b375745649ef21b4173169e6c7b9df3",
+      "status": "awaiting_review",
+      "finished_at": 1791991433.8439784
+    },
+    {
+      "catalog": "armature",
+      "pdf_page": 21,
+      "role": "reviewer",
+      "artifact_sha256": "8afcf1af212b33667b3336ee3111fc993cc55cab5787f953af0847582ae5c100",
+      "status": "accepted",
+      "finished_at": 1791991134.7102568
+    },
+    {
       "catalog": "armature",
       "pdf_page": 34,
       "role": "extractor",
       "artifact_sha256": "d62979463bb51624f04a888e1bbf355a91c9ccf70ec2a5c28237a8538e475704",
-      "status": "awaiting_review",
+      "status": "superseded_by_independently_verified_revision",
       "finished_at": 1791988921.2437682
     },
     {
@@ -107,8 +215,96 @@
       "pdf_page": 34,
       "role": "reviewer",
       "artifact_sha256": "8c9149f544a61b9510c002bce4d50807742958f04e88a1c36854f4a32f119d5c",
-      "status": "awaiting_review",
+      "status": "superseded_by_independently_verified_revision",
       "finished_at": 1791988824.086551
+    },
+    {
+      "catalog": "armature",
+      "pdf_page": 42,
+      "role": "extractor",
+      "artifact_sha256": "df6893ced67a1191321009dde1ec01ab867b79a41c933524ebd4047931f523ef",
+      "status": "superseded_by_independently_verified_revision",
+      "finished_at": 1791989310.75977
+    },
+    {
+      "catalog": "armature",
+      "pdf_page": 42,
+      "role": "reviewer",
+      "artifact_sha256": "64b9b8e9fd88bc81e46cef0954db5092922e079bdd20ff9c441b27d0e86ecdb6",
+      "status": "superseded_by_independently_verified_revision",
+      "finished_at": 1791989185.2452443
+    },
+    {
+      "catalog": "armature",
+      "pdf_page": 66,
+      "role": "extractor",
+      "artifact_sha256": "26d6f0162d306641cd2bcaa4bc4e896cf4d5df70b744b7593187c1c9d400cee3",
+      "status": "superseded_by_independently_verified_revision",
+      "finished_at": 1791989371.8802328
+    },
+    {
+      "catalog": "armature",
+      "pdf_page": 66,
+      "role": "reviewer",
+      "artifact_sha256": "92f6a8bd628b778d1a83f5edd8e248ad50727c871bf13f1329a21ddcd0301455",
+      "status": "superseded_by_independently_verified_revision",
+      "finished_at": 1791989259.6455257
+    },
+    {
+      "catalog": "armature",
+      "pdf_page": 93,
+      "role": "reviewer",
+      "artifact_sha256": "0d253ba64adc11f23ebac70dc65c318dcabd494710ca6c3db78bf386b490c78b",
+      "status": "accepted",
+      "finished_at": 1791989663.9740446
+    },
+    {
+      "catalog": "innovations",
+      "pdf_page": 10,
+      "role": "extractor",
+      "artifact_sha256": "b943ae80c25bb0269979516be30c2d322028ed94ecdb94478b79b7cc67abb23d",
+      "status": "awaiting_review",
+      "finished_at": 1791989759.2931013
+    },
+    {
+      "catalog": "innovations",
+      "pdf_page": 10,
+      "role": "reviewer",
+      "artifact_sha256": "70058dc4298b5444c14fa9d9bc6db11fca8d85a75938357f2539fb02350219f8",
+      "status": "awaiting_review",
+      "finished_at": 1791989622.0914052
+    },
+    {
+      "catalog": "innovations",
+      "pdf_page": 12,
+      "role": "reviewer",
+      "artifact_sha256": "e063774cdc12c72b740ad092e774f52a9d30c19b21226e8cd74d34bb6e34fd89",
+      "status": "accepted",
+      "finished_at": 1791990488.1566339
+    },
+    {
+      "catalog": "innovations",
+      "pdf_page": 84,
+      "role": "extractor",
+      "artifact_sha256": "cc77239ac6205cf2882f29ecae38601ace258bb26a141d96211e3fc9283f489e",
+      "status": "awaiting_review",
+      "finished_at": 1791990969.4242246
+    },
+    {
+      "catalog": "innovations",
+      "pdf_page": 84,
+      "role": "reviewer",
+      "artifact_sha256": "9a727fe970b36bcc77d3147c62e1063ad43ebfcfae612e3831445fd1ab7edccc",
+      "status": "awaiting_review",
+      "finished_at": 1791990739.3495588
+    },
+    {
+      "catalog": "innovations",
+      "pdf_page": 108,
+      "role": "reviewer",
+      "artifact_sha256": "b99a98215ca594c75de8017f55831600f2e23b1860dd2dabbab69c9d8cfe086e",
+      "status": "accepted",
+      "finished_at": 1791990199.9483268
     },
     {
       "catalog": "innovations",
@@ -117,6 +313,30 @@
       "artifact_sha256": "22bb796d3e67923993455d4b2d9cb1d441aec13a77984596c46ff15393570dea",
       "status": "accepted",
       "finished_at": 1791988921.0516374
+    },
+    {
+      "catalog": "innovations",
+      "pdf_page": 182,
+      "role": "extractor",
+      "artifact_sha256": "8b3714176fb3d0427e95a7595ada4d8a2995096a099bfa27d4912661ff77294a",
+      "status": "awaiting_review",
+      "finished_at": 1791989829.7150738
+    },
+    {
+      "catalog": "innovations",
+      "pdf_page": 182,
+      "role": "reviewer",
+      "artifact_sha256": "3480c2a0f67d5f54cde2b070c2a15b285460ce5f963f9158464c90c46b86c2e5",
+      "status": "awaiting_review",
+      "finished_at": 1791989508.384852
+    },
+    {
+      "catalog": "innovations",
+      "pdf_page": 186,
+      "role": "reviewer",
+      "artifact_sha256": "135c90c37e0634d80ab1475b62c70a66fe8fcfeb42ca060fdceac95c9b03a678",
+      "status": "accepted",
+      "finished_at": 1791989211.1262171
     }
   ]
 }
