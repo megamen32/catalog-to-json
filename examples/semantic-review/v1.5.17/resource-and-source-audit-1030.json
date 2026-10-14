@@ -1,0 +1,602 @@
+{
+  "observed_unix": 1791964417.0894158,
+  "observed_local": "2026-10-14T10:53:37.089420+03:00",
+  "comparison_baseline_unix": 1791961212.8037908,
+  "counts": {
+    "opn": {
+      "accepted": 60,
+      "pages": 60,
+      "accepted_delta": 0,
+      "compatible_drafts": 60,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 60,
+      "native_completed": {
+        "extractor": 146,
+        "reviewer": 164
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      },
+      "native_failed_since_previous": {
+        "timeout": 0,
+        "rate_limit": 0,
+        "other": 0
+      }
+    },
+    "isolators": {
+      "accepted": 161,
+      "pages": 162,
+      "accepted_delta": 0,
+      "compatible_drafts": 162,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 162,
+      "native_completed": {
+        "extractor": 390,
+        "reviewer": 345
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      },
+      "native_failed_since_previous": {
+        "timeout": 1,
+        "rate_limit": 0,
+        "other": 0
+      }
+    },
+    "small": {
+      "accepted": 228,
+      "pages": 228,
+      "accepted_delta": 0,
+      "compatible_drafts": 228,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 228,
+      "native_completed": {
+        "extractor": 539,
+        "reviewer": 518
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      },
+      "native_failed_since_previous": {
+        "timeout": 0,
+        "rate_limit": 0,
+        "other": 0
+      }
+    },
+    "innovations": {
+      "accepted": 67,
+      "pages": 216,
+      "accepted_delta": 0,
+      "compatible_drafts": 216,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 216,
+      "native_completed": {
+        "extractor": 467,
+        "reviewer": 169
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 1
+      },
+      "native_failed_since_previous": {
+        "timeout": 0,
+        "rate_limit": 0,
+        "other": 0
+      }
+    },
+    "armature": {
+      "accepted": 10,
+      "pages": 314,
+      "accepted_delta": 0,
+      "compatible_drafts": 285,
+      "compatible_drafts_delta": 24,
+      "original_draft_pages_preserved": 314,
+      "native_completed": {
+        "extractor": 616,
+        "reviewer": 25
+      },
+      "native_completed_delta": {
+        "extractor": 26,
+        "reviewer": 0
+      },
+      "native_failed_since_previous": {
+        "timeout": 3,
+        "rate_limit": 0,
+        "other": 1
+      }
+    }
+  },
+  "accepted": 526,
+  "accepted_delta": 0,
+  "active_job": "catalog-worker@full-semantic1517.service",
+  "primary_extractor_version": "1.5.17",
+  "primary_reviewer_version": "1.5.17",
+  "program": {
+    "package_version": "1.5.17",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "250a5f879c4c07bb339e5791b2e6b59062426df6bcef56df7b50cb0af47cfc87",
+    "python_version": "3.12.13"
+  },
+  "extractor_model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+  "reviewer_model": "zai.glm-5.3-flash?reasoning=low",
+  "reviewer_endpoint": "https://api.z.ai/api/coding/paas/v4/",
+  "original_regions_viewed": [
+    "armature178 full original and enlarged S spans:12 across first3rows,14 for330/30 and330/43; fastener repair retained",
+    "armature274 full original,6drawing labels and five table cells; independent review still required",
+    "isolators47 whole original: factory facts and8attestations+2title sheets, no dimension drawings"
+  ],
+  "confirmed_issues": [
+    "47 misclassified supporting factory material as mixed:70 false dimension targets, native29 timeout/unaccepted",
+    "178 repair4 fixed fasteners but wrongly changed3S cells from valid merged values;exact-candidate veto installed",
+    "Exact native178 direct-grid crop returned19x16 for real18x14 with unknowns/ghost outer columns; not reliable authority",
+    "Unit4GiB soft limit repeatedly throttled4.1GiB working set despite6GiB hard limit and33GiB host available;soft raised to existing hard without restart"
+  ],
+  "new_regression_ids": [
+    "arm178-fasteners-fixed-merged-s-cells-corrupted",
+    "isolators47-factory-mixed-context-seventy-false-dimensions"
+  ],
+  "regression_pending_cases": 42,
+  "benchmark_commit": "1b5edc6",
+  "installed_veto_replay": {
+    "program": "1.5.17",
+    "checks": [
+      {
+        "catalog": "armature",
+        "physical_page": 178,
+        "candidate_sha256": "9c7934602f5c68b00c55107ac26fcb029c75290c6dfc94601f95c56b0df31db3",
+        "exact_veto_active": true,
+        "different_candidate_not_rejected": true
+      },
+      {
+        "catalog": "isolators",
+        "physical_page": 47,
+        "candidate_sha256": "49921aff03f7871f5f1a65bcb337b9e9bed9ffd70cb72e9e0cc7751ae779ec06",
+        "exact_veto_active": true,
+        "different_candidate_not_rejected": true
+      }
+    ],
+    "model_calls": 0,
+    "source_values_edited": false
+  },
+  "source_values_edited": false,
+  "new_calls": [
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "attempt": 4,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791961215.429088,
+      "seconds": 563.393
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 264,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791961229.4047112,
+      "seconds": 154.836
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 243,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791961257.7934983,
+      "seconds": 615.322
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "attempt": 2,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791961291.4320767,
+      "seconds": 398.399
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 265,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791961325.4965913,
+      "seconds": 144.573
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 269,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791961720.2743976,
+      "seconds": 404.833
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 266,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791961752.2537086,
+      "seconds": 517.397
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 261,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791961767.364687,
+      "seconds": 943.289
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 270,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791962397.1372778,
+      "seconds": 1050.907
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 271,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791962501.2760384,
+      "seconds": 761.84
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 272,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791962504.7616916,
+      "seconds": 751.31
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 273,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791962552.8060591,
+      "seconds": 771.577
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 274,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791962581.4347591,
+      "seconds": 197.473
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 276,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791962821.036638,
+      "seconds": 325.595
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 277,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791962930.657286,
+      "seconds": 406.163
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 278,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791962984.5473447,
+      "seconds": 452.583
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 279,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791963038.8910296,
+      "seconds": 499.295
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 280,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791963774.3913128,
+      "seconds": 1193.111
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 282,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791963802.6498125,
+      "seconds": 861.656
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 283,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791963872.0866826,
+      "seconds": 878.787
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 284,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791964066.0612328,
+      "seconds": 1019.16
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 10,
+      "role": "reviewer",
+      "attempt": 4,
+      "program": "1.5.17",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "finished_at": 1791964091.179638,
+      "seconds": 433.627
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 288,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791964164.9703398,
+      "seconds": 355.762
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 286,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791964173.5387714,
+      "seconds": 508.998
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 289,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791964224.3160005,
+      "seconds": 349.35
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 285,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791964266.5702145,
+      "seconds": 629.404
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 294,
+      "role": "extractor",
+      "attempt": 1,
+      "program": "1.5.17",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "finished_at": 1791964329.5380054,
+      "seconds": 80.332
+    }
+  ],
+  "provider_pacing": {
+    "anthropic": {
+      "configured_maximum": 8,
+      "current_limit": 8,
+      "active_calls": 8,
+      "waiting_calls": 0,
+      "rate_limit_count": 1530,
+      "rate_limit_waves": 81,
+      "backoff_streak": 0,
+      "clean_successes": 4,
+      "operator_not_before_unix": 1791954000.0,
+      "operator_hold_remaining_seconds": 0,
+      "backoff_remaining_seconds": 0
+    },
+    "zai": {
+      "configured_maximum": 8,
+      "current_limit": 1,
+      "active_calls": 1,
+      "waiting_calls": 7,
+      "rate_limit_count": 983,
+      "rate_limit_waves": 83,
+      "backoff_streak": 0,
+      "clean_successes": 4,
+      "operator_not_before_unix": 0,
+      "operator_hold_remaining_seconds": 0,
+      "backoff_remaining_seconds": 0
+    }
+  },
+  "batch_mtime": 1791964352.6406748,
+  "runtime_pins_verified": 355,
+  "memory_change": {
+    "before": {
+      "observed_unix": 1791963999.4725058,
+      "unit": "catalog-worker@full-semantic1517.service",
+      "memory": {
+        "memory.current": "4467789824",
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.events": "low 0\nhigh 2415724\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "memory.pressure": "some avg10=52.24 avg60=39.70 avg300=37.24 total=1187546700\nfull avg10=52.15 avg60=39.60 avg300=37.15 total=1184684747"
+      },
+      "host_available_bytes": 36109455360,
+      "disk_free_bytes": 251932438528,
+      "main_pid": "3910786"
+    },
+    "applied": {
+      "applied_unix": 1791964049.275513,
+      "source_commit": "1533b2e",
+      "unit": "catalog-worker@full-semantic1517.service",
+      "main_pid_before": "3910786",
+      "main_pid_after": "3910786",
+      "restart_performed": false,
+      "soft_bytes": 6442450944,
+      "hard_bytes_unchanged": 6442450944,
+      "swap_bytes": 0,
+      "host_uid_ancestors_unchanged": true,
+      "before_memory": {
+        "memory.current": "4510662656",
+        "memory.events": "low 0\nhigh 2467310\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "memory.pressure": "some avg10=63.98 avg60=52.98 avg300=41.25 total=1218985932\nfull avg10=63.97 avg60=52.92 avg300=41.17 total=1216085192"
+      }
+    },
+    "after": {
+      "observed_unix": 1791964415.9771776,
+      "elapsed_seconds": 366.702,
+      "memory_current_bytes": 5235531776,
+      "memory_high_bytes": 6442450944,
+      "memory_max_bytes": 6442450944,
+      "memory_pressure": "some avg10=0.00 avg60=0.11 avg300=11.82 total=1219008198\nfull avg10=0.00 avg60=0.11 avg300=11.80 total=1216107457",
+      "event_delta": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0
+      },
+      "main_pid": "3910786",
+      "native_completed_since_change": [
+        {
+          "catalog": "armature",
+          "physical_page": 286,
+          "role": "extractor",
+          "attempt": 1,
+          "program": "1.5.17",
+          "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+          "finished_at": 1791964173.5387714,
+          "seconds": 508.998
+        },
+        {
+          "catalog": "armature",
+          "physical_page": 289,
+          "role": "extractor",
+          "attempt": 1,
+          "program": "1.5.17",
+          "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+          "finished_at": 1791964224.3160005,
+          "seconds": 349.35
+        },
+        {
+          "catalog": "armature",
+          "physical_page": 285,
+          "role": "extractor",
+          "attempt": 1,
+          "program": "1.5.17",
+          "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+          "finished_at": 1791964266.5702145,
+          "seconds": 629.404
+        },
+        {
+          "catalog": "armature",
+          "physical_page": 284,
+          "role": "extractor",
+          "attempt": 1,
+          "program": "1.5.17",
+          "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+          "finished_at": 1791964066.0612328,
+          "seconds": 1019.16
+        },
+        {
+          "catalog": "armature",
+          "physical_page": 288,
+          "role": "extractor",
+          "attempt": 1,
+          "program": "1.5.17",
+          "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+          "finished_at": 1791964164.9703398,
+          "seconds": 355.762
+        },
+        {
+          "catalog": "armature",
+          "physical_page": 294,
+          "role": "extractor",
+          "attempt": 1,
+          "program": "1.5.17",
+          "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+          "finished_at": 1791964329.5380054,
+          "seconds": 80.332
+        },
+        {
+          "catalog": "innovations",
+          "physical_page": 10,
+          "role": "reviewer",
+          "attempt": 4,
+          "program": "1.5.17",
+          "model": "zai.glm-5.3-flash?reasoning=low",
+          "finished_at": 1791964091.179638,
+          "seconds": 433.627
+        }
+      ],
+      "host_available_bytes": 36193558528
+    },
+    "source_commit": "1533b2e",
+    "restart_performed": false,
+    "claim": "Local memory-high throttling eliminated in measured post-change interval; no overall accuracy or long-window speedup percentage claimed."
+  },
+  "next_step": "Keep all five catalogues on17, observe7→8MiniMax adaptive capacity and GLM independent reviews. Confirm pre-admission skips exact rejected47/29 and178/4 then native repairs; no restart/large benchmark. Check real196retry timeout and native10revise without assuming source labels are wrong. All980/final3exports remain outstanding.",
+  "large_model_benchmark_run": false,
+  "scheduler": {
+    "timer": "catalog-review-watch.timer",
+    "left_active": true,
+    "cadence_minutes": 30
+  },
+  "accuracy_note": "Accepted pages is a production counter, not accuracy. New native extraction or completed revise does not imply independent PASS."
+}
