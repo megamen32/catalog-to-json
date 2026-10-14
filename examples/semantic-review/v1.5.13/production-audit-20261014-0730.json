@@ -1,0 +1,176 @@
+{
+  "observed_local": "2026-10-14T07:54:53.365212+03:00",
+  "counts": {
+    "opn": {
+      "accepted": 60,
+      "pages": 60,
+      "accepted_delta": 0,
+      "compatible_drafts": 60,
+      "original_draft_pages_preserved": 60,
+      "native_completed": {
+        "extractor": 146,
+        "reviewer": 164
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "isolators": {
+      "accepted": 161,
+      "pages": 162,
+      "accepted_delta": 0,
+      "compatible_drafts": 162,
+      "original_draft_pages_preserved": 162,
+      "native_completed": {
+        "extractor": 388,
+        "reviewer": 343
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "small": {
+      "accepted": 228,
+      "pages": 228,
+      "accepted_delta": 0,
+      "compatible_drafts": 228,
+      "original_draft_pages_preserved": 228,
+      "native_completed": {
+        "extractor": 539,
+        "reviewer": 518
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "innovations": {
+      "accepted": 61,
+      "pages": 216,
+      "accepted_delta": 1,
+      "compatible_drafts": 216,
+      "original_draft_pages_preserved": 216,
+      "native_completed": {
+        "extractor": 462,
+        "reviewer": 156
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 5
+      }
+    },
+    "armature": {
+      "accepted": 7,
+      "pages": 314,
+      "accepted_delta": 0,
+      "compatible_drafts": 189,
+      "original_draft_pages_preserved": 314,
+      "native_completed": {
+        "extractor": 513,
+        "reviewer": 20
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 1
+      }
+    }
+  },
+  "accepted": 517,
+  "accepted_delta": 1,
+  "fixes_published": [
+    "cfb9d14/v1.5.12 unchanged post-comparison branding receipt cache and targeted errors",
+    "0fb81dd/v1.5.13 exact header-clause partition equivalence"
+  ],
+  "focused_checks": [
+    {
+      "change": "1512",
+      "passed": 47,
+      "seconds": 22.0
+    },
+    {
+      "change": "1513 final",
+      "passed": 82,
+      "seconds": 7.73,
+      "overlap_with_other_checks": true
+    }
+  ],
+  "installed_native_mcp_proof": {
+    "version": "1.5.13",
+    "native_stdio_MCP": true,
+    "unchanged_post_comparison_quote_reused": true,
+    "blind_quote_cannot_waive_first_post_comparison_inspection": true,
+    "changed_quote_needs_fresh_exact_region": true,
+    "blind_original_preserved": true,
+    "model_calls": 0,
+    "elapsed_seconds": 2.228
+  },
+  "saved_header_comparison_replay": {
+    "source": "Katalog-ARMATURA.pdf",
+    "physical_page": 179,
+    "old_version": "1.5.12",
+    "new_source_version": "1.5.13",
+    "old_differences": 46,
+    "new_differences": 43,
+    "removed_false_metadata_differences": [
+      {
+        "path": "tables[0].columns[9].conditions",
+        "source_observation": {
+          "group": null,
+          "label": "Масса шлейфа, при L=7м, не более",
+          "qualifier": null
+        },
+        "candidate": {
+          "group": null,
+          "label": "Масса шлейфа",
+          "qualifier": "не более, при L=7м"
+        }
+      },
+      {
+        "path": "tables[0].columns[9].qualifier",
+        "source_observation": null,
+        "candidate": "не более, при L=7м"
+      },
+      {
+        "path": "tables[0].columns[9].label",
+        "source_observation": "Масса шлейфа, при L=7м, не более",
+        "candidate": "Масса шлейфа"
+      }
+    ],
+    "other_differences_unchanged": true,
+    "input_sha256": {
+      "source-observation-1.json": "f2efb2fab4fdc1f7ec54bb9210560cb0034a36e75d048be7c2b08dadbe02d951",
+      "candidate-1.json": "584c48cd5d7937d595ca8f21879629ca582e5df38abba89c128e0055544031e2"
+    },
+    "model_calls": 0,
+    "remaining_cell_field_differences": 41,
+    "counts_note": "Field comparisons, not unique cells or a new accuracy score; other defects still require independent review."
+  },
+  "new_regression_cases": [
+    "isolators47-unchanged-branding-evidence-expires",
+    "innov100-false-r300-diameter-arithmetic",
+    "arm179-exact-header-clause-partition",
+    "isolators47-factory-supporting-context"
+  ],
+  "confirmed_findings": [
+    "Unchanged logos invalidated by unrelated observation correction; same first-post-disclosure and changed-quote guards remain",
+    "Native100 review asks to clear R300 uncertainty on false300=640/2 arithmetic. Existing PASS guard blocked acceptance; source lead requires real feature evidence",
+    "Native179 has three false header partition issues plus actual merged-cell omissions; replay removes only the3metadata issues",
+    "Native47 blind observer independently saysmixed; candidate27 product scope misstates factory/supporting purpose. Exact candidate27 rejected pending native repair; all facts retained"
+  ],
+  "production_values_manually_edited": false,
+  "large_model_benchmark_run": false,
+  "official_minimax_quota_reset_local": "2026-10-14T08:00:00+03:00",
+  "separate_controlled_transfer_holds": true,
+  "accuracy_note": "No new global or drawing accuracy percentage; saved-candidate replays do not count as independent native PASS.",
+  "new_program": {
+    "package_version": "1.5.13",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "388e4b7dea7fc75a16d8aeee3f64f722f70d0518bda21b5ea9121fd690d0cc26",
+    "python_version": "3.12.13"
+  },
+  "native_model_throughput_gain": "Not established. Native201 reviewed on1511 in97.257s and independently checked16rows/80cells; no1513 native PASS claim yet.",
+  "handoff_status": "waiting_for_admitted_GLM_only"
+}

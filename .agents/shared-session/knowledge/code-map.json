@@ -379,6 +379,52 @@
         "Provider error is not a model extraction repair. Return to outer pacing; never infer successful artifact from SDK error text.",
         "Official interval hold prevents further admissions; already admitted quota-denied attempts require own supervisor cleanup after checking no source calls."
       ]
+    },
+    "verified-unchanged-branding-correction": {
+      "key": "verified-unchanged-branding-correction",
+      "kind": "failure-shield",
+      "confidence": "verified",
+      "git_head": "0fb81dd",
+      "locations": [
+        {
+          "path": "src/catalog_json/observation_quotes.py",
+          "symbol": "branding_quote_evidence",
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "c1b1c010d2789a832d22b08ea6eae114a42ec4fa14457f8bf4cc484999b29fff"
+        }
+      ],
+      "evidence": [
+        "Native1511 isolators47 advances disclosure cutoff after successful correction, invalidating all unchanged graphic quotes.19corrections/25zooms then timeout.",
+        "1512 caches only successful post-disclosure exact quote identities. Changed quote/index/box/basis/conflict/rotation still needs fresh original crop; initial blind quote cannot waive first post-disclosure check.",
+        "47 focused checks22.00s; installed native MCP1513 proves first freshness/refusal, unchanged reuse, changed-quote refusal and original blind preservation2.228s."
+      ],
+      "hazards": [
+        "Saved-error replay/native MCP delivery is not a native model accuracy score. Preserve all strict source/numeric/geometry/PASS guards."
+      ]
+    },
+    "exact-column-header-partition": {
+      "key": "exact-column-header-partition",
+      "kind": "failure-shield",
+      "confidence": "verified",
+      "git_head": "0fb81dd",
+      "locations": [
+        {
+          "path": "src/catalog_json/audit.py",
+          "symbol": "same_header_partition",
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "7cc8d527f79f7ab239cba90967528c135410dcf05ff8c756edb09e1cefa90d36"
+        }
+      ],
+      "evidence": [
+        "Native1511 armature179 false issues on same mass/L=7m/upper-bound clauses moved label→qualifier.",
+        "1513 requires identical primary label/parent/declared unit, preserves exact clause bytes/case, decimals and multiplicity; no word sorting or loose semantic claims.",
+        "Retained source/candidate replay removes exactly3false metadata differences46→43;41cell-field differences remain.82focused checks7.73s."
+      ],
+      "hazards": [
+        "Saved-error replay/native MCP delivery is not a native model accuracy score. Preserve all strict source/numeric/geometry/PASS guards."
+      ]
     }
   },
   "schema_version": 1
