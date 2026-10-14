@@ -1,0 +1,996 @@
+{
+  "observed_unix": 1791967069.8070407,
+  "unchanged_candidates_receipt_verified": 99,
+  "reopened_source_leads": 99,
+  "counts": {
+    "isolators": 44,
+    "small": 38,
+    "innovations": 14,
+    "armature": 3
+  },
+  "candidate_values_edited": false,
+  "fresh_extraction_requested": false,
+  "model_calls_in_reassessment": 0,
+  "source_lead_id": "symbolic-dimension-coverage-v1519",
+  "old_acceptances_preserved_as_history": true,
+  "queue_routes": "Existing source-audit refresh reopens accepted→awaiting_review with retained extraction; no exact candidate veto for an evidence gap.",
+  "candidates": [
+    {
+      "catalog": "isolators",
+      "physical_page": 30,
+      "attempt": 1,
+      "candidate_sha256": "2d3cf314e7ff078d5e5dbfe0364847d6a14b3bae7fc9206cc3658c3ec183b1be",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 119,
+      "attempt": 1,
+      "candidate_sha256": "08c256d3fb6ee815e63c27d8f3b6bd553c8af1380f93df9b5baecc0820842548",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 112,
+      "attempt": 2,
+      "candidate_sha256": "78368db4ac0a3fce51b45303d55b0eb4234af3933edadf562acee192f252a41a",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 99,
+      "attempt": 1,
+      "candidate_sha256": "852d098e2e9ce006407695afbe5be7f327fdf8de258c8d7231b8046e88457dd4",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 157,
+      "attempt": 1,
+      "candidate_sha256": "f1d55be645bf3e69f16a6123ae101a3766f047aaaddcf808175137b643c778aa",
+      "labels": [
+        "H",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 106,
+      "attempt": 3,
+      "candidate_sha256": "c3b1fc31899e9c715f0130a88db1f2c296d4934acb0ee92fd3d02e194bcea99f",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 49,
+      "attempt": 4,
+      "candidate_sha256": "7638c48d73bf694216cd676f8fa67a02643015ae3fde968b9687a50eacdc0468",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 32,
+      "attempt": 2,
+      "candidate_sha256": "d4e7841b59d00de7bef2412859ee13a0000b242a7a51cc885ac1bbb931614798",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 55,
+      "attempt": 2,
+      "candidate_sha256": "c6253f4eb734859a423f8c36313e7b3c8beaaa60546789f44037ef42a08607b2",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 97,
+      "attempt": 5,
+      "candidate_sha256": "29aa3c0b5c8e0a73508bba2c9dd23edfbf89d8847eb36cd67ca00aba3878bac3",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 111,
+      "attempt": 1,
+      "candidate_sha256": "13743d25e0d727890742aeef7d21e155ad9c149f766cd5100f58fb84d417bff9",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 35,
+      "attempt": 1,
+      "candidate_sha256": "abc904ccf87cdb775cfb84100c8b89e3bb64d68272a5378b3631409c78942d62",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 59,
+      "attempt": 1,
+      "candidate_sha256": "d741dd1b8498a31be48893b71305f288e40ed3e54876f8fb42169db31af4cf70",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 113,
+      "attempt": 3,
+      "candidate_sha256": "a6a47a42528fb4e6c293d83a898ae9d6df09b118e5c6019bc9575fe860a3fe71",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 64,
+      "attempt": 2,
+      "candidate_sha256": "4cd6ef75dda513edb7d9f2a109abcb1613cdb50e8662b86e5609ee8eb553b338",
+      "labels": [
+        "S"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 50,
+      "attempt": 2,
+      "candidate_sha256": "5c191c2deadc5588a1a4ecaa0c0cf95ae8bd68b3151f4bec7c1148f3b511391f",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 123,
+      "attempt": 3,
+      "candidate_sha256": "71093dcac92c8440aae432135771d45334ad3af61e014214f1f5a7b31cee9372",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 91,
+      "attempt": 2,
+      "candidate_sha256": "62735b486d9a9823442cd72a3ba856558f4996cce925a7d3eb0f12c44015fc81",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 61,
+      "attempt": 1,
+      "candidate_sha256": "ccd865eb27a54ae23fea97d7696a3789bfebaf819275ea8c9386bdd4c47d3635",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 124,
+      "attempt": 2,
+      "candidate_sha256": "960048bcae43a88785833a7f8ec1148ad10ba64fac31e982ed54521336cac3aa",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 52,
+      "attempt": 2,
+      "candidate_sha256": "739667251aae687f175e65ad0310d220ca6c107532fa93c0f249cefb28774eb3",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 131,
+      "attempt": 2,
+      "candidate_sha256": "86e37663228d250d9c0af8ba5f1942e202e91204ceb1b0c801a071c02aee4f09",
+      "labels": [
+        "H",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 60,
+      "attempt": 2,
+      "candidate_sha256": "bbf46e241522ab0fa47ea9b80aa7a44ae5633592c13c10c969c7278602bbf4e3",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 51,
+      "attempt": 5,
+      "candidate_sha256": "68dcc6ed8eda5d40c6b3ccc14f5b39677f700df863ce637c8e055e5ebe5d3fe2",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 96,
+      "attempt": 3,
+      "candidate_sha256": "4c8e1ea4e36e91aa0f1996df1b6e556daceb86c4e15151674c7ecf9a79b751d0",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 58,
+      "attempt": 1,
+      "candidate_sha256": "5c68d9fa3ce82f6d1ef360838c4aa94161508bdf8199854a717b3224e41f0274",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 156,
+      "attempt": 1,
+      "candidate_sha256": "512703b30bfe1ab01be54c7d141608dc3b4f7653f207b0cf3da499bf5698a0b0",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 36,
+      "attempt": 1,
+      "candidate_sha256": "a4a9a6673d9b8aa543110799641ed426322c1997930a9d40d067a2f8449e9fb1",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 101,
+      "attempt": 2,
+      "candidate_sha256": "1be47846d60eb421837548d008c2f09495aecb40d4beb91940dc3f68e6fd8893",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 98,
+      "attempt": 1,
+      "candidate_sha256": "75dcd9f22f36dcb81540bb112d55dd6b5756cecef6b1b136249f215bb4892994",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 34,
+      "attempt": 4,
+      "candidate_sha256": "60d5174627e2f1264d6ed63bda5a1120a898203eed71277e26eda0f29a12fbfc",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 114,
+      "attempt": 4,
+      "candidate_sha256": "6ddf72113a8ed49be054ecf912cac3befba882860783ee6b35b1150bb2c02238",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 159,
+      "attempt": 1,
+      "candidate_sha256": "31fd2b155b8f6b4807141b9db0c9ef79f2df1d5ee08198f8bcd17fa6321733e1",
+      "labels": [
+        "H",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 56,
+      "attempt": 1,
+      "candidate_sha256": "28a0f83715726729f6552f0721295ecf1d6f0a93999c10c61cab7c064067b3f4",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 100,
+      "attempt": 2,
+      "candidate_sha256": "698d95db871568e73ff23e58723b41ae09de74d4322dbb330ca32d785d2a715b",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 116,
+      "attempt": 3,
+      "candidate_sha256": "0ab9af792cc86413e182d1e053d2ad40128d52d95d5df6370e01c8c33394f618",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 120,
+      "attempt": 2,
+      "candidate_sha256": "6cd38290827b70cebaf166ef70ee658ef70553739616afb0dd338a76bdaabea0",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 92,
+      "attempt": 2,
+      "candidate_sha256": "fa7665244fcf6ded81e48a941e6a3c7c26f0b56bbaf939d6a8934b4ae843cf26",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 115,
+      "attempt": 1,
+      "candidate_sha256": "27e9f185edb3bab51ce3716a180ff34b151e92c7d3914f7639026e83a343d967",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 118,
+      "attempt": 3,
+      "candidate_sha256": "2a527509ae47c11252ad2175373e82772a66612c3034447eaaefdec420b0361f",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 158,
+      "attempt": 1,
+      "candidate_sha256": "fc0e1e9b1431a687f4c9320fc17e4d059c088652777263f299eadf74acbb6959",
+      "labels": [
+        "H",
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 108,
+      "attempt": 2,
+      "candidate_sha256": "1f6eb6897bf2ecb31f5b077393af8134a08e08990f131fa392faecb0a27aadb7",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 54,
+      "attempt": 4,
+      "candidate_sha256": "e54527410290f0899567ef58ad88afbce4e6722864935f1eec9a9fd250cfafc7",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 107,
+      "attempt": 1,
+      "candidate_sha256": "424a390bfa0c9003b7a694ef39702b1ad86e592db7169849b17f0822a1929724",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 39,
+      "attempt": 2,
+      "candidate_sha256": "2586a71655512159201dfad6a0dedb366cfbecb00cd1611527a034c8e4eb7fd9",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 160,
+      "attempt": 1,
+      "candidate_sha256": "a02533e1a8baeb692d8618315cfb2da5389f0e3ac556239d0add2f2208e27574",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 122,
+      "attempt": 1,
+      "candidate_sha256": "e6e14a90f6c751b8ad71d5ff0a597159311c27030cc531a5471844d87fc19699",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 142,
+      "attempt": 3,
+      "candidate_sha256": "95c61b182527cb0fd1daa9bd219b5d3d3131b2619f1f50e47a8af14024c0ab14",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 157,
+      "attempt": 1,
+      "candidate_sha256": "20fca398c9f505bb2efefed7abd9bc01e6a297ee4358deaff6deee6e017e6de1",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 162,
+      "attempt": 0,
+      "candidate_sha256": "ee45628461d6b723109af4698812c5b22068516c62f89f63d9c4956999d0388e",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 106,
+      "attempt": 0,
+      "candidate_sha256": "80438e617e747560d6a72d5442f0e0ef7051eadda914d2e4985806f861802517",
+      "labels": [
+        "H",
+        "L"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 90,
+      "attempt": 2,
+      "candidate_sha256": "9ae3e807919cafb91be45148186642301bc5fad414a2d4f715b5f8630dcc0f67",
+      "labels": [
+        "H"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 179,
+      "attempt": 2,
+      "candidate_sha256": "ebcd2724a4f76ffe42bc0b9a1a036296ca8d5ab8b95a74019495a75a10c4d1af",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 117,
+      "attempt": 1,
+      "candidate_sha256": "0767450f57a5833fd8c798f2570223e3b189e57972679a04d74667ea0323f863",
+      "labels": [
+        "A₁",
+        "H",
+        "L",
+        "R"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 83,
+      "attempt": 2,
+      "candidate_sha256": "6299c2a3f9db24ac7e8d4bee5a2b94a886673d1c7ce72224c0a6177948aff104",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 181,
+      "attempt": 0,
+      "candidate_sha256": "f1e409caad7e926cfc7a63204807f7070d16914b2c6cb75ed55ee62bb830eb23",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 147,
+      "attempt": 2,
+      "candidate_sha256": "5dbb32978baf6d09759bec88caa27b4980c22109d159641d30b74a9e0d22da5d",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 72,
+      "attempt": 1,
+      "candidate_sha256": "aef4643ccd2fd893ed791f5d56d5227e06e1ae042c751c204903833343d96c55",
+      "labels": [
+        "H",
+        "L"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 166,
+      "attempt": 1,
+      "candidate_sha256": "30b4a5d8b8dc914575a74a806e9c67008cfda15f830b13f4fafcb9be8fee7110",
+      "labels": [
+        "S"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 161,
+      "attempt": 1,
+      "candidate_sha256": "bf1a5ddf091be0cbe620a7bd53c794c8c85d2096d69b34c1cb28a4cbb0d27d9a",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 163,
+      "attempt": 2,
+      "candidate_sha256": "7b628190d2479089e6d92c429c8c4a4af17eca83471715bae4df4a5d3a7c00c8",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 180,
+      "attempt": 1,
+      "candidate_sha256": "600c8cfd2a6ce42b061d91bdc956b9fc540a3739a45762187f0730b02ddde66d",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 211,
+      "attempt": 0,
+      "candidate_sha256": "15842f68a28837e4b4ec055e9a379941c392a22be0c27c5c027ed3849a70eb14",
+      "labels": [
+        "D",
+        "S"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 105,
+      "attempt": 1,
+      "candidate_sha256": "c278eadf860716be1d068b642c7876ec63242571310158aca96bf4e684824c50",
+      "labels": [
+        "B₁",
+        "D",
+        "H",
+        "L"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 178,
+      "attempt": 2,
+      "candidate_sha256": "f3b81f0a83dbe0a10c1ddf0a7a3d247d602f906abd15ca25c66d39ed009f6e1c",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 101,
+      "attempt": 2,
+      "candidate_sha256": "7f2a2008ea07803ece2a1db43eff8b3825681fe46a15c43e646c8ce94eea6e81",
+      "labels": [
+        "D",
+        "H",
+        "H₁",
+        "L",
+        "L₁",
+        "S"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 103,
+      "attempt": 0,
+      "candidate_sha256": "5e510f41fcc3390c1d01ec9eb89f0b50b4f5c0e6b0844c77d24ab194aca8c7ad",
+      "labels": [
+        "B₁",
+        "B₂",
+        "D",
+        "D₁",
+        "H",
+        "H₁",
+        "В₂"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 41,
+      "attempt": 1,
+      "candidate_sha256": "b6f10db6debb64bf64fb07c9922e24c2ed0d3330502b74620b8938da15a87697",
+      "labels": [
+        "H",
+        "L"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 159,
+      "attempt": 1,
+      "candidate_sha256": "e8b05801a284cd119b59a1a9e0a3096d7fa44d17785f904f05089d4fac66c8f4",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 100,
+      "attempt": 1,
+      "candidate_sha256": "eb970085d08715e03779b8117f19cc3f8dc8e31efab7fe479ba56d207f5edd72",
+      "labels": [
+        "D",
+        "D₁",
+        "H",
+        "H₁",
+        "H₂"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 148,
+      "attempt": 1,
+      "candidate_sha256": "9c1709ebd9234c368f8f6536b448e9dd28533b5ecc00d6694d215ac533e575e5",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 116,
+      "attempt": 1,
+      "candidate_sha256": "559fb25af3b40a61659000fe2cd91eb65247daf2bf54eb92287cbd1c56cb2e2d",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 78,
+      "attempt": 3,
+      "candidate_sha256": "8115f364d21097fd46e7004755c0e5e9ec9a0e284d8789c5efa913a58a53d3ea",
+      "labels": [
+        "D",
+        "L",
+        "S"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 77,
+      "attempt": 1,
+      "candidate_sha256": "eabfb5265c3afff9cd6ba587a9c63a39696f490ca3bb57ebde673ea073a13c1d",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 115,
+      "attempt": 0,
+      "candidate_sha256": "1ee6096c4e9d836df9ba775e4e399c25d6de0bf59ef365e7ecc95b8128b41659",
+      "labels": [
+        "L",
+        "b₁",
+        "b₂"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 158,
+      "attempt": 1,
+      "candidate_sha256": "d0dec6637827a13ab68e50fd70b5c9bee88d546a711f297d59a16797ec5d83ea",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 125,
+      "attempt": 1,
+      "candidate_sha256": "0b9f3179680f5cd7b928b71965768ed7bb9d374fcdf033f704cb281cee55c0a7",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 40,
+      "attempt": 0,
+      "candidate_sha256": "683d370cf260b7ce6edfe81acf9d48df0d6291958394b1db78a500361d1634d7",
+      "labels": [
+        "H",
+        "L",
+        "L₁"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 104,
+      "attempt": 0,
+      "candidate_sha256": "a929f6497a328be316fcd8f5abaa67707dfb538d24ba340bab180e8680963663",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 102,
+      "attempt": 1,
+      "candidate_sha256": "8104f16ee2192906ae61b4f3c29570405ed9091aa499215085899d01e4442184",
+      "labels": [
+        "D",
+        "D₁",
+        "H",
+        "H₁",
+        "L",
+        "L₁",
+        "S"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 174,
+      "attempt": 2,
+      "candidate_sha256": "cbe3a12263cbc15305c3e63f9798dcdb405095ee2dc11ed1bde514c1e032f9cd",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "small",
+      "physical_page": 107,
+      "attempt": 2,
+      "candidate_sha256": "b876e53005dc6171a3c131399b6de5c3f01986c66303d2f32c134688b32cb9fb",
+      "labels": [
+        "H",
+        "H₁",
+        "L",
+        "L₁"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 88,
+      "attempt": 1,
+      "candidate_sha256": "bb05f2c1352d3404fa9188b540e73fb53e8a5de72a2b6d0edefea9b5cad474e4",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 194,
+      "attempt": 1,
+      "candidate_sha256": "79349a05e6a07d5cc659033decf18f3e6226dcc0768933d7acbb1f5934d7770c",
+      "labels": [
+        "D",
+        "H",
+        "L"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 27,
+      "attempt": 2,
+      "candidate_sha256": "0b490ea47f4eaabe3c022689839fee30f1649d0f7917c22ee6c3ee3815095363",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 65,
+      "attempt": 0,
+      "candidate_sha256": "fda0e09f75a2f6a837eb61972b7f257b0a746693e7607b24e3c5402a9d2d9d5f",
+      "labels": [
+        "D",
+        "L"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 49,
+      "attempt": 1,
+      "candidate_sha256": "128396159fb8601b31eb2486e92f6ea4aaafe05c1ab6abfb6e6bc29abbe9135e",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 53,
+      "attempt": 1,
+      "candidate_sha256": "838f086d32071d44fed33f7bb76e2ef3a9662a7a2fb90d61b8aef741b1389b2e",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 28,
+      "attempt": 2,
+      "candidate_sha256": "b9aa246d2e0d448571a1501e0671c27de59f7d3c25ce67f28f7db89e0063d8f5",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 72,
+      "attempt": 0,
+      "candidate_sha256": "cb9a3f8c09dff7ea8d4295e05fa95b01c2e9fc3c0c66a426b51d332a3c5255e3",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 26,
+      "attempt": 1,
+      "candidate_sha256": "c7f39e8da2cb4be484a90daf13b6548b2d9cfe59e32a487eb6ce496fdd752685",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 25,
+      "attempt": 0,
+      "candidate_sha256": "e0e4d412289d4e60e7d4fd6df2bf050dd7b963da4385ec53863919f3607a7603",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 63,
+      "attempt": 1,
+      "candidate_sha256": "9341abb33dfee46b31ad978266fea76b51a9067e21011a0c1777bb116480e61f",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 19,
+      "attempt": 1,
+      "candidate_sha256": "b2497f9a1fbfd18afa780c03792761dbdbf52b2d762aacde1cf972419cad730a",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 31,
+      "attempt": 1,
+      "candidate_sha256": "14ebcf1294b8e665b0718dba848b7ac949ef177b87f2c485c8ea00780050ce58",
+      "labels": [
+        "S"
+      ]
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 21,
+      "attempt": 1,
+      "candidate_sha256": "aef20839f05e24862bda4589ad187fb33377e137c2469981b3fc668abfc3e485",
+      "labels": [
+        "D",
+        "H"
+      ]
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 165,
+      "attempt": 1,
+      "candidate_sha256": "9bb7e3f27bc3fb765091efb5834166ed55b7e1e363df37b6bca7a1eb3ae24d0a",
+      "labels": [
+        "D",
+        "L",
+        "L₁",
+        "L₂"
+      ]
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 130,
+      "attempt": 1,
+      "candidate_sha256": "b6ad82271f1aaa29d56d73e63080027e598b7d99d0fcc54118bb9967e3741feb",
+      "labels": [
+        "L"
+      ]
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 110,
+      "attempt": 1,
+      "candidate_sha256": "358ec5a512f240fba601a5574a481b6e16c1dbdab930495ef32d6dee9259d2b8",
+      "labels": [
+        "D",
+        "L"
+      ]
+    }
+  ]
+}

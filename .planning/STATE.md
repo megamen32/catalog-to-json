@@ -38,6 +38,10 @@ Extractor15 MiniMax-M3.1-Flash-Preview, reviewer/coordinator31 GLM5.3Flash Codin
 
 # State
 
+## 14October2026,11:40 —19 live, evidence gaps reopened;19-r2 reuse fix prepared
+
+428/980 currently accepted after99source-bound coverage-only rechecks; historical527 not lost, no table value edits.19startup failed before native calls on own empty photo10veto metadata, corrected and138audits validated; actual19now8MM/2GLM. Some rechecks wrongly re-extract because accepted14.x profiles not allowed as retained candidates. Immutable19-r2 adds only receipt-verified14.2/14.15candidate permission; all new calls remain19/code unchanged.99historical candidates verified again,0modelcalls. Primary-first bounded drain preserves8admittedMM calls and letsGLMcontinue; remaining rechecks must reuse outputs. Finish controlled transfer and verify actual retained candidate route before closing this audit. No big benchmark.
+
 ## 14October2026,11:30 —19 supersedes unactivated18 after false drawing PASS
 
 Root withdrew new17PASS/armature27: Rz8 was misread as radius, and only2of19relationships required evidence because subscripts/bare symbols escaped numeric detection. Exact candidate veto reopened native repair3; accepted527 after transient528.19 adds coverage NFKC+bare dimension symbols without editing source labels, and explicit Rz/Ra surface-meaning guidance.133focused checks20.82s, retained real27 native MCP17 PASS vs19 refusal with34missing source+candidate relationships;168missing-context fix retained.18standby was never activated; only its own helper stopped, hold atomically transferred, native17model calls uninterrupted. Source/release19 then finish17→19drain and actual new native progress required. Pending regression45, no big benchmark. All980/final3exports still outstanding.
