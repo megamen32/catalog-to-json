@@ -113,6 +113,23 @@ def test_header_address_does_not_choose_a_subrow_or_overlapping_window_by_value(
     assert ledger[0]['oleg_fact_ids']==[]
 
 
+def test_explicit_header_fallback_uses_same_designation_key_as_primary_matching():
+    # Retained OPN p9: Oleg has two spaces before UHL1; our one-space
+    # designation already matches in the normal index. The hierarchy fallback
+    # must not manufacture unmatched fields for those same identical owners.
+    left, right = _header_pair()
+    left['owner'] = 'ОПН-П-6/7,2/10/0,8-III УХЛ1'
+    right['owner'] = 'ОПН-П-6/7,2/10/0,8-III  УХЛ1'
+    ledger, cases = compare_facts([left, right])
+    assert ledger[0]['oleg_fact_ids'] == [right['fact_id']]
+    assert cases[0]['ours'][0]['owner'].endswith('III УХЛ1')
+    assert cases[0]['oleg'][0]['owner'].endswith('III  УХЛ1')
+    # An additional variant/window remains ambiguous rather than being chosen
+    # by value equality after owner whitespace is normalized.
+    duplicate = {**right, 'fact_id': 'another-window', 'value': '99'}
+    assert compare_facts([left, right, duplicate])[0][0]['oleg_fact_ids'] == []
+
+
 def test_header_address_requires_literal_group_qualifier_unit_and_owner():
     left,right=_header_pair()
     variants=[{**right,'owner':'С3'}, {**right,'unit':'мВ'},

@@ -198,7 +198,7 @@ def _header_address(fact):
         if not isinstance(group, str) or not group or not isinstance(leaf, str) or not leaf or fact['name'] != leaf:
             return None
     return (fact['source_sha256'], fact['physical_pages'][0],
-            json.dumps(fact['owner'], ensure_ascii=False), group, leaf,
+            designation(fact['owner']), group, leaf,
             json.dumps(fact['unit'], ensure_ascii=False))
 
 def load_facts(oleg_dir, ours_zip):
