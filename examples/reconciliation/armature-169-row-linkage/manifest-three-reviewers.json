@@ -1,0 +1,48 @@
+{
+  "schema_version": "reconciliation-example-provenance/1",
+  "status": "one_resolved_discrepancy; complete_980_page_merge_not_finished",
+  "required_roles": [
+    "codex",
+    "zcode",
+    "minimax"
+  ],
+  "standalone_glm_used_in_current_consensus": false,
+  "materializer_program": {
+    "repository": "megamen32/catalog-to-json",
+    "git_commit": "ba9f1c71f2daee4a1c34a9a079e9fc50b62df099",
+    "source_path": "src/catalog_json/reconciliation/materialize.py",
+    "source_sha256": "0966c348524ea564181a6aa231096402db2182f35fdf4a1c6df79724f72aab14"
+  },
+  "pack_sha256": "4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f",
+  "proof_sha256": "6aec849e663510f73c6a2547f60fcab601fba36960bcac8e31bf6ebf7e0e8a86",
+  "proof_file_sha256": "aee431642acd2ad65d8185b51b7bfff611b9767c70c2be2cf18165b8fa3362ff",
+  "actual_reviewers": {
+    "codex": {
+      "deliberation_round": 2,
+      "model": "native Codex root; exact provider model ID unavailable",
+      "reaffirmation": "Original source and independent sealed round1 judgement revalidated after startup fix; no content change",
+      "role": "codex",
+      "runtime": "Codex Desktop native root",
+      "session_id": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "source_review": "Original PDF page169 and two personally inspected crops, independent opinion sealed before other verdicts"
+    },
+    "zcode": {
+      "model": "account:zai-individual-coding-plan/GLM-5.3$max",
+      "native_payload_sha256": "988ccc9d2d32b6a55bd352aa8ffa41eea78add1549f9e330df744da7fbf080de",
+      "role": "zcode",
+      "runtime": "native ZCode via AgentHerder; independent source review reaffirmed in actual native round2",
+      "session_id": "sess_0dd4a3ee-bc7d-4008-b9fa-c25146ec5392"
+    },
+    "minimax": {
+      "attempt_number": 1,
+      "config_sha256": "aeac1f34a0febb5d2425e9f05e801fad79e3ec2cfa0b3fd90981c247b9fcdd5c",
+      "contract_sha256": "eb985672e5e045d0277d18728ace7a3e7ef3a40e14191af15f62de44e334b8b9",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "role": "minimax",
+      "runtime": "FastAgent0.10.43:/home/roomhacker/apps/catalog-to-json/.tmp/full-digitization/semantic-v1.5.24/env/bin/python:/home/roomhacker/apps/catalog-to-json/.tmp/oleg-consensus-20261014/adjudication/4dd213e5e4f0b66ef59ca2248f00663bea9de5667004d1ae5bc0b9aff619b58f/round2/runtime/minimax",
+      "session_id": "a8101963-ecc2-48b1-b5b9-7be562f3d7d6"
+    }
+  },
+  "input_our_archive_sha256": "dcfdf4a64448a727766cc50ba31b01cf967b475744b9a6d6c5d065344c5061a7",
+  "input_oleg_archive_sha256": "b5febbcb5ab6f9dc7017304befd017bb8d7eab821459537804cfcb417cd98ceb"
+}

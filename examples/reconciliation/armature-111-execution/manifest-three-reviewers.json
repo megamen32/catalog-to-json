@@ -1,0 +1,48 @@
+{
+  "schema_version": "reconciliation-example-provenance/1",
+  "status": "one_resolved_discrepancy; complete_980_page_merge_not_finished",
+  "required_roles": [
+    "codex",
+    "zcode",
+    "minimax"
+  ],
+  "standalone_glm_used_in_current_consensus": false,
+  "materializer_program": {
+    "repository": "megamen32/catalog-to-json",
+    "git_commit": "ba9f1c71f2daee4a1c34a9a079e9fc50b62df099",
+    "source_path": "src/catalog_json/reconciliation/materialize.py",
+    "source_sha256": "0966c348524ea564181a6aa231096402db2182f35fdf4a1c6df79724f72aab14"
+  },
+  "pack_sha256": "9005fc766afec7a3a3d5842c0e2e8319e9bb919af3c1af84bfe48af78907cfa1",
+  "proof_sha256": "f524bf2c34dfedc7341e5151fabf5d5c03a4eeb3ff84785d48a3e785fdf9fcb6",
+  "proof_file_sha256": "5f893bb9e2321e4513eb5962c85969cf75644d8df1578b1abf2f6a742be87a2b",
+  "actual_reviewers": {
+    "codex": {
+      "model": "native Codex root; exact provider model ID unavailable",
+      "role": "codex",
+      "runtime": "Codex Desktop native root",
+      "session_id": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "source_review": "Full originals personally displayed plus own crops; opinions sealed before reading any other numeric verdicts",
+      "viewed_original": "/home/roomhacker/apps/catalog-to-json/.tmp/oleg-consensus-20261014/reviews/codex/numeric-originals/armature-111.png"
+    },
+    "zcode": {
+      "model": "account:zai-individual-coding-plan/GLM-5.3$max",
+      "model_calls": 0,
+      "other_models_launched": 0,
+      "role": "zcode",
+      "runtime": "zcode native",
+      "session_id": "sess_0dd4a3ee-bc7d-4008-b9fa-c25146ec5392"
+    },
+    "minimax": {
+      "attempt_number": 1,
+      "config_sha256": "aeac1f34a0febb5d2425e9f05e801fad79e3ec2cfa0b3fd90981c247b9fcdd5c",
+      "contract_sha256": "a488c944f512c818c7b03ea0e46e110479554053996862b9f7c10ccc98f5832c",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "role": "minimax",
+      "runtime": "FastAgent0.10.43:/home/roomhacker/apps/catalog-to-json/.tmp/full-digitization/semantic-v1.5.24/env/bin/python:/home/roomhacker/apps/catalog-to-json/.tmp/oleg-consensus-20261014/adjudication/9005fc766afec7a3a3d5842c0e2e8319e9bb919af3c1af84bfe48af78907cfa1/round1/runtime/minimax",
+      "session_id": "15fc3c50-fe73-4181-93d3-2f3b5a62e0e5"
+    }
+  },
+  "input_our_archive_sha256": "dcfdf4a64448a727766cc50ba31b01cf967b475744b9a6d6c5d065344c5061a7",
+  "input_oleg_archive_sha256": "b5febbcb5ab6f9dc7017304befd017bb8d7eab821459537804cfcb417cd98ceb"
+}

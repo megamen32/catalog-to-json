@@ -1,0 +1,72 @@
+{
+  "identity": {
+    "model": "native Codex root; exact provider model ID unavailable",
+    "role": "codex",
+    "runtime": "Codex Desktop native root",
+    "session_id": "01a12c30-e58f-7861-8a2d-966c92630163",
+    "source_review": "Full originals personally displayed plus own crops; opinions sealed before reading any other numeric verdicts",
+    "viewed_original": "/home/roomhacker/apps/catalog-to-json/.tmp/oleg-consensus-20261014/reviews/codex/numeric-originals/armature-111.png"
+  },
+  "pack_id": "arm111-first-execution-layout-v1",
+  "pack_sha256": "9005fc766afec7a3a3d5842c0e2e8319e9bb919af3c1af84bfe48af78907cfa1",
+  "payload": {
+    "pack_id": "arm111-first-execution-layout-v1",
+    "verdicts": [
+      {
+        "case_id": "N-710b3475bd027c26a8ab1ad2",
+        "case_sha256": "504acfa9c34727361ad8b49d8386c74e04d3228185f0236b6111c3cdc81ac0ff",
+        "decision": "ours",
+        "reason": "КолонкаИсполнениепослеНМЗ-160имеетновуюобъединённуюячейку2, охватывающуюНМЗ-180иНМЗ-200иНМЗ-240. Длякаждойизшестиназванныхподстрок180/200 верно2;1остаётсявыше,для135/160.",
+        "source_evidence": [
+          {
+            "bbox": [
+              0.08,
+              0.59,
+              0.92,
+              0.87
+            ],
+            "observation": "КолонкаИсполнениепослеНМЗ-160имеетновуюобъединённуюячейку2, охватывающуюНМЗ-180иНМЗ-200иНМЗ-240. Длякаждойизшестиназванныхподстрок180/200 верно2;1остаётсявыше,для135/160.",
+            "page": 111,
+            "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+          }
+        ]
+      }
+    ]
+  },
+  "projection": {
+    "case_sha256": {
+      "N-710b3475bd027c26a8ab1ad2": "504acfa9c34727361ad8b49d8386c74e04d3228185f0236b6111c3cdc81ac0ff"
+    },
+    "new_independent_voice": false,
+    "new_model_calls": 0,
+    "original_opinion_saved_at": "2026-10-14T18:47:31.359492+00:00",
+    "parent_pack_sha256": "dbb1b07e135a6ab924a01baaf7b044fb23795076608ff08f9673a3b9af0548be",
+    "parent_receipt_sha256": "b8345c2b61460205504efd3abb4c458439d31419629ec76d45089506e630e1ba"
+  },
+  "receipt_sha256": "c4adae1388100c7b1ceaf8b6edecedf1b65c8449c31e129d1341211011169599",
+  "round_number": 1,
+  "saved_at": "2026-10-14T19:32:27.104390+00:00",
+  "schema_version": "catalogue-consensus-vote/1",
+  "source_manifest": [
+    {
+      "page_count": 228,
+      "sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49"
+    },
+    {
+      "page_count": 60,
+      "sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2"
+    },
+    {
+      "page_count": 216,
+      "sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee"
+    },
+    {
+      "page_count": 162,
+      "sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35"
+    },
+    {
+      "page_count": 314,
+      "sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    }
+  ]
+}

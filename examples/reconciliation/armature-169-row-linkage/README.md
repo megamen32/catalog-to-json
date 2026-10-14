@@ -1,15 +1,15 @@
-# Пример согласованного сведения: арматура, физическая страница 169
+# Сведение арматуры: физическая страница 169
 
-Это один разобранный случай, не готовое сведение всех 980 страниц и не оценка точности.
+Текущие участники: **Codex, native ZCode (он же GLM) и MiniMax M3.1 Flash Preview**. Отдельный GLM не вызывается и не учитывается. Это один согласованный случай, не итог всего сведения 980 страниц и не оценка точности.
 
-Все четыре участника — Codex, native ZCode, GLM 5.3 Flash через CodingEndpoint и MiniMax M3.1 Flash Preview — выбрали наши строки: 150/19 и 150/24 → НАС-150-1Б; 150/34 → НАС-150-2Б. У плоских наблюдений Олега нет однозначной построчной связи. Обе исходные формы и все четыре мнения сохранены в proof.json. Точные источник, страницы, производители, модели, раунд и SHA указаны в JSON.
+Все трое выбрали наши строки: 150/19 и 150/24 → НАС-150-1Б; 150/34 → НАС-150-2Б. У плоских наблюдений Олега нет однозначной построчной связи. Текущий результат — `proof-three-reviewers.json`: обе исходные формы, три настоящих мнения, источник, страница, модели и версии сохранены. Мнения переиспользованы только для неизменного case; новых модельных вызовов для перехода к трём участникам не было.
 
-MiniMax дополнительно записал связи отдельным словарём. Исходный строгий consensus с различными JSON selected_value сохранён как unresolved; дополнительная materialization проверяет каждое значение и каждый ключ словаря по точным JSON-pointer привязкам к выбранным строкам. Она принимает выбранную всеми сторону только после этой проверки. Мнения не исправляются и новые голоса не создаются. Три мнения проецированы с того же побайтно неизменного case; новый вызов был только у MiniMax и занял 23.888 с.
+MiniMax записал связи кратким словарём. Материализация проверяет каждый ключ и значение словаря по точным привязкам к исходным строкам. Строгий результат сравнения разных JSON-форм тоже сохранён; исходные мнения и извлечённые значения не переписываются.
 
-Проверка без моделей из корня репозитория:
+Проверка текущей схемы из корня репозитория, без моделей:
 
 ```sh
-python -m catalog_json.reconciliation.materialize --pack examples/reconciliation/armature-169-row-linkage/pack.json --votes examples/reconciliation/armature-169-row-linkage/votes/codex.json examples/reconciliation/armature-169-row-linkage/votes/zcode.json examples/reconciliation/armature-169-row-linkage/votes/glm.json examples/reconciliation/armature-169-row-linkage/votes/minimax.json --bindings examples/reconciliation/armature-169-row-linkage/bindings.json --output .tmp/armature-169-replayed-proof.json
+python -m catalog_json.reconciliation.materialize --pack examples/reconciliation/armature-169-row-linkage/pack.json --votes examples/reconciliation/armature-169-row-linkage/votes/codex.json examples/reconciliation/armature-169-row-linkage/votes/zcode.json examples/reconciliation/armature-169-row-linkage/votes/minimax.json --bindings examples/reconciliation/armature-169-row-linkage/bindings.json --output .tmp/armature-169-three-reviewers.json
 ```
 
-Результат записывается только в новый файл. Сырые транскрипты и PDF здесь не опубликованы.
+Файл `proof.json` и `votes/glm.json` — неизменная история прежней ошибочной схемы с четырьмя участниками. Для её воспроизведения добавьте `--role-profile legacy4` и четвёртый файл `votes/glm.json`. Исторический proof воспроизводится с прежним SHA; он не входит в текущий консенсус. Сырых транскриптов и PDF здесь нет.

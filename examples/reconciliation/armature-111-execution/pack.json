@@ -1,0 +1,176 @@
+{
+  "schema_version": "catalogue-discrepancy-pack/1",
+  "pack_id": "arm111-first-execution-layout-v1",
+  "derived_from_pack_sha256": "dbb1b07e135a6ab924a01baaf7b044fb23795076608ff08f9673a3b9af0548be",
+  "layout_context": {
+    "scope": "Determine exact model-row and Execution-column merged-cell boundaries independently. Use images plus native layout evidence when necessary; no answer is supplied.",
+    "recommended_regions": [
+      {
+        "physical_page": 111,
+        "bbox": [
+          0.71,
+          0.62,
+          0.78,
+          0.85
+        ],
+        "purpose": "Execution column near the reviewed model rows; include the full nearby cell boundary and printed values"
+      },
+      {
+        "physical_page": 111,
+        "bbox": [
+          0.075,
+          0.65,
+          0.39,
+          0.82
+        ],
+        "purpose": "Actual model labels and their native row positions"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "case_id": "N-710b3475bd027c26a8ab1ad2",
+      "kind": "numeric_value_or_scope_conflict",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+      "physical_pages": [
+        111
+      ],
+      "ours": [
+        {
+          "side": "ours",
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "catalog": "armature",
+          "physical_pages": [
+            111
+          ],
+          "kind": "model_parameter",
+          "pointer": "/catalogs/4/pages/110/content/tables/0/rows/24/cells/10",
+          "owner": "НМЗ-180-1",
+          "name": "Исполнение",
+          "value": "2",
+          "raw_value_type": "str",
+          "unit": null,
+          "condition": null,
+          "table_index": 0,
+          "row_index": 24,
+          "column_index": 10,
+          "table_title": "Зажимы натяжные прессуемые типа НМЗ: типоразмеры, материалы и характеристики",
+          "column": {
+            "id": "exec",
+            "label": "Исполнение",
+            "unit": null,
+            "group": null,
+            "qualifier": null
+          },
+          "raw": {
+            "column_id": "exec",
+            "value": "2",
+            "state": "value"
+          },
+          "row_values": [
+            "НМЗ-180-1",
+            "16,0-Г(МЗ)-В-ОЖ-МК-Н-Р-1770",
+            "43",
+            "53",
+            "17,5",
+            "36",
+            "445",
+            "185",
+            "119",
+            "С-44",
+            "2",
+            "400",
+            "7,55"
+          ],
+          "owner_column_index": 0,
+          "owner_scope": "",
+          "candidate_sha256": "fa2cf98b3236e134bcaceff6d500fa7dcf643b605867d507f56fdaf912de0120",
+          "previously_accepted": true,
+          "fact_id": "O-805e1a2bb4957b3f645ff193"
+        }
+      ],
+      "oleg": [
+        {
+          "side": "oleg",
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "catalog": "armature",
+          "physical_pages": [
+            111
+          ],
+          "kind": "model_parameter",
+          "pointer": "characteristics.jsonl:44629/raw",
+          "owner": "НМЗ-180-1",
+          "name": "Исполнение",
+          "value": "1",
+          "raw_value_type": "str",
+          "unit": "",
+          "condition": "",
+          "observation_id": "C-d274f0f1794d95cd83934e68",
+          "window_id": "W-0e95e9c9996e75e14d384639",
+          "group_id": "G-1380a7e13be50a1b57a13b84",
+          "product_id": "P-7faaa614d3f036e660c9aaf9",
+          "group_title": "Зажимы натяжные прессуемые типа НМЗ",
+          "raw": {
+            "name": "Исполнение",
+            "raw_value": "1",
+            "unit": "",
+            "condition": "",
+            "scope": "model",
+            "scope_evidence": "Value shown in designation row or a visibly spanning merged cell",
+            "evidence": [
+              {
+                "page": 111,
+                "region": [
+                  0.09,
+                  0.694,
+                  0.92,
+                  0.7090000000000001
+                ]
+              }
+            ],
+            "uncertainties": [],
+            "header_path": [
+              {
+                "raw_text": "Исполнение",
+                "role": "column",
+                "unit": "",
+                "condition": "",
+                "evidence": [
+                  {
+                    "page": 111,
+                    "region": [
+                      0.09,
+                      0.245,
+                      0.92,
+                      0.325
+                    ]
+                  }
+                ]
+              }
+            ],
+            "row_evidence": [
+              {
+                "page": 111,
+                "region": [
+                  0.09,
+                  0.694,
+                  0.92,
+                  0.7090000000000001
+                ]
+              }
+            ],
+            "value_state": "printed_value",
+            "origin": "table_cell"
+          },
+          "raw_value_present": true,
+          "fact_id": "L-668ea6e270af600303bf26aa"
+        }
+      ],
+      "question": "Установи по оригиналу значение именно этой модели/варианта и параметра, единицу, условие, объединение строк. Числовое различие может быть ложным соответствием разных подстрок. Не считай модельное обозначение доказательством одинаковой применимости. Если обе стороны относятся к разным строкам, сохрани связи явно; если источник нечитаем — unresolved.",
+      "member_fact_ids": [
+        "O-805e1a2bb4957b3f645ff193",
+        "L-668ea6e270af600303bf26aa"
+      ]
+    }
+  ]
+}

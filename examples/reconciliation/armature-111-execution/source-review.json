@@ -1,0 +1,21 @@
+{
+  "case_id": "N-710b3475bd027c26a8ab1ad2",
+  "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+  "physical_page": 111,
+  "root_viewed_original": "reviews/codex/numeric-originals/armature-111.png",
+  "selected_value_checked": "Execution2 follows actual y599.245483 boundary; models180/200 lie below it.",
+  "supporting_minimax_evidence_indices_zero_based": [
+    0,
+    1,
+    3,
+    4
+  ],
+  "auxiliary_evidence_excluded": [
+    {
+      "index_zero_based": 2,
+      "reason": "Its bbox is in the right-hand area and does not cover the cited lower boundary y0.92997. The correct full Execution region and boundary are independently confirmed by original image, native words and horizontal segments."
+    }
+  ],
+  "original_receipt_unchanged": true,
+  "standalone_glm_in_consensus": false
+}

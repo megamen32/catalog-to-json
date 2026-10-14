@@ -1,0 +1,19 @@
+{
+  "schema_version": "catalogue-side-bindings/1",
+  "pack_sha256": "9005fc766afec7a3a3d5842c0e2e8319e9bb919af3c1af84bfe48af78907cfa1",
+  "cases": [
+    {
+      "case_id": "N-710b3475bd027c26a8ab1ad2",
+      "case_sha256": "504acfa9c34727361ad8b49d8386c74e04d3228185f0236b6111c3cdc81ac0ff",
+      "side": "ours",
+      "bindings": [
+        {
+          "role": "minimax",
+          "selected_pointer": "",
+          "pack_pointer": "/cases/0/ours/0/value",
+          "comparison": "decimal_numeric"
+        }
+      ]
+    }
+  ]
+}
