@@ -1,6 +1,6 @@
 {
   "name": "catalog-to-json",
-  "version": "1.5.15",
+  "version": "1.5.16",
   "description": "Tool-using FastAgent catalog extraction and strict visual review skills; canonical JSON, Excel and HTML exports.",
   "author": {
     "name": "megamen32"

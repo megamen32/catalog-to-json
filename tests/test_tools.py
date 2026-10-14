@@ -32,6 +32,33 @@ def test_save_requires_inspection_and_returns_errors(tmp_path):
     assert r.save(1,review().model_dump_json(),'review')['saved']
 
 
+def test_reviewer_refreshes_source_leads_before_final_write(tmp_path):
+    """Fast unit: mid-review parent lead must reach this attempt; expected1s/emergency10s."""
+    import hashlib
+    from catalog_json.tools import write_json
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out');t.render(1);t.direct(1)
+    assert t.save(1,content().model_dump_json(),'page')['saved']
+    r=CatalogTools(t.source,t.output,role='reviewer');r.render(1)
+    assert r.save(1,content().model_dump_json(),'observation')['saved'];r.read(1,'page')
+    audit={'pdf_page':1,'source_sha256':hashlib.sha256(t.source.read_bytes()).hexdigest(),
+           'findings':[{'observation':'Independently inspect this original source lead'}]}
+    path=t.work(1)/'external-audit.json';write_json(path,audit)
+    refused=r.save(1,review().model_dump_json(),'review')
+    assert not refused['saved'] and 'read_external_audit' in refused['error']
+    assert not (t.work(1)/'review-0.json').exists()
+    r.external_audit(1);assert r.save(1,review().model_dump_json(),'review')['saved']
+    old=(t.work(1)/'review-0.json').read_bytes()
+    audit['findings'].append({'observation':'Fresh source lead arrived during the current review'})
+    write_json(path,audit)
+    assert not r.save(1,review().model_dump_json(),'review')['saved']
+    assert (t.work(1)/'review-0.json').read_bytes()==old
+    r.external_audit(1);assert r.save(1,review().model_dump_json(),'review')['saved']
+    # Reading a lead is no waiver for a real independently observed defect.
+    candidate=content();candidate.tables[0].rows[0].cells[0].value='wrong'
+    write_json(t.work(1)/'candidate-0.json',candidate.model_dump())
+    assert not r.save(1,review().model_dump_json(),'review')['saved']
+
+
 def test_repair_must_read_current_source_audit_before_saving(tmp_path):
     import hashlib
     from catalog_json.tools import write_json

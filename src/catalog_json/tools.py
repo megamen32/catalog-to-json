@@ -386,8 +386,8 @@ class CatalogTools:
     def save(self,page,json_text,kind,literal_quotes=None):
         work=self.work(page)
         audit=work/'external-audit.json'
-        if kind=='page' and audit.exists() and self.audit_receipts.get(page)!=hashlib.sha256(audit.read_bytes()).hexdigest():
-            return {'saved':False,'error':'Read current read_external_audit before saving this repair. Independently verify each lead against the original; do not blindly copy a claim or repeat the known rejected draft.'}
+        if kind in ('page','review') and audit.exists() and self.audit_receipts.get(page)!=hashlib.sha256(audit.read_bytes()).hexdigest():
+            return {'saved':False,'error':'Read current read_external_audit before saving this candidate/review; source leads changed or have not been read. Continue the current attempt and independently verify each lead against the original; do not blindly copy a claim or repeat the known rejected draft.'}
         expected='extractor' if kind=='page' else 'reviewer'
         if self.role!=expected:return {'saved':False,'error':f'{self.role} cannot write {kind} artifacts'}
         required={'view_page','extract_direct'} if kind=='page' else {'view_page'} if kind=='observation' else {'view_page','read_page_json','save_source_observation'}
