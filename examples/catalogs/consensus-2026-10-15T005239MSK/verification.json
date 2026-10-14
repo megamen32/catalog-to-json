@@ -1,0 +1,15 @@
+{
+  "archive": "/home/roomhacker/apps/catalog-to-json/.tmp/oleg-consensus-20261014/delivery-20261015T0058MSK/catalogues-unified.zip",
+  "sha256": "32aaa7a0f37ca97478dbe54115b1c87b175cc96d751e52211e09f10b8ccf29f6",
+  "bytes": 37332384,
+  "page_count": 980,
+  "canonical_cells_changed": 16,
+  "excel_cells_roundtrip_checked": 83712,
+  "oleg_observations_retained": 92847,
+  "archive_crc": "passed",
+  "manifest_all_members_verified": true,
+  "elapsed_seconds": 248.899,
+  "peak_rss_kib": 1724244,
+  "final_consensus_merge": false,
+  "model_calls": 0
+}

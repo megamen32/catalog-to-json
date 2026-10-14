@@ -1,0 +1,14 @@
+{
+  "stage": "partial-consensus-snapshot",
+  "final_consensus_merge": false,
+  "page_count": 980,
+  "three_party_resolved_cases": 170,
+  "pending_cases": 56,
+  "canonical_cells_changed": 16,
+  "snapshot_created_at": "2026-10-14T21:52:39.395266+00:00",
+  "builder_git_commit": "ea799a97d0afe6ca1ecebac3f5be11d4dcf16651",
+  "zip_sha256": "32aaa7a0f37ca97478dbe54115b1c87b175cc96d751e52211e09f10b8ccf29f6",
+  "zip_bytes": 37332384,
+  "unmatched_or_ambiguous_model_parameters_outside_direct_percentage": 28743,
+  "warning_ru": "Это единый проверенный архив всех каталогов с текущими согласованными исправлениями. Полный консенсус и семантическое сопоставление двух выдач ещё не завершены; открытые случаи и полный исходный реестр включены в ZIP. Не считать170разобранных случаев долей точности или полным количеством расхождений."
+}
