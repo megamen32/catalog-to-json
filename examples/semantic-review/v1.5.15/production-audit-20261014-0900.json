@@ -1,0 +1,279 @@
+{
+  "observed_local": "2026-10-14T09:25:26.537641+03:00",
+  "counts": {
+    "opn": {
+      "accepted": 60,
+      "pages": 60,
+      "accepted_delta": 0,
+      "compatible_drafts": 60,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 60,
+      "native_completed": {
+        "extractor": 146,
+        "reviewer": 164
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "isolators": {
+      "accepted": 161,
+      "pages": 162,
+      "accepted_delta": 0,
+      "compatible_drafts": 162,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 162,
+      "native_completed": {
+        "reviewer": 345,
+        "extractor": 390
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "small": {
+      "accepted": 228,
+      "pages": 228,
+      "accepted_delta": 0,
+      "compatible_drafts": 228,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 228,
+      "native_completed": {
+        "extractor": 539,
+        "reviewer": 518
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "innovations": {
+      "accepted": 66,
+      "pages": 216,
+      "accepted_delta": 1,
+      "compatible_drafts": 216,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 216,
+      "native_completed": {
+        "reviewer": 166,
+        "extractor": 466
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 2
+      }
+    },
+    "armature": {
+      "accepted": 10,
+      "pages": 314,
+      "accepted_delta": 0,
+      "compatible_drafts": 240,
+      "compatible_drafts_delta": 16,
+      "original_draft_pages_preserved": 314,
+      "native_completed": {
+        "extractor": 568,
+        "reviewer": 24
+      },
+      "native_completed_delta": {
+        "extractor": 18,
+        "reviewer": 0
+      }
+    }
+  },
+  "accepted": 525,
+  "accepted_delta": 1,
+  "primary_extractor_version": "1.5.15",
+  "primary_reviewer_version": "1.5.15",
+  "reviewer_endpoint": "https://api.z.ai/api/coding/paas/v4/",
+  "transition1515_completed": {
+    "status": "new_unit_active",
+    "finished_unix": 1791957217.1825366,
+    "elapsed_seconds": 339.626,
+    "new_program": {
+      "package_version": "1.5.15",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "8242b10480ab5cbc00eb6b6de0abd40b182977e4018be71b2df47b3ed98da688",
+      "python_version": "3.12.13"
+    },
+    "new_unit": "catalog-worker@full-semantic1515.service",
+    "no_native_calls_interrupted": true,
+    "compatible_accepted_verified": 524,
+    "artifact_pins": 1504,
+    "quota_hold_preserved": true,
+    "note": "Unit start only. Next native model/tool/receipt progress must still be checked; Provider pacing and historical producers retained."
+  },
+  "frozen_job_pins_verified": 355,
+  "original_regions_viewed": [
+    "innovations187 divider title and supporting purpose, no product table",
+    "innovations200 full three drawing groups and5x top-right Протектор leader crop; uppercase visible captions",
+    "armature178 full source and5x viewA fastener symbols;5nowlinear, four hex heads are not hex drilled holes",
+    "isolators47 unchanged original factory5million/10percent prose,8attestations,2project title sheets re-viewed against new in-flight29summary-label refusals"
+  ],
+  "first1515_native_pass": {
+    "catalog": "innovations",
+    "physical_page": 187,
+    "producers": {
+      "extractor": {
+        "program_version": "1.5.6",
+        "artifact_sha256": "4128f412b079a5b500b128591418700845d9237c05fb3ed17f1c9da951256756",
+        "native_seconds": 54.528,
+        "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium"
+      },
+      "reviewer": {
+        "program_version": "1.5.15",
+        "artifact_sha256": "7978ef09c8b6897051c8fd20582cc7c951246500555a8c8b63d4fda71c5ca840",
+        "native_seconds": 64.128,
+        "model": "zai.glm-5.3-flash?reasoning=low"
+      }
+    },
+    "receipt_sha256_verified": true,
+    "root_visual_scope": "Source cover/title/group codes and supporting purpose; no overall engineering/drawing accuracy claim."
+  },
+  "native164_after_fix": {
+    "program_version": "1.5.15",
+    "role": "extractor",
+    "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+    "native_seconds": 301.742,
+    "artifact_sha256": "125065c42c5e7eff9421877e0734dfc722ec78cc73b42b266205ad20691929b4",
+    "status": "extraction_completed_not_independent_PASS",
+    "provider_rate_limit_events": 0
+  },
+  "new_regression_cases": [
+    "innov200-caption-case-misses-real-part-name",
+    "arm178-hex-fastener-heads-not-hex-holes",
+    "isolators47-summary-prose-as-literal-document-label",
+    "isolators47-mid-review-source-lead-refresh"
+  ],
+  "pending_inbox_cases": 36,
+  "benchmark_commit": "470a01b",
+  "confirmed_findings": [
+    "200review13has false lowercase-OCR caption requirement but misses actual Протектор/Pромежутор misidentification; candidate158 exact veto/source lead installed",
+    "178candidate3extractor15corrects5count/direction but invents hex drilled holes from fastener-head symbols; exact veto/source lead installed, all18x14cell values unchanged",
+    "47review29in-flight synthesizes summary labels and treats absence as source omission. Current source lead separates factory/document role, actual codes and unreadable auxiliary metadata; no forcedPASS"
+  ],
+  "source_veto_saved_candidate_replays": {
+    "innovations200candidate1": "refused",
+    "armature178candidate3": "refused",
+    "model_calls": 0
+  },
+  "production_values_manually_edited": false,
+  "large_model_benchmark_run": false,
+  "accuracy_note": "Native187review15PASS and164extract15completion are source-bound receipts, not a new aggregate/drawing percentage. Saved15/15numeric relation records on200did not catch real part/feature defects. In-flight or timed-out47is not acceptance.",
+  "fixes_published": [
+    "7ce3a15/v1.5.16 review save checks current source-audit receipt inside same context"
+  ],
+  "focused_checks": {
+    "passed": 111,
+    "seconds": 29.8,
+    "category": "fast unit and focused integration",
+    "model_calls": 0
+  },
+  "installed_native_mcp_proof": {
+    "version": "1.5.16",
+    "native_stdio_MCP": true,
+    "same_native_context_retained": true,
+    "unread_and_updated_audit_block_review_write": true,
+    "existing_review_bytes_preserved_on_refusal": true,
+    "source_hint_refresh_allows_continuation": true,
+    "real_source_defect_still_refused_after_hint_read": true,
+    "blind_source_observation_unchanged": true,
+    "model_calls": 0,
+    "seconds": 1.857
+  },
+  "primary_completions_started_after_reviewer_hold": [
+    {
+      "catalog": "armature",
+      "physical_page": 242,
+      "program_version": "1.5.15",
+      "started_at": 1791958945.6850765,
+      "finished_at": 1791959018.5102608
+    }
+  ],
+  "transcript_metrics": [
+    {
+      "catalog": "innovations",
+      "physical_page": 187,
+      "role": "reviewer",
+      "attempt": 1,
+      "program_version": "1.5.15",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "messages": 16,
+      "seconds": 64.128,
+      "tools": {
+        "catalog__load_skill": 1,
+        "catalog__view_page": 1,
+        "catalog__get_json_schema": 1,
+        "catalog__save_source_observation": 1,
+        "catalog__read_page_json": 1,
+        "catalog__read_external_audit": 1,
+        "catalog__view_region": 1,
+        "catalog__correct_source_observation": 1,
+        "catalog__save_review": 1
+      },
+      "refused_tool_results": 0,
+      "raw_transcript_published": false
+    },
+    {
+      "catalog": "innovations",
+      "physical_page": 200,
+      "role": "reviewer",
+      "attempt": 1,
+      "program_version": "1.5.13",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "messages": 86,
+      "seconds": 782.149,
+      "tools": {
+        "catalog__load_skill": 1,
+        "catalog__view_page": 1,
+        "catalog__view_region": 36,
+        "catalog__save_source_observation": 2,
+        "catalog__get_json_schema": 1,
+        "catalog__read_page_json": 1,
+        "catalog__read_external_audit": 1,
+        "catalog__read_source_layout": 2,
+        "catalog__correct_source_observation": 2,
+        "catalog__inspect_dimension_review_targets": 1,
+        "catalog__record_dimension_reviews": 11,
+        "catalog__trace_dimension_candidates": 14,
+        "catalog__inspect_drawing_geometry": 1,
+        "catalog__save_review": 4,
+        "catalog__enable_helpers": 1,
+        "catalog__record_dimension_review": 4
+      },
+      "refused_tool_results": 19,
+      "raw_transcript_published": false
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "attempt": 3,
+      "program_version": "1.5.15",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "messages": 46,
+      "seconds": 349.104,
+      "tools": {
+        "catalog__load_skill": 1,
+        "catalog__view_page": 1,
+        "catalog__read_external_audit": 1,
+        "catalog__read_page_json": 2,
+        "catalog__read_review": 1,
+        "catalog__view_region": 7,
+        "catalog__read_source_table": 1,
+        "catalog__read_source_artifact": 2,
+        "bash": 2,
+        "catalog__save_section": 4,
+        "catalog__get_json_schema": 1,
+        "catalog__finalize_page": 2,
+        "catalog__save_page_json": 3,
+        "catalog__extract_direct": 1
+      },
+      "refused_tool_results": 5,
+      "raw_transcript_published": false
+    }
+  ],
+  "new1516transfer_status": "waiting_for_reviewer_primary_keeps_working"
+}

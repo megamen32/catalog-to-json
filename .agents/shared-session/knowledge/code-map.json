@@ -479,6 +479,33 @@
       ],
       "summary": "MiniMax164400/2013 came from SDK maxTokens: raw Anthropic tool_use persisted, structured tool_calls not dispatched. Converter replays raw tool_use then ordinary user continuation has no result.1515 stops only this raw-tool token boundary before second generate, retains artifacts, never fabricates results or executes partial payload. Plain text token boundary and genuine repairs stay supported.",
       "verified_at": "2026-10-14T08:47:06.794698+03:00"
+    },
+    "reviewer-current-source-audit": {
+      "confidence": "verified",
+      "evidence": [
+        "Focused red proof saved review despite unread/new lead;111focused checks29.80s green, installed1516MCP same-context refresh/old bytes/real-defect guards1.857s,0modelcalls."
+      ],
+      "git_head": "7ce3a159237740cdb2019a59b040e938614adee0",
+      "key": "reviewer-current-source-audit",
+      "kind": "failure-shield",
+      "locations": [
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "968b4d053aa6cb9d2c21f24775b7f73983b45fe4fcad521a7482fa164ebd79a9",
+          "path": "src/catalog_json/tools.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "a898f14511672017ae2aec8f8103184e4bc67794064383557ada7ff595ee0e15",
+          "path": "tests/test_tools.py",
+          "symbol": ""
+        }
+      ],
+      "summary": "Parent source-lead receipt changed during reviewer attempt47/29, but MCP save guarded only candidate writes.1516 guards review writes too and requests read_external_audit in same native context; blind source observation stays independent. Parent receipt binding and strict actual data/geometry checks remain.",
+      "verified_at": "2026-10-14T09:19:15.555641+03:00"
     }
   },
   "schema_version": 1

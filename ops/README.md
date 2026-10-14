@@ -182,3 +182,13 @@ Delivery1.5.11 stops a native attempt on the SDK terminal stop_reason=error inst
 Delivery1.5.12 retains exact unchanged branding quote receipts from a successful post-disclosure observation correction. Editing an unrelated paragraph no longer expires all verified logos. Changed quote/index/box/basis/conflict/rotation still needs fresh inspection, and the initial blind save cannot waive the first post-disclosure check. Error messages name the exact missing target/box.47 focused checks22.00s include initial freshness, changed-quote rejection, literal/numeric guards and native MCP transport; no new accuracy percentage or large model benchmark.
 
 Delivery1.5.13 recognizes exact comma-separated header clauses moved between label and qualifier within one column, with identical primary parameter, parent and declared unit. Clause bytes/case, decimal boundaries, multiplicity, conditions and values remain strict; no word sorting/fuzzy equivalence. Saved armature179 replay removes only3false mass/L=7m/upper-bound metadata issues, retaining all43other differences including41cell-field differences (not41distinct cells).82 focused checks7.73s, no model requests or accuracy claim.
+
+During a controlled full-worker update, drain the independent reviewer first while
+primary extraction continues under its existing provider gate. Then briefly hold
+new primary admissions and finish its already admitted native calls before the
+single coordinator handoff. Retain provider pacing, exact producer receipts,
+source outputs and the original admission holds; release only the transfer's own
+holds after owner comparison. A finite one-off transfer records its phase and
+refuses to revive an externally stopped unit. This avoids freezing primary work
+for the whole duration of a long review. It grants no duplicate queue or provider
+fallback and does not turn unit activation into native model acceptance.

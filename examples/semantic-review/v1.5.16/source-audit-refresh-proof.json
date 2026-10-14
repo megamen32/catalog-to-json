@@ -1,0 +1,37 @@
+{
+  "source_commit": "7ce3a15",
+  "version": "1.5.16",
+  "scope": "Refresh newly arrived source leads inside same native review context; no source-values edit or source/geometry acceptance waiver.",
+  "focused_checks": {
+    "passed": 111,
+    "seconds": 29.8,
+    "category": "fast unit and focused integration",
+    "model_calls": 0
+  },
+  "installed_native_audit_refresh": {
+    "version": "1.5.16",
+    "native_stdio_MCP": true,
+    "same_native_context_retained": true,
+    "unread_and_updated_audit_block_review_write": true,
+    "existing_review_bytes_preserved_on_refusal": true,
+    "source_hint_refresh_allows_continuation": true,
+    "real_source_defect_still_refused_after_hint_read": true,
+    "blind_source_observation_unchanged": true,
+    "model_calls": 0,
+    "seconds": 1.857
+  },
+  "installed_existing_guards": {
+    "version": "1.5.16",
+    "exact_observation_and_dimension_contracts_discovered": true,
+    "review_envelope_below16000": true,
+    "native_stdio_MCP": true,
+    "unchanged_post_comparison_quote_reused": true,
+    "blind_quote_cannot_waive_first_post_comparison_inspection": true,
+    "changed_quote_needs_fresh_exact_region": true,
+    "blind_original_preserved": true,
+    "model_calls": 0,
+    "elapsed_seconds": 2.263
+  },
+  "production_native1516PASS_claimed": false,
+  "large_model_benchmark_run": false
+}
