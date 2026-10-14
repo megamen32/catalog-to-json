@@ -52,6 +52,7 @@ def deliver(prompt, input_id):
     # Direct user mandate: wake this same catalogue task every30min. Never
     # override a later human stop: both preceding reads must permit delivery.
     arguments = {'sessionId': THREAD, 'harness': 'codex', 'mode': 'queue',
+                 'fromSessionId': THREAD, 'fromHarness': 'codex',
                  'humanRequested': True, 'inputId': input_id, 'message': prompt}
     body = {'jsonrpc': '2.0', 'id': input_id, 'method': 'tools/call',
             'params': {'name': 'send_message', 'arguments': arguments}}
@@ -104,7 +105,12 @@ def main():
         elif session_state() == 'idle':
             result['previous_delivery'] = {'input_id': input_id, 'status': 'unknown', 'attempted_unix': time.time()}
             save(result)  # An uncertain external delivery must never be replayed.
-            receipt = deliver(prompt, input_id)
+            message = ('[catalog-review-half-hour:v1]\nПлановая проверка оцифровки всех пяти каталогов по прямому поручению владельца. '
+                       'Продолжи исходную задачу в этой же сессии по инструкции '
+                       + str(ROOT / 'ops/catalog-review-watch.prompt.txt')
+                       + '. Прочитай её и текущий task/state; проверь прогресс, свежие транскрипты и оригиналы. '
+                       'Без большого бенчмарка. При нормальном ходе уведомление не нужно.')
+            receipt = deliver(message, input_id)
             result['previous_delivery'].update(status='admitted', receipt=receipt)
             result['status'] = 'started'
         else:
