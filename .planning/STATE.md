@@ -38,6 +38,13 @@ Extractor15 MiniMax-M3.1-Flash-Preview, reviewer/coordinator31 GLM5.3Flash Codin
 
 # State
 
+
+## 2026-10-14T12:36+03:00 — личная оцифровка root и единый980-страничный ZIP
+
+Полностью разобраны27арматуры/47изоляторов/168инноваций:356табличных ячеек и25геометрических связей плюс документы/текст. Честная Codex/manual-reference.r1provenance, независимыйPASS ожидается; новые разборы встроены в свои каталоги, не отдельная выдача. ZIP examples/catalogs/all-pages-2026-10-14T093139Z/all-catalogues-980-pages.zip: единыйJSON+5Excel,980страниц,434независимо приняты; CRC, распаковка,980схем,5книг и83732ячеек проверены.
+
+Единственная очередь19r2/фактический код1.5.19 восстановлена12:21 после неудачи собственного post-drain helper; ни один native call не прерван,433полностью совместимых принятых сохранены,88изменённых audit требуют новогоreview. GLM реально работает,434accepted. MiniMax реальный429/2056 и официальный0%интервала: собственный admission hold до13:00МСК, GLMне остановлен.1.5.20source/release опубликованы с135focused проверками и0-call native probe replay;runtimeещё19.47pending regression cases, без большого бенчмарка. Оригинальная цель980принятых/финальныеJSON+Excelне завершена; timer остаётся включён. Следующий шаг: проверить MiniMax после границы, независимая приёмка root-основ, закреплённая20передача без лишнего исследования.
+
 ## 14October2026,11:40 —19 live, evidence gaps reopened;19-r2 reuse fix prepared
 
 428/980 currently accepted after99source-bound coverage-only rechecks; historical527 not lost, no table value edits.19startup failed before native calls on own empty photo10veto metadata, corrected and138audits validated; actual19now8MM/2GLM. Some rechecks wrongly re-extract because accepted14.x profiles not allowed as retained candidates. Immutable19-r2 adds only receipt-verified14.2/14.15candidate permission; all new calls remain19/code unchanged.99historical candidates verified again,0modelcalls. Primary-first bounded drain preserves8admittedMM calls and letsGLMcontinue; remaining rechecks must reuse outputs. Finish controlled transfer and verify actual retained candidate route before closing this audit. No big benchmark.

@@ -1,0 +1,20 @@
+{
+  "zip": "examples/catalogs/all-pages-2026-10-14T093139Z/all-catalogues-980-pages.zip",
+  "zip_sha256": "160c65af09f07f56022e05212cafdf2d8490b40d6be11ee0b95bda79c1d81421",
+  "zip_bytes": 9501248,
+  "archive_CRC": "passed",
+  "extracted_files": 8,
+  "json_pages_validated": 980,
+  "excel_workbooks_reopened": 5,
+  "excel_data_cells_exact_roundtrip": 83732,
+  "figure_descriptions_in_json": 1977,
+  "manual_pages_integrated": 3,
+  "independent_accepted": 434,
+  "all_pages_independently_reviewed": false,
+  "model_calls": 0,
+  "verification_elapsed_seconds": 4.436,
+  "peak_rss_bytes": 156131328,
+  "normalized_excel_rows_and_states_verified": 83732,
+  "empty_strings_displayed_as_empty_excel_cells": 5,
+  "empty_string_note": "Excel displays empty strings as empty cells; JSON values and explicit states are preserved, normalized Excel state column also checked."
+}
