@@ -1,0 +1,63 @@
+{
+  "focused_checks": {
+    "category": "fast unit/focused integration",
+    "purpose": "False observer-context revision and unchanged strict numerical/drawing checks",
+    "passed": 132,
+    "elapsed_seconds": 25.91,
+    "expected_seconds": 30,
+    "emergency_maximum_seconds": 300
+  },
+  "native_retained168_before": {
+    "program": {
+      "package_version": "1.5.17",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "250a5f879c4c07bb339e5791b2e6b59062426df6bcef56df7b50cb0af47cfc87",
+      "python_version": "3.12.13"
+    },
+    "original_physical_page": 168,
+    "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+    "retained_input_hashes": {
+      "candidate-1.json": "149d78d5e5ac4d8fc77eba9e76a62ab0bcf3912beff41aa2b875da96b1de385e",
+      "verified-source-observation-1.json": "9905907289fec56f5878d376bef4a85432487458448948af2fb01fb43ee162cb",
+      "review-1.json": "8dc00cc77ee43a5d3b841282460b36d729cbfdb1dba8a779a555da0a80e5a438"
+    },
+    "native_stdio_MCP": true,
+    "result": {
+      "saved": true,
+      "file": "/home/roomhacker/apps/catalog-to-json/.tmp/semantic-review-v1518/replay168-1.5.17/page-0168/review-1.json"
+    },
+    "candidate_and_blind_bytes_unchanged": true,
+    "model_calls": 0,
+    "elapsed_seconds": 2.148
+  },
+  "native_retained168_after": {
+    "program": {
+      "package_version": "1.5.18",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "3448fc23943919aebaebcbc52914f5010869c959b1d48c0eb4d7443cfea3cc39",
+      "python_version": "3.12.13"
+    },
+    "original_physical_page": 168,
+    "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+    "retained_input_hashes": {
+      "candidate-1.json": "149d78d5e5ac4d8fc77eba9e76a62ab0bcf3912beff41aa2b875da96b1de385e",
+      "verified-source-observation-1.json": "9905907289fec56f5878d376bef4a85432487458448948af2fb01fb43ee162cb",
+      "review-1.json": "8dc00cc77ee43a5d3b841282460b36d729cbfdb1dba8a779a555da0a80e5a438"
+    },
+    "native_stdio_MCP": true,
+    "result": {
+      "saved": false,
+      "repair_observer_context": true,
+      "error": "Your independent source observation has no page_context, while the candidate has one. Reinspect the original with view_region and complete your own source context using correct_source_observation before saving any verdict. Do not ask the extractor to delete its context or copy your wording to compensate for an incomplete observation. Determine the purpose and evidence independently; genuine classification, technical and drawing differences must still be reported. No candidate or review was changed."
+    },
+    "candidate_and_blind_bytes_unchanged": true,
+    "model_calls": 0,
+    "elapsed_seconds": 2.945
+  },
+  "blind_source_and_candidate_unchanged": true,
+  "large_model_benchmark": false,
+  "source_values_edited": false,
+  "true_geometry_H1_still_rejected": "Exact candidate1/2 veto with independently inspected source lead; no drawing PASS claimed."
+}

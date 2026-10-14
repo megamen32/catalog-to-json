@@ -416,6 +416,8 @@ class CatalogTools:
                 observation_file=work/(f'verified-source-observation-{self.attempt}.json' if 'correct_source_observation' in self.seen.get(page,set()) else f'source-observation-{self.attempt}.json')
                 observation=PageContent.model_validate_json(observation_file.read_text())
                 candidate=PageContent.model_validate(disclosed['candidate'])
+                if candidate.page_context is not None and observation.page_context is None:
+                    return {'saved':False,'repair_observer_context':True,'error':'Your independent source observation has no page_context, while the candidate has one. Reinspect the original with view_region and complete your own source context using correct_source_observation before saving any verdict. Do not ask the extractor to delete its context or copy your wording to compensate for an incomplete observation. Determine the purpose and evidence independently; genuine classification, technical and drawing differences must still be reported. No candidate or review was changed.'}
                 if model.verdict=='pass' and candidate.page_context is not None and (model.context_review is None or not model.context_review.accepts()):
                     return {'saved':False,'error':'Для PASS нужен независимый смысловой context_review по оригиналу: назначение страницы, смысл пересказа, реальные данные/демонстрация, технические факты и связи изделия/параметра/условия/элемента чертежа. Все пять проверок должны быть true с конкретным обоснованием. Буквальное совпадение обычных предложений не требуется.','required_context_review':review_contract()['example']['context_review']}
                 pairs,left,right=align_tables(observation,candidate)

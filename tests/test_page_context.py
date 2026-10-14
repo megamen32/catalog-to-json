@@ -229,6 +229,45 @@ def test_legacy_eleven_check_review_remains_valid_without_context_verdict():
     assert report.context_review is None and len(report.checks)==11 and report.accepts(content())
 
 
+@pytest.mark.parametrize('verdict',['pass','revise','uncertain'])
+def test_missing_observer_context_is_its_own_repair_not_candidate_feedback(tmp_path,verdict):
+    """Fast tool integration; expected1s/max10s. Reproduces innovations168 false revisions."""
+    candidate=content();candidate.page_context=context('catalogue_product_data',transcription='literal')
+    candidate.text_blocks=[TextBlock(kind='paragraph',text='Назначение зажимов — соединять шлейфовые провода.')]
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out');t.render(1);t.direct(1)
+    assert t.save(1,candidate.model_dump_json(),'page')['saved']
+    observer=candidate.model_copy(deep=True);observer.page_context=None
+    observer.text_blocks=[TextBlock(kind='paragraph',text='Для соединения шлейфовых проводов применяются зажимы.')]
+    r=CatalogTools(t.source,t.output,role='reviewer');r.render(1)
+    assert r.save(1,observer.model_dump_json(),'observation')['saved'];r.read(1,'page')
+    candidate_bytes=(r.work(1)/'candidate-0.json').read_bytes()
+    blind_bytes=(r.work(1)/'source-observation-0.json').read_bytes()
+    report=review();report.verdict=verdict;report.context_review=semantic_review()
+    refused=r.save(1,report.model_dump_json(),'review')
+    assert not refused['saved'] and refused['repair_observer_context']
+    assert not (r.work(1)/'review-0.json').exists()
+    assert (r.work(1)/'candidate-0.json').read_bytes()==candidate_bytes
+    assert (r.work(1)/'source-observation-0.json').read_bytes()==blind_bytes
+
+    # Independent source correction removes prose/context false positives.
+    r.render(1,[0,0,1,1]);observer.page_context=context('catalogue_product_data',transcription='literal')
+    assert r.correct_observation(1,observer.model_dump_json(),'Fresh original inspection establishes actual product data.')['saved']
+    assert not r.read(1,'page')['independent_comparison']
+    report.verdict='pass'
+    assert r.save(1,report.model_dump_json(),'review')['saved']
+    assert (r.work(1)/'source-observation-0.json').read_bytes()==blind_bytes
+
+    # A real changed numeric value still blocks PASS after context is complete.
+    observer.tables[0].rows[0].cells[0].value=81
+    r.render(1,[0,0,1,1])
+    assert r.correct_observation(1,observer.model_dump_json(),'Fresh source inspection finds mass81, not80.')['saved']
+    blocked=r.save(1,report.model_dump_json(),'review')
+    assert not blocked['saved'] and any('.value' in d['path'] for d in blocked['differences'])
+    report.verdict='revise'
+    assert r.save(1,report.model_dump_json(),'review')['saved']
+    assert any('.value' in d['path'] for d in json.loads((r.work(1)/'review-0.json').read_text())['issues'])
+
+
 def test_classification_disagreement_cannot_pass_review(tmp_path):
     source=pdf(tmp_path);out=tmp_path/'out';a=demonstration()
     t=CatalogTools(source,out);t.render(1);t.direct(1);t.render(1,a.page_context.source_evidence[0].box)

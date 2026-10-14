@@ -38,6 +38,11 @@ Extractor15 MiniMax-M3.1-Flash-Preview, reviewer/coordinator31 GLM5.3Flash Codin
 
 # State
 
+## 14October2026,11:00 audit —18 prepared,17 remains live
+
+527/980 accepted (OPN60,isolators161,small228,innovations68,armature10); GLM recovered1→2, MiniMax8, no new429. Latest originals294/168/10 and their full new native histories inspected. Confirmed168 false revise: its own source context null becomes candidate error and literal prose mismatches.132focused tests25.91s; exact retained168 native MCP replay17 saves true/2.148s,18 refuses with observer-context correction instruction/2.945s. No model benchmark/source value edits. True168H1 axis-vs-full-height error retained with exact candidate1/2 veto; new pending regression43. Immutable18 prepared with139dependency pins/126accepted predecessor profiles, native installed proof; publication then staged native-call drain17→18 remains next, not yet live18. Full queue17 and half-hour timer continue.
+
+
 ## Аудит 2026-10-14T10:53, МСК: память исправлена горячо, source-ошибки47/178
 
 Принято 526/980, прирост0 к10:00: OPN60/60, изоляторы161/162, малый228/228, инновации67/216, арматура10/314. В арматуре 285/314 совместимых черновиков (+24); новые завершения26extractor и1reviewer, последний — настоящий revise innovations10, не PASS. Все980старых черновиков сохранены. Reviewer47 завершился внешним timeout1200s, reviewer196 завершился RuntimeError/TimeoutError после source/schema/branding коррекций; обе проверки не приняты. GLM уже работает над innovations168. Вне rate-limit отказов обнаружены также3timeout и1иной сбой арматуры; конкретная природа отдельных транспортных timeout не доказана. Они не были выданы за429 или успешную проверку.
