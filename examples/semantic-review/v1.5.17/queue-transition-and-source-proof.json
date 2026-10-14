@@ -1,0 +1,1144 @@
+{
+  "observed_unix": 1791961212.8037908,
+  "observed_local": "2026-10-14T10:00:12.803796+03:00",
+  "comparison_baseline_unix": 1791959126.5376408,
+  "counts": {
+    "opn": {
+      "accepted": 60,
+      "pages": 60,
+      "accepted_delta": 0,
+      "compatible_drafts": 60,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 60,
+      "native_completed": {
+        "extractor": 146,
+        "reviewer": 164
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "isolators": {
+      "accepted": 161,
+      "pages": 162,
+      "accepted_delta": 0,
+      "compatible_drafts": 162,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 162,
+      "native_completed": {
+        "extractor": 390,
+        "reviewer": 345
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "small": {
+      "accepted": 228,
+      "pages": 228,
+      "accepted_delta": 0,
+      "compatible_drafts": 228,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 228,
+      "native_completed": {
+        "extractor": 539,
+        "reviewer": 518
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "innovations": {
+      "accepted": 67,
+      "pages": 216,
+      "accepted_delta": 1,
+      "compatible_drafts": 216,
+      "compatible_drafts_delta": 0,
+      "original_draft_pages_preserved": 216,
+      "native_completed": {
+        "extractor": 467,
+        "reviewer": 168
+      },
+      "native_completed_delta": {
+        "extractor": 1,
+        "reviewer": 2
+      }
+    },
+    "armature": {
+      "accepted": 10,
+      "pages": 314,
+      "accepted_delta": 0,
+      "compatible_drafts": 261,
+      "compatible_drafts_delta": 21,
+      "original_draft_pages_preserved": 314,
+      "native_completed": {
+        "extractor": 590,
+        "reviewer": 25
+      },
+      "native_completed_delta": {
+        "extractor": 22,
+        "reviewer": 1
+      }
+    }
+  },
+  "accepted": 526,
+  "accepted_delta": 1,
+  "active_job": "catalog-worker@full-semantic1517.service",
+  "primary_extractor_version": "1.5.17",
+  "primary_reviewer_version": "1.5.17",
+  "program": {
+    "package_version": "1.5.17",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "250a5f879c4c07bb339e5791b2e6b59062426df6bcef56df7b50cb0af47cfc87",
+    "python_version": "3.12.13"
+  },
+  "reviewer_endpoint": "https://api.z.ai/api/coding/paas/v4/",
+  "extractor_model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+  "reviewer_model": "zai.glm-5.3-flash?reasoning=low",
+  "transition": {
+    "status": "new_unit_active",
+    "finished_unix": 1791960570.108198,
+    "elapsed_seconds": 316.838,
+    "new_program": {
+      "package_version": "1.5.17",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "250a5f879c4c07bb339e5791b2e6b59062426df6bcef56df7b50cb0af47cfc87",
+      "python_version": "3.12.13"
+    },
+    "new_unit": "catalog-worker@full-semantic1517.service",
+    "no_native_calls_interrupted": true,
+    "compatible_accepted_verified": 525,
+    "artifact_pins": 1505,
+    "extractor_continued_during_reviewer_drain": true,
+    "note": "Runtime start only; new actual native model progress must still be verified."
+  },
+  "frozen_job_pins_verified": 355,
+  "preserved_artifact_pins": 1505,
+  "original_regions_viewed": [
+    "armature251 physical/printed250 four spacer drawings, enlarged rotated L diagonal confirms no r",
+    "armature204 physical/printed203 dimension70 exact extension-base and diameter14/four-hole annotation",
+    "armature164 physical/printed163 crimp/pin view A, L1/L4, no hinged-pencil object; all-table accuracy not claimed"
+  ],
+  "confirmed_issues": [
+    "figure_key stripped emptyset-shaped diameter sign, false mismatch and potential missing-diameter match; fixed1517",
+    "204 true70 upper extension base described as bolt axis; source veto remains",
+    "251 diagonal L invented as r; source lead/exactSHA veto installed",
+    "164 unsupported hinged-pencil object and questionable L4 ownership; source lead/exactSHA veto installed"
+  ],
+  "first_completed1517": {
+    "catalog": "innovations",
+    "physical_page": 200,
+    "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+    "attempt": 2,
+    "role": "extractor",
+    "program": {
+      "package_version": "1.5.17",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "250a5f879c4c07bb339e5791b2e6b59062426df6bcef56df7b50cb0af47cfc87",
+      "python_version": "3.12.13"
+    },
+    "contract_sha256": "5f66dfaacd6c43b74ca531095c704b2a738db593b26901fc493f46c9409796e6",
+    "artifact_sha256": "3d17c5e1756c6c531f303aa4a276a3c23773025571dc0ad35271a65cd6fc2817",
+    "elapsed_seconds": 157.146,
+    "native_completed": true,
+    "corrected_protector_name": true,
+    "independent_review_complete": false,
+    "source_veto_for_real_dimension_bases": true,
+    "page_accepted": false
+  },
+  "new_regression_ids": [
+    "innov200-fixed-part-name-still-wrong-dimension-bases",
+    "arm204-diameter-glyph-and-measured-feature-base",
+    "arm251-diagonal-length-l-not-radius-r",
+    "arm164-invented-hinged-pencil-and-length-ownership"
+  ],
+  "regression_pending_cases": 40,
+  "benchmark_commit": "70d7da8",
+  "focused_checks": {
+    "passed": 97,
+    "seconds": 17.36,
+    "model_calls": 0
+  },
+  "installed_native_consumer": {
+    "version": "1.5.17",
+    "exact_observation_and_dimension_contracts_discovered": true,
+    "review_envelope_below16000": true,
+    "native_stdio_MCP": true,
+    "unchanged_post_comparison_quote_reused": true,
+    "blind_quote_cannot_waive_first_post_comparison_inspection": true,
+    "changed_quote_needs_fresh_exact_region": true,
+    "blind_original_preserved": true,
+    "model_calls": 0,
+    "elapsed_seconds": 2.096
+  },
+  "installed_native_audit_refresh": {
+    "version": "1.5.17",
+    "native_stdio_MCP": true,
+    "same_native_context_retained": true,
+    "unread_and_updated_audit_block_review_write": true,
+    "existing_review_bytes_preserved_on_refusal": true,
+    "source_hint_refresh_allows_continuation": true,
+    "real_source_defect_still_refused_after_hint_read": true,
+    "blind_source_observation_unchanged": true,
+    "model_calls": 0,
+    "seconds": 1.57
+  },
+  "retained204_replay": {
+    "version": "1.5.17",
+    "retained_physical_page": 204,
+    "candidate_sha256": "efa447e402cbdf98ee97229805976d1b0307d337faa47b8285589bce0ce4099c",
+    "before": [
+      {
+        "path": "tables[0].columns[0].group",
+        "source_observation": "Сталеалюминиевый провод АС по ГОСТ 839-80",
+        "candidate": null
+      },
+      {
+        "path": "figures[1].labels",
+        "source_observation": "⌀14, 4 отв.",
+        "candidate": "missing or changed label/tolerance"
+      }
+    ],
+    "after": [
+      {
+        "path": "tables[0].columns[0].group",
+        "source_observation": "Сталеалюминиевый провод АС по ГОСТ 839-80",
+        "candidate": null
+      }
+    ],
+    "diameter_not_dropped": true,
+    "changed_numeral_refused": true,
+    "real70_source_veto_preserved": true,
+    "drawing_pass": false,
+    "model_calls": 0
+  },
+  "new_source_tool_events": [
+    {
+      "catalog": "armature",
+      "physical_page": 243,
+      "role": "extractor",
+      "tool": "load_skill",
+      "time": 1791960655.966614,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 243,
+      "role": "extractor",
+      "tool": "view_page",
+      "time": 1791960658.3570333,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 243,
+      "role": "extractor",
+      "tool": "read_source_table",
+      "time": 1791960668.449962,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 243,
+      "role": "extractor",
+      "tool": "source_artifact_created",
+      "time": 1791960668.9600158,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 243,
+      "role": "extractor",
+      "tool": "read_source_artifact",
+      "time": 1791960670.6949508,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 243,
+      "role": "extractor",
+      "tool": "read_source_artifact",
+      "time": 1791960672.9600935,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 243,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960679.735795,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 243,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960679.748371,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 243,
+      "role": "extractor",
+      "tool": "extract_direct",
+      "time": 1791960741.5767744,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "load_skill",
+      "time": 1791960662.6493979,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "view_page",
+      "time": 1791960663.85904,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "read_external_audit",
+      "time": 1791960669.983256,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "read_page_json",
+      "time": 1791960673.4653804,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960683.7597027,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960683.7599056,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "save_section",
+      "time": 1791960696.4522555,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "read_source_table",
+      "time": 1791960708.0024898,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "source_artifact_created",
+      "time": 1791960708.109459,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "read_source_artifact",
+      "time": 1791960711.6900482,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "read_source_artifact",
+      "time": 1791960717.195436,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960730.603202,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960760.5373683,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960767.5173855,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960767.517583,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "save_section",
+      "time": 1791960968.2864714,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "extract_direct",
+      "time": 1791961048.6672356,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 178,
+      "role": "extractor",
+      "tool": "save_page_json",
+      "time": 1791961210.678517,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 261,
+      "role": "extractor",
+      "tool": "load_skill",
+      "time": 1791960831.7851088,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 261,
+      "role": "extractor",
+      "tool": "view_page",
+      "time": 1791960833.1542892,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 261,
+      "role": "extractor",
+      "tool": "read_page_json",
+      "time": 1791960836.860571,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 261,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960847.6214483,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 261,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960847.6977923,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 261,
+      "role": "extractor",
+      "tool": "read_source_table",
+      "time": 1791960856.0120006,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 261,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960864.910432,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 261,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960864.977156,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 261,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960877.6917512,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 261,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960877.7469697,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 261,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960902.9710267,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 261,
+      "role": "extractor",
+      "tool": "extract_direct",
+      "time": 1791960986.7279878,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "load_skill",
+      "time": 1791960640.9456844,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_page",
+      "time": 1791960643.1288335,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "read_external_audit",
+      "time": 1791960647.131939,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "read_page_json",
+      "time": 1791960647.3630903,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960658.0616522,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960658.256252,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960669.1521568,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960669.371461,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960680.4611282,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "read_source_table",
+      "time": 1791960690.4723196,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "source_artifact_created",
+      "time": 1791960690.7674456,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "read_source_artifact",
+      "time": 1791960693.9979398,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "save_section",
+      "time": 1791960725.5496821,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "load_skill",
+      "time": 1791960898.6900334,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_page",
+      "time": 1791960899.487022,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "read_page_json",
+      "time": 1791960902.3536587,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "read_external_audit",
+      "time": 1791960902.6856265,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960907.0306354,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960916.149101,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960920.0828595,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960927.8737853,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960938.9917943,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960939.1421793,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791960958.6789396,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "read_source_table",
+      "time": 1791960972.2809284,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "source_artifact_created",
+      "time": 1791960972.3937068,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "read_source_artifact",
+      "time": 1791960982.4363596,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "read_source_artifact",
+      "time": 1791960986.2970088,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "inspect_drawing_geometry",
+      "time": 1791961005.969126,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791961008.998734,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791961020.7627087,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791961031.8215165,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "save_section",
+      "time": 1791961056.291788,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 164,
+      "role": "extractor",
+      "tool": "extract_direct",
+      "time": 1791961126.1476057,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 264,
+      "role": "extractor",
+      "tool": "load_skill",
+      "time": 1791961081.1020145,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 264,
+      "role": "extractor",
+      "tool": "view_page",
+      "time": 1791961081.9620447,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 264,
+      "role": "extractor",
+      "tool": "read_page_json",
+      "time": 1791961087.5065265,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 264,
+      "role": "extractor",
+      "tool": "read_source_table",
+      "time": 1791961092.8944151,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 264,
+      "role": "extractor",
+      "tool": "read_source_layout",
+      "time": 1791961097.6538405,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 264,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791961097.654086,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 264,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791961103.4503982,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 264,
+      "role": "extractor",
+      "tool": "extract_direct",
+      "time": 1791961134.9001129,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 47,
+      "role": "reviewer",
+      "tool": "load_skill",
+      "time": 1791961163.5877044,
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35"
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 47,
+      "role": "reviewer",
+      "tool": "view_page",
+      "time": 1791961164.131435,
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35"
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 47,
+      "role": "reviewer",
+      "tool": "view_region",
+      "time": 1791961172.2993534,
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35"
+    },
+    {
+      "catalog": "isolators",
+      "physical_page": 47,
+      "role": "reviewer",
+      "tool": "view_region",
+      "time": 1791961172.3296306,
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 265,
+      "role": "extractor",
+      "tool": "load_skill",
+      "time": 1791961189.6814055,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 265,
+      "role": "extractor",
+      "tool": "view_page",
+      "time": 1791961190.4656024,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 265,
+      "role": "extractor",
+      "tool": "read_page_json",
+      "time": 1791961192.6054175,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 265,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791961203.0911455,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 265,
+      "role": "extractor",
+      "tool": "read_source_table",
+      "time": 1791961203.3327074,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    },
+    {
+      "catalog": "armature",
+      "physical_page": 265,
+      "role": "extractor",
+      "tool": "view_region",
+      "time": 1791961207.5800426,
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e"
+    }
+  ],
+  "first_completed1517_review": {
+    "catalog": "innovations",
+    "physical_page": 194,
+    "status": "accepted",
+    "candidate_producer": {
+      "status": "receipt_verified",
+      "program": {
+        "package_version": "1.5.8",
+        "git_revision": null,
+        "dirty": null,
+        "source_code_sha256": "56b47ab11c142fdd0d89ade636eb52fff30220c3425401678e2bf74c18b69c62",
+        "python_version": "3.12.13"
+      },
+      "artifact_sha256": "79349a05e6a07d5cc659033decf18f3e6226dcc0768933d7acbb1f5934d7770c",
+      "source_bound_save": true,
+      "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+      "physical_page": 194,
+      "attempt": 1,
+      "role": "extractor",
+      "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+      "contract_sha256": "ad43db8eeb96f6a5b1aab82eb07fb8d999a3c90cd9e1f094a41f378634f1d7ae",
+      "started_at": 1791944923.4637012,
+      "finished_at": 1791946034.2044508
+    },
+    "review_producer": {
+      "status": "receipt_verified",
+      "program": {
+        "package_version": "1.5.17",
+        "git_revision": null,
+        "dirty": null,
+        "source_code_sha256": "250a5f879c4c07bb339e5791b2e6b59062426df6bcef56df7b50cb0af47cfc87",
+        "python_version": "3.12.13"
+      },
+      "artifact_sha256": "8b3a3f0533c9e2421b9ff463dbff08875b7f7a1a99852c3f59b03de322ccd5b3",
+      "source_bound_save": true,
+      "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+      "physical_page": 194,
+      "attempt": 1,
+      "role": "reviewer",
+      "model": "zai.glm-5.3-flash?reasoning=low",
+      "contract_sha256": "5f66dfaacd6c43b74ca531095c704b2a738db593b26901fc493f46c9409796e6",
+      "dimension_evidence": {
+        "file": "dimension-review-1.json",
+        "sha256": "e8391bb1c205be0733f6b68d227ea4a6ad65f6893c33b0ba78ef0c4a7cd6fb6c"
+      },
+      "started_at": 1791960683.907061,
+      "finished_at": 1791961119.409191
+    },
+    "review_verdict": "pass",
+    "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+    "root_full_drawing_accuracy_claimed": false
+  },
+  "production1517_pagePASS_claimed": true,
+  "provider_pacing": {
+    "anthropic": {
+      "configured_maximum": 8,
+      "current_limit": 6,
+      "active_calls": 6,
+      "waiting_calls": 1,
+      "rate_limit_count": 1530,
+      "rate_limit_waves": 81,
+      "backoff_streak": 0,
+      "clean_successes": 4,
+      "operator_not_before_unix": 1791954000.0,
+      "operator_hold_remaining_seconds": 0,
+      "backoff_remaining_seconds": 0
+    },
+    "zai": {
+      "configured_maximum": 8,
+      "current_limit": 1,
+      "active_calls": 1,
+      "waiting_calls": 7,
+      "rate_limit_count": 983,
+      "rate_limit_waves": 83,
+      "backoff_streak": 0,
+      "clean_successes": 4,
+      "operator_not_before_unix": 0,
+      "operator_hold_remaining_seconds": 0,
+      "backoff_remaining_seconds": 0
+    }
+  },
+  "runtime_budget": {
+    "memory_high_bytes": 4294967296,
+    "memory_max_bytes": 6442450944,
+    "swap_bytes": 0,
+    "cpu_percent": 200,
+    "tasks": 512,
+    "io_weight": 50,
+    "nice": 10,
+    "runtime_seconds": 86500,
+    "note": "Fresh live systemd matches tracked worker template. Older12/16GiB narrative is historical and not the current boundary."
+  },
+  "large_model_benchmark_run": false,
+  "manual_production_values_edited": false,
+  "scheduler": {
+    "timer": "catalog-review-watch.timer",
+    "left_active": true,
+    "cadence_minutes": 30
+  },
+  "draft_count_basis": "Current per-catalog catalog.json queue snapshot (per-page result.json may be stale until admission); source/receipt-verified candidate_producer.attempt, including retained accepted outputs; next_attempt may already point to a pending repair. Compatible is not source-accuracy PASS.",
+  "accuracy_note": "Accepted page count and source-tool delivery do not provide a new global or drawing accuracy percentage. Retained204 alias comparison removes one false difference but does not accept the true geometry defect.",
+  "next_step": "Continue full queue on1517. First extractor200 and review194 receipts verified; inspect source repairs200/164/204/251 plus47/178/86/179/189 next wake. Use current per-catalog catalog.json queue records; individual result.json may be stale until admission. No new transfer pending or broad benchmark."
+}

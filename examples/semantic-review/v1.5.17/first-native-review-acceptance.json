@@ -1,0 +1,52 @@
+{
+  "catalog": "innovations",
+  "physical_page": 194,
+  "status": "accepted",
+  "candidate_producer": {
+    "status": "receipt_verified",
+    "program": {
+      "package_version": "1.5.8",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "56b47ab11c142fdd0d89ade636eb52fff30220c3425401678e2bf74c18b69c62",
+      "python_version": "3.12.13"
+    },
+    "artifact_sha256": "79349a05e6a07d5cc659033decf18f3e6226dcc0768933d7acbb1f5934d7770c",
+    "source_bound_save": true,
+    "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+    "physical_page": 194,
+    "attempt": 1,
+    "role": "extractor",
+    "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+    "contract_sha256": "ad43db8eeb96f6a5b1aab82eb07fb8d999a3c90cd9e1f094a41f378634f1d7ae",
+    "started_at": 1791944923.4637012,
+    "finished_at": 1791946034.2044508
+  },
+  "review_producer": {
+    "status": "receipt_verified",
+    "program": {
+      "package_version": "1.5.17",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "250a5f879c4c07bb339e5791b2e6b59062426df6bcef56df7b50cb0af47cfc87",
+      "python_version": "3.12.13"
+    },
+    "artifact_sha256": "8b3a3f0533c9e2421b9ff463dbff08875b7f7a1a99852c3f59b03de322ccd5b3",
+    "source_bound_save": true,
+    "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+    "physical_page": 194,
+    "attempt": 1,
+    "role": "reviewer",
+    "model": "zai.glm-5.3-flash?reasoning=low",
+    "contract_sha256": "5f66dfaacd6c43b74ca531095c704b2a738db593b26901fc493f46c9409796e6",
+    "dimension_evidence": {
+      "file": "dimension-review-1.json",
+      "sha256": "e8391bb1c205be0733f6b68d227ea4a6ad65f6893c33b0ba78ef0c4a7cd6fb6c"
+    },
+    "started_at": 1791960683.907061,
+    "finished_at": 1791961119.409191
+  },
+  "review_verdict": "pass",
+  "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+  "root_full_drawing_accuracy_claimed": false
+}
