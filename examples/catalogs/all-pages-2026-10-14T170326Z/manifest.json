@@ -1,0 +1,105 @@
+{
+  "created_at": "2026-10-14T20:04:55.493236+03:00",
+  "page_count": 980,
+  "independently_accepted_pages": 957,
+  "manual_pages_integrated": 509,
+  "manual_independently_source_verified": 486,
+  "native_queue_accepted_pages": 477,
+  "counts": {
+    "opn": {
+      "pages": 60,
+      "independently_accepted": 60,
+      "root_source_checked_pending_review": 0
+    },
+    "isolators": {
+      "pages": 162,
+      "independently_accepted": 160,
+      "root_source_checked_pending_review": 2
+    },
+    "small": {
+      "pages": 228,
+      "independently_accepted": 227,
+      "root_source_checked_pending_review": 1
+    },
+    "innovations": {
+      "pages": 216,
+      "independently_accepted": 210,
+      "root_source_checked_pending_review": 6
+    },
+    "armature": {
+      "pages": 314,
+      "independently_accepted": 300,
+      "root_source_checked_pending_review": 14
+    }
+  },
+  "files": {
+    "all-catalogues-980-pages.json": {
+      "sha256": "025b6c312b9ff2ed6e4f6f31cbc776a48b751315d3c2d5788751a4ae5347ea54",
+      "bytes": 38453147
+    },
+    "small.xlsx": {
+      "sha256": "37b8e570edd880255592a3ecb6b04e1b60db9ac1ac456bedca8123e26e2d2953",
+      "bytes": 1325812
+    },
+    "armature.xlsx": {
+      "sha256": "349cfb9354a14289dc15c779d85b1ed5e9af458ebe0af4fb3f486458cca01323",
+      "bytes": 2137799
+    },
+    "opn.xlsx": {
+      "sha256": "01bf8789fcc4ebf3f88530176d172c8ae22158038f94e7c5102e416e0df0e6a3",
+      "bytes": 370874
+    },
+    "innovations.xlsx": {
+      "sha256": "766935e535aea53978aa5ccc01fd293b3203fca0cdbb78344d708eb6a15d6d99",
+      "bytes": 1406208
+    },
+    "isolators.xlsx": {
+      "sha256": "78c7747b675c0bd6ea9ed737bd3f83438d1b460455329af9c345542e3ecfe7c3",
+      "bytes": 1075135
+    },
+    "README.txt": {
+      "sha256": "480442c46187a9ccf21b7399a199a4d6181f37d83d8e0e075879e3673453a721",
+      "bytes": 1625
+    }
+  },
+  "snapshot_sources": [
+    {
+      "catalog": "opn",
+      "checkpoint_sha256": "9fd29c750be4d18c30fb2744505cfb0be3c8c2a6810f09bae8b24b7f42a315cf",
+      "checkpoint_mtime_unix": 1791994528.6757712,
+      "snapshot_read_unix": 1791997407.509193
+    },
+    {
+      "catalog": "isolators",
+      "checkpoint_sha256": "ad5e331fdf5ffd6e295f34618f44429c5f72ad9140118b2d9b25f40b747ffdba",
+      "checkpoint_mtime_unix": 1791997378.4373825,
+      "snapshot_read_unix": 1791997412.6068223
+    },
+    {
+      "catalog": "small",
+      "checkpoint_sha256": "083e45248d13a0f2f0451a61bc833f4735abade16c6b79351bfc23c423b33834",
+      "checkpoint_mtime_unix": 1791997376.6433215,
+      "snapshot_read_unix": 1791997426.6643677
+    },
+    {
+      "catalog": "innovations",
+      "checkpoint_sha256": "6bd43ff859fbcce25110ba0fef9e62a65e413083c40032b758c41efdedc84349",
+      "checkpoint_mtime_unix": 1791997375.0162663,
+      "snapshot_read_unix": 1791997444.0166314
+    },
+    {
+      "catalog": "armature",
+      "checkpoint_sha256": "062db8a4f8d6206af5aaadc8847528f96f9e75e59a4e3220f3450eb31bd7433a",
+      "checkpoint_mtime_unix": 1791997403.8402426,
+      "snapshot_read_unix": 1791997464.892922
+    }
+  ],
+  "budget": {
+    "expected_seconds": 90,
+    "maximum_seconds": 900,
+    "ram_hard_bytes": 3221225472,
+    "cpu_workers": 1,
+    "temporary_disk_max_bytes": 536870912,
+    "model_calls": 0
+  }
+}
