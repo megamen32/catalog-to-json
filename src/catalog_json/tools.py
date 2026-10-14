@@ -85,7 +85,7 @@ def review_contract():
 
 class CatalogTools:
     def __init__(self, source=None, output=None, role='extractor', page=None, attempt=0,model=None,contract_sha256=None):
-        self.model=model;self.contract_sha256=contract_sha256;self.region_evidence={};self.branding_figure_quotes={};self.dimension_reviews={};self.audit_receipts={}
+        self.model=model;self.contract_sha256=contract_sha256;self.region_evidence={};self.branding_figure_quotes={};self.verified_branding_quotes={};self.dimension_reviews={};self.audit_receipts={}
         self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.disclosed={};self.latest_zoom={};self.corrections={};self.grids={};self.source_artifacts={};self.region_reads={};self.edit_baselines={};self.invalid_edit_baselines=set();self.source=None;self.output=None
         if source and output:self.open(source,output)
 
@@ -95,7 +95,7 @@ class CatalogTools:
         if output==source or source.parent==output:raise ValueError('Choose a separate output directory')
         with pymupdf.open(source) as doc:count=len(doc)
         durable_directory(output)
-        self.source=source;self.source_digest=hashlib.sha256(source.read_bytes()).hexdigest();self.output=output;self.seen={};self.source_artifacts={};self.region_reads={};self.region_evidence={};self.branding_figure_quotes={};self.edit_baselines={};self.invalid_edit_baselines=set();self.grids={};self.disclosed={};self.latest_zoom={};self.corrections={}
+        self.source=source;self.source_digest=hashlib.sha256(source.read_bytes()).hexdigest();self.output=output;self.seen={};self.source_artifacts={};self.region_reads={};self.region_evidence={};self.branding_figure_quotes={};self.verified_branding_quotes={};self.edit_baselines={};self.invalid_edit_baselines=set();self.grids={};self.disclosed={};self.latest_zoom={};self.corrections={}
         return {'filename':source.name,'page_count':count,'role':self.role,'output':str(output)}
 
     def work(self,page):
@@ -451,6 +451,9 @@ class CatalogTools:
         return {'saved':True,'file':str(work/filename)}
 
     def bind_branding_figures(self,page,quotes):
+        # Reuse only exact quotes from a successful post-disclosure correction.
+        # The initial blind observation cannot waive the first fresh comparison.
+        if page in self.disclosed:self.verified_branding_quotes[page]=quotes
         bound={}
         for quote in quotes:
             if quote.get('source_kind')=='branding' and 'figure_index' in quote:

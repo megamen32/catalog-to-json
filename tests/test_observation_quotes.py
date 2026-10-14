@@ -91,6 +91,25 @@ def test_correction_quote_needs_fresh_matching_box(tmp_path):
     t.region(1,[0.,0.,.5,.5])
     assert not t.correct_observation(1,observation().model_dump_json(),'Other source region was reinspected',literal_quotes=proof())['saved']
 
+
+def test_unchanged_verified_quotes_survive_unrelated_observation_correction(tmp_path):
+    """Fast unit: retained47 stale-all-quotes loop; expected1s/emergency10s."""
+    t=setup(tmp_path);base=observation()
+    assert t.save(1,base.model_dump_json(),'observation',literal_quotes=proof())['saved']
+    (t.work(1)/'candidate-0.json').write_text(base.model_dump_json());t.read(1,'page')
+    t.region(1,BOX)
+    first=base.model_copy(deep=True);first.text_blocks.append(TextBlock(kind='paragraph',text='First source explanation'))
+    assert t.correct_observation(1,first.model_dump_json(),'Fresh source check of explanation',literal_quotes=proof())['saved']
+    # A later paragraph correction must not expire the unchanged exact quote.
+    t.region(1,[0.,.5,1.,1.])
+    second=first.model_copy(deep=True);second.text_blocks[-1].text='Revised source explanation'
+    assert t.correct_observation(1,second.model_dump_json(),'Fresh lower source region',literal_quotes=proof())['saved']
+    # Changing the quote itself still needs its own fresh inspection.
+    t.region(1,[0.,.5,1.,1.]);changed=second.model_copy(deep=True);changed.text_blocks[0].text='A DIFFERENT BRAND'
+    result=t.correct_observation(1,changed.model_dump_json(),'Changed branding assertion',literal_quotes=proof('A DIFFERENT BRAND'))
+    assert not result['saved']
+    assert any('block_index=0' in e and 'View the exact' in e for e in result['quote_errors'])
+
 def test_quote_guard_does_not_replace_numeric_or_figure_guards(tmp_path):
     from catalog_json.schema import Figure
     from catalog_json.audit import compare_source

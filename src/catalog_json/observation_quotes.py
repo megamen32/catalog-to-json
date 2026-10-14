@@ -62,8 +62,13 @@ def branding_quote_evidence(context,page,model,proofs,after=0):
                     any(type(x) not in (int,float) or not math.isfinite(x) or not 0<=x<=1 for x in box) or
                     box[0]>=box[2] or box[1]>=box[3] or type(rotation) is not int or rotation not in (0,90,180,270)):
                 errors.append('Invalid literal quote source region');continue
-            if context.region_evidence.get((page,tuple(box),rotation),0)<=after:
-                errors.append('View the exact quoted source region before recording this quote');continue
+            identity=('block_index','figure_index','label_index','source_kind','box','visible_quote','basis','conflict')
+            unchanged_verified=any(all(previous.get(k)==item.get(k) for k in identity)
+                                   and previous.get('rotation',0)==rotation
+                                   for previous in getattr(context,'verified_branding_quotes',{}).get(page,[]))
+            if context.region_evidence.get((page,tuple(box),rotation),0)<=after and not unchanged_verified:
+                target=f'block_index={index}' if index is not None else f'figure_index={fi}, label_index={li}'
+                errors.append(f'View the exact quoted source region before recording this quote: {target}, box={box}, rotation={rotation}. Only this changed/unconfirmed quote needs its own fresh view; unchanged quotes from a successful post-comparison correction are retained.');continue
             visible=item.get('visible_quote');basis=item.get('basis');conflict=item.get('conflict')
             if visible!=expected or not isinstance(visible,str) or not visible.strip():
                 errors.append('visible_quote must equal the literal branding block, without added description');continue
