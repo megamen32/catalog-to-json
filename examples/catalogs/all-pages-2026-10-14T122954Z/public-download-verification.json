@@ -1,0 +1,17 @@
+{
+  "url": "https://raw.githubusercontent.com/megamen32/catalog-to-json/8f1ab839f2a4370ce58ab0624d6b4cd6c6115316/examples/catalogs/all-pages-2026-10-14T122954Z/all-catalogues-980-pages.zip",
+  "commit": "8f1ab839f2a4370ce58ab0624d6b4cd6c6115316",
+  "time": "2026-10-14T15:38:30.251439+03:00",
+  "http_status": 200,
+  "bytes": 9767500,
+  "sha256": "fb30e1a7115b678af8d3cdae48f0c5146e2441fb27b9bb28dffdbda83960e48c",
+  "CRC": "pass",
+  "member_hashes": "pass",
+  "members": 8,
+  "catalogues": 5,
+  "pages": 980,
+  "verified_current_page_contents": 576,
+  "manual_independent_pages": 122,
+  "native_queue_accepted_at_snapshot": 456,
+  "model_calls": 0
+}
