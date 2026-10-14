@@ -1,3 +1,9 @@
+## Текущий этап: полное сведение двух готовых разборов,15.10.2026,02:56МСК
+
+Безкворума: rootCodex380(armature5/36переданыпослеterminalMM), nativeZCode288 и MiniMax312. На23:53UTC141/288/40saved, всего469/980,511безreceipts; livecensus .tmp/oleg-consensus-20261014/full-owner-progress-latest.json. Rootдобавил30страницвэтомпродолжении, следующиeisolators77–84. MiniMaxстарыйexec20502terminalна36; новаянеповторяющаясвежаяочередьexec31640на37..314живареальнымиrecеipts37/38/39/40+, исходныйworker1.5.25/явныйM3.1FlashPreview. Root36сведенабезповтораUNKNOWN. Контроллер/ошибка/transferполностьювверхнемtaskrecord. Новогобольшогобенчмарка/отдельногоGLM/повторнойэкстракциинет.
+
+ZCodeсоздалbuild_owner_merge.pyитесты, ноinitialdispositions-onlyвариантнепринимается: нужноРЕАЛЬНОматериализоватьselectedtypedfactsвprimaryJSON/Excel, архивахсохранитьотвергнутыезначения, Olegonlyвосновныхданных. КонкретноеисправлениеназначеноZCode, rootегокоднетрогает. См.самыйверх .agents/tasks/20261014-oleg-consensus-merge.md. ИтоговыйZIPещёнепостроен/невыдан, финальнаянезависимаяпроверкаотложена, текущийownercoverageнеaccuracy. Pendingregressions89/95/97публикованывbenchmark7cd0a61, безсменыстарых500/520.
+
 ## LIVE OWNER WORK — 15.10.2026,01:54МСК
 
 Root88/379(19сравнений+69одностороннихсохранений), ZCode288/288savedНОдоделываетреальныемежсторонниеcounterparts, MiniMax12/313 ирастёт.388сохранённыхownerстраниц/592безreceipts; неaccuracy/notfinal. MM64944terminated onpage5networktimeout/no429; originalUNKNOWNnotreplayed. Newnever-admittedqueueexec20502. Page5completebyactualCodex, ownershiptransferindex containsunchangedfacts proof. Read newest `.agents/tasks/20261014-oleg-consensus-merge.md` and full-owner-progress-latest.json. Rootnextisolators133–140/allrest; finalwholeZIPbuilderneedsnewownerreceipts+transfers,notold226casegate. Goalactive.
