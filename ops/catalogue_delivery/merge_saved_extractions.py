@@ -306,6 +306,13 @@ def build(root, task, out, *, allow_pending=False):
     with zipfile.ZipFile(archive, 'x', compression=zipfile.ZIP_DEFLATED, compresslevel=6) as z:
         for file in workbook_paths:
             z.write(file,file.name); manifest_files[file.name]={'sha256':sha(file),'bytes':file.stat().st_size}
+        # Retain the COMPLETE comparison, not only the small adjudicated subset.
+        # These are candidate alignments, explicitly not a list of source errors.
+        for filename, member in (('facts.jsonl.gz','comparison-facts.jsonl.gz'),
+                                 ('alignment-ledger.jsonl.gz','comparison-ledger.jsonl.gz'),
+                                 ('summary.json','comparison-coverage.json')):
+            file=task/'comparison-property-scope-safe'/filename
+            z.write(file,member);manifest_files[member]={'sha256':sha(file),'bytes':file.stat().st_size}
         # A single readable catalogue JSON. Other-side observations use one
         # common literal fact schema and link to the same source/page identities.
         h=hashlib.sha256(); size=0
@@ -346,7 +353,7 @@ def build(root, task, out, *, allow_pending=False):
         manifest_files['catalogue.json']={'sha256':h.hexdigest(),'bytes':size,'oleg_observations':n}
         reports={'corrections.json':changes, 'reconciliation-report.json':{'summary':summary,'cases':[public_record(r) for r in records], 'joint_scope_approvals': approvals},
             'README.txt':'Единый снимок пяти каталогов (980 физических страниц).\n'+('Итоговый консенсус завершён.\n' if full else 'ВНИМАНИЕ: промежуточный снимок; полный консенсус ещё не завершён.\n')+
-            'catalogue.json — основная постраничная выдача, исправления, три мнения по каждому разобранному случаю и сохранённые наблюдения Олега.\nПять Excel содержат те же таблицы, тексты, чертежи, происхождение и исправления.\nВ отчёте отдельно показаны принятые случаи и оставшиеся споры. Кандидаты сопоставления не являются числом ошибок.\n'}
+            'catalogue.json — основная постраничная выдача, исправления, три мнения по каждому разобранному случаю и сохранённые наблюдения Олега.\nПять Excel содержат те же таблицы, тексты, чертежи, происхождение и исправления. Лист «Варианты модели» сохраняет согласованные связи отдельных вариантов с полными списками модели.\nВ отчёте отдельно показаны принятые случаи и оставшиеся споры. comparison-facts.jsonl.gz и comparison-ledger.jsonl.gz содержат полный исходный реестр фактов и сопоставлений, включая ещё не разобранные случаи; comparison-coverage.json — его охват. Кандидаты сопоставления не являются числом ошибок.\n'}
         for name,value in reports.items():
             data=(value if isinstance(value,str) else dump(value)).encode();z.writestr(name,data);manifest_files[name]={'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data)}
         z.writestr('manifest.json',dump({'schema_version':'catalogue-reconciliation-manifest/1','summary':summary,'files':manifest_files}))
