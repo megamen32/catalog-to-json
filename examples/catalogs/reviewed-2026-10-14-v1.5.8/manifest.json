@@ -1,0 +1,91 @@
+{
+  "created_at": "2026-10-14T05:35:29.549306+03:00",
+  "snapshot_runner_version": "1.5.8",
+  "source_revision": "5e1949e",
+  "status": "native_review_accepted",
+  "independent_root_review": "selected source pages only, no universal accuracy percentage",
+  "catalogs": [
+    {
+      "id": "opn",
+      "source": {
+        "filename": "opn.pdf",
+        "sha256": "300f06a65b18b1656c589e85c94eb29486aaf6d16a5c10b0544dbdc51666adc2",
+        "page_count": 60
+      },
+      "accepted_pages": 60,
+      "cells_checked_against_json": 3550,
+      "producer_pairs": [
+        {
+          "extractor_version": "1.4.15",
+          "reviewer_version": "1.4.8",
+          "pages": 10
+        },
+        {
+          "extractor_version": "1.4.2",
+          "reviewer_version": "1.4.8",
+          "pages": 50
+        }
+      ],
+      "files": {
+        "opn.json": {
+          "bytes": 1948397,
+          "sha256": "6a90e583a1f1274dc11e2e0b5e96120817739df3d40126c4fba87118da432cd1"
+        },
+        "opn.xlsx": {
+          "bytes": 370670,
+          "sha256": "c6d0c61bff56e5867df3a38fe92b58c62b27a8e3150e19213578b5ddb22ab848"
+        }
+      }
+    },
+    {
+      "id": "small",
+      "source": {
+        "filename": "Malyj-katalog.pdf",
+        "sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+        "page_count": 228
+      },
+      "accepted_pages": 228,
+      "cells_checked_against_json": 13373,
+      "producer_pairs": [
+        {
+          "extractor_version": "1.4.15",
+          "reviewer_version": "1.4.8",
+          "pages": 226
+        },
+        {
+          "extractor_version": "1.5.3",
+          "reviewer_version": "1.5.3",
+          "pages": 1
+        },
+        {
+          "extractor_version": "1.5.3",
+          "reviewer_version": "1.5.8",
+          "pages": 1
+        }
+      ],
+      "files": {
+        "small.json": {
+          "bytes": 6874351,
+          "sha256": "b9b279108514ddd16fafe2b97f0cd4f0f98b9ae7ce5fe89be09e301a2c4acec6"
+        },
+        "small.xlsx": {
+          "bytes": 1323510,
+          "sha256": "001abc1642316b60a30f452f7ddf001301d60cd77686d66d8b367f3c52315cc0"
+        }
+      }
+    }
+  ],
+  "validation": {
+    "category": "focused_integration",
+    "expected_seconds": 30,
+    "emergency_seconds": 300,
+    "model_calls": 0,
+    "parallel_processes": 1,
+    "gpu": false
+  },
+  "publication_sanitization": {
+    "shortened_local_source_paths_in_review_evidence": 2,
+    "extracted_values_changed": false,
+    "original_review_hashes_retained": true
+  }
+}

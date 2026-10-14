@@ -1,0 +1,215 @@
+{
+  "observed_local": "2026-10-14T05:40:34.338333+03:00",
+  "primary_version": "1.5.8",
+  "counts": {
+    "opn": {
+      "accepted": 60,
+      "pages": 60,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 60,
+      "native_completed": {
+        "extractor": 146,
+        "reviewer": 164
+      },
+      "completed_receipts_after_baseline_timestamp": {
+        "extractor": 0,
+        "reviewer": 0
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "isolators": {
+      "accepted": 161,
+      "pages": 162,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 162,
+      "native_completed": {
+        "extractor": 388,
+        "reviewer": 343
+      },
+      "completed_receipts_after_baseline_timestamp": {
+        "extractor": 1,
+        "reviewer": 0
+      },
+      "native_completed_delta": {
+        "extractor": 1,
+        "reviewer": 0
+      }
+    },
+    "small": {
+      "accepted": 228,
+      "pages": 228,
+      "accepted_delta": 1,
+      "original_draft_pages_preserved": 228,
+      "native_completed": {
+        "extractor": 539,
+        "reviewer": 518
+      },
+      "completed_receipts_after_baseline_timestamp": {
+        "extractor": 0,
+        "reviewer": 1
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 1
+      }
+    },
+    "innovations": {
+      "accepted": 58,
+      "pages": 216,
+      "accepted_delta": 1,
+      "original_draft_pages_preserved": 216,
+      "native_completed": {
+        "extractor": 448,
+        "reviewer": 147
+      },
+      "completed_receipts_after_baseline_timestamp": {
+        "extractor": 12,
+        "reviewer": 1
+      },
+      "native_completed_delta": {
+        "extractor": 14,
+        "reviewer": 1
+      }
+    },
+    "armature": {
+      "accepted": 4,
+      "pages": 314,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 314,
+      "native_completed": {
+        "extractor": 469,
+        "reviewer": 15
+      },
+      "completed_receipts_after_baseline_timestamp": {
+        "extractor": 15,
+        "reviewer": 0
+      },
+      "native_completed_delta": {
+        "extractor": 17,
+        "reviewer": 0
+      }
+    }
+  },
+  "new_native_acceptances": [
+    {
+      "catalog": "innovations",
+      "physical_page": 184,
+      "status": "accepted",
+      "candidate_producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.5.6",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "ca9cb343d7402f9bdb421b4fc5bc0b77ee1cff94b255122f592b3fda0e12f0b3",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "c2bf7d8b91c7f05428df2f02e15407686404e1a23570b2e38c70bebd0da1e9b6",
+        "source_bound_save": true,
+        "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+        "physical_page": 184,
+        "attempt": 1,
+        "role": "extractor",
+        "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+        "contract_sha256": "3031f54101971a2d9729b048304180edaaf22cda716b98c15339c8c61c45fa7b",
+        "started_at": 1791943757.2025511,
+        "finished_at": 1791943795.50067
+      },
+      "review_producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.5.8",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "56b47ab11c142fdd0d89ade636eb52fff30220c3425401678e2bf74c18b69c62",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "ad062b038b6dcefa04ac28e85463d23a55f2af532148d7e5ad40a241d2bf9b64",
+        "source_bound_save": true,
+        "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+        "physical_page": 184,
+        "attempt": 1,
+        "role": "reviewer",
+        "model": "zai.glm-5.3-flash?reasoning=low",
+        "contract_sha256": "ad43db8eeb96f6a5b1aab82eb07fb8d999a3c90cd9e1f094a41f378634f1d7ae",
+        "started_at": 1791944494.628499,
+        "finished_at": 1791944655.460394
+      },
+      "review_verdict": "pass"
+    },
+    {
+      "catalog": "small",
+      "physical_page": 25,
+      "status": "accepted",
+      "candidate_producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.5.3",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "531e9bea963ef7592a9a09035761b155f81fbf1ba43027dc5c7017c55e9693fe",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "78dc79e85c441897b937a7a0b877b23d23120ff670911236292417d39b7d9294",
+        "source_bound_save": true,
+        "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+        "physical_page": 25,
+        "attempt": 14,
+        "role": "extractor",
+        "model": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+        "contract_sha256": "3b4165e5e56d3a8455b883aea55738aa0e06f3159a60ba01bc9d5ccabf1f6d10",
+        "started_at": 1791937768.040576,
+        "finished_at": 1791937846.0756505
+      },
+      "review_producer": {
+        "status": "receipt_verified",
+        "program": {
+          "package_version": "1.5.8",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "56b47ab11c142fdd0d89ade636eb52fff30220c3425401678e2bf74c18b69c62",
+          "python_version": "3.12.13"
+        },
+        "artifact_sha256": "a6c59a0ee84c01a9ad0778f54a4e2f4e182c4700205733d03c26e7c941d1a0cf",
+        "source_bound_save": true,
+        "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+        "physical_page": 25,
+        "attempt": 14,
+        "role": "reviewer",
+        "model": "zai.glm-5.3-flash?reasoning=low",
+        "contract_sha256": "ad43db8eeb96f6a5b1aab82eb07fb8d999a3c90cd9e1f094a41f378634f1d7ae",
+        "dimension_evidence": {
+          "file": "dimension-review-14.json",
+          "sha256": "777b02ca28c4c7936ef31032f0bf4d587fb7692aacc95f2d04f3a5ac0b48eead"
+        },
+        "started_at": 1791944668.658599,
+        "finished_at": 1791945057.7814019
+      },
+      "review_verdict": "pass"
+    }
+  ],
+  "root_source_checks": [
+    "innovations184 full page and actual advantages of А4АБ/ОАБ",
+    "small25 full page, certificate/quality-lab context and enlarged document header",
+    "isolators47 full factory/certificate/title-sheet page",
+    "armature86 enlarged lower П6Р drawing, six axes confirmed"
+  ],
+  "native_repair47": {
+    "seconds": 220.9,
+    "zoom_calls": 8,
+    "audit_before_detail": true,
+    "independent_review_pending": true
+  },
+  "arm86_count_correction": {
+    "original_six_axes": true,
+    "candidate4_six_three_each_side": true,
+    "independent_review_pending": true,
+    "full_geometry_accuracy_not_claimed": true
+  },
+  "complete_catalogue_export": "../../catalogs/reviewed-2026-10-14-v1.5.8/manifest.json",
+  "large_model_benchmark_run": false,
+  "accuracy_note": "Production acceptance/export checks are not a new global accuracy percentage or independent full-drawing score."
+}
