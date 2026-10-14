@@ -32,6 +32,22 @@ def test_save_requires_inspection_and_returns_errors(tmp_path):
     assert r.save(1,review().model_dump_json(),'review')['saved']
 
 
+def test_repair_must_read_current_source_audit_before_saving(tmp_path):
+    import hashlib
+    from catalog_json.tools import write_json
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out');t.render(1);t.direct(1)
+    path=t.work(1)/'external-audit.json'
+    audit={'pdf_page':1,'source_sha256':hashlib.sha256(t.source.read_bytes()).hexdigest(),
+        'findings':[{'observation':'Check actual source roller count; previous candidate was wrong'}]}
+    write_json(path,audit)
+    assert not t.save(1,content().model_dump_json(),'page')['saved']
+    assert t.external_audit(1)['present']
+    assert t.save(1,content().model_dump_json(),'page')['saved']
+    audit['findings'].append({'observation':'Additional fresh original-source lead'});write_json(path,audit)
+    assert not t.save(1,content().model_dump_json(),'page')['saved']
+    t.external_audit(1);assert t.save(1,content().model_dump_json(),'page')['saved']
+
+
 def test_native_mcp_image_roundtrip(tmp_path):
     source=pdf(tmp_path)
     async def run():

@@ -485,6 +485,13 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                         task=preferred;item=task[2];r=item['record'];attempt=r['next_attempt'];began=time.monotonic()
                         r['active_role']=role
                     if role=='reviewer':
+                        rejection=source_audit_rejection(item['work'],r['source_sha256'],r['pdf_page'],r.get('candidate_sha256'))
+                        if rejection:
+                            r['attempts'].append({'candidate':f'candidate-{attempt}.json','review':None,
+                                'source_audit_rejected':True,'review_skipped':True})
+                            r.update(status='needs_review',next_attempt=attempt+1,source_audit_rejection=rejection)
+                            enqueue_extraction(item,repair=True,fresh=True)
+                            continue  # Reject known bad bytes before spending a reviewer call.
                         previous=item['work']/f'review-{attempt}.json'
                         if previous.exists():
                             history=item['work']/'review-history'/hashlib.sha256(previous.read_bytes()).hexdigest();history.mkdir(parents=True,exist_ok=True);shutil.copy2(previous,history/previous.name)

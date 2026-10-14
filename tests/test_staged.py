@@ -638,9 +638,10 @@ def test_source_confirmed_rejected_bytes_cannot_be_reaccepted_by_model_pass(tmp_
     record=json.loads((tmp_path/'out/test/page-0001/result.json').read_text())
     assert record['status']=='accepted' and record['next_attempt']==1
     assert record['attempts'][0]['source_audit_rejected'] is True
+    assert record['attempts'][0]['review_skipped'] is True and ('reviewer',1,0) not in calls
     assert 'source_audit_rejection' not in record
-    # The native model report remains truthful; the parent recorded its own veto.
-    assert json.loads((tmp_path/'out/test/page-0001/review-0.json').read_text())['verdict']=='pass'
+    # No model report is invented for the skipped paid call.
+    assert not (tmp_path/'out/test/page-0001/review-0.json').exists()
 
 
 @pytest.mark.parametrize('change',['source','page','page_bool','digest','not_list','empty_findings'])
@@ -709,7 +710,9 @@ def test_rejected_passing_candidate_resume_repairs_without_duplicate_review(tmp_
         write_json(work/'calls'/uuid.uuid4().hex/'result.json',{'status':'completed','execution':{'program':{'package_version':'synthetic','source_code_sha256':'verified-program'},'source_sha256':sha,'physical_page':page,'attempt':attempt,'role':role,'model':getattr(agents,role),'contract_sha256':agents.contract_digest,'artifact_sha256':digest,'started_at':began,'finished_at':time.time()}})
         return value
     assert not asyncio.run(staged_batch(queue,out,Agents(),deadline_seconds=.06,call=call))['complete']
-    first=json.loads((out/'test/page-0001/result.json').read_text());assert first['next_attempt']==1 and first['review']['verdict']=='pass'
+    first=json.loads((out/'test/page-0001/result.json').read_text())
+    assert first['next_attempt']==1 and first['attempts'][0]['review_skipped']
+    assert ('reviewer',1,0) not in calls and 'review' not in first
     pause=False;calls.clear()
     assert asyncio.run(staged_batch(queue,out,Agents(),deadline_seconds=1,call=call,resume=True,resume_compatible_profile=True))['complete']
     assert [c for c in calls if c[1]==1]==[('extractor',1,1),('reviewer',1,1)]

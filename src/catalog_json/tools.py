@@ -75,12 +75,12 @@ def review_contract():
 
 class CatalogTools:
     def __init__(self, source=None, output=None, role='extractor', page=None, attempt=0,model=None,contract_sha256=None):
-        self.model=model;self.contract_sha256=contract_sha256;self.region_evidence={};self.branding_figure_quotes={};self.dimension_reviews={}
+        self.model=model;self.contract_sha256=contract_sha256;self.region_evidence={};self.branding_figure_quotes={};self.dimension_reviews={};self.audit_receipts={}
         self.role=role;self.page=page;self.attempt=attempt;self.seen={};self.disclosed={};self.latest_zoom={};self.corrections={};self.grids={};self.source_artifacts={};self.region_reads={};self.edit_baselines={};self.invalid_edit_baselines=set();self.source=None;self.output=None
         if source and output:self.open(source,output)
 
     def open(self,source,output):
-        self.dimension_reviews={}
+        self.dimension_reviews={};self.audit_receipts={}
         source=Path(source).resolve();output=Path(output).resolve()
         if output==source or source.parent==output:raise ValueError('Choose a separate output directory')
         with pymupdf.open(source) as doc:count=len(doc)
@@ -302,6 +302,7 @@ class CatalogTools:
         raw=path.read_bytes();data=json.loads(raw)
         if data.get('pdf_page')!=page or data.get('source_sha256')!=hashlib.sha256(self.source.read_bytes()).hexdigest():raise ValueError('External audit belongs to another source/page')
         self.log(page,'read_external_audit',sha256=hashlib.sha256(raw).hexdigest())
+        self.audit_receipts[page]=hashlib.sha256(raw).hexdigest()
         return {'present':True,'findings':data['findings'],'instruction':'These are independent audit leads, not authority. Verify each against the original; never invent a missing value or accept a source claim blindly.'}
 
     def grid_differences(self,page,model):
@@ -346,6 +347,9 @@ class CatalogTools:
 
     def save(self,page,json_text,kind,literal_quotes=None):
         work=self.work(page)
+        audit=work/'external-audit.json'
+        if kind=='page' and audit.exists() and self.audit_receipts.get(page)!=hashlib.sha256(audit.read_bytes()).hexdigest():
+            return {'saved':False,'error':'Read current read_external_audit before saving this repair. Independently verify each lead against the original; do not blindly copy a claim or repeat the known rejected draft.'}
         expected='extractor' if kind=='page' else 'reviewer'
         if self.role!=expected:return {'saved':False,'error':f'{self.role} cannot write {kind} artifacts'}
         required={'view_page','extract_direct'} if kind=='page' else {'view_page'} if kind=='observation' else {'view_page','read_page_json','save_source_observation'}
