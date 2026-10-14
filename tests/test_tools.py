@@ -60,6 +60,12 @@ def test_native_mcp_image_roundtrip(tmp_path):
                 result=await client.call_tool('view_page',{'page':1})
                 assert not result.is_error
                 assert any(b.type=='image' for b in result.content)
+                # Jittering between two almost identical views must still
+                # surface the loop advisory, while returning the source image.
+                for right in (.38,.37,.36):
+                    result=await client.call_tool('view_region',{'page':1,'box':[0.,.08,right,.45]})
+                    assert any(b.type=='image' for b in result.content)
+                assert any(b.type=='text' and 'почти ту же' in b.text for b in result.content)
                 result=await client.call_tool('get_json_schema',{'kind':'page'})
                 assert not result.is_error
                 await client.call_tool('extract_direct',{'page':1})
@@ -70,6 +76,19 @@ def test_native_mcp_image_roundtrip(tmp_path):
                 assert validated_candidate(work,hashlib.sha256(source.read_bytes()).hexdigest(),1,'native-test','c'*64)
                 assert validated_candidate(work,hashlib.sha256(source.read_bytes()).hexdigest(),1,'native-test','d'*64) is None
     asyncio.run(asyncio.wait_for(run(),20))
+
+
+def test_near_repeat_crops_keep_images_and_new_detail_available(tmp_path):
+    """Fast unit: alternating jitter-loop; expected1s/emergency10s."""
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out')
+    for right in (.38,.37,.36):
+        result=t.region(1,[0.,.08,right,.45])
+        t.region(1,[.4,.08,.98,.45])
+    assert isinstance(result,list) and result[0].data
+    assert 'почти ту же' in result[1].text
+    assert not isinstance(t.region(1,[0.,.08,.1,.2]),list)  # genuinely tighter detail
+    assert not isinstance(t.region(1,[0.,.08,.36,.45],90),list)  # new orientation
+    for _ in range(5):assert t.region(1,[0.,.08,.36,.45])[0].data
 
 
 def test_json_exports_keep_units_qualifiers_and_full_page(tmp_path):

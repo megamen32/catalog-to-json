@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "catalog-to-json",
-  "version": "1.5.9",
+  "version": "1.5.10",
   "description": "Tool-using FastAgent catalog extraction and strict visual review skills; canonical JSON, Excel and HTML exports.",
   "author": {
     "name": "megamen32"

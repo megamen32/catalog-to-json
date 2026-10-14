@@ -135,9 +135,15 @@ class CatalogTools:
         image=self.render(page,box,rotation)
         key=(page,tuple(box),rotation)
         count=self.region_reads.get(key,0)+1;self.region_reads[key]=count
-        if count==1:return image
-        self.log(page,'repeat_region',box=box,rotation=rotation,identical_reads=count)
-        return [image,TextContent(type='text',text='This exact source region is unchanged and has already been viewed. Another identical crop adds no evidence. Compare the already read rows/headers and save completed sections now; explicitly record remaining uncertainty rather than repeating the same inspection. The image remains available and there is no inspection-count limit.')]
+        similar_reads=0
+        for (p,previous,r),reads in self.region_reads.items():
+            if p!=page or r!=rotation:continue
+            overlap=max(0,min(box[2],previous[2])-max(box[0],previous[0]))*max(0,min(box[3],previous[3])-max(box[1],previous[1]))
+            union=(box[2]-box[0])*(box[3]-box[1])+(previous[2]-previous[0])*(previous[3]-previous[1])-overlap
+            if overlap/union>=.85:similar_reads+=reads
+        if count==1 and similar_reads<3:return image
+        self.log(page,'repeat_region',box=box,rotation=rotation,identical_reads=count,similar_reads=similar_reads)
+        return [image,TextContent(type='text',text=f'Вы уже просмотрели эту же или почти ту же область {similar_reads} раз при том же повороте. Малый сдвиг рамки и чередование двух видов не дают новой проверки. Сопоставьте уже видимые данные и сохраните завершённую работу через save_section/save_page_json или source observation/review по своей роли. Если остался конкретный неясный факт, выберите направленное увеличение именно его или другой подходящий источник; не начинайте заново подтверждённые левый/правый виды. Неразрешённые факты явно укажите как uncertainties/issues, не угадывайте и не выдавайте PASS. Это подсказка против цикла: изображение и дальнейшие увеличения доступны без лимита.')]
 
     def source_payload(self,page,kind,data,maximum_bytes=SOURCE_RESPONSE_BYTES):
         text=json.dumps(data,ensure_ascii=False,indent=2)
