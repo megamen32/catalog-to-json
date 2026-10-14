@@ -71,16 +71,38 @@ def source_chunk(text,offset,length):
 
 def review_contract():
     return {'schema':Review.model_json_schema(),'required_review_checks':sorted(CHECKS),
+            'tool_contract_discovery':"First get_json_schema(kind='observation') before blind save, kind='dimension_review' before dimension records. literal_quotes is a sibling of data, not inside PageContent. Real product evidence uses transcription:literal; contextual_summary only for confirmed software demos. Examples are shape, not source facts.",
             'source_observation_example':{'title':'[actual source title]',
                 'page_context':{'kind':'software_demonstration','summary':'[actual demonstrated software function, not example product offers]',
                     'source_evidence':[{'kind':'software_demonstration','box':[.1,.1,.9,.9],'observation':'[actual visible contextual evidence]','transcription':'contextual_summary'}]},
                 'printed_page':None,'text_blocks':[],'tables':[],'figures':[],'source_notes':[],'uncertainties':[]},
-            'source_observation_instruction':'Это только пример ФОРМЫ для подтверждённой демонстрации ПО. Самостоятельно выберите назначение реальной страницы; не копируйте классификацию, рамки и заглушки. page_context должен быть объектом. Для настоящей таблицы получите get_json_schema(page), заполните все реальные ячейки; blank требует value:null. Для pure software_demonstration сохраняйте tables=[], а не OCR таблицу примера.',
+            'source_observation_instruction':'Shape example only, for independently confirmed software demonstration. Choose actual source purpose and boxes, never copy placeholders. page_context is an object. Real tables: get_json_schema(page), include every cell, blank has value:null. Pure software demonstration has tables=[]; summarize the software, not example offers.',
             'example':{'verdict':'uncertain','checks':[{'category':c,'passed':False,'evidence':'Replace with concrete original-image comparison'} for c in sorted(CHECKS)],
                        'context_review':{'page_purpose_verified':False,'summary_meaning_verified':False,'actual_vs_demo_verified':False,'technical_facts_verified':False,'relations_verified':False,'evidence':'Замените независимым обоснованием по оригиналу: назначение страницы, смысл пересказа, реальные данные/демонстрация, технические факты и связи изделия, параметра, единицы, условия и элемента чертежа.'},
                        'issues':[{'severity':'error','path':'replace_with_actual_path','message':'Replace with source-grounded finding'}],
                        'observed_table_count':0,'observed_row_counts':[],'observed_column_counts':[]},
             'instruction':'Это только пример структуры. Укажите фактические числа строк/столбцов в сопоставленном порядке кандидата и конкретные результаты проверки оригинала. Для PASS страницы с page_context нужны все пять true в context_review и независимое смысловое обоснование. Верный пересказ допустим; технические факты и связи проверяются по оригиналу, а не по сходству строк. Legacy без контекста сохраняет одиннадцать обычных checks. Не копируйте текст-заглушку.'}
+
+
+def observation_contract():
+    return {'schema':PageContent.model_json_schema(),
+            'example':{'page':1,'data':{'title':'[actual source title]',
+                'page_context':{'kind':'catalogue_product_data','summary':'[actual product purpose and facts]',
+                    'source_evidence':[{'kind':'catalogue_product_data','box':[.1,.1,.9,.9],'observation':'[actual source evidence]','transcription':'literal'}]},
+                'text_blocks':[{'kind':'branding','text':'[literal visible brand]'}],
+                'tables':[],'figures':[],'source_notes':[],'uncertainties':[]},
+                'literal_quotes':[{'block_index':0,'box':[.1,.1,.9,.2],'visible_quote':'[literal visible brand]','basis':'vision','conflict':None,'rotation':0}]},
+            'instruction':'Example is tool ARGUMENTS, not a saved file. data is PageContent only; literal_quotes is its sibling argument. Replace all placeholders, actual source purpose, evidence boxes and complete tables/figures. Branding quote indices must match actual branding text_blocks; view each exact box first. If visible text differs from native text, preserve both and explain the confirmed conflict in source_notes and quote.conflict. No branding means literal_quotes=[]. Existing blindness, freshness, source and PASS guards remain.'}
+
+
+def dimension_contract():
+    return {'schema':DimensionReview.model_json_schema(),
+            'example':{'page':1,'data':{'source_figure_index':0,'source_label_index':0,'figure_index':0,'label_index':0,
+                'view':'[actual source view]','relation':'linear','source_box':[.1,.1,.9,.9],'feature_box':[.2,.2,.8,.8],
+                'tip_points':[[.2,.3],[.8,.3]],'path_ids':[],'source_feature':'[actual feature at inspected tips]',
+                'candidate_feature_quote':'[exact candidate description quote]','agrees_with_candidate':False,
+                'evidence':'[actual independent source evidence]','correction_reason':''}},
+            'instruction':'Example shows shape only; no coordinate or conclusion is evidence. First inspect_dimension_review_targets and view_region on exact source_box. Source and candidate indices are separate. Linear/diameter need two distinct inspected tips, leader may have one, actual non-dimensional annotation none. For record_dimension_reviews pass data=[full records] or data={shared:{common fields},records:[per-record fields]}. Every original geometric, freshness, correction and PASS check remains.'}
 
 
 class CatalogTools:
@@ -609,8 +631,10 @@ def server(context):
         return text
     @mcp.tool()
     def get_json_schema(kind: str='page') -> dict:
-        """Get the exact saved-file schema. Chat responses need not be JSON. kind: page or review."""
-        if kind not in ('page','review'):raise ValueError('kind must be page or review')
+        """Get exact payload/schema before writing: page, review, observation (PageContent plus sibling literal_quotes arguments), or dimension_review (one relationship and batch instructions). Chat responses need not be JSON. Examples are shape only, never source evidence."""
+        if kind=='observation':return observation_contract()
+        if kind=='dimension_review':return dimension_contract()
+        if kind not in ('page','review'):raise ValueError('kind must be page, review, observation or dimension_review')
         return {'schema':PageContent.model_json_schema(),'required_review_checks':sorted(CHECKS)} if kind=='page' else review_contract()
     @mcp.tool(structured_output=False)
     def view_page(page: int):

@@ -28,6 +28,20 @@ def test_native_file_tools_accept_objects_and_retain_guards(tmp_path):
                 name='save_page_json' if role=='extractor' else 'save_source_observation'
                 assert 'data' in names[name].input_schema['properties']
                 await s.call_tool('load_skill',{});await s.call_tool('view_page',{'page':1})
+                if role=='reviewer':
+                    # Focused integration: exact contracts before source/dimension writes;
+                    # expected3s/emergency30s, no model calls. Retained88/136 guessed
+                    # literal_quotes inside data and dimension fields before discovery.
+                    observation=payload(await s.call_tool('get_json_schema',{'kind':'observation'}))
+                    from catalog_json.schema import PageContent
+                    PageContent.model_validate(observation['example']['data'])
+                    assert 'literal_quotes' in observation['example']
+                    assert 'literal_quotes' not in observation['example']['data']
+                    dimension=payload(await s.call_tool('get_json_schema',{'kind':'dimension_review'}))
+                    from catalog_json.dimension_review import DimensionReview
+                    DimensionReview.model_validate(dimension['example']['data'])
+                    assert 'source_figure_index' in dimension['schema']['required']
+                    assert 'feature_box' in dimension['schema']['required']
                 if role=='extractor':await s.call_tool('extract_direct',{'page':1})
                 both=payload(await s.call_tool(name,{'page':1,'data':data,'json_text':json.dumps(data)}))
                 assert both['saved'] is False and 'exactly one' in both['error']
