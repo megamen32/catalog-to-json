@@ -1,5 +1,6 @@
 """Evidence coverage for drawing relationships, never a geometry accuracy oracle."""
 import re
+import unicodedata
 from .schema import Model
 from pydantic import Field,field_validator
 from typing import Literal
@@ -33,11 +34,12 @@ def dimension_targets(content,supporting_annotations=False):
         for li,label in enumerate(figure.labels):
             # Candidate naming or extra prose must not hide a numeric annotation.
             # Non-dimensional numbers need an explicit source-bound classification.
-            if re.search(r'\d',label):
+            inspected_label=unicodedata.normalize('NFKC',label)
+            if re.search(r'\d',inspected_label) or re.fullmatch(r'\s*[DFHLRSTV]\s*',inspected_label):
                 # Only a separately confirmed supporting-document context can
                 # classify metadata as annotations. Bare numbers, tolerances,
                 # engineering units and geometric signs remain strict targets.
-                if supporting_annotations and not re.search(r'[Øø⌀∅φΦ±]|\d\s*[xх×]\s*\d|\d\s*[+−]\s*\d|\b(?:мм|см|кН|МПа|mm|cm|kN|MPa)\b|^\s*[+−-]?\d+(?:[.,]\d+)?(?:\s*[/+−-]\s*\d+(?:[.,]\d+)?)*\s*$',label):
+                if supporting_annotations and not re.search(r'[Øø⌀∅φΦ±]|\d\s*[xх×]\s*\d|\d\s*[+−]\s*\d|\b(?:мм|см|кН|МПа|mm|cm|kN|MPa)\b|^\s*[+−-]?\d+(?:[.,]\d+)?(?:\s*[/+−-]\s*\d+(?:[.,]\d+)?)*\s*$',inspected_label):
                     continue
                 targets.append({'figure_index':fi,'label_index':li,'figure_title':figure.title,'label':label})
     return targets

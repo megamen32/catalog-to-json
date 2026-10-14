@@ -38,6 +38,10 @@ Extractor15 MiniMax-M3.1-Flash-Preview, reviewer/coordinator31 GLM5.3Flash Codin
 
 # State
 
+## 14October2026,11:30 —19 supersedes unactivated18 after false drawing PASS
+
+Root withdrew new17PASS/armature27: Rz8 was misread as radius, and only2of19relationships required evidence because subscripts/bare symbols escaped numeric detection. Exact candidate veto reopened native repair3; accepted527 after transient528.19 adds coverage NFKC+bare dimension symbols without editing source labels, and explicit Rz/Ra surface-meaning guidance.133focused checks20.82s, retained real27 native MCP17 PASS vs19 refusal with34missing source+candidate relationships;168missing-context fix retained.18standby was never activated; only its own helper stopped, hold atomically transferred, native17model calls uninterrupted. Source/release19 then finish17→19drain and actual new native progress required. Pending regression45, no big benchmark. All980/final3exports still outstanding.
+
 ## 14October2026,11:00 audit —18 prepared,17 remains live
 
 527/980 accepted (OPN60,isolators161,small228,innovations68,armature10); GLM recovered1→2, MiniMax8, no new429. Latest originals294/168/10 and their full new native histories inspected. Confirmed168 false revise: its own source context null becomes candidate error and literal prose mismatches.132focused tests25.91s; exact retained168 native MCP replay17 saves true/2.148s,18 refuses with observer-context correction instruction/2.945s. No model benchmark/source value edits. True168H1 axis-vs-full-height error retained with exact candidate1/2 veto; new pending regression43. Immutable18 prepared with139dependency pins/126accepted predecessor profiles, native installed proof; publication then staged native-call drain17→18 remains next, not yet live18. Full queue17 and half-hour timer continue.

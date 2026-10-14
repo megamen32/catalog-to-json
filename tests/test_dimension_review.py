@@ -65,6 +65,17 @@ def test_candidate_names_and_prose_cannot_hide_dimensions():
     assert len(dimension_targets(c))==4
 
 
+def test_v_lock_symbolic_and_subscript_dimensions_cannot_bypass_coverage():
+    """Fast unit; expected1s/max10s. Retained arm27 PASS covered only Rz8/angle."""
+    c=drawing_content();c.figures=[Figure(title='V-образный замок',description='Original drawing',labels=[
+        'L₁','L','L₂','L₃','L₄','F₁','F₂','F₃','F₄','F₅','R','R₁','R₂','R₃','Rz8','V','S','T','А','А–А','38°–50°'])]
+    old_records=[{'figure_index':0,'label_index':i,'candidate_sha256':'sha','agrees_with_candidate':True} for i in (14,20)]
+    missing=missing_dimension_evidence(c,old_records,'sha',c,'source-sha')
+    assert {t['label'] for t in dimension_targets(c)}==set(c.figures[0].labels)-{'А','А–А'}
+    assert {'L₁','L','F₂','R','R₃','V','S','T'}<={t['label'] for t in missing}
+    assert c.figures[0].labels[0]=='L₁'  # Only coverage normalizes; extracted source text stays intact.
+
+
 def test_confirmed_document_metadata_is_not_drawing_geometry():
     c=drawing_content();c.figures=[Figure(title='Certificate',description='Scanned certificate',labels=[
         '2018 г.','Протокол №29-10 от24.04.2018','ТУ3493-004-99267582-2009','457040, ул.Строителей1б',

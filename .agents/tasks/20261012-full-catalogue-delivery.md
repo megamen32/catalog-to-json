@@ -186,3 +186,14 @@ B main1b5edc6:42pendingcases,2новыхсвыходнымиJSON/диагнос�
 
 
 Бюджет18: при восстановленномGLM2 measured10native trees доходят до6GiBhard (max1068/OOM0); PSSmax~0.67GiB, возможные16×0.67+0.5GiB coordinator+20%=14GiB. Опубликованный finite high=hard14GiB,swap0,CPU2,tasks512,I/O50 с measured hostreserve>24GiB/обязательный20GiB иUIDзапасом; внешние guards/adaptive429 не ослабляются. Source budget proof сохранён отдельно; горячее применение/consumer followup ещё отдельно.
+
+
+## Повторная ручная проверка27: подтверждён ложный PASS,19 заменяет standby18
+
+Счётчик вырос до528 благодаря17reviewer/armature27, но root тут же сверил оригиналphysical27/printed26: Rz8 у двух знаков шероховатости назван радиусом вcandidate2 (producer1.5.8) и подтверждён dimension evidence17. Точный кандидат5bfff695… отозван source-bound veto, queue самостоятельно вернула его вextract3 без изменения значения JSON; принятых снова527. Нельзя выдавать автоматический PASS за ручную приёмку.
+
+Подтверждён кодовый обход: dimension_targets использовал regex\d по исходной типографике; нижние индексы₁/₂ не десятичная Unicodeкатегория, голые L/R/S/T/V тоже отсутствовали вinventory. ТолькоRz8/угол требовали2records, остальные17связей пропускались.19 нормализует NFKC только для обнаружения покрытия и включает отдельные DFHLRSTV; сами исходные надписи/значения не меняет. Подтверждённый supporting-material exception/строгие реальные числа/диаметры остаются. Reviewer получает короткое правило Rz/Ra о шероховатости, полная инструкция проходит прежний16000byteguard.
+
+133focused checks20.82s (expected30/max300), exact native MCP retained27:17 saved:true/2targets/5.897s;19 saved:false/19targets/34missing source+candidate relations/7.28s. Это исправление coverage, не автоматический semantic oracle. Сохраняются исходные candidate/review/partial evidence и реальные producers; новый pending case45 в B. Native19 replay168 также отказывает неполному observer context. Никакого нового модельного benchmark.
+
+18 опубликована как проверенная промежуточная версия, но НИ РАЗУ не активирована. Собственный foreground helper18 остановлен до остановки17service, hold атомарно передан собственному helper19 без окна нового GLM admission; все принятые native17 calls продолжаются. Immutable19 соответствует тем же139dependency pins/126accepted profiles и355jobpins, budget14GiB high=hard/swap0/CPU2/tasks512/I/O50. Source publish/release19 затем финальная передача17→19 и живой consumer proof ещё отдельно. Чужие code-map WIP/page117 сохранены.

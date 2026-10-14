@@ -1,0 +1,340 @@
+{
+  "focused_checks": {
+    "passed": 133,
+    "elapsed_seconds": 20.82,
+    "category": "fast unit/focused integration",
+    "purpose": "Symbolic/subscript drawing coverage, observer context, strict source values/real geometry",
+    "expected_seconds": 30,
+    "emergency_maximum_seconds": 300
+  },
+  "native27_before": {
+    "program": {
+      "package_version": "1.5.17",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "250a5f879c4c07bb339e5791b2e6b59062426df6bcef56df7b50cb0af47cfc87",
+      "python_version": "3.12.13"
+    },
+    "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+    "physical_page": 27,
+    "retained_inputs": {
+      "candidate-2.json": "5bfff69585b4f0bce0c8fc9e96969887731a8a0508263445d2d33a82b337b6a4",
+      "review-2.json": "9f4b01608fa202040df3fb409013e4e02df6c79821d3dabfce44ffbe1bc1b1cc",
+      "verified-source-observation-2.json": "9f892e22e28f235af772c6becc6ed7faf7213bd72a7f9e35129e9f9c0024918d",
+      "dimension-review-2.json": "0142f6fba7d572f15e1741f0fd46a266f25a605b503242f0a6f5cdc605632f7b"
+    },
+    "candidate_targets": 2,
+    "old_records_replayed": 2,
+    "native_stdio_MCP": true,
+    "saved": true,
+    "missing_relations": [],
+    "model_calls": 0,
+    "candidate_bytes_unchanged": true,
+    "scope": "Coverage gate, not automated correctness oracle for Rz meaning; root source veto separately rejects wrong radius interpretation.",
+    "elapsed_seconds": 5.897
+  },
+  "native27_after": {
+    "program": {
+      "package_version": "1.5.19",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "4dd002a27b4242bf9afd3391e54e404aef0ec7a81a5606e51be336747baa0775",
+      "python_version": "3.12.13"
+    },
+    "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+    "physical_page": 27,
+    "retained_inputs": {
+      "candidate-2.json": "5bfff69585b4f0bce0c8fc9e96969887731a8a0508263445d2d33a82b337b6a4",
+      "review-2.json": "9f4b01608fa202040df3fb409013e4e02df6c79821d3dabfce44ffbe1bc1b1cc",
+      "verified-source-observation-2.json": "9f892e22e28f235af772c6becc6ed7faf7213bd72a7f9e35129e9f9c0024918d",
+      "dimension-review-2.json": "0142f6fba7d572f15e1741f0fd46a266f25a605b503242f0a6f5cdc605632f7b"
+    },
+    "candidate_targets": 19,
+    "old_records_replayed": 2,
+    "native_stdio_MCP": true,
+    "saved": false,
+    "missing_relations": [
+      {
+        "figure_index": 0,
+        "label_index": 0,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "L₁",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 1,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "L",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 2,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "L₂",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 3,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "L₃",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 4,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "L₄",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 5,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "F₁",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 6,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "F₂",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 7,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "F₃",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 8,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "F₄",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 9,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "F₅",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 10,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "R",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 11,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "R₁",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 12,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "R₂",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 13,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "R₃",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 15,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "V",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 16,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "S",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 17,
+        "figure_title": "Чертёж V-образного замка (главный вид и вынесенное сечение А–А)",
+        "label": "T",
+        "inventory": "candidate"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 0,
+        "figure_title": "V-образный замок",
+        "label": "L₁",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 1,
+        "figure_title": "V-образный замок",
+        "label": "L",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 2,
+        "figure_title": "V-образный замок",
+        "label": "L₂",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 3,
+        "figure_title": "V-образный замок",
+        "label": "L₃",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 4,
+        "figure_title": "V-образный замок",
+        "label": "L₄",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 5,
+        "figure_title": "V-образный замок",
+        "label": "F₁",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 6,
+        "figure_title": "V-образный замок",
+        "label": "F₂",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 7,
+        "figure_title": "V-образный замок",
+        "label": "F₃",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 8,
+        "figure_title": "V-образный замок",
+        "label": "F₄",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 9,
+        "figure_title": "V-образный замок",
+        "label": "F₅",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 10,
+        "figure_title": "V-образный замок",
+        "label": "R",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 11,
+        "figure_title": "V-образный замок",
+        "label": "R₁",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 12,
+        "figure_title": "V-образный замок",
+        "label": "R₂",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 13,
+        "figure_title": "V-образный замок",
+        "label": "R₃",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 14,
+        "figure_title": "V-образный замок",
+        "label": "S",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 15,
+        "figure_title": "V-образный замок",
+        "label": "T",
+        "inventory": "source"
+      },
+      {
+        "figure_index": 0,
+        "label_index": 16,
+        "figure_title": "V-образный замок",
+        "label": "V",
+        "inventory": "source"
+      }
+    ],
+    "model_calls": 0,
+    "candidate_bytes_unchanged": true,
+    "scope": "Coverage gate, not automated correctness oracle for Rz meaning; root source veto separately rejects wrong radius interpretation.",
+    "elapsed_seconds": 7.28
+  },
+  "native168_after": {
+    "program": {
+      "package_version": "1.5.19",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "4dd002a27b4242bf9afd3391e54e404aef0ec7a81a5606e51be336747baa0775",
+      "python_version": "3.12.13"
+    },
+    "original_physical_page": 168,
+    "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+    "retained_input_hashes": {
+      "candidate-1.json": "149d78d5e5ac4d8fc77eba9e76a62ab0bcf3912beff41aa2b875da96b1de385e",
+      "verified-source-observation-1.json": "9905907289fec56f5878d376bef4a85432487458448948af2fb01fb43ee162cb",
+      "review-1.json": "8dc00cc77ee43a5d3b841282460b36d729cbfdb1dba8a779a555da0a80e5a438"
+    },
+    "native_stdio_MCP": true,
+    "result": {
+      "saved": false,
+      "repair_observer_context": true,
+      "error": "Your independent source observation has no page_context, while the candidate has one. Reinspect the original with view_region and complete your own source context using correct_source_observation before saving any verdict. Do not ask the extractor to delete its context or copy your wording to compensate for an incomplete observation. Determine the purpose and evidence independently; genuine classification, technical and drawing differences must still be reported. No candidate or review was changed."
+    },
+    "candidate_and_blind_bytes_unchanged": true,
+    "model_calls": 0,
+    "elapsed_seconds": 2.025
+  },
+  "supersession": {
+    "observed_unix": 1791966510.2011383,
+    "old_helper_pid": 331167,
+    "old_helper_terminated": true,
+    "old_model_unit_still_active": true,
+    "old17_native_calls_not_interrupted": true,
+    "18_never_activated": true,
+    "owned_hold_transferred_without_admission_gap": true,
+    "new_owner": "transfer1519-symbolic-geometry-1791966510",
+    "reason": "Confirmed arm27 false PASS and Unicode/bare symbol coverage require19;18standby superseded before activation."
+  },
+  "large_model_benchmark": false,
+  "source_values_edited": false,
+  "whole_page_accuracy_not_claimed": true
+}
