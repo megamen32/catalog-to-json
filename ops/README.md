@@ -15,8 +15,12 @@ never commit job descriptors or credentials. Start with
 
 Use an immutable installed release for each job. Stop only the exact owned prior
 invocation, retain its checkpoint, verify it is gone, then resume that same queue.
-Changed program contracts require a separately labelled output; never relabel old
-JSON as a new producer. The service does not bypass the CLI's independent review.
+Changed program contracts must retain separately identified original artifacts; never relabel old
+JSON as a new producer. Explicit `--resume-compatible-profile` with pinned
+`accepted_predecessor_profiles` may resume the same source-bound queue: validated
+historical acceptances keep their actual producers, while changed pending
+contracts require fresh numbered extraction/review attempts. Preserve a snapshot
+and verify old artifact hashes during this transition. The service does not bypass the CLI's independent review.
 
 Staged jobs default to one worker per role. `--extractor-workers` and
 `--reviewer-workers` set finite pool maxima; `--initial-provider-concurrency`
@@ -120,3 +124,25 @@ Composition1.4.22 is an explicit experimental extractor route: unchanged initial
 Reviewer1.4.23 corrects a condition-comparison regression in experimental21: a leaf label repeating its exact parent header no longer adds that condition twice. Removal requires a token boundary; changed leaf currents, units, decimal values, operators, missing or extra parent conditions still block review. Retained OPN17/26 source checks demonstrate the formatting equivalence, while OPN35's real147,5→14,75 error remains blocked. Native artifacts are unchanged, unprinted material findings still require source-bound repair, and this is not a new benchmark score or a live profile switch. The portable and Claude plugin manifests now both declare the same package release version; earlier assets remain historical.
 
 Packaging1.4.24 also aligns the Codex plugin manifest with the portable/Claude manifests and the Python package. Version23 source remains historical; its Codex manifest still declared20. Executed Python logic and skills are byte-identical to23, and live/frozen role profiles remain unchanged. Release checks now cover all three manifests.
+
+### Semantic1.5.3 transition
+
+Native small4 MiniMax M3.1 Flash Preview → blind GLM5.3 Flash CodingEndpoint
+passed after one repair; see `examples/semantic-review/v1.5.3`. Full reviewer
+instructions fit the native16k envelope, helper schemas are usable from the initial
+generation, and real/mixed drawing ownership gates remain strict. This is not
+a new global accuracy estimate. The shared queue retains historical accepted
+producers; it does not relabel them as freshly checked by1.5.3.
+
+The replacement full job reuses the reviewed12GiB MemoryHigh/16GiB MemoryMax,
+zero swap,400% CPU,2048 tasks,IOWeight50 and24h budget. Fresh measured capacity
+was36GiB available RAM/208GiB free disk; no GPU and no parallel second full job.
+Provider pools remain capped at8 per role and back off on429; actual admission
+is recorded in the live queue.
+
+Operational storage allocation for this continuation:96GiB total under
+`.tmp/full-digitization` (measured31GiB at handoff), leaving at least64GiB
+host free-space reserve. Keep source/accepted checkpoints; do not duplicate the
+full job or delete live results to reclaim this allocation. CPU/RAM/task/runtime
+limits are enforced by the existing unit; storage is the project operating
+budget to check on each continuation.

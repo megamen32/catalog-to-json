@@ -239,58 +239,58 @@
     "transcript-audit-table-alignment": {
       "confidence": "verified",
       "evidence": [
-        "33 focused checks7.51s; real retained1.5.0 source/candidate compared under1.5.1 no longer produce framing differences; independent read-only delta review no blocking findings"
+        "31 final affected checks8.96s; native semantic pass examples/semantic-review/v1.5.3; fullqueue1484 retained hashes unchanged and fresh native1.5.3 stage receipts"
       ],
-      "git_head": "c58d2daafb357f95e0f9361fc1cab48049fa8ab1",
+      "git_head": "d84caf03dff9908dc9299a298a4b297ac8ac732f",
       "key": "transcript-audit-table-alignment",
       "kind": "failure-shield",
       "locations": [
         {
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "f63b82c33c20058d812c9a6efdd3e6c65b5897778ddcd5bf1a2adc7169960c0f",
+          "observed_sha256": "17ea22162ae2eba694156b1a15f3351a4e71e318710e64a114f19a96aed7626a",
           "path": "src/catalog_json/audit.py",
           "symbol": "compare_source"
         },
         {
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "bc18e8758e30d2b75ae39af1d476440a91e9a11383cbba949cfba2becd2cdc6f",
+          "observed_sha256": "283adc9523e10fb23379e779cfe42da76db50c5f5b1d2d8464eff547c48e11c2",
           "path": "src/catalog_json/schema.py",
           "symbol": "ContextReview"
         },
         {
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "e96c31243b45e768798f96c91258363ba48dba8056444712c49438dc4176e401",
+          "observed_sha256": "a17929ec091c996e97739a445a008b84334c9b96535b27b421ae37307c65ec2a",
           "path": "src/catalog_json/tools.py",
           "symbol": "CatalogTools.save"
         },
         {
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "8e26aae753dbc6504c6f55d45b732696deb95d8b445b7a8a98efb9fe3570031c",
+          "observed_sha256": "f9af3abe11e0088a91a6594f97df1648c33e327a8aaf1feb8112c2a43df70637",
           "path": "src/catalog_json/agents.py",
           "symbol": ""
         },
         {
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "0263023f0d70fe6065b6e97f22ad6f1ab5acd54657e99e17264c6479e305cb31",
+          "observed_sha256": "87e77bf463159b9be6a7baea708b6623ef303b2081a01c0f294db13f14fd9dca",
           "path": "skills/catalog-extract/SKILL.md",
           "symbol": ""
         },
         {
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "8e104b0d9b3f302d5c9fa422a852ea28518b9d651f782b1c70c51a81f6e8f7c9",
+          "observed_sha256": "6d7405fbe9429ef950a3a8b3038f711efc179d82bbf5557e4e2a2ba684262373",
           "path": "skills/catalog-review/SKILL.md",
           "symbol": ""
         },
         {
           "exists_at_verification": true,
           "observed_kind": "file",
-          "observed_sha256": "3791fba465309001db17ee92be6607815ed4cd64b79091352a711a6a2d3cb49d",
+          "observed_sha256": "915b0dd6b671bb97e0d005dff1c942d43e1c2116f53d0fc9edf0680e94b8abc8",
           "path": "tests/test_page_context.py",
           "symbol": ""
         },
@@ -302,8 +302,8 @@
           "symbol": ""
         }
       ],
-      "summary": "Independent catalogue-meaning review checks page purpose and semantic evidence scopes, not evidence-box count/IoU or narrative string equality. A real native small4 witness exposed2-vs4 frame segmentation as false failure;1.5.1 removes that mechanical fallback. Pure independently agreed software demonstrations use semantic UI descriptions; mixed/real drawing labels and tables remain strict. PASS requires all five ContextReview checks with original evidence. Purpose-only benchmark3/3 does not certify summary identity correctness (nanoCAD was invented as платоCAD in failed1.5.0). Legacy absent context remains literal. Native1.5.1 canary in progress, not an accuracy claim.",
-      "verified_at": "2026-10-14T02:50:25.901510+03:00"
+      "summary": "Independent semantic catalogue review compares purpose/evidence scopes instead of box count/IoU or narrative literal equality. Actual IDs, values, units, conditions and mixed/real drawing ownership remain strict. Only independently agreed exclusive software-demo scopes skip tiny UI labels/geometry. ContextReview needs5 source-grounded confirmations; purpose-only3/3 does not prove summary correctness (ВИМ and voltage-category adverb are real semantic defects). Native1.5.3 accepted small4 after one repair563.26s, final root+independent visual review no blocking; full980queue now uses pinned1.5.3 and preserves504 historical accepted producers/all980 drafts. Separate native-review-contract-delivery entry covers full13k skill/initial20tool snapshot fixes.",
+      "verified_at": "2026-10-14T03:31:04.720588+03:00"
     }
   },
   "schema_version": 1

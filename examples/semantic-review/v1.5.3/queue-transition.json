@@ -1,0 +1,187 @@
+{
+  "observed_unix": 1791937811.924168,
+  "running_program": {
+    "package_version": "1.5.3",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "531e9bea963ef7592a9a09035761b155f81fbf1ba43027dc5c7017c55e9693fe",
+    "python_version": "3.12.13"
+  },
+  "models": {
+    "extractor": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+    "reviewer": "zai.glm-5.3-flash?reasoning=low"
+  },
+  "source_pages": 980,
+  "historical_accepted_before": 504,
+  "accepted_now": 504,
+  "historical_accepted_producer_pairs": {
+    "1.4.2 → 1.4.8": 122,
+    "1.4.15 → 1.4.8": 374,
+    "1.4.15 → 1.4.30": 3,
+    "1.4.15 → 1.4.32": 1,
+    "1.4.15 → 1.4.21": 4
+  },
+  "original_artifact_files_checked": 1484,
+  "changed_original_artifacts": [],
+  "retained_draft_pages": 980,
+  "fresh_native_completed_extractions": [
+    {
+      "catalogue": "isolators",
+      "physical_page": 47,
+      "attempt": 26,
+      "status": "awaiting_provider_admission",
+      "extractor_producer": {
+        "program": {
+          "package_version": "1.5.3",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "531e9bea963ef7592a9a09035761b155f81fbf1ba43027dc5c7017c55e9693fe",
+          "python_version": "3.12.13"
+        },
+        "source_bound_save": true,
+        "status": "receipt_verified",
+        "artifact_sha256": "ff2ec925880fdb495974da2039c17d85ea353645895e4b8d0fbdb1da62c03590"
+      }
+    },
+    {
+      "catalogue": "small",
+      "physical_page": 4,
+      "attempt": 13,
+      "status": "awaiting_provider_admission",
+      "extractor_producer": {
+        "program": {
+          "package_version": "1.5.3",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "531e9bea963ef7592a9a09035761b155f81fbf1ba43027dc5c7017c55e9693fe",
+          "python_version": "3.12.13"
+        },
+        "source_bound_save": true,
+        "status": "receipt_verified",
+        "artifact_sha256": "30d4266a11a6d35eb4731160d3e87dfd4d83fa4c8e33f8aefc1b954afe70d199"
+      }
+    },
+    {
+      "catalogue": "armature",
+      "physical_page": 2,
+      "attempt": 2,
+      "status": "awaiting_provider_admission",
+      "extractor_producer": {
+        "program": {
+          "package_version": "1.5.3",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "531e9bea963ef7592a9a09035761b155f81fbf1ba43027dc5c7017c55e9693fe",
+          "python_version": "3.12.13"
+        },
+        "source_bound_save": true,
+        "status": "receipt_verified",
+        "artifact_sha256": "cded45dfba0873bfca1af4ed4bb07b59dd025acbb9eec7be591b8414d4936451"
+      }
+    },
+    {
+      "catalogue": "armature",
+      "physical_page": 3,
+      "attempt": 3,
+      "status": "awaiting_provider_admission",
+      "extractor_producer": {
+        "program": {
+          "package_version": "1.5.3",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "531e9bea963ef7592a9a09035761b155f81fbf1ba43027dc5c7017c55e9693fe",
+          "python_version": "3.12.13"
+        },
+        "source_bound_save": true,
+        "status": "receipt_verified",
+        "artifact_sha256": "bb2126cc75895c66031ca5527341a56ff5b01f5a7f7a01b0c94a2f4697020f6a"
+      }
+    },
+    {
+      "catalogue": "innovations",
+      "physical_page": 10,
+      "attempt": 4,
+      "status": "awaiting_review",
+      "extractor_producer": {
+        "program": {
+          "package_version": "1.5.3",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "531e9bea963ef7592a9a09035761b155f81fbf1ba43027dc5c7017c55e9693fe",
+          "python_version": "3.12.13"
+        },
+        "source_bound_save": true,
+        "status": "receipt_verified",
+        "artifact_sha256": "c9c13b930ce5f75f937a88c068f35081b5953c8c215dec4d463f4f5bb932ad9a"
+      }
+    },
+    {
+      "catalogue": "innovations",
+      "physical_page": 5,
+      "attempt": 5,
+      "status": "awaiting_provider_admission",
+      "extractor_producer": {
+        "program": {
+          "package_version": "1.5.3",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "531e9bea963ef7592a9a09035761b155f81fbf1ba43027dc5c7017c55e9693fe",
+          "python_version": "3.12.13"
+        },
+        "source_bound_save": true,
+        "status": "receipt_verified",
+        "artifact_sha256": "630bc7b2234fede199f04bf9f49ec004be2ac07d210f4dcec2963089495dabd2"
+      }
+    },
+    {
+      "catalogue": "innovations",
+      "physical_page": 4,
+      "attempt": 4,
+      "status": "reviewing",
+      "extractor_producer": {
+        "program": {
+          "package_version": "1.5.3",
+          "git_revision": null,
+          "dirty": null,
+          "source_code_sha256": "531e9bea963ef7592a9a09035761b155f81fbf1ba43027dc5c7017c55e9693fe",
+          "python_version": "3.12.13"
+        },
+        "source_bound_save": true,
+        "status": "receipt_verified",
+        "artifact_sha256": "d940ee6b325d6e8853b558fd4e52e49a06018608f7a84d92ebdcb5050e3ddb46"
+      }
+    }
+  ],
+  "fresh_reviewer_in_progress": [
+    "innovations:4"
+  ],
+  "provider_pacing": {
+    "anthropic": {
+      "configured_maximum": 8,
+      "current_limit": 4,
+      "active_calls": 4,
+      "waiting_calls": 3,
+      "rate_limit_count": 922,
+      "rate_limit_waves": 72,
+      "backoff_streak": 0,
+      "clean_successes": 4,
+      "operator_not_before_unix": 1791867600.0,
+      "operator_hold_remaining_seconds": 0,
+      "backoff_remaining_seconds": 0
+    },
+    "zai": {
+      "configured_maximum": 8,
+      "current_limit": 1,
+      "active_calls": 1,
+      "waiting_calls": 5,
+      "rate_limit_count": 960,
+      "rate_limit_waves": 73,
+      "backoff_streak": 4,
+      "clean_successes": 1,
+      "operator_not_before_unix": 0,
+      "operator_hold_remaining_seconds": 0,
+      "backoff_remaining_seconds": 0
+    }
+  },
+  "method": "Same source-bound queue resumed with7 explicit pinned accepted predecessor profiles. Old accepted bytes keep actual producers; pending pages get new extraction/review attempts. Whole980 not complete. No new global accuracy claim."
+}
