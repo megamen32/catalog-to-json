@@ -1,6 +1,6 @@
 """Fast unit/focused integration: exact source votes, no partial or majority acceptance.
 
-Expected20s, emergency200s; no provider requests or live queue writes.
+Expected30s, emergency300s; no provider requests or live queue writes.
 """
 import asyncio
 import copy
@@ -17,7 +17,9 @@ import pytest
 from catalog_json.reconciliation.consensus import (
     REQUIRED_ROLES, build_consensus, case_sha256, load_sources, save_vote, validate_pack, validate_vote,
 )
-from catalog_json.reconciliation.voter import MODELS, adjudication_server_config, explicit_retry_policy, runtime_config
+from catalog_json.reconciliation.voter import (
+    MODELS, adjudication_server_config, explicit_retry_policy, runtime_config, run_voter, validate_rejected_attempt,
+)
 from catalog_json.reconciliation.voter_tools import VoterTools, server
 
 
@@ -165,6 +167,107 @@ def test_runtime_configuration_rejects_non_coding_endpoint(tmp_path):
     assert "agent_plugins" not in result and "anthropic" not in result
     config.write_text(yaml.safe_dump({"zai": {"base_url": "https://api.z.ai/api/paas/v4/"}}))
     with pytest.raises(ValueError): runtime_config(config, "glm")
+
+
+@pytest.mark.parametrize("role,provider,variable", [("glm", "zai", "ZAI_API_KEY"), ("minimax", "anthropic", "MINIMAX_API_KEY")])
+def test_missing_credentials_fail_before_claim_or_http(tmp_path, monkeypatch, role, provider, variable):
+    import yaml
+    from catalog_json.reconciliation.voter import ENDPOINTS, deny_http_requests
+    config = tmp_path / "provider.yaml"
+    config.write_text(yaml.safe_dump({provider: {"base_url": ENDPOINTS[role][1], "api_key": "${" + variable + "}"}}))
+    monkeypatch.delenv(variable, raising=False)
+    output = tmp_path / "no-claims"
+    with deny_http_requests() as attempts:
+        with pytest.raises(ValueError, match=variable):
+            asyncio.run(run_voter(pack_path=tmp_path / "not-read-pack.json", sources_path=tmp_path / "not-read-sources.json",
+                                 output_dir=output, role=role, config_path=config))
+    assert attempts == [] and not output.exists()
+    monkeypatch.setenv(variable, "  ")
+    with pytest.raises(ValueError, match="missing or empty"): runtime_config(config, role)
+
+
+@pytest.mark.parametrize("role,provider,variable,other", [("glm", "zai", "ZAI_API_KEY", "MINIMAX_API_KEY"),
+                                                       ("minimax", "anthropic", "MINIMAX_API_KEY", "ZAI_API_KEY")])
+def test_only_selected_provider_credentials_are_resolved(tmp_path, monkeypatch, role, provider, variable, other):
+    import yaml
+    from catalog_json.reconciliation.voter import ENDPOINTS
+    config = tmp_path / "provider.yaml"
+    original = {"zai": {"base_url": ENDPOINTS["glm"][1], "api_key": "${ZAI_API_KEY}"},
+                "anthropic": {"base_url": ENDPOINTS["minimax"][1], "api_key": "${MINIMAX_API_KEY}"}}
+    config.write_text(yaml.safe_dump(original))
+    monkeypatch.setenv(variable, "fixture-selected-credential")
+    monkeypatch.delenv(other, raising=False)
+    resolved = runtime_config(config, role)
+    assert resolved[provider]["api_key"] == "fixture-selected-credential"
+    assert (set(resolved) & {"zai", "anthropic"}) == {provider}
+    assert yaml.safe_load(config.read_text()) == original  # Never mutate the protected input.
+    original[provider]["api_key"] = "${MALFORMED.NAME}"
+    config.write_text(yaml.safe_dump(original))
+    with pytest.raises(ValueError, match="unresolved"): runtime_config(config, role)
+
+
+def rejected_attempt_fixture(tmp_path, pack, role="glm", round_number=2):
+    import time
+    runtime = tmp_path / case_sha256(pack) / f"round{round_number}" / "runtime" / role
+    runtime.mkdir(parents=True)
+    claim = {"role": role, "pack_sha256": case_sha256(pack), "round_number": round_number, "session_id": "actual-old-session"}
+    execution = {"status": "unknown", "identity": {"role": role, "session_id": claim["session_id"], "model": MODELS[role]},
+                 "pack_sha256": case_sha256(pack), "started_at": time.time() - 2, "finished_at": time.time() - 1,
+                 "receipt": None, "receipt_sha256": None}
+    turn = {"stop_reason": "error", "tool_calls": None, "tool_results": None,
+            "channels": {"fast-agent-error": [{"type": "text", "text": "AuthenticationError status=401; Error code: 401"}]}}
+    for name, value in [("claim.json", claim), ("execution.json", execution), ("turn1.json", turn)]:
+        (runtime / name).write_text(json.dumps(value))
+    return runtime
+
+
+@pytest.mark.parametrize("mutation", ["unfinished", "different-source", "different-session", "other-http", "no-sdk-confirmation",
+                                     "tool-call", "tool-result", "later-turn", "accepted-receipt", "success"])
+def test_transport_retry_refuses_unknown_or_accepted_work(inputs, tmp_path, mutation):
+    pack, *_ = inputs
+    runtime = rejected_attempt_fixture(tmp_path, pack)
+    turn = json.loads((runtime / "turn1.json").read_text())
+    execution = json.loads((runtime / "execution.json").read_text())
+    if mutation == "unfinished": execution.pop("finished_at")
+    if mutation == "different-source": execution["pack_sha256"] = "0" * 64
+    if mutation == "different-session": execution["identity"]["session_id"] = "another-session"
+    if mutation == "other-http": turn["channels"]["fast-agent-error"][0]["text"] = "status=500; Error code: 500"
+    if mutation == "no-sdk-confirmation": turn["channels"] = {}; turn["content"] = [{"text": "source contains401"}]
+    if mutation == "tool-call": turn["tool_calls"] = [{"name": "save_verdict"}]
+    if mutation == "tool-result": turn["tool_results"] = [{"saved": True}]
+    if mutation == "later-turn": (runtime / "turn2.json").write_text(json.dumps(turn))
+    if mutation == "accepted-receipt":
+        receipts = runtime.parent.parent / "receipts"; receipts.mkdir(); (receipts / "glm.json").write_text("{}")
+    if mutation == "success": turn["stop_reason"] = "end_turn"
+    (runtime / "turn1.json").write_text(json.dumps(turn)); (runtime / "execution.json").write_text(json.dumps(execution))
+    with pytest.raises(ValueError):
+        validate_rejected_attempt(runtime, pack_sha256=case_sha256(pack), role="glm", round_number=2)
+
+
+def test_transport_attempt2_keeps_semantic_round_and_previous_bytes(inputs, tmp_path, monkeypatch):
+    import yaml
+    from catalog_json.reconciliation.voter import ENDPOINTS
+    pack, _, _, pack_file, sources_file = inputs
+    output = tmp_path / "votes"
+    runtime = rejected_attempt_fixture(output, pack)
+    frozen = {p.name: p.read_bytes() for p in runtime.iterdir()}
+    basis = validate_rejected_attempt(runtime, pack_sha256=case_sha256(pack), role="glm", round_number=2)
+    assert basis["classification"] == "provider_rejected_http401"
+    config = tmp_path / "provider.yaml"
+    config.write_text(yaml.safe_dump({"zai": {"base_url": ENDPOINTS["glm"][1], "api_key": "fixture"}}))
+    class NoProviderLaunch(Exception): pass
+    async def prevent_model_process(*args, **kwargs): raise NoProviderLaunch()
+    monkeypatch.setattr(asyncio, "create_subprocess_exec", prevent_model_process)
+    with pytest.raises(NoProviderLaunch):
+        asyncio.run(run_voter(pack_path=pack_file, sources_path=sources_file, output_dir=output,
+                             role="glm", config_path=config, round_number=2, attempt_number=2))
+    new = runtime.parent / "glm-attempt2"
+    assert new.parents[3] == output  # Same depth as attempt1; same canonical round receipt.
+    claim = json.loads((new / "claim.json").read_text())
+    assert claim["round_number"] == 2 and claim["attempt_number"] == 2
+    assert claim["retry_basis"] == basis and claim["session_id"] != "actual-old-session"
+    assert all((runtime / name).read_bytes() == value for name, value in frozen.items())
+    assert not (runtime.parent.parent / "receipts" / "glm.json").exists()
 
 
 def test_sdk_unknown_retry_is_disabled_and_429_is_observable():

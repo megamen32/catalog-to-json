@@ -78,6 +78,38 @@ def _rows(path):
                 yield json.loads(line)
 
 
+def column_owner_anchors(columns):
+    """Parallel manufacturer blocks own different products in the same row.
+
+    Require explicit group metadata and an untyped designation column, never
+    infer ownership from the magnitude or similarity of a cell value.
+    """
+    groups = defaultdict(list)
+    for i, col in enumerate(columns):
+        if col.get('group'):
+            groups[col['group']].append(i)
+    anchors = {}
+    for group, indices in groups.items():
+        start = indices[0]
+        col = columns[start]
+        if not col.get('unit') and col.get('label', '') in ('', group):
+            anchor = start
+        elif start and columns[start - 1].get('label') == group and not columns[start - 1].get('unit'):
+            anchor = start - 1
+        else:
+            continue
+        anchors[group] = anchor
+    if len(anchors) < 2:
+        return {}
+    return {i: (anchor, group) for group, anchor in anchors.items()
+            for i in [anchor, *groups[group]]}
+
+
+def _declared_groups(fact):
+    return {label(h.get('raw_text')) for h in fact.get('raw', {}).get('header_path', [])
+            if isinstance(h, dict) and h.get('role') == 'group' and h.get('raw_text')}
+
+
 def load_facts(oleg_dir, ours_zip):
     """Retain all material claims; byte/record roundtrips live in formats.py."""
     oleg_dir = Path(oleg_dir)
@@ -131,6 +163,7 @@ def load_facts(oleg_dir, ours_zip):
             prefix = f'/catalogs/{ci}/pages/{pi}/content'
             for ti, table in enumerate(content.get('tables', [])):
                 cols = table['columns']; matrix = [{c['column_id']: c for c in row['cells']} for row in table['rows']]
+                local_owners = column_owner_anchors(cols)
                 names = known_names[source_sha, number]
                 header_hits = [designation(c['label']) in names for c in cols]
                 transposed = sum(header_hits) >= 2 and sum(header_hits) >= len(cols)-2
@@ -144,11 +177,17 @@ def load_facts(oleg_dir, ours_zip):
                         cell = row.get(col['id'])
                         if cell is None:
                             continue
-                        if transposed and cj:
+                        local_anchor, owner_scope = local_owners.get(cj, (primary, ''))
+                        if local_owners:
+                            owner_value = row.get(cols[local_anchor]['id'], {}).get('value', '') if cj in local_owners else ''
+                            prop = col['label']
+                        elif transposed and cj:
                             owner_value, prop = col['label'], row.get(cols[0]['id'], {}).get('value', '')
                         else:
                             owner_value, prop = owner, col['label']
-                        kind = 'model_designation' if (not transposed and cj == primary) or (transposed and cj == 0) else 'model_parameter'
+                        kind = ('table_context' if local_owners and cj not in local_owners else
+                                'model_designation' if (local_owners and cj == local_anchor) or
+                                (not local_owners and ((not transposed and cj == primary) or (transposed and cj == 0))) else 'model_parameter')
                         add('ours', source_sha, [number], kind,
                             f'{prefix}/tables/{ti}/rows/{ri}/cells/{next(i for i,c in enumerate(table["rows"][ri]["cells"]) if c["column_id"]==col["id"])}', owner_value,
                             'designation' if kind == 'model_designation' and not transposed else prop,
@@ -156,6 +195,7 @@ def load_facts(oleg_dir, ours_zip):
                             table_index=ti, row_index=ri, column_index=cj,
                             table_title=table.get('title'), column=col, raw=cell,
                             row_values=[row.get(c['id'], {}).get('value') for c in cols],
+                            owner_column_index=local_anchor, owner_scope=owner_scope,
                             candidate_sha256=page['candidate_sha256'],
                             previously_accepted=page['reviewed_current_content'])
             for kind, field in [('page_text','text_blocks'), ('figure','figures'), ('source_note','source_notes'), ('uncertainty','uncertainties')]:
@@ -186,10 +226,16 @@ def compare_facts(facts):
                 matches += right.get((f['source_sha256'], p, designation(f['owner']), property_label(f['name'], f['unit'])), [])
         distinct = {x['fact_id']: x for x in matches}
         matches = list(distinct.values())
+        scope = label(f.get('owner_scope'))
+        if scope:
+            matches = [x for x in matches if not _declared_groups(x) or scope in _declared_groups(x)]
+        unverified_scope = bool(scope and any(scope not in _declared_groups(x) for x in matches))
         # Repeated observations remain individually linked; no winner by order.
         identities = {(value_identity(x['value']), unit_identity(x['unit']), unit_identity(x['condition'])) for x in matches}
         identity = value_identity(f['value']), unit_identity(f['unit']), unit_identity(f['condition'])
-        if matches and identities == {identity}:
+        if matches and unverified_scope:
+            status = 'ambiguous_alignment'
+        elif matches and identities == {identity}:
             status = 'exact_agreement' if all(type(x['value']) is type(f['value']) and x['value'] == f['value'] for x in matches) else 'representation_difference'
         elif matches:
             status = 'value_or_applicability_conflict' if len(identities) == 1 else 'ambiguous_alignment'

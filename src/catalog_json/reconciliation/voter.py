@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import sys
 import time
 import uuid
@@ -37,12 +38,75 @@ def runtime_config(config_path, role):
         raise ValueError("FastAgent voters are only glm and minimax")
     config = yaml.safe_load(Path(config_path).read_text())
     provider, endpoint = ENDPOINTS[role]
-    settings = config.get(provider, {})
+    if not isinstance(config, dict) or not isinstance(config.get(provider), dict):
+        raise ValueError(f"{role} requires explicit provider settings")
+
+    def resolved(value):
+        if isinstance(value, dict):
+            return {key: resolved(item) for key, item in value.items()}
+        if isinstance(value, list):
+            return [resolved(item) for item in value]
+        if not isinstance(value, str):
+            return value
+
+        def replace(match):
+            variable = match.group(1)
+            supplied = os.environ.get(variable)
+            if supplied is None or not supplied.strip():
+                raise ValueError(f"{role}: required environment variable {variable} is missing or empty")
+            return supplied
+
+        result = re.sub(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}", replace, value)
+        if "${" in result:
+            raise ValueError(f"{role}: unresolved provider environment placeholder")
+        return result
+
+    # Resolve only this provider, never inspect another provider's credentials.
+    settings = resolved(config[provider])
     if settings.get("base_url", "").rstrip("/") != endpoint:
         raise ValueError(f"{role} requires its explicitly authorized endpoint")
+    if not isinstance(settings.get("api_key"), str) or not settings["api_key"].strip():
+        raise ValueError(f"{role} requires an explicitly resolved nonempty api_key")
     return {provider: settings, "llm_retries": 0,
             "logger": {"level": "error", "type": "console", "show_chat": False,
                        "show_tools": False, "progress_display": False}, "mcp": {"servers": {}}}
+
+
+def rejected_http401_turn(turn):
+    """A typed SDK rejection, not a loose401 anywhere in model text or source data."""
+    if (turn.get("stop_reason") != "error" or "tool_calls" not in turn or "tool_results" not in turn
+            or turn.get("tool_calls") or turn.get("tool_results")):
+        return False
+    errors = turn.get("channels", {}).get("fast-agent-error", [])
+    text = "\n".join(block.get("text", "") for block in errors if isinstance(block, dict))
+    return bool(re.search(r"\bstatus=401\b", text) and re.search(r"\bError code:\s*401\b", text))
+
+
+def validate_rejected_attempt(runtime, *, pack_sha256, role, round_number):
+    """Only a terminal, source-bound, no-tool HTTP401 can authorize another transport attempt."""
+    runtime = Path(runtime)
+    if (runtime.parent.parent / "receipts" / f"{role}.json").exists():
+        raise ValueError("A canonical receipt already exists; no transport retry")
+    paths = {name: runtime / name for name in ("claim.json", "execution.json", "turn1.json")}
+    if any(not p.is_file() for p in paths.values()) or sorted(p.name for p in runtime.glob("turn*.json")) != ["turn1.json"]:
+        raise ValueError("Prior transport attempt is incomplete/UNKNOWN; no retry")
+    claim, execution, turn = (json.loads(paths[n].read_text()) for n in ("claim.json", "execution.json", "turn1.json"))
+    started, finished = execution.get("started_at"), execution.get("finished_at")
+    if (claim.get("pack_sha256") != pack_sha256 or claim.get("role") != role or claim.get("round_number") != round_number
+            or not isinstance(claim.get("session_id"), str) or not claim["session_id"]
+            or execution.get("pack_sha256") != pack_sha256
+            or execution.get("identity", {}).get("role") != role
+            or execution.get("identity", {}).get("model") != MODELS[role]
+            or execution.get("identity", {}).get("session_id") != claim.get("session_id")
+            or type(started) not in (int, float) or type(finished) not in (int, float)
+            or not (0 < started <= finished <= time.time())
+            or execution.get("status") not in {"unknown", "provider_rejected"}
+            or "receipt" not in execution or "receipt_sha256" not in execution
+            or execution.get("receipt") is not None or execution.get("receipt_sha256") is not None
+            or not rejected_http401_turn(turn)):
+        raise ValueError("Prior attempt is not a confirmed terminal no-tool HTTP401; no retry")
+    return {"classification": "provider_rejected_http401", "previous_runtime": str(runtime.resolve()),
+            "previous_files_sha256": {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in paths.items()}}
 
 
 @contextmanager
@@ -82,11 +146,13 @@ def explicit_retry_policy(on_rate_limit):
 
 
 async def run_voter(*, pack_path, sources_path, output_dir, role, config_path,
-                    round_number=1, deadline_seconds=1200) -> Path:
+                    round_number=1, deadline_seconds=1200, attempt_number=1) -> Path:
     """One bounded fresh process per pack/role/round. Existing claims require reconciliation."""
     if not 0 < deadline_seconds <= 1200:
         raise ValueError("Per-voter deadline must be in(0,1200]")
-    runtime_config(config_path, role)  # Refuse endpoint/model errors before claiming work.
+    if type(attempt_number) is not int or attempt_number < 1:
+        raise ValueError("attempt_number must be a positive integer")
+    provider_config = runtime_config(config_path, role)  # Credentials/endpoints fail before claim/HTTP.
     pack = validate_pack(json.loads(Path(pack_path).read_text()))
     sources = load_sources(sources_path)
     output_dir = Path(output_dir).resolve()
@@ -103,11 +169,17 @@ async def run_voter(*, pack_path, sources_path, output_dir, role, config_path,
     receipt = receipt_path(pack, output_dir, round_number, role)
     if receipt.exists():
         raise FileExistsError("A receipt already exists; reconcile it without another model call")
-    runtime = receipt.parent.parent / "runtime" / role
+    runtime_base = receipt.parent.parent / "runtime"
+    runtime = runtime_base / (role if attempt_number == 1 else f"{role}-attempt{attempt_number}")
+    retry_basis = None
+    if attempt_number > 1:
+        previous = runtime_base / (role if attempt_number == 2 else f"{role}-attempt{attempt_number - 1}")
+        retry_basis = validate_rejected_attempt(previous, pack_sha256=case_sha256(pack), role=role, round_number=round_number)
     runtime.mkdir(parents=True, exist_ok=True)
     # Do not silently resume after a crash or accepted save, even if receipt is absent.
     write_exclusive(runtime / "claim.json", {"pack_sha256": case_sha256(pack), "role": role,
                     "round_number": round_number, "session_id": str(uuid.uuid4()), "started_at": time.time(),
+                    "attempt_number": attempt_number, "retry_basis": retry_basis,
                     "deadline_seconds": remaining, "config_sha256": hashlib.sha256(Path(config_path).read_bytes()).hexdigest()})
     write_exclusive(runtime / "pack.json", pack)
     write_exclusive(runtime / "sources.json", [{"sha256": k, "path": v["path"]} for k, v in sorted(sources.items())])
@@ -116,7 +188,7 @@ async def run_voter(*, pack_path, sources_path, output_dir, role, config_path,
     cfg = runtime / "provider.yaml"
     fd = os.open(cfg, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     with os.fdopen(fd, "w") as stream:
-        yaml.safe_dump(runtime_config(config_path, role), stream)
+        yaml.safe_dump(provider_config, stream)
     env = dict(os.environ)
     env["PYTHONPATH"] = str(Path(__file__).resolve().parents[2])
     with (runtime / "worker.log").open("xb") as log:
@@ -132,9 +204,13 @@ async def run_voter(*, pack_path, sources_path, output_dir, role, config_path,
                 process.kill(); await process.wait()
             raise
     execution = runtime / "execution.json"
-    if not execution.exists() or code != 0:
+    if not execution.exists():
         raise RuntimeError(f"Voter did not complete; retain UNKNOWN/failed attempt at {runtime}")
     result = json.loads(execution.read_text())
+    if code != 0:
+        if result.get("status") == "provider_rejected":
+            raise RuntimeError(f"Provider rejected HTTP401 without a verdict; retain attempt at {runtime}")
+        raise RuntimeError(f"Voter did not complete; retain UNKNOWN/failed attempt at {runtime}")
     if result["status"] != "completed" or not receipt.exists() or result["receipt_sha256"] != hashlib.sha256(receipt.read_bytes()).hexdigest():
         raise RuntimeError("No exact successful validated vote receipt")
     return receipt
@@ -162,6 +238,7 @@ async def _worker(runtime):
     code_files = [Path(__file__).with_name(n) for n in ("voter.py", "voter_tools.py", "consensus.py")]
     contract_sha = hashlib.sha256(b"".join(p.name.encode() + b"\0" + p.read_bytes() for p in code_files)).hexdigest()
     identity = {"role": role, "session_id": claim["session_id"], "model": MODELS[role],
+                "attempt_number": claim.get("attempt_number", 1),
                 "runtime": f"FastAgent{sdk_version}:{sys.executable}:{runtime}",
                 "contract_sha256": contract_sha, "config_sha256": claim["config_sha256"]}
     write_exclusive(runtime / "identity.json", identity)
@@ -209,6 +286,8 @@ async def _worker(runtime):
                             write_exclusive(runtime / f"turn{turn_number}.json", response.model_dump(mode="json"))
                             stop = str(getattr(response.stop_reason, "value", response.stop_reason)).lower().split(".")[-1]
                             if stop in {"error", "cancelled", "canceled"}:
+                                if turn_number == 1 and rejected_http401_turn(response.model_dump(mode="json")):
+                                    status = "provider_rejected"
                                 raise RuntimeError("Provider generation ended without confirmed delivery")
                             if stop in {"max_tokens", "maxtokens"}:
                                 raise RuntimeError("Truncated generation is UNKNOWN; do not replay tool payload")
