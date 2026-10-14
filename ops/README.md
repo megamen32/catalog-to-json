@@ -192,3 +192,29 @@ holds after owner comparison. A finite one-off transfer records its phase and
 refuses to revive an externally stopped unit. This avoids freezing primary work
 for the whole duration of a long review. It grants no duplicate queue or provider
 fallback and does not turn unit activation into native model acceptance.
+
+
+### Delivery1.5.22: finish independently verified manual revisions once
+
+A source-bound corrected reference with a retained native basis and a separate
+other-author full-image PASS may close duplicate extraction/review work. The
+coordinator validates the exact reference, author proof, independent frozen input,
+image, all six checks, table counts, dimension evidence, and actual native basis
+receipt. Missing, contradictory, stale or uncertain evidence leaves normal work
+open. A newly changed audit requires a new report; an old report cannot repeatedly
+close it. Already admitted native calls finish normally.
+
+The status `superseded_by_independently_verified_revision` certifies the separate
+reference, never the old native candidate. Original content, candidate/review
+files and actual producers remain unchanged. `accepted_pages` still counts native
+acceptances; `independently_verified_revision_pages` and `completed_pages` are
+explicit separate counters. Such catalogues require external reference selection
+before export and therefore retain `complete_for_selection=false`. This is a
+queue/delivery fix, not a new model-quality benchmark or an accuracy percentage.
+
+Older author proofs may record that independent review was still needed. Only
+the four exact historical workflow messages are discharged by an actual
+different-author PASS; real source uncertainties still prevent closure. Cached
+validation expires when any bound input changes. Focused integration checks use
+one process, expected30s/emergency300s, without provider calls. The existing
+full-worker budget and explicit provider routes are reused.

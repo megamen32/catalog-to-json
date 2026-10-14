@@ -20,6 +20,7 @@ from .provenance import program_version,artifact_origin
 from .processes import OwnedProcessTree
 from .fair_queue import FairWorkQueue,REVIEW_ORDER
 from .manual_review import source_review_update
+from .manual_completion import independent_completion_update,queue_complete,STATUS as MANUAL_COMPLETE
 
 
 RATE_LIMIT=re.compile(r'(?:HTTP(?:/\d(?:\.\d)?)?[^\n]{0,100}\b429\b|Error\s+code:\s*429\b|RateLimitError|rate[ _-]limit(?:ed| error| exceeded| reached)|Too Many Requests)',re.I)
@@ -375,6 +376,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             old=json.loads((work/'result.json').read_text()) if (work/'result.json').exists() else {}
             record={'pdf_page':page,'cache_key':key,'status':'pending','next_attempt':0,'attempts':[],'tested_program':version,'source_sha256':digest,'extractor':agents.extractor,'reviewer':agents.reviewer,'contract_sha256':agents.contract_digest,'role_contracts':{role:role_contract(agents,role) for role in providers},'elapsed_seconds':0}
             if old:record['prior_execution']=old
+            if old.get('independent_revision_completion'):record['independent_revision_completion']=old['independent_revision_completion']
             item={'id':cid,'source':source,'out':out,'work':work,'record':record,'reviewed_audit':external_audit_digest(work),
                   'has_prior_review':bool(old.get('review') or old.get('attempts') or list(work.glob('review-*.json')))};pending[cid,page]=item
             accepted_profile=accepted_profile_agents(work,old,agents,digest,page) if not old.get('manual_source_review') and old.get('status')=='accepted' and (old.get('cache_key')==key or resume_compatible_profile) else None
@@ -410,6 +412,9 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                     record['retained_extraction']={'fresh_model_call':False,'extractor_contract_sha256':role_contract(candidate_profile,'extractor'),
                         'review_required':True,'reason':'Explicit receipt-verified predecessor extraction; current independent reviewer must verify it'}
                 record['candidate_sha256']=record['candidate_producer']['artifact_sha256']
+                completion=independent_completion_update(work,record)
+                if completion is not None:
+                    record.update(completion);continue
                 root_review=source_review_update(work,record)
                 if root_review is not None:
                     record.update(root_review);continue
@@ -456,8 +461,9 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
         for cat in catalogs:
             records=[pending[cat['id'],n]['record'] for n in range(1,cat['pages']+1)]
             accepted=sum(r['status']=='accepted' for r in records)
-            cat.update(accepted_pages=accepted,draft_pages=sum('content' in r for r in records),status='complete' if accepted==cat['pages'] else 'running')
-            payload={'schema_version':'1.0','stage':'reviewed_conversion','tested_program':version,'source':{'filename':Path(cat['source']).name,'sha256':cat['source_sha256'],'page_count':cat['pages']},'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'pages':records,'catalog_complete':accepted==cat['pages'],'complete_for_selection':accepted==cat['pages']}
+            external=sum(r['status']==MANUAL_COMPLETE for r in records)
+            cat.update(independently_verified_revision_pages=external,completed_pages=accepted+external,accepted_pages=accepted,draft_pages=sum('content' in r for r in records),status='complete' if accepted+external==cat['pages'] else 'running')
+            payload={'schema_version':'1.0','stage':'reviewed_conversion','tested_program':version,'source':{'filename':Path(cat['source']).name,'sha256':cat['source_sha256'],'page_count':cat['pages']},'models':{'extractor':agents.extractor,'reviewer':agents.reviewer},'pages':records,'catalog_complete':accepted+external==cat['pages'],'complete_for_selection':False if external else accepted==cat['pages'],'independently_verified_revision_pages':external,'external_revision_selection_required':bool(external)}
             digest=hashlib.sha256(json.dumps(payload,ensure_ascii=False).encode()).hexdigest()
             if snapshot_digests.get(cat['id'])!=digest:
                 write_json(Path(cat['output']),payload);snapshot_digests[cat['id']]=digest
@@ -480,16 +486,20 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
             task=await queue.get();item=task[2]
             r=item['record'];attempt=r['next_attempt'];began=time.monotonic()
             try:
-                if r['status']=='accepted':continue
+                if queue_complete(r):continue
                 r.update(status='awaiting_provider_admission',active_role=role);save(item)
                 async with provider_slots[providers[role]]:
                     preferred=queue.at_admission(task)
                     if preferred is not task:
-                        r.update(status='awaiting_review' if role=='reviewer' else 'needs_review' if 'content' in r else 'pending');r.pop('active_role',None)
+                        if not queue_complete(r):r.update(status='awaiting_review' if role=='reviewer' else 'needs_review' if 'content' in r else 'pending')
+                        r.pop('active_role',None)
                         r['elapsed_seconds']+=round(time.monotonic()-began,3);save(item)
                         task=preferred;item=task[2];r=item['record'];attempt=r['next_attempt'];began=time.monotonic()
                         r['active_role']=role
-                    if r['status']=='accepted':continue
+                    if queue_complete(r):continue
+                    completion=independent_completion_update(item['work'],r)
+                    if completion is not None:
+                        r.update(completion);continue
                     if role=='reviewer':
                         root_review=source_review_update(item['work'],r)
                         if root_review is not None:
@@ -542,7 +552,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                         else:r.pop('source_audit_rejection',None)
                         r.update(status='needs_review',next_attempt=attempt+1);enqueue_extraction(item,repair=True,fresh=True)
             except asyncio.CancelledError:
-                r['status']='awaiting_review' if role=='reviewer' and 'content' in r else 'pending'
+                if not queue_complete(r):r['status']='awaiting_review' if role=='reviewer' and 'content' in r else 'pending'
                 raise
             except Exception as exc:
                 failures+=1;r.update(status='awaiting_review' if role=='reviewer' and 'content' in r else 'pending',last_error=f'{type(exc).__name__}: {exc}')
@@ -568,6 +578,17 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                 # the affected accepted page. Retain its exact extractor bytes.
                 for item in pending.values():
                     r=item['record']
+                    if r['status'] not in ('extracting','reviewing'):
+                        completion=independent_completion_update(item['work'],r)
+                        if completion is not None:
+                            if r.get('independent_revision_completion')!=completion['independent_revision_completion'] or r['status']!=MANUAL_COMPLETE:
+                                r.update(completion);save(item)
+                            continue
+                        if r['status']==MANUAL_COMPLETE:
+                            # Retain the enrollment audit hash: an unchanged old
+                            # manual report must not re-close a newly changed lead.
+                            r['status']='awaiting_review'
+                            enqueue_review(item,audit=True);save(item)
                     if r['status']!='accepted' and not r.get('active_role'):
                         root_review=source_review_update(item['work'],r)
                         if root_review is not None:
@@ -581,7 +602,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                         else:
                             r['status']='awaiting_review';enqueue_review(item,audit=True)
                         save(item)
-                if all(i['record']['status']=='accepted' for i in pending.values()):break
+                if all(queue_complete(i['record']) for i in pending.values()):break
                 await asyncio.sleep(.1)
     except TimeoutError:pass
     except asyncio.CancelledError:interrupted=True
