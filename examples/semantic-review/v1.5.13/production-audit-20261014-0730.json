@@ -1,5 +1,5 @@
 {
-  "observed_local": "2026-10-14T07:58:52.795073+03:00",
+  "observed_local": "2026-10-14T08:04:41.132655+03:00",
   "counts": {
     "opn": {
       "accepted": 60,
@@ -23,11 +23,11 @@
       "compatible_drafts": 162,
       "original_draft_pages_preserved": 162,
       "native_completed": {
-        "extractor": 388,
+        "extractor": 389,
         "reviewer": 344
       },
       "native_completed_delta": {
-        "extractor": 0,
+        "extractor": 1,
         "reviewer": 1
       }
     },
@@ -47,18 +47,18 @@
       }
     },
     "innovations": {
-      "accepted": 62,
+      "accepted": 63,
       "pages": 216,
-      "accepted_delta": 2,
+      "accepted_delta": 3,
       "compatible_drafts": 216,
       "original_draft_pages_preserved": 216,
       "native_completed": {
         "extractor": 462,
-        "reviewer": 157
+        "reviewer": 159
       },
       "native_completed_delta": {
         "extractor": 0,
-        "reviewer": 6
+        "reviewer": 8
       }
     },
     "armature": {
@@ -77,8 +77,8 @@
       }
     }
   },
-  "accepted": 518,
-  "accepted_delta": 2,
+  "accepted": 519,
+  "accepted_delta": 3,
   "fixes_published": [
     "cfb9d14/v1.5.12 unchanged post-comparison branding receipt cache and targeted errors",
     "0fb81dd/v1.5.13 exact header-clause partition equivalence"
@@ -171,7 +171,7 @@
     "source_code_sha256": "388e4b7dea7fc75a16d8aeee3f64f722f70d0518bda21b5ea9121fd690d0cc26",
     "python_version": "3.12.13"
   },
-  "native_model_throughput_gain": "Not established. Native201 reviewed on1511 in97.257s and independently checked16rows/80cells; no1513 native PASS claim yet.",
+  "native_model_throughput_gain": "No aggregate benefit/accuracy claim. Native201 PASS on1511 and96PASS on1512; first1513 nativePASS176 retained below. Targeted saved179 replay/MCP guards remain separate evidence.",
   "handoff_status": "new_unit_active",
   "native96_accepted": {
     "extractor_version": "1.5.3",
@@ -220,5 +220,18 @@
     ],
     "history_sha256": "a15ac79f5b8a9430267c77283184fe050a50ab9c747e04cedcbb1436ad576500",
     "scope": "Real native model source tool calls after reset, not completed extraction or final page acceptance"
+  },
+  "first1513_native_pass": {
+    "catalog": "innovations",
+    "physical_page": 176,
+    "attempt": 1,
+    "extractor_version": "1.5.6",
+    "reviewer_version": "1.5.13",
+    "reviewer_model": "zai.glm-5.3-flash?reasoning=low",
+    "native_review_seconds": 66.86,
+    "candidate_sha256": "225f6eab74b28a3efd2d97ae487ebfff344d9cd347d2758f705b1d9cb8c9c514",
+    "review_sha256": "4849633cbda10f4b7e5c90b0fa6a289d12f66672c9f05c376dd64f9b2469a444",
+    "bound_raw_artifact_hashes_verified": true,
+    "root_original_visual_check_this_turn": false
   }
 }
