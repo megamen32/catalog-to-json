@@ -1,3 +1,9 @@
+## Актуальная коррекция: ZCode GLM5.3Flash с реальным зрением
+
+Текущая задача — merge двух готовых980-страничных выдач. ТОЛЬКО Codex/nativeZCode/MiniMax. NativeZCode sess_0dd4a3ee-bc7d-4008-b9fa-c25146ec5392 переключён на account:zai-individual-coding-plan/GLM-5.3-Flash$max, реальныйimagecanary58/120успешен21:06:51UTC.141староеtext/vector-onlyмнение сохраняетфактическуюGLM-5.3identity; оставшиеся50проверяютсяFlash. НельзяпереименовыватьстароеиливыдаватьегозаVision. Root8post-sourceисправленийзапечатаныбезперезаписистарого.
+
+Основной task .agents/tasks/20261014-oleg-consensus-merge.md; текущиеживыеcounts .tmp/oleg-consensus-20261014/merge-progress-latest.json. MiniMax201serialqueueпродолжается,никакогоновогоstandaloneGLM. СборщикобщегоJSON/5Excelпроверенна980страницах/83712ячейках/92847Olegobservations;внутреннийZIPпокапромежуточный,final_consensus_merge=false. Остатоксопоставления/разногласийнезакрыт,финальныйZIPневыдан. Большогобенчмарка/полногоизвлечениянезапускать. OperatorMCPdefinitionвGPTAdminсохранён,реальныйtools/list+zoomчерезHubещёнедоказаны.
+
 ## Актуальное исправление владельца: три участника консенсуса
 
 Только Codex + native ZCode (он же GLM) + MiniMax. Отдельный GLM больше не вызывается и не учитывается. Старые результаты четырёхролей сохраняются как история. Продолжается сведение двух готовых разборов; оцифровка заново и большой бенчмарк не нужны. Точное поручение: `.agents/tasks/20261014-oleg-consensus-merge.md`, livepolicy `.tmp/oleg-consensus-20261014/reviewer-policy-current.json`. MiniMax9005fc76… успешно завершил111.583с:исполнение2. Core/CLIпереведенына3, новый standaloneGLMзапрещён доHTTP. Реальные3-roleproof169/111готовы,197целевыхпроверокpassed;старый4-roleproof169 воспроизводитсяпобайтночерезявныйlegacyprofile. Полныйmerge980ещёнезакончен.

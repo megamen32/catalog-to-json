@@ -266,6 +266,10 @@ def build(root, task, out, *, allow_pending=False):
         for name,value in reports.items():
             data=(value if isinstance(value,str) else dump(value)).encode();z.writestr(name,data);manifest_files[name]={'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data)}
         z.writestr('manifest.json',dump({'schema_version':'catalogue-reconciliation-manifest/1','summary':summary,'files':manifest_files}))
+    # Readback needs only the actual archive. Avoid retaining two decoded copies
+    # of all980 pages alongside the Oleg tables under the2GiB export budget.
+    del bundle
+    gc.collect()
     # Read back the actual consumer archive, CRC and every manifest digest.
     with zipfile.ZipFile(archive) as z:
         if z.testzip() is not None:raise ValueError('ZIP CRC failure')
