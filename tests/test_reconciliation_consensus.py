@@ -157,6 +157,67 @@ def test_mcp_tools_deliver_source_then_validate_complete_save(inputs, tmp_path):
     assert {t.name for t in tools} == {"get_cases", "view_page", "zoom_page", "save_verdict"}
 
 
+@pytest.mark.parametrize("page", [True, "1", 1.0])
+def test_tool_strict_pages_refuse_coercion_with_exact_feedback(inputs, tmp_path, page):
+    _, payload, _, pack_file, sources_file = inputs
+    context = VoterTools(pack_path=pack_file, sources_path=sources_file, identity=identity("glm"), output_dir=tmp_path / "votes")
+    payload = copy.deepcopy(payload)
+    payload["verdicts"][0]["source_evidence"][0]["page"] = page
+    result = context.save_verdict(payload)
+    assert result["saved"] is False and not context.receipt.exists()
+    assert any(e["loc"] == ("verdicts", 0, "source_evidence", 0, "page") for e in result["validation_errors"])
+    assert result["save_contract"]["verdicts"][0]["case_id"] == "dimension"
+
+
+def test_tool_owns_omitted_hash_preserves_null_and_optional_bbox(inputs, tmp_path):
+    pack, payload, _, pack_file, sources_file = inputs
+    context = VoterTools(pack_path=pack_file, sources_path=sources_file, identity=identity("glm"), output_dir=tmp_path / "votes")
+    context.render(pack["cases"][0]["source_sha256"], 1)
+    payload = copy.deepcopy(payload)
+    for verdict in payload["verdicts"]:
+        verdict.pop("case_sha256")
+        verdict["source_evidence"][0].pop("bbox")
+    payload["verdicts"][0]["selected_value"] = None
+    wrong = copy.deepcopy(payload); wrong["verdicts"][0]["case_sha256"] = "0" * 64
+    assert context.save_verdict(wrong)["saved"] is False
+    wrong["verdicts"][0]["case_sha256"] = None
+    assert context.save_verdict(wrong)["saved"] is False
+    wrong = copy.deepcopy(payload); wrong["actual_model"] = "forged"
+    refused = context.save_verdict(wrong)
+    assert not refused["saved"]
+    assert any(e["type"] == "extra_forbidden" and e["loc"] == ("actual_model",) for e in refused["validation_errors"])
+    assert context.save_verdict(payload)["saved"]
+    saved = json.loads(context.receipt.read_text())["payload"]["verdicts"]
+    assert saved[0]["case_sha256"] == case_sha256(pack["cases"][0])
+    assert saved[0]["selected_value"] is None and "selected_value" not in saved[1]
+    assert "bbox" not in saved[0]["source_evidence"][0]
+    tool = next(t for t in asyncio.run(server(context).list_tools()) if t.name == "save_verdict")
+    schema = tool.input_schema["properties"]["data"]
+    assert schema["required"] == ["pack_id", "verdicts"] and schema["additionalProperties"] is False
+    fields = schema["properties"]["verdicts"]["items"]
+    assert "case_sha256" not in fields["required"] and "selected_value" not in fields["required"]
+
+
+def test_duplicate_zoom_feedback_allows_new_pixel_detail_and_repairs(inputs, tmp_path):
+    pack, payload, _, pack_file, sources_file = inputs
+    context = VoterTools(pack_path=pack_file, sources_path=sources_file, identity=identity("glm"), output_dir=tmp_path / "votes")
+    digest = pack["cases"][0]["source_sha256"]
+    first = context.render(digest, 1, [0., .3, 1., .6])
+    assert first.data
+    before = {p.name: p.read_bytes() for p in context.artifacts.iterdir()}
+    for _ in range(8):
+        result = context.render(digest, 1, [0., .4, 1., .45])
+        assert result["already_viewed"] and result["new_source_information"] is False
+        assert "unresolved" in result["instruction"] and "both" in result["instruction"]
+    assert before == {p.name: p.read_bytes() for p in context.artifacts.iterdir()}
+    # A narrower crop gives more source pixels, so it must still return an image.
+    assert context.render(digest, 1, [.1, .4, .2, .45]).data
+    partial = copy.deepcopy(payload); partial["verdicts"].pop()
+    for _ in range(8):
+        assert not context.save_verdict(partial)["saved"]
+    assert context.save_verdict(payload)["saved"]
+
+
 def test_runtime_configuration_rejects_non_coding_endpoint(tmp_path):
     import yaml
     config = tmp_path / "provider.yaml"
@@ -330,12 +391,11 @@ def test_real_stdio_consumer_saves_only_a_complete_bound_vote(inputs, tmp_path):
 @pytest.mark.parametrize("role", ["glm", "minimax"])
 def test_native_fastagent_boots_only_adjudication_tools_without_network(inputs, tmp_path, monkeypatch, role):
     """Provider initialization + real MCP attachment, explicitly forbid HTTP/API calls."""
-    import httpx
     import yaml
     from fast_agent import FastAgent
     from fast_agent.mcp.mcp_aggregator import MCPAttachOptions
     from catalog_json.models import register_model_capabilities
-    from catalog_json.reconciliation.voter import ENDPOINTS
+    from catalog_json.reconciliation.voter import ENDPOINTS, deny_http_requests
     _, _, _, pack_file, sources_file = inputs
     who = tmp_path / "identity.json"; who.write_text(json.dumps(identity(role)))
     provider, endpoint = ENDPOINTS[role]
@@ -346,9 +406,6 @@ def test_native_fastagent_boots_only_adjudication_tools_without_network(inputs, 
         "llm_retries": 0, "mcp": {"servers": {"adjudication":
             adjudication_server_config(tmp_path, tmp_path / "votes", 1)}}}))
 
-    async def forbidden_http(*args, **kwargs):
-        raise AssertionError("No model/network request is authorized in this test")
-    monkeypatch.setattr(httpx.AsyncClient, "send", forbidden_http)
     register_model_capabilities()
     fast = FastAgent("preflight", config_path=str(config), parse_cli_args=False, quiet=True,
                      workspace=tmp_path, home=tmp_path / "home", skills_directory=[])
@@ -361,7 +418,9 @@ def test_native_fastagent_boots_only_adjudication_tools_without_network(inputs, 
             result = await app[role].list_tools()
             assert len(result.tools) == 4
             assert all(any(name in t.name for name in ("get_cases", "view_page", "zoom_page", "save_verdict")) for t in result.tools)
-    asyncio.run(boot())
+    with deny_http_requests() as attempts:
+        asyncio.run(boot())
+    assert attempts == []
 
 
 def test_actual_installed_runtime_cli_env_cwd_limits_without_http(inputs, tmp_path):
@@ -401,3 +460,89 @@ def test_actual_installed_runtime_cli_env_cwd_limits_without_http(inputs, tmp_pa
         assert proof["status"] == ("startup_failed" if saved else "passed")
         assert len(proof["tools"]) == (0 if saved else 4)
     assert all((runtime / name).read_bytes() == value for name, value in frozen.items())
+
+
+def test_actual_semantic1524_sdk_http_stacks_mocked_and_denied(tmp_path):
+    """Focused integration: actual SDK clients, local MockTransport, zero sockets/API."""
+    root = Path(__file__).resolve().parents[1]
+    python = root / ".tmp/full-digitization/semantic-v1.5.24/env/bin/python"
+    if not python.exists():
+        pytest.skip("Actual retained1524 interpreter not available")
+    probe = r'''
+import asyncio, json, os, resource, socket
+resource.setrlimit(resource.RLIMIT_AS, (2 * 1024**3, 2 * 1024**3))
+os.sched_setaffinity(0, {min(os.sched_getaffinity(0))})
+import anthropic, anthropic._base_client as anthropic_base
+import openai, openai._base_client as openai_base
+from catalog_json.reconciliation.voter import _http_modules, explicit_retry_policy, deny_http_requests
+connections = []
+def no_socket(*args, **kwargs):
+    connections.append(True)
+    raise AssertionError("External sockets forbidden in local SDK proof")
+socket.socket.connect = no_socket
+socket.socket.connect_ex = no_socket
+modules = _http_modules()
+assert {m.__name__ for m in modules} == {"httpx", "httpx2"}
+sdk_modules = {"openai": getattr(openai_base, "httpx2", None) or openai_base.httpx,
+               "anthropic": getattr(anthropic_base, "httpx2", None) or anthropic_base.httpx}
+calls, events = [], []
+def handler(module):
+    def respond(request):
+        calls.append(module.__name__)
+        return module.Response(429, headers={"retry-after": "2"}, json={"error": {"message": "fixture limit", "type": "rate_limit"}})
+    return respond
+async def invoke(client, kind):
+    if kind == "openai":
+        await client.chat.completions.create(model="fixture", messages=[{"role": "user", "content": "fixture"}])
+    else:
+        await client.messages.create(model="fixture", max_tokens=1, messages=[{"role": "user", "content": "fixture"}])
+async def scenario():
+    with explicit_retry_policy(events.append):
+        for module in modules:
+            async with module.AsyncClient(transport=module.MockTransport(handler(module))) as raw:
+                assert (await raw.get("https://fixture.invalid")).status_code == 429
+        for kind, constructor in (("openai", openai.AsyncOpenAI), ("anthropic", anthropic.AsyncAnthropic)):
+            module = sdk_modules[kind]
+            async with constructor(api_key="fixture", base_url="https://fixture.invalid", max_retries=5,
+                    http_client=module.AsyncClient(transport=module.MockTransport(handler(module)))) as client:
+                assert client.max_retries == 0
+                try:
+                    await invoke(client, kind)
+                except (openai.RateLimitError, anthropic.RateLimitError):
+                    pass
+                else:
+                    raise AssertionError("Expected the single mocked SDK429 rejection")
+        before = list(calls)
+        with deny_http_requests() as denied:
+            for module in modules:
+                with module.Client(transport=module.MockTransport(handler(module))) as client:
+                    try: client.get("https://fixture.invalid")
+                    except RuntimeError: pass
+                    else: raise AssertionError("Sync HTTP escaped deny")
+                async with module.AsyncClient(transport=module.MockTransport(handler(module))) as client:
+                    try: await client.get("https://fixture.invalid")
+                    except RuntimeError: pass
+                    else: raise AssertionError("Async HTTP escaped deny")
+            for kind, constructor in (("openai", openai.AsyncOpenAI), ("anthropic", anthropic.AsyncAnthropic)):
+                module = sdk_modules[kind]
+                async with constructor(api_key="fixture", base_url="https://fixture.invalid",
+                        http_client=module.AsyncClient(transport=module.MockTransport(handler(module)))) as client:
+                    try: await invoke(client, kind)
+                    except (RuntimeError, openai.APIConnectionError, anthropic.APIConnectionError): pass
+                    else: raise AssertionError("SDK HTTP escaped deny")
+            assert calls == before and len(denied) == 6
+    assert len(calls) == 4 and events == [2] * 4 and not connections
+    print(json.dumps({"sdk_versions": {"openai": openai.__version__, "anthropic": anthropic.__version__},
+        "sdk_http_modules": {k: m.__name__ for k,m in sdk_modules.items()}, "mock_transport_calls": calls,
+        "observed_429_delays": events, "denied_http_attempts": len(denied), "external_socket_attempts": len(connections),
+        "external_requests": 0, "address_space_limit": list(resource.getrlimit(resource.RLIMIT_AS)),
+        "cpu_affinity": sorted(os.sched_getaffinity(0))}))
+asyncio.run(scenario())
+'''
+    run = subprocess.run([str(python), "-c", probe], cwd=root,
+                         env={**os.environ, "PYTHONPATH": str(root / "src")}, capture_output=True, text=True, timeout=60)
+    assert run.returncode == 0, run.stderr
+    proof = json.loads(run.stdout)
+    (tmp_path / "semantic1524-http-stacks-proof.json").write_text(json.dumps(proof, indent=2) + "\n")
+    assert proof["sdk_http_modules"] == {"openai": "httpx2", "anthropic": "httpx2"}
+    assert proof["external_requests"] == proof["external_socket_attempts"] == 0
