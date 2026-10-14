@@ -1,0 +1,168 @@
+{
+  "observed_local": "2026-10-14T06:56:26.144480+03:00",
+  "counts": {
+    "opn": {
+      "accepted": 60,
+      "pages": 60,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 60,
+      "native_completed": {
+        "extractor": 146,
+        "reviewer": 164
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "isolators": {
+      "accepted": 161,
+      "pages": 162,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 162,
+      "native_completed": {
+        "extractor": 388,
+        "reviewer": 343
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "small": {
+      "accepted": 228,
+      "pages": 228,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 228,
+      "native_completed": {
+        "extractor": 539,
+        "reviewer": 518
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "innovations": {
+      "accepted": 60,
+      "pages": 216,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 216,
+      "native_completed": {
+        "extractor": 462,
+        "reviewer": 151
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 2
+      }
+    },
+    "armature": {
+      "accepted": 7,
+      "pages": 314,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 314,
+      "native_completed": {
+        "extractor": 513,
+        "reviewer": 19
+      },
+      "native_completed_delta": {
+        "extractor": 21,
+        "reviewer": 0
+      }
+    }
+  },
+  "accepted": 516,
+  "accepted_delta": 0,
+  "runtime_identity": {
+    "program": {
+      "package_version": "1.5.10",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "a5eb44123f7f7448ca727f61e119b298ef55cdf95f356beab381d69753a0a8ef",
+      "python_version": "3.12.13"
+    },
+    "role_contract": "280ef08dec4a4969b9d472b4ce248589fe758e7aab9589c74adb8152fb983893"
+  },
+  "confirmed_defects": [
+    "159 near-identical alternating crop loop bypassed exact-repeat guidance",
+    "innovations189 accepted candidate note says18 rows and merged wire marks, actual source/table17; retained all68 correct cells",
+    "armature178 Направление опрессования misread as Напряжение; false D/Ø uncertainty is a source lead requiring independent confirmation"
+  ],
+  "new_regression_cases": [
+    "arm178-jittered-alternating-zoom-loop",
+    "innov189-row-count-note-contradiction",
+    "arm178-crimp-direction-not-voltage"
+  ],
+  "fixes_published": [
+    "3690b57/v1.5.10",
+    "61ec269 lockfile correction"
+  ],
+  "saved_argument_replay": {
+    "1.5.9": [
+      {
+        "page": 164,
+        "calls": 86,
+        "advisory_calls": 24,
+        "first_advisory_call": 20,
+        "all_images_available": true
+      },
+      {
+        "page": 178,
+        "calls": 58,
+        "advisory_calls": 2,
+        "first_advisory_call": 12,
+        "all_images_available": true
+      }
+    ],
+    "1.5.10": [
+      {
+        "page": 164,
+        "calls": 86,
+        "advisory_calls": 42,
+        "first_advisory_call": 20,
+        "all_images_available": true
+      },
+      {
+        "page": 178,
+        "calls": 58,
+        "advisory_calls": 49,
+        "first_advisory_call": 10,
+        "all_images_available": true
+      }
+    ]
+  },
+  "installed_native_mcp_proof": {
+    "installed_version": "1.5.10",
+    "native_mcp_images_retained": true,
+    "near_repeat_guidance": true,
+    "distinct_detail_unblocked": true,
+    "model_calls": 0,
+    "elapsed_seconds": 1.549
+  },
+  "focused_checks": {
+    "passed": 49,
+    "elapsed_seconds": 21.35
+  },
+  "transition": {
+    "old_unit": "full-semantic159",
+    "new_unit": "full-semantic1510",
+    "no_native_calls_intentionally_interrupted": true,
+    "all_admitted_calls_finished_or_hit_existing_timeout_before_stop": true,
+    "old_unit_stop_result": "exit-code2 during bounded coordinator/waiter cleanup, no active stage_worker at stop",
+    "initial_artifact_pins_verified": 1497,
+    "changed_artifact_hashes": 0,
+    "compatible_accepted_preserved": 516,
+    "original_drafts_preserved": 980,
+    "prior_accepted_innovations189_reopened_by_current_source_audit": true,
+    "owned_holds_removed_only_after_owner_check": true,
+    "single_full_queue": true
+  },
+  "fresh_rate_limits_since_baseline": {
+    "anthropic": 0,
+    "zai": 1
+  },
+  "large_model_benchmark_run": false,
+  "accuracy_note": "No new global/drawing accuracy percentage; native189 PASS was independently reopened for a real explanation defect.",
+  "native_model_throughput_gain": "Not yet established; source/native-MCP/replay delivery is proven separately."
+}

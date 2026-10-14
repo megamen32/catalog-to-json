@@ -331,6 +331,54 @@
       ],
       "summary": "Independent semantic catalogue review compares purpose/evidence scopes instead of box count/IoU or narrative literal equality. Actual IDs, values, units, conditions and mixed/real drawing ownership remain strict. Only independently agreed exclusive software-demo scopes skip tiny UI labels/geometry. ContextReview needs5 source-grounded confirmations; purpose-only3/3 does not prove summary correctness (ВИМ and voltage-category adverb are real semantic defects). Native1.5.3 accepted small4 after one repair563.26s, final root+independent visual review no blocking; full980queue now uses pinned1.5.3 and preserves504 historical accepted producers/all980 drafts. Separate native-review-contract-delivery entry covers full13k skill/initial20tool snapshot fixes.",
       "verified_at": "2026-10-14T03:31:04.720588+03:00"
+    },
+    "jittered-region-loop": {
+      "key": "jittered-region-loop",
+      "kind": "failure-shield",
+      "confidence": "verified",
+      "git_head": "61ec269",
+      "locations": [
+        {
+          "path": "src/catalog_json/tools.py",
+          "symbol": "CatalogTools.region",
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "791f602a9862d852338213290a4232bb2bc67fc7de880983b4aa7d80147cf2d3"
+        }
+      ],
+      "evidence": [
+        "Native159 armature178 alternates left/right drawing boxes shifted by.01; exact-repeat-only notice misses most calls.",
+        "1510 same-page/same-rotation IoU>=.85 counts near repeats; third receives advisory, image and all future zooms retained. Real tighter detail/different rotation unaffected.",
+        "49 focused checks21.35s incl native stdio image+text; installed1510 native MCP1.549s; retained164/178 call replay."
+      ],
+      "hazards": [
+        "No hard inspection cap; never suppress original image or weaken final validation. Advisory delivery is not proof of actual model throughput gain."
+      ],
+      "next_route": "tests/test_tools.py native image roundtrip and near-repeat test; retained argument replay under .tmp/catalog-review-watch/20261014-0630"
+    },
+    "native-provider-error-stop": {
+      "key": "native-provider-error-stop",
+      "kind": "failure-shield",
+      "confidence": "verified",
+      "git_head": "7825035",
+      "locations": [
+        {
+          "path": "src/catalog_json/agents.py",
+          "symbol": "generate_until_saved",
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "bbd4ca874eae22b4215c18255f9faa31933c8a1c52b74818dcbd33ad2d3f7947"
+        }
+      ],
+      "evidence": [
+        "Real1510 SDK returns LlmStopReason.ERROR for MiniMax429/2056, not an exception; artifact followup loop retried it.",
+        "1511 raises immediately on native stop_reason error; real typed PromptMessageExtended replay calls generate once and refuses acceptance.",
+        "69 focused staged/pacing checks12.98s; ordinary unfinished artifact loops remain unlimited, cancellation/absolute deadline remain strict."
+      ],
+      "hazards": [
+        "Provider error is not a model extraction repair. Return to outer pacing; never infer successful artifact from SDK error text.",
+        "Official interval hold prevents further admissions; already admitted quota-denied attempts require own supervisor cleanup after checking no source calls."
+      ]
     }
   },
   "schema_version": 1

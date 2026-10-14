@@ -1,0 +1,120 @@
+{
+  "observed_local": "2026-10-14T07:05:40.078942+03:00",
+  "accepted": 516,
+  "remaining": 464,
+  "counts": {
+    "opn": {
+      "accepted": 60,
+      "pages": 60,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 60,
+      "native_completed": {
+        "extractor": 146,
+        "reviewer": 164
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "isolators": {
+      "accepted": 161,
+      "pages": 162,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 162,
+      "native_completed": {
+        "extractor": 388,
+        "reviewer": 343
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "small": {
+      "accepted": 228,
+      "pages": 228,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 228,
+      "native_completed": {
+        "extractor": 539,
+        "reviewer": 518
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 0
+      }
+    },
+    "innovations": {
+      "accepted": 60,
+      "pages": 216,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 216,
+      "native_completed": {
+        "extractor": 462,
+        "reviewer": 151
+      },
+      "native_completed_delta": {
+        "extractor": 0,
+        "reviewer": 2
+      }
+    },
+    "armature": {
+      "accepted": 7,
+      "pages": 314,
+      "accepted_delta": 0,
+      "original_draft_pages_preserved": 314,
+      "native_completed": {
+        "extractor": 513,
+        "reviewer": 19
+      },
+      "native_completed_delta": {
+        "extractor": 21,
+        "reviewer": 0
+      }
+    }
+  },
+  "new_regression_cases": [
+    "arm178-jittered-alternating-zoom-loop",
+    "innov189-row-count-note-contradiction",
+    "arm178-crimp-direction-not-voltage",
+    "native-provider-error-is-not-artifact-repair"
+  ],
+  "program": {
+    "package_version": "1.5.11",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "0ab40f14211ff0e312905d70e2b67ce68cf529f1e4d1de1294411d73a5253d2b",
+    "python_version": "3.12.13"
+  },
+  "focused_checks": 69,
+  "focused_checks_seconds": 12.98,
+  "installed_sdk_error_replay": {
+    "program": {
+      "package_version": "1.5.11",
+      "git_revision": null,
+      "dirty": null,
+      "source_code_sha256": "0ab40f14211ff0e312905d70e2b67ce68cf529f1e4d1de1294411d73a5253d2b",
+      "python_version": "3.12.13"
+    },
+    "actual_sdk_message_class": "PromptMessageExtended",
+    "native_stop_reason": "LlmStopReason.ERROR",
+    "recorded_provider_code": 2056,
+    "generate_calls": 1,
+    "artifact_accepted": false,
+    "model_calls": 0,
+    "elapsed_seconds": 0.001
+  },
+  "official_minimax_quota": {
+    "observed_unix": 1791950271.7067678,
+    "remaining_percent": 0,
+    "reset_local": "2026-10-14T08:00:00+03:00",
+    "weekly_remaining_percent": 89
+  },
+  "runtime_transition": "1511 prepared; one existing1510 GLM review drains first; do not claim new native1511 page acceptance yet",
+  "quota_denied_attempts_cancelled": 7,
+  "GLM_continues_current_review": true,
+  "manual_catalogue_values_edited": false,
+  "large_model_benchmark": false,
+  "accuracy_note": "No new global or drawing percentage. One newly passing page189 reopened for false explanatory row count; all17 rows/68 cells preserved. MiniMax1510 extraction calls could not start source tools because quota was exhausted."
+}
