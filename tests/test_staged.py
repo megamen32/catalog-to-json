@@ -409,6 +409,29 @@ def test_end_turn_without_file_continues_until_confirmed_tool_save():
     assert all('save' in p for p in model.calls[1:])
 
 
+def test_truncated_native_tool_use_cannot_continue_as_missing_file():
+    """Fast unit: retained164 maxTokens orphan; expected1s/emergency10s, no model calls."""
+    from catalog_json.agents import generate_until_saved
+    from fast_agent.types import PromptMessageExtended
+    native=PromptMessageExtended.model_validate({'role':'assistant','content':[],
+        'stop_reason':'maxTokens','channels':{'anthropic-assistant-raw-content':[
+            {'type':'text','text':json.dumps({'type':'tool_use','id':'retained-orphan','name':'catalog__save_page_json','input':{}})}]}})
+    class Model:
+        calls=0
+        async def generate(self,*args,**kwargs):
+            self.calls+=1
+            if self.calls>1:raise AssertionError('Would send orphan tool_use without tool_result')
+            return native
+    model=Model()
+    with pytest.raises(RuntimeError,match='truncated tool'):
+        asyncio.run(generate_until_saved(model,'source',object(),lambda:False))
+    assert model.calls==1
+    # A plain text token boundary has no orphan tool and may continue normally.
+    native.channels={}
+    model=Model()
+    assert asyncio.run(generate_until_saved(model,'source',object(),lambda:True)) is native
+
+
 def test_sdk_error_response_is_not_an_artifact_repair_turn():
     """Fast unit: retained1510 quota stop_reason=error; expected1s/emergency10s."""
     from catalog_json.agents import generate_until_saved

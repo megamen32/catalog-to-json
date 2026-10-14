@@ -30,6 +30,19 @@ async def generate_until_saved(agent,task,request_params,completed,deadline=None
         reason=str(getattr(stop,'value',stop)).lower().split('.')[-1]
         if reason in {'cancelled','canceled'}:raise RuntimeError('Native generation cancelled before confirmed delivery')
         if reason=='error':raise RuntimeError('Native generation failed before confirmed delivery; see retained fast-agent-error channel. Provider errors are not artifact repair turns.')
+        if reason in {'maxtokens','max_tokens'}:
+            # SDK preserves raw Anthropic tool_use on max_tokens but does not
+            # execute it. Resending that history creates an orphan tool call
+            # (MiniMax400/2013). Never execute its potentially partial payload
+            # ourselves or fabricate a tool_result; retain the failed attempt.
+            for block in (getattr(response,'channels',None) or {}).get('anthropic-assistant-raw-content',[]):
+                raw=block.get('text') if isinstance(block,dict) else getattr(block,'text',None)
+                if not raw:continue
+                try:value=json.loads(raw)
+                except (ValueError,TypeError):continue
+                values=value if isinstance(value,list) else [value]
+                if any(isinstance(v,dict) and v.get('type')=='tool_use' for v in values):
+                    raise RuntimeError('Native generation ended with a truncated tool call; retained attempt cannot continue with an orphan tool_use. No tool result was fabricated.')
         if completed():return response
         prompt='В этой попытке ещё нет успешного source-bound save. Продолжи смысловую проверку исходной задачи в текущем контексте, исправь замечания инструмента и сохрани результат catalog tools. Обычная реплика не заменяет артефакт. Не повторяй длинный пересказ.'
 
