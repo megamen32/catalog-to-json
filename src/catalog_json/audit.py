@@ -197,7 +197,13 @@ def context_differences(observed,candidate):
     # would turn valid paraphrases back into mechanical OCR differences.
     # Preserve scope disagreements; meaning and facts require ContextReview.
     source=a.source_evidence;actual=b.source_evidence
-    if {e.kind for e in source}!={e.kind for e in actual}:
+    source_scopes={e.kind for e in source};actual_scopes={e.kind for e in actual}
+    # An extra unclassified evidence box (for example empty cover whitespace)
+    # is not itself a missing engineering fact. Keep all concrete scope changes
+    # strict, and never grant demo summarization through an unknown region.
+    if a.kind==b.kind and a.kind not in {'software_demonstration','unknown'}:
+        source_scopes.discard('unknown');actual_scopes.discard('unknown')
+    if source_scopes!=actual_scopes:
         differences.append(diff('page_context.source_evidence',[e.model_dump() for e in source],[e.model_dump() for e in actual]))
     return differences
 

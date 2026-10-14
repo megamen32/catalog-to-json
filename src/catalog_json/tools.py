@@ -383,7 +383,11 @@ class CatalogTools:
                     candidate=PageContent.model_validate(disclosed['candidate']);candidate_file=work/f'candidate-{self.attempt}.json'
                     candidate_sha=hashlib.sha256(candidate_file.read_bytes()).hexdigest() if candidate_file.exists() else None
                     records=list(self.dimension_reviews.get(page,{}).values())
-                    missing=missing_dimension_evidence(candidate,records,candidate_sha,observation,hashlib.sha256(observation_file.read_bytes()).hexdigest())
+                    supporting_annotations=bool(model.context_review and model.context_review.accepts() and model.context_review.supporting_annotations_verified
+                        and all(c.page_context is not None and c.page_context.kind=='supporting_material' and not c.tables
+                                and all(e.kind=='supporting_material' and e.transcription=='literal' for e in c.page_context.source_evidence)
+                                for c in (observation,candidate)))
+                    missing=missing_dimension_evidence(candidate,records,candidate_sha,observation,hashlib.sha256(observation_file.read_bytes()).hexdigest(),supporting_annotations=supporting_annotations)
                     if missing:return {'saved':False,'error':'A blanket figures PASS cannot certify dimension ownership. Enable labels helpers to record already inspected relationships in a batch; enable drawings only for ambiguous engineering geometry. Inspect each source view/variant and its own tips/contour. False or unresolved relationships require figures failed. Never borrow a label from another view.', 'missing_dimension_relations':missing}
                 if model.verdict=='pass' and disclosed['independent_comparison']:
                     return {'saved':False,'error':'Independent source observations contradict the claimed pass. Report ALL differences and any additional findings.', 'differences':disclosed['independent_comparison']}

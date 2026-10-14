@@ -126,6 +126,7 @@ class ContextReview(Model):
     actual_vs_demo_verified: bool
     technical_facts_verified: bool
     relations_verified: bool
+    supporting_annotations_verified: bool = Field(default=False,description="True only after independent original-image confirmation that both supporting_material inventories contain document annotations (dates, document numbers, addresses), not engineering drawings. Actual drawings require mixed/product/project context and per-dimension ownership evidence.")
     evidence: str = Field(min_length=1,description="Независимая проверка по оригиналу: назначение страницы, смысл пересказа, реальные данные/демонстрация, технические факты и связи изделия/параметра/условия/элемента чертежа. Перефразирование допустимо; числа, марки, единицы и связи нельзя менять.")
 
     def accepts(self):

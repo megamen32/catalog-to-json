@@ -143,12 +143,13 @@ def load_role_runtimes(agents,path):
     agents.role_runtimes=routes['roles'];agents.role_contracts={r:v['contract_sha256'] for r,v in routes['roles'].items()}
     agents.contract_digest=hashlib.sha256(json.dumps(agents.role_contracts,sort_keys=True).encode()).hexdigest()
     agents.accepted_predecessor_profiles=[]
-    for previous in routes.get('accepted_predecessor_profiles',[]):
+    agents.candidate_predecessor_profiles=[]
+    for destination,previous in [(name,p) for name in ('accepted_predecessor_profiles','candidate_predecessor_profiles') for p in routes.get(name,[])]:
         if previous.get('models')!={'extractor':agents.extractor,'reviewer':agents.reviewer}:
             raise ValueError('Accepted predecessor models must match; no provider fallback')
         validate(previous['roles'])
         contracts={r:v['contract_sha256'] for r,v in previous['roles'].items()}
-        agents.accepted_predecessor_profiles.append(SimpleNamespace(extractor=agents.extractor,reviewer=agents.reviewer,
+        getattr(agents,destination).append(SimpleNamespace(extractor=agents.extractor,reviewer=agents.reviewer,
             role_contracts=contracts,role_runtimes=previous['roles'],
             contract_digest=hashlib.sha256(json.dumps(contracts,sort_keys=True).encode()).hexdigest()))
     return agents
@@ -341,7 +342,8 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
     else:
         policy={'seed':uuid.uuid4().hex,'order':REVIEW_ORDER};write_json(policy_path,policy)
     extract=FairWorkQueue(ids);review=FairWorkQueue(ids,seed=policy['seed']);sequence=count()
-    def enqueue_extraction(item,repair=False):extract.put_nowait((0 if repair else 1,next(sequence),item))
+    def enqueue_extraction(item,repair=False,fresh=False):
+        extract.put_nowait((2 if fresh else 0 if repair else 1,next(sequence),item))
     def enqueue_review(item,audit=False,fresh=False):
         repair=audit or bool(item['record'].get('review') or item['record'].get('attempts') or item.get('has_prior_review'))
         review.put_nowait((2 if fresh else 0 if repair else 1,next(sequence),item))
@@ -389,15 +391,29 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                         'accepted_artifact_contract_sha256':accepted_profile.contract_digest,'fresh_model_call':False}
                     continue
             candidate=validated_candidate(work,digest,page,agents.extractor,role_contract(agents,'extractor'))
+            candidate_profile=agents
+            if candidate is None and resume_compatible_profile:
+                for previous in getattr(agents,'candidate_predecessor_profiles',[]):
+                    retained=validated_candidate(work,digest,page,agents.extractor,role_contract(previous,'extractor'))
+                    if retained is None:continue
+                    path=work/f'candidate-{retained[0]}.json'
+                    origin=artifact_origin(work,path,digest,page,retained[0],'extractor',agents.extractor,role_contract(previous,'extractor'))
+                    if origin['status']=='receipt_verified' and origin['program']==previous.role_runtimes['extractor']['program']:
+                        candidate=retained;candidate_profile=previous;break
             if candidate:
                 record.update(content=candidate[1].model_dump(),next_attempt=candidate[0],status='awaiting_review')
-                record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,role_contract(agents,'extractor'))
+                record['candidate_producer']=artifact_origin(work,work/f'candidate-{candidate[0]}.json',digest,page,candidate[0],'extractor',agents.extractor,role_contract(candidate_profile,'extractor'))
+                if candidate_profile is not agents:
+                    record['role_contracts']['extractor']=role_contract(candidate_profile,'extractor')
+                    record['contract_sha256']=hashlib.sha256(json.dumps(record['role_contracts'],sort_keys=True).encode()).hexdigest()
+                    record['retained_extraction']={'fresh_model_call':False,'extractor_contract_sha256':role_contract(candidate_profile,'extractor'),
+                        'review_required':True,'reason':'Explicit receipt-verified predecessor extraction; current independent reviewer must verify it'}
                 record['candidate_sha256']=record['candidate_producer']['artifact_sha256']
                 rejection=source_audit_rejection(work,digest,page,record['candidate_sha256'])
                 if rejection:
                     record.update(status='needs_review',next_attempt=candidate[0]+1,source_audit_rejection=rejection,
                                   attempts=[dict(a) for a in old.get('attempts',[])])
-                    enqueue_extraction(item,repair=True);continue
+                    enqueue_extraction(item,repair=True,fresh=True);continue
                 if (resume_compatible_profile and old.get('status')!='accepted' and
                         type(old.get('next_attempt')) is int and old.get('next_attempt')==candidate[0]+1 and
                         compatible_reviewed_profile(work,old,agents,digest,page,candidate[0])):
@@ -407,7 +423,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                                       review_sha256=hashlib.sha256(report_path.read_bytes()).hexdigest(),
                                       review_producer=artifact_origin(work,report_path,digest,page,candidate[0],'reviewer',agents.reviewer,role_contract(agents,'reviewer')),
                                       attempts=[dict(a) for a in old.get('attempts',[])],repair_feedback_reused=True)
-                        enqueue_extraction(item,repair=True);continue
+                        enqueue_extraction(item,repair=True,fresh=True);continue
                 # A candidate written after the last completed review is a
                 # fresh repair even after a process/version handover.
                 cp=work/f'candidate-{candidate[0]}.json'
@@ -507,7 +523,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                     else:
                         if rejection:r['source_audit_rejection']=rejection
                         else:r.pop('source_audit_rejection',None)
-                        r.update(status='needs_review',next_attempt=attempt+1);enqueue_extraction(item,repair=True)
+                        r.update(status='needs_review',next_attempt=attempt+1);enqueue_extraction(item,repair=True,fresh=True)
             except asyncio.CancelledError:
                 r['status']='awaiting_review' if role=='reviewer' and 'content' in r else 'pending'
                 raise
@@ -518,7 +534,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                 r.setdefault('failures',[]).append({'role':role,'attempt':attempt,'error':r['last_error'],'time':datetime.now(timezone.utc).isoformat()})
                 # Provider pacing belongs to this worker only; the other keeps running.
                 save(item);await asyncio.sleep(min(900,retry_delay*2**min(failures-1,5)))
-                if role=='extractor':enqueue_extraction(item,repair=attempt>0)
+                if role=='extractor':enqueue_extraction(item,repair=attempt>0,fresh=task[0]==2)
                 else:enqueue_review(item,fresh=task[0]==2)
             finally:
                 r['elapsed_seconds']+=round(time.monotonic()-began,3);r.pop('active_role',None);save(item);queue.task_done()
@@ -540,7 +556,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                         r['external_audit_changed_at']=datetime.now(timezone.utc).isoformat()
                         if rejection:
                             r.update(status='needs_review',next_attempt=r['next_attempt']+1,source_audit_rejection=rejection)
-                            enqueue_extraction(item,repair=True)
+                            enqueue_extraction(item,repair=True,fresh=True)
                         else:
                             r['status']='awaiting_review';enqueue_review(item,audit=True)
                         save(item)

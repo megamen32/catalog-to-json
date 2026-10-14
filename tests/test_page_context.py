@@ -75,6 +75,26 @@ def test_independent_narrative_paraphrases_and_region_order_are_valid():
     assert not compare_source(a,b)
 
 
+def test_extra_unknown_evidence_box_does_not_invent_a_concrete_scope_error():
+    a=content();a.page_context=context('catalogue_product_data',transcription='literal')
+    b=a.model_copy(deep=True)
+    b.page_context.source_evidence.append(b.page_context.source_evidence[0].model_copy(update={
+        'kind':'unknown','observation':'Empty space has no drawing or product data.'}))
+    assert not compare_source(a,b)
+    b.tables[0].rows[0].cells[0].value=999
+    assert any('.value' in d['path'] for d in compare_source(a,b))
+
+
+def test_unknown_evidence_cannot_hide_missing_real_scope_or_grant_demo_mode():
+    a=content();a.page_context=context('mixed',transcription='literal')
+    b=a.model_copy(deep=True);b.page_context.source_evidence[0].kind='unknown'
+    assert any(d['path']=='page_context.source_evidence' for d in compare_source(a,b))
+    a=demonstration();b=a.model_copy(deep=True)
+    b.page_context.source_evidence.append(b.page_context.source_evidence[0].model_copy(update={
+        'kind':'unknown','transcription':'literal'}))
+    assert any(d['path']=='page_context.source_evidence' for d in compare_source(a,b))
+
+
 def test_independent_demo_region_segmentation_is_not_an_extraction_error():
     a=demonstration();b=demonstration()
     b.page_context.source_evidence.append(context(box=[.1,.01,.9,.15]).source_evidence[0])

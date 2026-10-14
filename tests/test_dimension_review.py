@@ -22,6 +22,45 @@ def test_candidate_names_and_prose_cannot_hide_dimensions():
     c.figures[0].labels=['Диаметр Ø98','∅98 — верхний контур','98 +2/-1']
     assert len(dimension_targets(c))==4
 
+
+def test_confirmed_document_metadata_is_not_drawing_geometry():
+    c=drawing_content();c.figures=[Figure(title='Certificate',description='Scanned certificate',labels=[
+        '2018 г.','Протокол №29-10 от24.04.2018','ТУ3493-004-99267582-2009','457040, ул.Строителей1б',
+        'Ø98','98','98 +2/-1','12 мм'])]
+    assert len(dimension_targets(c))==8
+    assert [t['label'] for t in dimension_targets(c,supporting_annotations=True)]==['Ø98','98','98 +2/-1','12 мм']
+
+
+def test_supporting_annotation_exception_requires_independent_context_and_flag(tmp_path):
+    from test_tools import pdf,review
+    from test_page_context import context,semantic_review
+    from catalog_json.tools import CatalogTools
+    c=drawing_content();c.figures=[Figure(title='Certificate',description='Certificate from2018',labels=['2018 г.'])]
+    c.tables=[]
+    c.page_context=context('supporting_material',transcription='literal')
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out');t.render(1);t.direct(1)
+    assert t.save(1,c.model_dump_json(),'page')['saved']
+    r=CatalogTools(t.source,t.output,role='reviewer');r.render(1)
+    assert r.save(1,c.model_dump_json(),'observation')['saved'];r.read(1,'page')
+    report=review();report.context_review=semantic_review()
+    report.observed_table_count=0;report.observed_row_counts=[];report.observed_column_counts=[]
+    assert not r.save(1,report.model_dump_json(),'review')['saved']
+    report.context_review.supporting_annotations_verified=True
+    assert r.save(1,report.model_dump_json(),'review')['saved']
+
+
+def test_supporting_flag_cannot_waive_mixed_real_drawing(tmp_path):
+    from test_tools import pdf,review
+    from test_page_context import context,semantic_review
+    from catalog_json.tools import CatalogTools
+    c=drawing_content();c.page_context=context('mixed',transcription='literal')
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out');t.render(1);t.direct(1)
+    assert t.save(1,c.model_dump_json(),'page')['saved']
+    r=CatalogTools(t.source,t.output,role='reviewer');r.render(1)
+    assert r.save(1,c.model_dump_json(),'observation')['saved'];r.read(1,'page')
+    report=review();report.context_review=semantic_review();report.context_review.supporting_annotations_verified=True
+    refused=r.save(1,report.model_dump_json(),'review');assert len(refused['missing_dimension_relations'])==4
+
 def test_description_only_numbers_cannot_hide_independent_source_targets():
     source=drawing_content();candidate=source.model_copy(deep=True)
     for f in candidate.figures:f.description+=' '+', '.join(f.labels);f.labels=[]

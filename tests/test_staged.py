@@ -83,6 +83,67 @@ def test_repairs_are_not_postponed_until_all_catalogues_are_extracted(tmp_path):
     assert events.index(('extractor',1,1))<events.index(('extractor',3,0))
 
 
+def test_live_review_repair_enters_fresh_extraction_lane(tmp_path):
+    """Focused integration: new review repairs cannot join hundreds of old repairs;1s/max10s."""
+    admissions=[]
+    async def call(agents,role,source,out,page,attempt):
+        work=out/f'page-{page:04d}'
+        if role=='extractor' and attempt:
+            admissions.append(json.loads((work/'result.json').read_text())['last_admission']['lane'])
+        value=PageContent(title=str(page),text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        if role=='reviewer' and page==1 and attempt==0:value.verdict='revise'
+        write_json(work/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json'),value.model_dump())
+        await asyncio.sleep(0)
+        return value
+    result=asyncio.run(staged_batch(manifest(tmp_path),tmp_path/'out',Agents(),deadline_seconds=3,call=call))
+    assert result['complete'] and admissions==['fresh_repair']
+
+
+def test_explicit_retained_extraction_gets_current_review_and_resumes_with_real_producers(tmp_path):
+    """Focused integration: no token-expensive re-extraction or old-output relabelling;1s/max10s."""
+    from types import SimpleNamespace
+    from catalog_json.staged import role_contract
+    import uuid
+    calls=[]
+    old_roles={r:'a'*64 for r in ('extractor','reviewer')};new_roles={r:'b'*64 for r in old_roles}
+    digest=lambda roles:hashlib.sha256(json.dumps(roles,sort_keys=True).encode()).hexdigest()
+    def profile(roles,programs):
+        return SimpleNamespace(extractor=Agents.extractor,reviewer=Agents.reviewer,timeout=3,max_tokens=1024,
+            contract_digest=digest(roles),role_contracts=roles,role_runtimes={r:{'program':programs[r]} for r in roles})
+    old_program={'package_version':'old','source_code_sha256':'old-source'}
+    new_program={'package_version':'new','source_code_sha256':'new-source'}
+    old=profile(old_roles,{r:old_program for r in old_roles})
+    current=profile(new_roles,{r:new_program for r in new_roles})
+    hybrid=profile({'extractor':old_roles['extractor'],'reviewer':new_roles['reviewer']},
+        {'extractor':old_program,'reviewer':new_program})
+    current.candidate_predecessor_profiles=[old];current.accepted_predecessor_profiles=[old,hybrid]
+    async def call(agents,role,source,out,page,attempt):
+        calls.append((role,page));work=out/f'page-{page:04d}'
+        value=PageContent(title=str(page),text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
+        path=work/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json');write_json(path,value.model_dump())
+        sha=hashlib.sha256(source.read_bytes()).hexdigest();artifact_sha=hashlib.sha256(path.read_bytes()).hexdigest()
+        event={'tool':'save_page_json' if role=='extractor' else 'save_review','role':role,'page':page,'attempt':attempt,
+            'source_sha256':sha,'model':getattr(agents,role),'contract_sha256':role_contract(agents,role),'sha256':artifact_sha,'time':10}
+        with (work/'tools.jsonl').open('a') as f:f.write(json.dumps(event)+'\n')
+        execution={'program':agents.role_runtimes[role]['program'],'source_sha256':sha,'physical_page':page,'attempt':attempt,
+            'role':role,'model':getattr(agents,role),'contract_sha256':role_contract(agents,role),'artifact_sha256':artifact_sha,'started_at':9,'finished_at':11}
+        write_json(work/'calls'/uuid.uuid4().hex/'result.json',{'status':'completed','execution':execution})
+        await asyncio.sleep(0);return value
+    queue=manifest(tmp_path);out=tmp_path/'out'
+    assert asyncio.run(staged_batch(queue,out,old,call=call,deadline_seconds=3))['complete']
+    for path in (out/'test').glob('page-*/result.json'):
+        record=json.loads(path.read_text());record['status']='awaiting_review';write_json(path,record)
+    calls.clear()
+    assert asyncio.run(staged_batch(queue,out,current,call=call,deadline_seconds=3,resume=True,resume_compatible_profile=True))['complete']
+    assert calls and all(role=='reviewer' for role,page in calls)
+    for path in (out/'test').glob('page-*/result.json'):
+        record=json.loads(path.read_text());assert record['candidate_producer']['program']==old_program
+        assert record['review_producer']['program']==new_program and record['retained_extraction']['review_required']
+    calls.clear()
+    assert asyncio.run(staged_batch(queue,out,current,call=call,deadline_seconds=3,resume=True,resume_compatible_profile=True))['complete']
+    assert not calls
+
+
 def test_repaired_review_precedes_queued_first_reviews(tmp_path):
     events=[]
     async def call(agents,role,source,out,page,attempt):
@@ -95,7 +156,9 @@ def test_repaired_review_precedes_queued_first_reviews(tmp_path):
         return value
     result=asyncio.run(staged_batch(manifest(tmp_path),tmp_path/'out',Agents(),deadline_seconds=3,call=call))
     assert result['complete']
-    assert events.index(('reviewer',1,1))<events.index(('reviewer',3,0))
+    # Seeded random ordering may admit either page2 or page3 while the repair
+    # is still being extracted. It must precede the remaining first review.
+    assert events.index(('reviewer',1,1))<max(events.index(('reviewer',p,0)) for p in (2,3))
 
 
 def test_review_priority_is_reselected_after_provider_admission_wait(tmp_path):

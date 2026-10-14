@@ -146,3 +146,9 @@ host free-space reserve. Keep source/accepted checkpoints; do not duplicate the
 full job or delete live results to reclaim this allocation. CPU/RAM/task/runtime
 limits are enforced by the existing unit; storage is the project operating
 budget to check on each continuation.
+
+### Delivery1.5.4: fresh repairs and document annotations
+
+Fresh extractor repairs now use lane2 (as fresh reviewer work already did), rather than joining historical migration repairs. Failed fresh calls retain that lane; unchanged old backlog and first passes still receive fair admissions. Native source/candidate dates, document numbers and addresses on independently confirmed supporting pages need no fictional dimension arrows: a new explicit supporting_annotations_verified reviewer flag plus matching pure supporting/literal contexts, no tables, and all five semantic checks are required. Bare numbers, geometry signs, tolerances and length units remain guarded; real/mixed drawings cannot use this exception. All factual/literal/source checks remain.
+
+An explicit candidate_predecessor_profiles role manifest may retain only receipt-verified old extraction from the same source/page/model and pinned actual producer. It requires fresh current review and records the old extractor contract, never relabels bytes. Accepted predecessor pairs (including an explicitly pinned old-extractor/new-reviewer pair) preserve actual producer identities on resume. No automatic model/provider fallback. The same reviewed full-job budget above applies; no second full queue or new large model benchmark.

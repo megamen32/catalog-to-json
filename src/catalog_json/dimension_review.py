@@ -27,22 +27,27 @@ class DimensionReview(Model):
         if not value.strip():raise ValueError('An actual source/view/feature quotation is required')
         return value.strip()
 
-def dimension_targets(content):
+def dimension_targets(content,supporting_annotations=False):
     targets=[]
     for fi,figure in enumerate(content.figures):
         for li,label in enumerate(figure.labels):
             # Candidate naming or extra prose must not hide a numeric annotation.
             # Non-dimensional numbers need an explicit source-bound classification.
             if re.search(r'\d',label):
+                # Only a separately confirmed supporting-document context can
+                # classify metadata as annotations. Bare numbers, tolerances,
+                # engineering units and geometric signs remain strict targets.
+                if supporting_annotations and not re.search(r'[Øø⌀∅φΦ±]|\d\s*[xх×]\s*\d|\d\s*[+−]\s*\d|\b(?:мм|см|кН|МПа|mm|cm|kN|MPa)\b|^\s*[+−-]?\d+(?:[.,]\d+)?(?:\s*[/+−-]\s*\d+(?:[.,]\d+)?)*\s*$',label):
+                    continue
                 targets.append({'figure_index':fi,'label_index':li,'figure_title':figure.title,'label':label})
     return targets
 
-def missing_dimension_evidence(content,records,candidate_sha256,observed=None,observation_sha256=None):
+def missing_dimension_evidence(content,records,candidate_sha256,observed=None,observation_sha256=None,supporting_annotations=False):
     records=[r for r in records if r.get('candidate_sha256')==candidate_sha256 and r.get('agrees_with_candidate') is True
              and (observed is None or r.get('observation_sha256')==observation_sha256)]
     valid={(r['figure_index'],r['label_index']) for r in records}
-    missing=[target|{'inventory':'candidate'} for target in dimension_targets(content) if (target['figure_index'],target['label_index']) not in valid]
+    missing=[target|{'inventory':'candidate'} for target in dimension_targets(content,supporting_annotations) if (target['figure_index'],target['label_index']) not in valid]
     if observed is not None:
         source_valid={(r.get('source_figure_index'),r.get('source_label_index')) for r in records}
-        missing.extend(target|{'inventory':'source'} for target in dimension_targets(observed) if (target['figure_index'],target['label_index']) not in source_valid)
+        missing.extend(target|{'inventory':'source'} for target in dimension_targets(observed,supporting_annotations) if (target['figure_index'],target['label_index']) not in source_valid)
     return missing
