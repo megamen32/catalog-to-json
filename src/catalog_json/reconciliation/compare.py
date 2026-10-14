@@ -92,9 +92,9 @@ def column_owner_anchors(columns):
     for group, indices in groups.items():
         start = indices[0]
         col = columns[start]
-        if not col.get('unit') and col.get('label', '') in ('', group):
+        if not col.get('unit') and label(col.get('label', '')) in ('', label(group)):
             anchor = start
-        elif start and columns[start - 1].get('label') == group and not columns[start - 1].get('unit'):
+        elif start and label(columns[start - 1].get('label')) == label(group) and not columns[start - 1].get('unit'):
             anchor = start - 1
         else:
             continue

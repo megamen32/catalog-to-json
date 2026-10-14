@@ -58,7 +58,7 @@ def test_parallel_manufacturers_do_not_borrow_each_others_values(tmp_path):
                 'header_path':[{'role':'group','raw_text':brand}]}}
          for m,v,brand in [('A-10','12','Brand A'),('B-20','20','Brand B')]])
     write_rows('group_characteristics', [])
-    columns=[{'id':'a','label':'Brand A','unit':None},
+    columns=[{'id':'a','label':'Brand\nA','unit':None},
              {'id':'av','label':'Load','unit':'кН','group':'Brand A'},
              {'id':'b','label':'','unit':None,'group':'Brand B'},
              {'id':'bv','label':'Load','unit':'кН','group':'Brand B'}]
