@@ -1,3 +1,7 @@
+## Проверка общих инструментов —15.10.2026
+
+Опубликован1.5.25/34bdcbd: общий11-tool PDF/zoom/table/drawing substrate,6page-worktools, полный packetpreparer и навыкcatalog-merge в существующемAgentPlugin.16unit/focusedintegration прошли1.53с безмоделей. Root реально увидел3оригинальныеобластиisolators108 черезGPTAdminHub и завершил всюстраницу218facts. MiniMax реально завершилarmature1/18facts/16groups за68.51с, с оригинальнымimagecall и source-evidence, модель строгоM3.1FlashPreview; продолжилarmature4, затемвсе314, concurrency1, nativeexecsession64944. Время запуска отслеживаетсяпоexecution, не basename историческогоenv. ZCode сделал реальныйHubview_pageOPN9, но его wrapper показалbase64текст; переданыnativeReadPNG черезте жеSourceTools, не засчитыватьодинbase64 как просмотр. НовойCodexсессии длядоступа нетнеобходимости. Подробности безсекретов `.tmp/.../shared-tools-verified.json`; реальносохранённыеownerreceipts `.tmp/.../full-owner-progress-latest.json`, ещёне финальнаяпроверка/точность. ЧужойWIP/page117сохранены.
+
 ## Последнее прямое исправление владельца: разделение работы,15.10.2026
 
 Пользователь: "quorum make you too slow now. split work with them for now. and final checks will be later."
