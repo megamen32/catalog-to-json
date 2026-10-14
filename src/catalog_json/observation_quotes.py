@@ -10,6 +10,21 @@ def quote_key(text):
     return re.sub(r'\s+','',unicodedata.normalize('NFKC',text).casefold())
 
 
+def quote_in_region(visible,native):
+    """A viewed region can include adjacent content outside this literal block.
+
+    Keep the entire quote, in order, on complete word/number boundaries. This
+    is only native corroboration of branding; it never changes a saved quote
+    or relaxes engineering comparisons.
+    """
+    if quote_key(visible)==quote_key(native):return True
+    def tokens(text):
+        return re.findall(r'\w+|[^\w\s]',unicodedata.normalize('NFKC',text).casefold())
+    needle,haystack=tokens(visible),tokens(native)
+    return bool(needle) and any(haystack[i:i+len(needle)]==needle
+                               for i in range(len(haystack)-len(needle)+1))
+
+
 def is_branding_caption(text):
     normalized=unicodedata.normalize('NFKC',text)
     return (not any(c.isnumeric() for c in text) and
@@ -56,7 +71,7 @@ def branding_quote_evidence(context,page,model,proofs,after=0):
                 errors.append('Quote basis must be text_layer or vision, with a textual conflict if needed');continue
             rect=pymupdf.Rect(box[0]*source.rect.width,box[1]*source.rect.height,box[2]*source.rect.width,box[3]*source.rect.height)
             native=source.get_text('text',clip=rect,sort=True)
-            status='unavailable' if not native.strip() else 'agree' if quote_key(visible)==quote_key(native) else 'conflict'
+            status='unavailable' if not native.strip() else 'agree' if quote_in_region(visible,native) else 'conflict'
             records.append({**item,'rotation':rotation,'text_layer_quote':native,'status':status})
             if status=='agree' and conflict:
                 errors.append('The text layer agrees; do not invent a conflict')

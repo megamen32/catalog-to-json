@@ -35,6 +35,23 @@ def test_literal_branding_and_quote_evidence_retained(tmp_path):
     assert evidence['quotes'][0]['visible_quote']==QUOTE
     assert evidence['quotes'][0]['status']=='agree'
 
+
+def test_quote_box_may_include_neighboring_page_number(tmp_path):
+    t=setup(tmp_path,'100 '+QUOTE+' 101')
+    result=t.save(1,observation().model_dump_json(),'observation',literal_quotes=proof())
+    assert result['saved']
+    q=json.loads((t.work(1)/'source-observation-quotes-0.json').read_text())['quotes'][0]
+    assert q['status']=='agree' and q['text_layer_quote'].strip()=='100 '+QUOTE+' 101'
+
+
+def test_neighboring_text_cannot_hide_changed_or_partial_quote(tmp_path):
+    for n,wrong in enumerate(['PRODUCTION OF HIGH-VOLTAGE INSULATOR',
+                              'PRODUCTION OF INSULATORS',
+                              'PRODUCTION OF HIGH+VOLTAGE INSULATORS',
+                              'OF HIGH-VOLTAGE INSULATORS EXTRA']):
+        root=tmp_path/str(n);root.mkdir();t=setup(root,'100 '+QUOTE+' 101')
+        assert not t.save(1,observation(wrong).model_dump_json(),'observation',literal_quotes=proof(wrong))['saved']
+
 def test_missing_quote_proof_and_wrong_block_quote_refused(tmp_path):
     t=setup(tmp_path)
     assert not t.save(1,observation().model_dump_json(),'observation')['saved']
