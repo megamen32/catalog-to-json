@@ -399,6 +399,8 @@ class CatalogTools:
         if kind=='observation' and 'read_page_json' in self.seen.get(page,set()):return {'saved':False,'error':'Source observations are frozen after candidate disclosure; start a fresh review to reinspect'}
         try:
             model=(PageContent if kind in ('page','observation') else Review).model_validate_json(json_text)
+            if kind=='page' and model.page_context is None and not (model.tables or model.figures) and all(b.kind=='heading' for b in model.text_blocks):
+                return {'saved':False,'error':'An empty or heading-only schema probe is not a catalogue deliverable. Use get_json_schema for schema inspection; save_page_json must contain the actual source content. A genuinely blank or title-only source needs an explicit independently inspected page_context with source_evidence. No candidate was changed.'}
             if kind in ('page','observation'):
                 errors=self.context_errors(page,model)
                 if errors:return {'saved':False,'context_errors':errors}

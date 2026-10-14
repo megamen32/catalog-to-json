@@ -1,0 +1,20 @@
+{
+  "program": {
+    "package_version": "1.5.20",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "58729e07b99ebe35dd2b58bec6630b6946753c11fb9152f138cdf969d5cac114",
+    "python_version": "3.12.13"
+  },
+  "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+  "physical_page": 47,
+  "retained_candidate_sha256": "db493b6cb9fd147c13b03f5b07e46e5508494bc52fe2c732ca9c624793047035",
+  "native_stdio_MCP": true,
+  "result": {
+    "saved": false,
+    "error": "An empty or heading-only schema probe is not a catalogue deliverable. Use get_json_schema for schema inspection; save_page_json must contain the actual source content. A genuinely blank or title-only source needs an explicit independently inspected page_context with source_evidence. No candidate was changed."
+  },
+  "model_calls": 0,
+  "production_bytes_edited": false,
+  "elapsed_seconds": 3.314
+}

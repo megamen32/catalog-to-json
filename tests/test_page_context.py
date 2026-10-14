@@ -229,6 +229,23 @@ def test_legacy_eleven_check_review_remains_valid_without_context_verdict():
     assert report.context_review is None and len(report.checks)==11 and report.accepts(content())
 
 
+@pytest.mark.parametrize('blocks',[[],[TextBlock(kind='heading',text='probe')]])
+def test_empty_probe_cannot_complete_extraction_or_erase_a_saved_candidate(tmp_path,blocks):
+    """Focused tool integration; expected1s/max10s. Native isolators47 saved only 'probe'."""
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out');t.render(1);t.direct(1)
+    empty=PageContent(title='probe',text_blocks=blocks,tables=[],figures=[])
+    assert not t.save(1,empty.model_dump_json(),'page')['saved']
+    assert not (t.work(1)/'candidate-0.json').exists()
+    assert t.save(1,content().model_dump_json(),'page')['saved']
+    before=(t.work(1)/'candidate-0.json').read_bytes()
+    assert not t.save(1,empty.model_dump_json(),'page')['saved']
+    assert (t.work(1)/'candidate-0.json').read_bytes()==before
+    # Legacy files remain readable; purposeful minimal sources can be explicit.
+    assert PageContent.model_validate_json(empty.model_dump_json()).page_context is None
+    empty.page_context=context('supporting_material',transcription='literal')
+    assert t.save(1,empty.model_dump_json(),'page')['saved']
+
+
 @pytest.mark.parametrize('verdict',['pass','revise','uncertain'])
 def test_missing_observer_context_is_its_own_repair_not_candidate_feedback(tmp_path,verdict):
     """Fast tool integration; expected1s/max10s. Reproduces innovations168 false revisions."""

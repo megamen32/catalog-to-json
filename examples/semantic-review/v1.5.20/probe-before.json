@@ -1,0 +1,20 @@
+{
+  "program": {
+    "package_version": "1.5.19",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "4dd002a27b4242bf9afd3391e54e404aef0ec7a81a5606e51be336747baa0775",
+    "python_version": "3.12.13"
+  },
+  "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+  "physical_page": 47,
+  "retained_candidate_sha256": "db493b6cb9fd147c13b03f5b07e46e5508494bc52fe2c732ca9c624793047035",
+  "native_stdio_MCP": true,
+  "result": {
+    "saved": true,
+    "file": "/home/roomhacker/apps/catalog-to-json/.tmp/semantic-review-v1520/probe47-1.5.19/page-0047/candidate-30.json"
+  },
+  "model_calls": 0,
+  "production_bytes_edited": false,
+  "elapsed_seconds": 2.108
+}
