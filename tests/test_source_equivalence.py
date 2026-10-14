@@ -27,6 +27,17 @@ def test_source_equivalent_representation_does_not_block_review(observed,candida
     assert not compare_source(observed,candidate)
 
 
+def test_emptyset_shaped_diameter_alias_is_not_dropped():
+    """Fast unit: retained arm204 glyph mismatch; expected1s/emergency10s."""
+    from catalog_json.audit import figure_key
+    assert not compare_source(page(figure='⌀14, 4 отв.'),page(figure='∅14, 4 отв.'))
+    assert figure_key('∅14')==figure_key('⌀14')
+    assert figure_key('∅14')!=figure_key('14')
+    assert compare_source(page(figure='∅14, 4 отв.'),page(figure='14, 4 отв.'))
+    assert compare_source(page(figure='∅14, 4 отв.'),page(figure='⌀41, 4 отв.'))
+    assert compare_source(page(figure='∅14, 4 отв.'),page(figure='⌀14, 3 отв.'))
+
+
 def test_exact_comma_clauses_can_move_between_label_and_qualifier():
     """Fast unit: retained armature179 false header issues; expected1s/emergency10s."""
     source=page(label='Масса шлейфа, при L=7м, не более',unit='кг')
