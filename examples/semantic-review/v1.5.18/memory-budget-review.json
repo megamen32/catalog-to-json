@@ -1,0 +1,73 @@
+{
+  "observed_unix": 1791965795.1414757,
+  "unit": "catalog-worker@full-semantic1517.service",
+  "native_stage_trees": [
+    {
+      "role": "extractor",
+      "physical_page": 297,
+      "tree_pss_bytes": 509231104
+    },
+    {
+      "role": "extractor",
+      "physical_page": 281,
+      "tree_pss_bytes": 592165888
+    },
+    {
+      "role": "extractor",
+      "physical_page": 275,
+      "tree_pss_bytes": 566569984
+    },
+    {
+      "role": "extractor",
+      "physical_page": 268,
+      "tree_pss_bytes": 659557376
+    },
+    {
+      "role": "extractor",
+      "physical_page": 267,
+      "tree_pss_bytes": 592133120
+    },
+    {
+      "role": "reviewer",
+      "physical_page": 27,
+      "tree_pss_bytes": 535513088
+    },
+    {
+      "role": "reviewer",
+      "physical_page": 196,
+      "tree_pss_bytes": 527143936
+    },
+    {
+      "role": "extractor",
+      "physical_page": 312,
+      "tree_pss_bytes": 675367936
+    },
+    {
+      "role": "extractor",
+      "physical_page": 311,
+      "tree_pss_bytes": 674091008
+    },
+    {
+      "role": "extractor",
+      "physical_page": 302,
+      "tree_pss_bytes": 516636672
+    }
+  ],
+  "old_hard_bytes": 6442450944,
+  "old_memory_peak_bytes": 6442471424,
+  "old_memory_events": "low 0\nhigh 2467310\nmax 1447\noom 0\noom_kill 0\noom_group_kill 0\n",
+  "memory_pressure": "some avg10=0.00 avg60=0.00 avg300=0.06 total=1219042327\nfull avg10=0.00 avg60=0.00 avg300=0.06 total=1216134544\n",
+  "host_available_bytes": 36262625280,
+  "host_reserve_bytes": 21474836480,
+  "proposed_high_and_hard_bytes": 15032385536,
+  "increment_bytes": 8589934592,
+  "remaining_host_available_if_increment_fully_used": 27672690688,
+  "uid_current_bytes": 51552681984,
+  "uid_high_bytes": 113277169664,
+  "uid_hard_bytes": 128000000000,
+  "derivation": "Observed stage PSS maximum about0.67GiB;16permitted stages plus0.5GiB coordinator allowance and20percent margin fits14GiB. Finite hard/high equal,0swap,CPU2,tasks512,I/O50 unchanged. Host20GiB reserve remains after whole increase; outer UID/host guards untouched.",
+  "disk_free_bytes": 251418800128,
+  "new_concurrency": false,
+  "max_native_stages": 16,
+  "provider_backoff_unchanged": true
+}
