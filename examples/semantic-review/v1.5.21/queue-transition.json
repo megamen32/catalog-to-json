@@ -1,0 +1,741 @@
+{
+  "observed_at": "2026-10-14T13:38:05.848531+03:00",
+  "runtime_version": "1.5.21",
+  "unit": "catalog-worker@full-semantic1521.service",
+  "all_roles_current_version": true,
+  "accepted": 446,
+  "progress": {
+    "opn": {
+      "accepted": 60,
+      "pages": 60
+    },
+    "isolators": {
+      "accepted": 118,
+      "pages": 162
+    },
+    "small": {
+      "accepted": 191,
+      "pages": 228
+    },
+    "armature": {
+      "accepted": 18,
+      "pages": 314
+    },
+    "innovations": {
+      "accepted": 59,
+      "pages": 216
+    }
+  },
+  "manual_partition": {
+    "modulus": 4,
+    "root": 2,
+    "catalog_tail_mod0": 0,
+    "catalog_tail_mod1": 1,
+    "catalog_tail_mod3": 3
+  },
+  "full_source_checked_pages": 65,
+  "cells_checked": 6268,
+  "unchanged_native_candidates": 8,
+  "corrected_pages_pending_independent_review": 57,
+  "pages": [
+    {
+      "physical_page": 313,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 0,
+      "changed": true,
+      "source_review_sha256": "f353092f4829febbce66fd57d1acca03cd8e8f194044a51f0f0fd4f89982a6a4",
+      "output_sha256": "de14e01f0d19817508334df62cfda69b12a1a5428de596d7e3a9e376e5a2c56b",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 312,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 0,
+      "changed": true,
+      "source_review_sha256": "d6f97ac21b09e8b63938c81abbef21c1242f88a8c47750096119358fcb2b4078",
+      "output_sha256": "65b1aecc104b6184a3e95e15f3d5e95922ae7d0ec59ce02ba73d7ca7cc9ec8e6",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 311,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 145,
+      "changed": false,
+      "source_review_sha256": "d30d023fc50f93d4a21bf6851db4c8ad0812d51279eeb1bc3f4b8e2832ca68dc",
+      "output_sha256": "1223eaa69e185912c4a42e39805e62ba64a4e30d5fe973bf2650c90923f3e52e",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 310,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 165,
+      "changed": false,
+      "source_review_sha256": "7d964dbf2485971cb0c6df2cdc4b3224875c7996c8619bb83b6f506c400604d0",
+      "output_sha256": "6f068f8659217efa035a653a697acd9ae68cb4d324d4a86a41cf247fa66ffc37",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 309,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 160,
+      "changed": true,
+      "source_review_sha256": "c8928847121ae9c64cbfc3907057ef5b4b754a39700f891c99b19a7cdffdf737",
+      "output_sha256": "12da9da7883156f0f77e8ff97b1df95d890cda48be5db57249d63d5ef30be87b",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 308,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 136,
+      "changed": false,
+      "source_review_sha256": "c695b24e6a404a0aad3ab650c4e489950e0801a556f47cd803a124f77842938a",
+      "output_sha256": "0898fc9aea816b887fea830c2a2def67c697f92ce1be9e58363a381da929204e",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 307,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 294,
+      "changed": true,
+      "source_review_sha256": "fee4aaf21ac39a74d72d1ff9d5aa8a746c0804558b4518c62f0fa16346cb4c40",
+      "output_sha256": "c9c1229e9f790843023bf8cbdced12e0e2a12744aae7bd2a219d5e30178b1240",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 306,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 276,
+      "changed": true,
+      "source_review_sha256": "4c5530bd4b02d1d43a3316cb95af970b7ed5bce0f72966c4182882abdcce7ec5",
+      "output_sha256": "452cc74689bbe9d76db89d23d8547f52cc907b8730ea60ec60acd73326a34b41",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 305,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 192,
+      "changed": false,
+      "source_review_sha256": "95ad6139954d8df1ed4e58c9354071e8f73a7834bad5e7e90b9e9dd69cd23bee",
+      "output_sha256": "f8b923bd9278de322cad89495e6a065e9143df5209f1a661524fc917634dfb6b",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 304,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 0,
+      "changed": false,
+      "source_review_sha256": "0b32c6d8ea3385337f4b8e0f519ab0939283f7d6ccb9b6e7473dbd5966fbd447",
+      "output_sha256": "3f1267a3f61e9096cbd9885e44dab3ce4ab7046f4670666d73573d240bb4c87a",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 303,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 0,
+      "changed": true,
+      "source_review_sha256": "fcc81e8b8d5a801c15da2402ff812b8c49e3f606c931303112c356db34237440",
+      "output_sha256": "5da28cc9d567121498df5fa627f6e89dcb907ae14551b70561941df7e3211d8a",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 302,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 216,
+      "changed": true,
+      "source_review_sha256": "f034e8acddc434a7a61f2db4f68535480a3fb93addf67f66b30f9b6e1fbc7c00",
+      "output_sha256": "0df28bb286ac8c86a5975fb5c67c894aa9c132d52b2efc2c20cabd3111bd087d",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 301,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 312,
+      "changed": false,
+      "source_review_sha256": "361720d3172ea4eeab8dd398fb46eb88dd7bc64f653c5e93accdccfdabc7905d",
+      "output_sha256": "15168ef369f703180b448eadfeba9a912c2323d4a6052577cca0853f39ae94c9",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 300,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 360,
+      "changed": false,
+      "source_review_sha256": "122aa04388fe1c9a2f190c143624a38a16df1c27d38a1910475412e3f3d5fdf4",
+      "output_sha256": "34e338db5b84d6d9695a5a53b075abb4a699055c87717cdf53111d5265eb8383",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 299,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 0,
+      "changed": true,
+      "source_review_sha256": "161c7bffff3feb57b48364e9cf9b6674d6592a6d7eaa49955b086872540c80bd",
+      "output_sha256": "f971888bce886892e8487c55708ed0811f33bba1d3407fc6937b5bef4dd52cdb",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 298,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 675,
+      "changed": true,
+      "source_review_sha256": "1b319a69305a0334e9ced311e8f53d3783b0dfc878fdcc47c93815c316ac485a",
+      "output_sha256": "b489598dd10fee55be54b68f601bd4304010b8f7c30a3dbff6efd6827bff02c5",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 297,
+      "author": "catalog_tail_mod1",
+      "version": "tail-mod1-20261014.r1",
+      "cells_checked": 630,
+      "changed": true,
+      "source_review_sha256": "a4d48dde127c6fec1014e888cd8e4bd64166f5d7c43c2a183766cbc0c49ffaee",
+      "output_sha256": "c8129ae74b77f8e3562127de1e142921e4fc0cb692f51b166953fa0ec578e3b1",
+      "unresolved_issues": [
+        "Нужна независимая проверка авторских исправлений."
+      ]
+    },
+    {
+      "physical_page": 296,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 0,
+      "changed": true,
+      "source_review_sha256": "d4283afd8bdc379fbebc3475587219271bc7cd394ba456f72f68a47fa8d2d9ba",
+      "output_sha256": "900202bb5d5be942e0483030e79fea7e733334c58911ece0b41ff7a7bab44542",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 294,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 0,
+      "changed": true,
+      "source_review_sha256": "667a07eabbce8e98a24d73d83b939ac5d8aaed557ec282ee54c6256e6d9043f8",
+      "output_sha256": "413dce017ad66856dcf24beae882b0c30b5900a69d96c5a8335b76342b631a4d",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 293,
+      "author": "catalog_tail_mod1",
+      "version": "tail-mod1-20261014.r1",
+      "cells_checked": 165,
+      "changed": true,
+      "source_review_sha256": "1fab5f76e743847b5fd201717c322e1a4178c50167e29951b38dfe78920680a8",
+      "output_sha256": "3db617ab163cb301be5f67a6b94802800bc6cd2e7bafa1f1ce178c22ab60f904",
+      "unresolved_issues": [
+        "Нужна независимая проверка авторских исправлений."
+      ]
+    },
+    {
+      "physical_page": 292,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 148,
+      "changed": true,
+      "source_review_sha256": "81586784688b1603a945af6f806a97e22d77ccbfe1e2db3da730ee76049cf3e3",
+      "output_sha256": "c809219649e981369fce47cb0dabda3117fedca0878bfa39bc743648abd33728",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 291,
+      "author": "catalog_tail_mod3",
+      "version": "tail-mod3-20261014.r1",
+      "cells_checked": 255,
+      "changed": false,
+      "source_review_sha256": "0bff4bfc126fbda7a3e42f4ec4f707f4dd482a7c194892b51dec5dd31c89257c",
+      "output_sha256": "8064d2ec4674400ce4015ec4c8a19c54f7e74db0357962c163329f4e78399258",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 290,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 319,
+      "changed": true,
+      "source_review_sha256": "7e6012c912d91b4556b8885cf73d3d8b615f984edf85a6b4baadb0259cfd2e53",
+      "output_sha256": "352a0946f74027f8e659948319282fbf700397e9b60ed368b2b17f7bb6eba812",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 289,
+      "author": "catalog_tail_mod1",
+      "version": "tail-mod1-20261014.r1",
+      "cells_checked": 0,
+      "changed": true,
+      "source_review_sha256": "4a4fb83d1251a796108706e3322bc0ac83292c6a888eabb788cc3fc3af88baa4",
+      "output_sha256": "9abd355bd6f264cb184263c128d44dc3fdf5d100443ca35756b89f5c63946217",
+      "unresolved_issues": [
+        "Нужна независимая проверка авторских исправлений и всех инженерных чертежей."
+      ]
+    },
+    {
+      "physical_page": 288,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 54,
+      "changed": true,
+      "source_review_sha256": "61dc2481e075c287fbbcf81c90a05113cd74d34e901146599427d6c3a24eacd0",
+      "output_sha256": "58ca67a79d87b7431c8dc96524b71a4dcc1ea6a0e9a7caa248e729412c47bc33",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 287,
+      "author": "catalog_tail_mod3",
+      "version": "tail-mod3-20261014.r1",
+      "cells_checked": 54,
+      "changed": true,
+      "source_review_sha256": "4dcdb15e14087c97b865d39d7661018388e9caa87e4d7b321afd00b6afaa08d0",
+      "output_sha256": "86d5b15a8f630822a2c0658ce8cf8db93eb58f1395b513b1aa9aacef7e202452",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 286,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 54,
+      "changed": true,
+      "source_review_sha256": "427c3b9463311ba67868b6f5a48e485248edbaf532c8d6e5be1d494abfafb40d",
+      "output_sha256": "352040463b244febdb54a0c5a0dc93a4a39d751234f362a63c2e5c4238fefa28",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 285,
+      "author": "catalog_tail_mod1",
+      "version": "tail-mod1-20261014.r1",
+      "cells_checked": 54,
+      "changed": true,
+      "source_review_sha256": "49dafc86b6280d3c04301dfa8351507ecd808b5d0907c1bd1dd900febf77de05",
+      "output_sha256": "4862c0c7fe788b5f8afcd47c0f83a8b45fdfc3de84736ac6a55b8c01c1dd75cb",
+      "unresolved_issues": [
+        "Нужна независимая проверка авторских исправлений и всех инженерных чертежей."
+      ]
+    },
+    {
+      "physical_page": 284,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 54,
+      "changed": true,
+      "source_review_sha256": "cc5a417fa0e585ba6dc72081ea5a43ef471e48cfb6589eab92cbd4c484b14ef1",
+      "output_sha256": "90a7e7f57cef4035161b9080a4cf2db92608801d8cb2acbf7fca876888926b66",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 283,
+      "author": "catalog_tail_mod3",
+      "version": "tail-mod3-20261014.r1",
+      "cells_checked": 52,
+      "changed": true,
+      "source_review_sha256": "ed91fd512536708ea518f55982919f3d7af01605e8b95f73877ac4fc15533632",
+      "output_sha256": "06634ece98692fbb523717294a10a224b6fe24692f71c9bc81d012dec0d155b9",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 282,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 6,
+      "changed": true,
+      "source_review_sha256": "387b519dafeecfd4914c64d2724e612a9a8b831a3fbfbfa84ff06ddd73cd1fa1",
+      "output_sha256": "ff4a8e90019bfab98396b9ab714d048c9c7dd955e5e9b09e5dd9b1553b85a71d",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 281,
+      "author": "catalog_tail_mod1",
+      "version": "tail-mod1-20261014.r1",
+      "cells_checked": 126,
+      "changed": true,
+      "source_review_sha256": "c328a8ddc685eb7638f145367d35d201feb1e7ccd492cafba1fc1d74194a56f1",
+      "output_sha256": "2092f6903290d8769e2210069e74898608d6ba6e1bdafb8cc1b14e3a730e4cde",
+      "unresolved_issues": [
+        "Нужна независимая проверка авторских исправлений и всех инженерных чертежей."
+      ]
+    },
+    {
+      "physical_page": 280,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 42,
+      "changed": true,
+      "source_review_sha256": "37d316d491784f37952ae80e7848ee889e85de4abc5751c3c413c33c3eb0fe53",
+      "output_sha256": "f8ca73be1dc4f891840d8eb637b23da0fb93bd9e012649b1790f191080f7c840",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 279,
+      "author": "catalog_tail_mod3",
+      "version": "tail-mod3-20261014.r1",
+      "cells_checked": 0,
+      "changed": true,
+      "source_review_sha256": "0bb3d5aca68fe805eddb651eeb7293329641c281d569576b02645c946e34df1e",
+      "output_sha256": "63629b099cd0a04d5ffc6de4fc48c2f41cff304134fc5d58a87830f24bd2bcb1",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 278,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 72,
+      "changed": true,
+      "source_review_sha256": "22f39035c90e419a47422ce6c3ad1ac7792065ff6a7e8a52efffca8f4099c6df",
+      "output_sha256": "7a67c94c655a71b031a78f682b5327f52d816bd0395f7a283c4720ddfe88b46a",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 277,
+      "author": "catalog_tail_mod1",
+      "version": "tail-mod1-20261014.r1",
+      "cells_checked": 10,
+      "changed": true,
+      "source_review_sha256": "1cffe70ce1fc7f07f1d047b0c9dd4d06aa51e442c2691af77835f63e76544e47",
+      "output_sha256": "d8fd96dfe8d9fbdb261d8419cdec91a3302c3938c06fc1fe757ed49d3890f3ea",
+      "unresolved_issues": [
+        "Нужна независимая проверка авторских исправлений и всех инженерных чертежей."
+      ]
+    },
+    {
+      "physical_page": 276,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 6,
+      "changed": true,
+      "source_review_sha256": "29ed207ce757fbc420a1d5314311514e88e1ddb701d5948c1bd76e4637f0ee1f",
+      "output_sha256": "82a7c0efdcd2f8d801b00d855d06e98c05e1f2079c25147d9151d26e94d2c92b",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 275,
+      "author": "catalog_tail_mod3",
+      "version": "tail-mod3-20261014.r1",
+      "cells_checked": 18,
+      "changed": true,
+      "source_review_sha256": "625b22afb8460fcb91d1e8c35ad129b403a3ed4041cbefb05a0343506320fee8",
+      "output_sha256": "1fa2644055d7480c5a05dee9689d6a69ff923432bca5c56e5f0ae9ff0258b742",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 274,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 5,
+      "changed": true,
+      "source_review_sha256": "f76310ca919364bea51961204560c658e1aa04500763516db9a534e5c2443e91",
+      "output_sha256": "afabafb269fae1b44a28bbcd3e92c5ef56740f514b3f9c9cfe8156e7c5ef1996",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 273,
+      "author": "catalog_tail_mod1",
+      "version": "tail-mod1-20261014.r1",
+      "cells_checked": 15,
+      "changed": true,
+      "source_review_sha256": "5920ffcf4bd789be460a100234d2179d46066bc828f4b5f5f5c33b3c06cd830d",
+      "output_sha256": "16b7a50904547d5015a6d09d496211e84a6d22e0fc32a8aa23f44ecd35f7fb1f",
+      "unresolved_issues": [
+        "Нужна независимая проверка всех авторских изменений и инженерных чертежей."
+      ]
+    },
+    {
+      "physical_page": 272,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 35,
+      "changed": true,
+      "source_review_sha256": "1711199919bafa9ea1a9c6ad4bb0786a2653fb9306e04ee1875515437c9917d1",
+      "output_sha256": "321e7a930697925da7c9b86a3b40648dbc690b580fd8e9500b6f85980012f941",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 271,
+      "author": "catalog_tail_mod3",
+      "version": "tail-mod3-20261014.r1",
+      "cells_checked": 0,
+      "changed": true,
+      "source_review_sha256": "954b1915874baeb71a6353bc66bd9d3f315087c1f6eb7258d0b7b1be8a8bc600",
+      "output_sha256": "a727323c162cf4907309a1cd1797f3046ab52d25e1c77dc7246291655d174e76",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 270,
+      "author": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "version": "root-tail-source-review-2026-10-14.r1",
+      "cells_checked": 10,
+      "changed": true,
+      "source_review_sha256": "5fafa23007fe103f8f1f1a8b09b010d23f418bf774bb589fb5c9b69001b14956",
+      "output_sha256": "e61d5a43eef199b5d869131b8089a7e67973a6bf69884bec753821d2593f104b",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 269,
+      "author": "catalog_tail_mod1",
+      "version": "tail-mod1-20261014.r1",
+      "cells_checked": 36,
+      "changed": true,
+      "source_review_sha256": "0287d14886b97c0e2068f3bc3433df06d1ec56465506b3eb10ccf3663cadff32",
+      "output_sha256": "5553e3086a66c04f2a4d56b471589b49f171cbb7280f56a978b4e64a2e2d35b5",
+      "unresolved_issues": [
+        "Нужна независимая проверка всех авторских изменений и инженерных чертежей."
+      ]
+    },
+    {
+      "physical_page": 268,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 8,
+      "changed": true,
+      "source_review_sha256": "0c8171854c1eeff005073ce7cb701731c80707c8ed2c96dc3fc1432b6357ec35",
+      "output_sha256": "65fce025b378477746c150d53d31043d0cf5ff5a0135d26f8ccf88faa6a1ba78",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 267,
+      "author": "catalog_tail_mod3",
+      "version": "tail-mod3-20261014.r2",
+      "cells_checked": 49,
+      "changed": true,
+      "source_review_sha256": "6ade77f9ea9ce616d5f47d062c90c0ccbc199a7a4d4a08e3ed368fa0c0c9c309",
+      "output_sha256": "407879e78e7f8faccaf14d8ea49c9d54ef9d44d3aafe3cc3954cab577ed64daa",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 265,
+      "author": "catalog_tail_mod1",
+      "version": "tail-mod1-20261014.r1",
+      "cells_checked": 24,
+      "changed": true,
+      "source_review_sha256": "8b8ae93382b8ac34c8e0f9e091a89e41a5884f1e79ce2758edcf7ea1a020a44a",
+      "output_sha256": "ddb69b53f728c730e456de1848a46f16f4e113cf61af83294b890d54bca896e9",
+      "unresolved_issues": [
+        "Нужна независимая проверка всех авторских изменений и инженерных чертежей."
+      ]
+    },
+    {
+      "physical_page": 264,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 18,
+      "changed": true,
+      "source_review_sha256": "30aa979e582e44fbcecd93c5660c8698100b439bcb8ef01bfa881b8cb55e2561",
+      "output_sha256": "a836e7ca6d719a90e72140763cc997b3e1a768c92a2707efc42e0a07ffc00b77",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 263,
+      "author": "catalog_tail_mod3",
+      "version": "tail-mod3-20261014.r2",
+      "cells_checked": 7,
+      "changed": true,
+      "source_review_sha256": "73271f0417b442333143f9a2fbd7b7ec9130cdfe0b726e15eabdf2d4cd73a413",
+      "output_sha256": "2a195e167d5787f07e25bf0f906cc733e805829696d2487c94de8ac0f4180565",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 261,
+      "author": "catalog_tail_mod1",
+      "version": "tail-mod1-20261014.r1",
+      "cells_checked": 36,
+      "changed": true,
+      "source_review_sha256": "d46ecb10cdc90ea382725274588511dd763441e99f4e520bbb6deae6879b7d89",
+      "output_sha256": "a71ee2d05443697b48f23129b8c3660943b381dbdb08836693a14944b4c183ff",
+      "unresolved_issues": [
+        "Нужна независимая проверка всех авторских изменений и инженерных чертежей."
+      ]
+    },
+    {
+      "physical_page": 260,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 35,
+      "changed": true,
+      "source_review_sha256": "2112a5b7f5acc1eca705f5707a32646583f9868445bc5035382d44cf2f45e681",
+      "output_sha256": "3e298e5c31fe0d72d6b8dd8c6f97b1b573bd258cf6aedba26c4664314aa84b74",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 259,
+      "author": "catalog_tail_mod3",
+      "version": "tail-mod3-20261014.r2",
+      "cells_checked": 48,
+      "changed": true,
+      "source_review_sha256": "5a75ba4ce5e089ea4b0163e3a8717197eea69d0ff1c3eb329a8d267f0f6beb92",
+      "output_sha256": "4242cf306a5d2731b3b76782c6a1b5e3aaaffe95ada79ced465fc66651d9349b",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 257,
+      "author": "catalog_tail_mod1",
+      "version": "tail-mod1-20261014.r1",
+      "cells_checked": 60,
+      "changed": true,
+      "source_review_sha256": "fce45c4209c7baecee2a643f3fc1399306fdb77b3f3b19593042f8f3dca55d2c",
+      "output_sha256": "c036b335e3a5b8f1d4c8fe1d97b1f9ab98c2d38b578f7cfdfd63641436a8486a",
+      "unresolved_issues": [
+        "Нужна независимая проверка всех авторских изменений и инженерных чертежей."
+      ]
+    },
+    {
+      "physical_page": 256,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 60,
+      "changed": true,
+      "source_review_sha256": "eca7058c4ce0f4c7195e1d66e9819643cc3f18a6fd5f92f5c7ce72ec85bc8573",
+      "output_sha256": "fef3f6a37e37e9dca9f09b30872895370e4fe5bd7c4801ee588dd71c9347c0cc",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 255,
+      "author": "catalog_tail_mod3",
+      "version": "tail-mod3-20261014.r2",
+      "cells_checked": 10,
+      "changed": true,
+      "source_review_sha256": "96bedea4a8f53672d954090179fcd7ad4496e0e17932dd15e892e51cb4eccc66",
+      "output_sha256": "bb0d2c62ce1b7b4a7bfb6b8969c6ba3b2d6c73941b7859727db9b4d7f086ddf4",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 253,
+      "author": "catalog_tail_mod1",
+      "version": "tail-mod1-20261014.r1",
+      "cells_checked": 20,
+      "changed": true,
+      "source_review_sha256": "59aaa65c3786e086080a32c5112d65c7a75324b035948ab8a32eea85df515f56",
+      "output_sha256": "981af3bef9997aeff9e90be3028c5a8f1524a198474a9d4b9988fad719cb9793",
+      "unresolved_issues": [
+        "Нужна независимая проверка всех авторских изменений и инженерных чертежей.",
+        "Наклонная маркировка на раме3РГД возле верхнего левого круглого узла не читается полностью в исходном растровом рисунке даже при увеличении;текст не восстановлен. РазмерыL,D,марки таблиц и функция изделия читаются."
+      ]
+    },
+    {
+      "physical_page": 252,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 78,
+      "changed": true,
+      "source_review_sha256": "55e1c72cd88c609c5c6f0be8f15381168e5dc6c08c3e5446374449c06868011b",
+      "output_sha256": "bd6a0cdf66f18ca9614b8ddec3bcae8f2a063d1987b7baf9e56df78967ff132a",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 251,
+      "author": "catalog_tail_mod3",
+      "version": "tail-mod3-20261014.r2",
+      "cells_checked": 0,
+      "changed": true,
+      "source_review_sha256": "46851feca042bc51958119a90b7a23089f74900d51d10097a8dc53fa85dfedc7",
+      "output_sha256": "0166eba00407f171d3bd77e18620bd5d9357ae88f30315c39bd0fe988f0f01a8",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 248,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 10,
+      "changed": true,
+      "source_review_sha256": "97fbb85651e6ca578e90525a559b7600a18964cef9b7b1fdaa99c0a025ec4f06",
+      "output_sha256": "9049c3d2859fd4105aaf1fba24b75f236fb85c7705517c60332bdc851d68d45d",
+      "unresolved_issues": [
+        "Источник объединяет ячейкуd и печатает в ней25/30 на высотах двух строк. Native общий текст сохранён; индивидуальное распределение d=25/30 по моделям требует независимого решения по оригиналу, без вывода из диапазонов проводов."
+      ]
+    },
+    {
+      "physical_page": 247,
+      "author": "catalog_tail_mod3",
+      "version": "tail-mod3-20261014.r2",
+      "cells_checked": 32,
+      "changed": true,
+      "source_review_sha256": "690c6a998e4037855ddd5f74fd9b9332456666f228e32cb964a1c5cba9faf0df",
+      "output_sha256": "f8aafc0f287825cba694681fb68f9ebef78ccfe57816e858ce6b0759544fd1e9",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 244,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 256,
+      "changed": true,
+      "source_review_sha256": "a6019fd3a19165276aa547bb957527e992d4f3f3c34f36072896d40ae8ed87a4",
+      "output_sha256": "e98a74fd4da94616c3fedeaf4c27b02e302e3f1d79bb1d1871325721e791d8b9",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 240,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 184,
+      "changed": true,
+      "source_review_sha256": "32ef48b067c01f3e07d3779e6912dc6e40384265d2591ec947adc11e8597b708",
+      "output_sha256": "c453fea97f6ffe1693b2c2b991f8e16b9101a3f3c7c2f0dd4dd678d274c195ca",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 236,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 84,
+      "changed": true,
+      "source_review_sha256": "5d21cf40d3496a57e4fd8de18aead09f1dfd4883fc08b83438d8968cdbeb2049",
+      "output_sha256": "444ed293850523a195f7aae6cdf7add499c10c15059a675c198a95886a964b0a",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 232,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 98,
+      "changed": true,
+      "source_review_sha256": "23ffbd0443054a6af39993db2927b6617d99d6176c27e73a5d6a34fbf620fc65",
+      "output_sha256": "4167e22b35e2847a192e90909cc78533c753a5ce2d48c2919dff8a1a6c7ef13e",
+      "unresolved_issues": []
+    },
+    {
+      "physical_page": 228,
+      "author": "catalog_tail_mod0",
+      "version": "tail-mod0-20261014.r1",
+      "cells_checked": 0,
+      "changed": true,
+      "source_review_sha256": "c3cf52b51d3205e60728cfc09fc93355bed688213dff52313993358d6af9c20f",
+      "output_sha256": "2e202784219e3cc2d4facf14b94138c3d2a394309f583f2de86e9334d7d0faa6",
+      "unresolved_issues": [
+        "ВкодовомобозначениизажимаПГН-5-[3/З]Родинобводочныйглифможетбытьцифрой3иликириллическойЗ;nativeчтениеЗнеобъявленопроверенным.Нужнанезависимаясверкаэтогоодногознака."
+      ]
+    }
+  ],
+  "native_calls_interrupted_during_release21_transfer": 0,
+  "retained_native_hashes_unchanged_during_transfer": 3692,
+  "new_large_benchmark_runs": 0,
+  "not_complete": true,
+  "unified_delivery": {
+    "zip": "examples/catalogs/all-pages-2026-10-14T103825Z/all-catalogues-980-pages.zip",
+    "zip_sha256": "9cc13e2f0f1d64ba27c99bfe93b8309ed29283390c2f168b9bdcfa76812b3f73",
+    "zip_bytes": 9532719,
+    "json_pages_validated": 980,
+    "excel_workbooks_reopened": 5,
+    "excel_data_cells_exact_roundtrip": 83730,
+    "manual_pages_integrated": 60,
+    "independent_accepted": 446
+  },
+  "retained_benchmark_errors": {
+    "total_pending": 102,
+    "new_cases": 50,
+    "commit": "58e2bf8c78c825c7cc3921e84cfd5b69ecd206e5",
+    "fresh_model_runs": 0
+  }
+}
