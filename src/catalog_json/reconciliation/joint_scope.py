@@ -10,7 +10,12 @@ from .consensus import build_consensus, case_sha256, validate_pack
 from .formats import exact_json_equal
 
 
-def make_variant_proposal(records, *, pack_id):
+def make_variant_proposal(records, *, pack_id, option_delimiter='\n', property_aliases=None):
+    if option_delimiter not in ('\n', '; '):
+        raise ValueError('Only an explicitly retained newline or semicolon-space delimiter is supported')
+    aliases = property_aliases or {}
+    if not isinstance(aliases, dict) or any(type(k) is not str or type(v) is not str or not k or not v for k, v in aliases.items()):
+        raise ValueError('Property aliases must be explicit original header pairs')
     if not records or not all(r['complete'] for r in records):
         raise ValueError('Discuss only cases with all initial voices retained')
     cases = [r['case'] for r in records]
@@ -28,17 +33,18 @@ def make_variant_proposal(records, *, pack_id):
     bindings = []
     for fid, option in atoms['oleg'].items():
         raw = option['value']
-        if type(raw) is not str or '\n' not in raw:
-            raise ValueError('An explicit original newline option list is required')
+        if type(raw) is not str or option_delimiter not in raw:
+            raise ValueError('An explicit original delimited option list is required')
         members = []; offset = 0
-        for line in raw.splitlines(keepends=True):
-            value = line.rstrip('\r\n')
+        lines = raw.splitlines(keepends=True) if option_delimiter == '\n' else raw.split(option_delimiter)
+        for line in lines:
+            value = line.rstrip('\r\n') if option_delimiter == '\n' else line
             if not value: raise ValueError('Empty option needs separate source adjudication')
             members.append((value, offset, offset + len(value)))
-            offset += len(line)
+            offset += len(line) + (len(option_delimiter) if option_delimiter != '\n' else 0)
         matches = [a for a in atoms['ours'].values()
                    if exact_json_equal(a['owner'], option['owner'])
-                   and a['name'] == option['name']]
+                   and (a['name'] == option['name'] or aliases.get(a['name']) == option['name'])]
         chosen = []
         for value, start, end in members:
             row = [a for a in matches if exact_json_equal(a['value'], value)]
@@ -73,11 +79,17 @@ def make_variant_proposal(records, *, pack_id):
     pack = {'schema_version': 'catalogue-discrepancy-pack/1', 'pack_id': pack_id,
             'reviewer_policy': {'required_roles': ['codex', 'zcode', 'minimax'], 'standalone_glm': False},
             'cases': [c]}
+    if option_delimiter != '\n' or aliases:
+        pack['proposal_construction'] = {'option_delimiter': option_delimiter,
+                                         'property_aliases': copy.deepcopy(aliases)}
     return validate_pack(pack)
 
 
 def validate_variant_proposal(pack, records):
-    expected = make_variant_proposal(records, pack_id=pack['pack_id'])
+    construction = pack.get('proposal_construction', {})
+    if not isinstance(construction, dict) or set(construction) - {'option_delimiter', 'property_aliases'}:
+        raise ValueError('Unsupported proposal construction rules')
+    expected = make_variant_proposal(records, pack_id=pack['pack_id'], **construction)
     if not exact_json_equal(pack, expected):
         raise ValueError('Joint scope proposal differs from its exact original facts/bindings')
     return expected['cases'][0]['proposal']

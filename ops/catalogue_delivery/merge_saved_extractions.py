@@ -126,13 +126,16 @@ def public_record(record):
 
 def joint_approvals(task, root, records):
     """Fresh three-party scope proofs resolve parents without rewriting old votes."""
-    path = task / 'joint-scope-ready-manifest.json'
-    if not path.exists(): return []
-    manifest = load(path)
-    if tuple(manifest['required_roles']) != ROLES or manifest['standalone_glm']:
-        raise ValueError('Unapproved joint review roles')
+    items = []
+    for name in ('joint-scope-ready-manifest.json', 'joint-scope-p123-ready-manifest.json'):
+        path = task / name
+        if not path.exists(): continue
+        manifest = load(path)
+        if tuple(manifest['required_roles']) != ROLES or manifest['standalone_glm']:
+            raise ValueError('Unapproved joint review roles')
+        items.extend(manifest['packs'])
     parents = {r['case']['case_id']: r for r in records}; result = []; covered = set()
-    for item in manifest['packs']:
+    for item in items:
         file = root / item['path']; pack = load(file)
         if sha(file) != item['file_sha256'] or case_sha256(pack) != item['pack_sha256']:
             raise ValueError('Joint proposal input changed')

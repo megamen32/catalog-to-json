@@ -43,3 +43,22 @@ def test_changed_proposal_cannot_borrow_earlier_review():
     rows = records(); pack = make_variant_proposal(rows, pack_id='joint')
     pack['cases'][0]['proposal']['bindings'][0]['members'][0]['member_end'] += 1
     with pytest.raises(ValueError): validate_variant_proposal(pack, rows)
+
+
+def test_explicit_semicolon_spans_and_header_alias_preserve_raw_headers():
+    rows = records()
+    for record in rows:
+        option = record['case']['oleg'][0]
+        option['value'] = 'AC25; AC35'
+        option['name'] = 'Wire, mm²'
+    before = copy.deepcopy(rows)
+    with pytest.raises(ValueError): make_variant_proposal(rows, pack_id='joint')
+    pack = make_variant_proposal(rows, pack_id='joint', option_delimiter='; ',
+                                 property_aliases={'Wire': 'Wire, mm²'})
+    proposal = validate_variant_proposal(pack, rows)
+    raw = pack['cases'][0]['oleg'][0]['value']
+    assert [raw[m['member_start']:m['member_end']] for m in proposal['bindings'][0]['members']] == ['AC25', 'AC35']
+    assert rows == before
+    assert pack['cases'][0]['ours'][0]['name'] == 'Wire'
+    pack['proposal_construction']['property_aliases'] = {'Wire': 'Other quantity'}
+    with pytest.raises(ValueError): validate_variant_proposal(pack, rows)
