@@ -91,6 +91,33 @@
       "summary": "audit compares literal branding independently of block order and normalizes only whitespace runs inside cell strings; IDs/numeric boundaries remain exact. FairWorkQueue gives fresh repairs a fair lane and seeded random first passes. tools.server reviewer starts with10 core tools; enable_helpers advertises extra groups via native notification. Save coverage/source validation unchanged. tools.record_dimensions batches same per-relation checks.",
       "verified_at": "2026-10-14T01:07:26.172099+03:00"
     },
+    "native-json-file-payload": {
+      "confidence": "verified",
+      "evidence": [
+        "Native MCP red missing data; green object/legacy saves, both-payload/schema/blind/PASS/annotation guards"
+      ],
+      "git_head": "0df8b5097c15e5985f8704de7d89d330f017af25",
+      "key": "native-json-file-payload",
+      "kind": "failure-shield",
+      "locations": [
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "b693eff667736ba0dbd267886a5176a491d2f8b89bbcbaf679c96a105e1fe71e",
+          "path": "src/catalog_json/tools.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "2adb71a4595c86e6c150dc183646b30daae5def361e160d94a2c71126a1ec60f",
+          "path": "tests/test_structured_payload.py",
+          "symbol": ""
+        }
+      ],
+      "summary": "File tools accept data JSON objects through the identical validation guards. Keep legacy json_text annotated str with empty default: Optional[str] caused MCP2.3 preprocessing to turn valid JSON strings into dicts before string validation. Do not auto-complete invalid strings.",
+      "verified_at": "2026-10-14T06:08:37.393116+03:00"
+    },
     "native-review-contract-delivery": {
       "confidence": "verified",
       "evidence": [

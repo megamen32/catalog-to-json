@@ -21,6 +21,16 @@ if not SKILLS.exists():
     SKILLS = Path(__file__).resolve().parents[2] / 'skills'
 
 
+def tool_json_payload(json_text,data):
+    """Encode a native tool object in code; never repair malformed model JSON."""
+    if bool(json_text)==(data is not None):
+        return None,{'saved':False,'error':'Provide exactly one payload: data as a JSON object (preferred), or legacy json_text. Do not encode JSON inside a string when using data.'}
+    if data is not None:
+        try:return json.dumps(data,ensure_ascii=False,allow_nan=False),None
+        except (ValueError,TypeError) as exc:return None,{'saved':False,'error':f'Payload is not a finite JSON value: {exc}'}
+    return json_text,None
+
+
 def sync_directory(path):
     descriptor=os.open(path,os.O_RDONLY|getattr(os,'O_DIRECTORY',0))
     try:os.fsync(descriptor)
@@ -201,7 +211,7 @@ class CatalogTools:
     def record_dimension(self,page,json_text):
         if self.role!='reviewer':return {'saved':False,'error':'Only reviewer records dimension evidence'}
         try:record=DimensionReview.model_validate_json(json_text)
-        except ValidationError as exc:return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False))}
+        except ValidationError as exc:return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False)), 'retry_payload':'Use data as a JSON object with the required schema. Do not repair/escape JSON inside a string; get_json_schema exposes PageContent or Review.'}
         disclosed=self.read(page,'page');candidate=PageContent.model_validate(disclosed['candidate'])
         if record.figure_index>=len(candidate.figures):return {'saved':False,'error':'Unknown candidate figure'}
         figure=candidate.figures[record.figure_index]
@@ -415,7 +425,7 @@ class CatalogTools:
             if kind=='review' and model.verdict=='pass' and not model.accepts(PageContent.model_validate(disclosed['candidate'])):
                 return {'saved':False,'error':'Claimed pass contradicts checks, issues, counts or candidate uncertainties; submit revise/uncertain or complete the review'}
         except ValidationError as exc:
-            return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False))}
+            return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False)), 'retry_payload':'Use data as a JSON object with the required schema. Do not repair/escape JSON inside a string; get_json_schema exposes PageContent or Review.'}
         filename=f'candidate-{self.attempt}.json' if kind=='page' else f'source-observation-{self.attempt}.json' if kind=='observation' else f'review-{self.attempt}.json'
         prior=work/filename
         if prior.exists():write_json(work/'.history'/prior.stem/(hashlib.sha256(prior.read_bytes()).hexdigest()+'.json'),json.loads(prior.read_text()))
@@ -446,7 +456,7 @@ class CatalogTools:
         if self.latest_zoom.get(page,0)<=self.disclosed[page]:return {'saved':False,'error':'Reinspect the disputed source with view_region first'}
         if not reason.strip():return {'saved':False,'error':'Explain the source evidence before revising the observation'}
         try:model=PageContent.model_validate_json(json_text)
-        except ValidationError as exc:return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False))}
+        except ValidationError as exc:return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False)), 'retry_payload':'Use data as a JSON object with the required schema. Do not repair/escape JSON inside a string; get_json_schema exposes PageContent or Review.'}
         errors=self.context_errors(page,model,after=self.disclosed[page])
         if errors:return {'saved':False,'context_errors':errors}
         quotes,errors=branding_quote_evidence(self,page,model,literal_quotes,after=self.disclosed[page])
@@ -488,7 +498,7 @@ class CatalogTools:
         if index<0 or index>999:raise ValueError('Index out of range')
         from .schema import TextBlock,Table,Figure
         try:model={'text_blocks':TextBlock,'tables':Table,'figures':Figure}[section].model_validate_json(json_text)
-        except ValidationError as exc:return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False))}
+        except ValidationError as exc:return {'saved':False,'validation_errors':json.loads(exc.json(include_input=False,include_url=False)), 'retry_payload':'Use data as a JSON object with the required schema. Do not repair/escape JSON inside a string; get_json_schema exposes PageContent or Review.'}
         path=self.work(page)/f'sections-{self.attempt}'/section/f'{index:04d}.json'
         write_json(path,model.model_dump());self.log(page,'save_section',section=section,index=index,sha256=hashlib.sha256(path.read_bytes()).hexdigest())
         return {'saved':True,'section':section,'index':index}
@@ -650,13 +660,15 @@ def server(context):
         return context.external_audit(page)
     if context.role=='extractor':
         @mcp.tool()
-        def save_page_json(page: int,json_text: str) -> dict:
-            """Validate and atomically save a complete page JSON. Errors are returned to the agent for correction."""
-            return context.save(page,json_text,'page')
+        def save_page_json(page: int,json_text: str='',data: dict|None=None) -> dict:
+            """Validate and atomically save a complete PageContent. Prefer data={...}, a JSON object from get_json_schema('page'); legacy json_text is optional. Supply exactly one. Every source, schema and audit guard remains."""
+            payload,error=tool_json_payload(json_text,data)
+            return error if error else context.save(page,payload,'page')
         @mcp.tool()
-        def save_section(page: int,section: str,index: int,json_text: str) -> dict:
-            """Validate/save ONE table, figure or text block; index starts at0. After a full save this edits that section while retaining the other sections."""
-            return context.section(page,section,index,json_text)
+        def save_section(page: int,section: str,index: int,json_text: str='',data: dict|None=None) -> dict:
+            """Validate/save ONE table, figure or text block; index starts at0. Prefer data as its JSON object, or legacy json_text, exactly one. After a full save this edits that section while retaining the other sections."""
+            payload,error=tool_json_payload(json_text,data)
+            return error if error else context.section(page,section,index,payload)
         @mcp.tool()
         def finalize_page(page: int,title: str,printed_page: str|None=None,source_notes: list[str]|None=None,uncertainties: list[str]|None=None,preserve_existing: bool=True,page_context: dict|None=None) -> dict:
             """Assemble validated sections into complete JSON. After a full save, apply only later section edits and retain all untouched tables/text/figures and omitted metadata. Same source/model/contract/attempt; new indices contiguous. An unbound read baseline is refused: rebuild ALL sections and explicitly set preserve_existing=False for a fresh page, or make a full save."""
@@ -667,25 +679,30 @@ def server(context):
             """List minimum candidate dimension relationships requiring separate source-view coverage. Each repeated figure/label has its own identity; nonstandard labels still require full original-image review."""
             return context.dimension_inventory(page)
         @mcp.tool()
-        def record_dimension_review(page: int,json_text: str) -> dict:
-            """Record source-bound relationship evidence. JSON: source_figure_index,source_label_index,figure_index,label_index,view,relation(linear/diameter/leader/annotation),source_box,feature_box,tip_points,path_ids,source_feature,candidate_feature_quote,agrees_with_candidate,evidence, optional correction_reason. Map independent source and candidate targets separately. First view_region on source_box including tips/extension lines/contour; quote candidate description exactly. annotation classifies actual non-dimensional dates/identifiers after source inspection, with no invented arrows; diameter/tolerance cannot use it. Native path IDs optional for scans. Changed records need correction_reason; all revisions retained. False/unresolved relations prohibit blanket figures PASS."""
-            return context.record_dimension(page,json_text)
+        def record_dimension_review(page: int,json_text: str='',data: dict|None=None) -> dict:
+            """Prefer data={...} or legacy json_text, exactly one. Record source-bound relationship evidence. JSON: source_figure_index,source_label_index,figure_index,label_index,view,relation(linear/diameter/leader/annotation),source_box,feature_box,tip_points,path_ids,source_feature,candidate_feature_quote,agrees_with_candidate,evidence, optional correction_reason. Map independent source and candidate targets separately. First view_region on source_box including tips/extension lines/contour; quote candidate description exactly. annotation classifies actual non-dimensional dates/identifiers after source inspection, with no invented arrows; diameter/tolerance cannot use it. Native path IDs optional for scans. Changed records need correction_reason; all revisions retained. False/unresolved relations prohibit blanket figures PASS."""
+            payload,error=tool_json_payload(json_text,data)
+            return error if error else context.record_dimension(page,payload)
         @mcp.tool()
-        def record_dimension_reviews(page: int,json_text: str) -> dict:
-            """Batch1..100 full records, or compact {shared:{common fields},records:[{per-label fields}]} (item overrides shared). Dates/IDs use relation:annotation, tip_points:[], actual source/candidate label indices and quote. Share inspected source_box/feature_box/view/evidence to avoid repeating them or generating records through shell. All individual validations, history and PASS coverage rules remain; returns saved_count/indexed failures."""
-            return context.record_dimensions(page,json_text)
+        def record_dimension_reviews(page: int,json_text: str='',data: dict|list[dict]|None=None) -> dict:
+            """Prefer data as an array or compact object; legacy json_text remains supported, exactly one. Batch1..100 full records, or compact {shared:{common fields},records:[{per-label fields}]} (item overrides shared). Dates/IDs use relation:annotation, tip_points:[], actual source/candidate label indices and quote. Share inspected source_box/feature_box/view/evidence to avoid repeating them or generating records through shell. All individual validations, history and PASS coverage rules remain; returns saved_count/indexed failures."""
+            payload,error=tool_json_payload(json_text,data)
+            return error if error else context.record_dimensions(page,payload)
         @mcp.tool()
-        def save_source_observation(page: int,json_text: str,literal_quotes: list[dict]|None=None) -> dict:
-            """Save blind PageContent BEFORE candidate. Branding literal_quotes items use {block_index,box,visible_quote,basis:text_layer|vision,conflict:null|source_notes text,rotation:0}. For a nontechnical branding caption represented as a figure label, use {figure_index,label_index,source_kind:branding,...} instead of block_index. View each exact box first. Numbers/operators/diameter/view signs cannot be reclassified. Quote original language. Native text and visible quote remain separate; an actual conflict needs a source note and Vision evidence."""
-            return context.save(page,json_text,'observation',literal_quotes)
+        def save_source_observation(page: int,json_text: str='',literal_quotes: list[dict]|None=None,data: dict|None=None) -> dict:
+            """Save blind PageContent BEFORE candidate. Prefer data={...}, a JSON object matching get_json_schema(page), not an encoded JSON string; supply exactly one of data/json_text. Branding literal_quotes items use {block_index,box,visible_quote,basis:text_layer|vision,conflict:null|source_notes text,rotation:0}. For a nontechnical branding caption represented as a figure label, use {figure_index,label_index,source_kind:branding,...} instead of block_index. View each exact box first. Numbers/operators/diameter/view signs cannot be reclassified. Quote original language. Native text and visible quote remain separate; an actual conflict needs a source note and Vision evidence."""
+            payload,error=tool_json_payload(json_text,data)
+            return error if error else context.save(page,payload,'observation',literal_quotes)
         @mcp.tool()
-        def correct_source_observation(page: int,json_text: str,reason: str,literal_quotes: list[dict]|None=None) -> dict:
-            """Revise mistaken source observations only after fresh view_region inspection and a source-grounded reason. Initial blind transcription and every revision stay retained; no revision-count limit."""
-            return context.correct_observation(page,json_text,reason,literal_quotes)
+        def correct_source_observation(page: int,reason: str,json_text: str='',literal_quotes: list[dict]|None=None,data: dict|None=None) -> dict:
+            """Prefer data={...} for the complete PageContent; supply exactly one of data/json_text. Revise mistaken source observations only after fresh view_region inspection and a source-grounded reason. Initial blind transcription and every revision stay retained; no revision-count limit."""
+            payload,error=tool_json_payload(json_text,data)
+            return error if error else context.correct_observation(page,payload,reason,literal_quotes)
         @mcp.tool()
-        def save_review(page: int,json_text: str) -> dict:
-            """Save strict source-grounded review. Incomplete or contradictory claimed passes return errors."""
-            return context.save(page,json_text,'review')
+        def save_review(page: int,json_text: str='',data: dict|None=None) -> dict:
+            """Save strict source-grounded Review using data={...} (preferred) or legacy json_text, exactly one. Incomplete or contradictory claimed passes return errors."""
+            payload,error=tool_json_payload(json_text,data)
+            return error if error else context.save(page,payload,'review')
     return mcp
 
 
