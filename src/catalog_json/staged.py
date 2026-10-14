@@ -429,7 +429,7 @@ async def staged_batch(manifest,output,agents,deadline_seconds=86400,resume=Fals
                 cp=work/f'candidate-{candidate[0]}.json'
                 previous_reviews=list(work.glob('review-*.json'))
                 fresh=bool(candidate[0]>0 and previous_reviews and cp.stat().st_mtime>max(p.stat().st_mtime for p in previous_reviews))
-                enqueue_review(item,fresh=fresh)
+                enqueue_review(item,audit=audit.exists(),fresh=fresh or audit.exists())
             else:
                 # Unbound legacy output is retained as feedback, never minted as
                 # a new source/model result merely by asking another reviewer.

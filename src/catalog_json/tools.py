@@ -253,6 +253,11 @@ class CatalogTools:
         if self.role!='reviewer':return {'saved':False,'error':'Only reviewer records dimension evidence'}
         try:records=json.loads(json_text)
         except (TypeError,ValueError):return {'saved':False,'error':'Expected a JSON array of dimension records'}
+        if isinstance(records,dict) and set(records)=={'shared','records'}:
+            shared,items=records['shared'],records['records']
+            if not isinstance(shared,dict) or not isinstance(items,list) or any(not isinstance(r,dict) for r in items):
+                return {'saved':False,'error':'Compact batch requires shared object and records array'}
+            records=[shared|r for r in items]
         if not isinstance(records,list) or not 1<=len(records)<=100 or any(not isinstance(r,dict) for r in records):
             return {'saved':False,'error':'Provide 1..100 dimension record objects'}
         failures=[];saved=0
@@ -379,7 +384,16 @@ class CatalogTools:
                              candidate_content_sha256=hashlib.sha256(json.dumps(disclosed['candidate'],sort_keys=True).encode()).hexdigest())
                     return {'saved':False,'error':'Final review contradicts its independent source observation. Do NOT tell the extractor to delete tables or duplicate table rows into figure labels. Reinspect the original region; correct_source_observation with source evidence if the observation classified a table as a figure, or correct the final counts/checks if they were wrong. Then save_review again. No candidate data was changed.',
                             'review_disagreements':conflicts}
-                if (model.verdict=='pass' or any(c.category=='figures' and c.passed for c in model.checks)) and not independent_software_demonstration(observation,candidate):
+                # Surface the actual blocking defect before requesting expensive
+                # geometry evidence for a page that cannot yet be accepted.
+                if model.verdict=='pass' and not model.accepts(candidate):
+                    return {'saved':False,'error':'Claimed pass contradicts checks, issues, counts or candidate uncertainties; submit revise/uncertain for real blocking defects before collecting final PASS geometry.',
+                            'candidate_uncertainties':candidate.uncertainties}
+                if model.verdict=='pass' and disclosed['independent_comparison']:
+                    return {'saved':False,'error':'Independent source observations contradict the claimed pass. Resolve or report these defects before collecting final PASS geometry.', 'differences':disclosed['independent_comparison']}
+                # A blocking revise/uncertain report is a repair checkpoint,
+                # never an acceptance or a certificate of drawing ownership.
+                if model.verdict=='pass' and not independent_software_demonstration(observation,candidate):
                     candidate=PageContent.model_validate(disclosed['candidate']);candidate_file=work/f'candidate-{self.attempt}.json'
                     candidate_sha=hashlib.sha256(candidate_file.read_bytes()).hexdigest() if candidate_file.exists() else None
                     records=list(self.dimension_reviews.get(page,{}).values())
@@ -389,8 +403,6 @@ class CatalogTools:
                                 for c in (observation,candidate)))
                     missing=missing_dimension_evidence(candidate,records,candidate_sha,observation,hashlib.sha256(observation_file.read_bytes()).hexdigest(),supporting_annotations=supporting_annotations)
                     if missing:return {'saved':False,'error':'A blanket figures PASS cannot certify dimension ownership. Enable labels helpers to record already inspected relationships in a batch; enable drawings only for ambiguous engineering geometry. Inspect each source view/variant and its own tips/contour. False or unresolved relationships require figures failed. Never borrow a label from another view.', 'missing_dimension_relations':missing}
-                if model.verdict=='pass' and disclosed['independent_comparison']:
-                    return {'saved':False,'error':'Independent source observations contradict the claimed pass. Report ALL differences and any additional findings.', 'differences':disclosed['independent_comparison']}
             if kind=='review' and model.verdict!='pass':
                 existing={issue.path for issue in model.issues}
                 for diff in disclosed['independent_comparison']:
@@ -656,7 +668,7 @@ def server(context):
             return context.record_dimension(page,json_text)
         @mcp.tool()
         def record_dimension_reviews(page: int,json_text: str) -> dict:
-            """Preferred batch form of record_dimension_review: JSON array of 1..100 records with the same fields. First inspect exact crops/tips/contours. All individual validations, history and final coverage rules apply; no implied ownership. Returns compact saved_count and indexed failures. Partial successes stay saved; fix every failure before PASS."""
+            """Batch1..100 full records, or compact {shared:{common fields},records:[{per-label fields}]} (item overrides shared). Dates/IDs use relation:annotation, tip_points:[], actual source/candidate label indices and quote. Share inspected source_box/feature_box/view/evidence to avoid repeating them or generating records through shell. All individual validations, history and PASS coverage rules remain; returns saved_count/indexed failures."""
             return context.record_dimensions(page,json_text)
         @mcp.tool()
         def save_source_observation(page: int,json_text: str,literal_quotes: list[dict]|None=None) -> dict:

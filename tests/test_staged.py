@@ -191,7 +191,9 @@ def test_repairs_and_later_catalogue_first_passes_both_progress(tmp_path):
     result=asyncio.run(staged_batch(path,tmp_path/'out',Agents(),deadline_seconds=3,call=call))
     assert result['complete']
     assert ('reviewer','first',1,1) in events and ('reviewer','later',1,0) in events
-    assert events.index(('reviewer','first',1,1))<events.index(('reviewer','later',3,0))
+    # Later-catalogue first passes are randomized, so page3 may be admitted
+    # first. The repair must precede completion of that catalogue's backlog.
+    assert events.index(('reviewer','first',1,1))<max(events.index(('reviewer','later',p,0)) for p in (1,2,3))
     assert [c['accepted_pages'] for c in result['catalogs']]==[3,3]
 
 

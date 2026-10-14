@@ -17,6 +17,48 @@ def test_same_numeral_in_other_view_cannot_cover_relation():
     records[0]['agrees_with_candidate']=False
     assert len(missing_dimension_evidence(c,records,'sha'))==2
 
+
+def test_blocking_uncertainty_surfaces_before_geometry_and_revise_can_checkpoint(tmp_path):
+    """Focused integration: retained cert47 could not PASS even after costly geometry;1s/max10s."""
+    from test_tools import pdf,review
+    from catalog_json.tools import CatalogTools
+    from catalog_json.schema import Issue
+    c=drawing_content();c.uncertainties=['Source identifier still unresolved']
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out');t.render(1);t.direct(1)
+    assert t.save(1,c.model_dump_json(),'page')['saved']
+    r=CatalogTools(t.source,t.output,role='reviewer');r.render(1)
+    assert r.save(1,c.model_dump_json(),'observation')['saved'];r.read(1,'page')
+    report=review();refused=r.save(1,report.model_dump_json(),'review')
+    assert refused['candidate_uncertainties']==c.uncertainties and 'missing_dimension_relations' not in refused
+    report.verdict='revise';report.issues=[Issue(severity='error',path='uncertainties',message='Resolve original identifier first')]
+    assert r.save(1,report.model_dump_json(),'review')['saved'] and not report.accepts(c)
+    # Resolving the unrelated uncertainty does not waive actual drawing evidence.
+    c.uncertainties=[];assert t.save(1,c.model_dump_json(),'page')['saved']
+    r=CatalogTools(t.source,t.output,role='reviewer');r.render(1)
+    assert r.save(1,c.model_dump_json(),'observation')['saved'];r.read(1,'page')
+    report.verdict='pass';report.issues=[]
+    refused=r.save(1,report.model_dump_json(),'review')
+    assert 'missing_dimension_relations' in refused, refused
+
+
+def test_compact_annotation_batch_keeps_inspection_and_diameter_refusal(tmp_path):
+    from test_tools import pdf
+    from catalog_json.tools import CatalogTools
+    c=drawing_content();c.figures=[Figure(title='Scanned metadata and actual dimension',description='Source labels',labels=['2018 г.','Ø98'])]
+    t=CatalogTools(pdf(tmp_path),tmp_path/'out');t.render(1);t.direct(1)
+    assert t.save(1,c.model_dump_json(),'page')['saved']
+    r=CatalogTools(t.source,t.output,role='reviewer');r.render(1)
+    assert r.save(1,c.model_dump_json(),'observation')['saved'];r.read(1,'page')
+    shared={'relation':'annotation','tip_points':[],'source_figure_index':0,'figure_index':0,'source_box':[0,0,1,1],
+        'feature_box':[.1,.1,.9,.9],'view':'Document region','source_feature':'Date field',
+        'agrees_with_candidate':True,'evidence':'Read original document date; no dimension arrows for date'}
+    batch={'shared':shared,'records':[{'source_label_index':0,'label_index':0,'candidate_feature_quote':'2018 г.'},
+        {'source_label_index':1,'label_index':1,'candidate_feature_quote':'Ø98'}]}
+    assert r.record_dimensions(1,json.dumps(batch))['saved_count']==0
+    r.render(1,[0,0,1,1]);result=r.record_dimensions(1,json.dumps(batch))
+    assert not result['saved'] and result['saved_count']==1 and result['failures'][0]['index']==1
+    assert 'Diameter/tolerance' in result['failures'][0]['error']
+
 def test_candidate_names_and_prose_cannot_hide_dimensions():
     c=drawing_content();c.figures[0].title='Вид А';c.figures[0].description='Внешняя геометрия изделия'
     c.figures[0].labels=['Диаметр Ø98','∅98 — верхний контур','98 +2/-1']
