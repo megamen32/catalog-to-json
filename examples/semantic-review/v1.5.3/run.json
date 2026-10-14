@@ -129,5 +129,57 @@
   "outputs": {
     "review.json": "a0f2f9acb9b61102cadef1b189c025ac6521f4c15a080a6647cc2a6bc6606135",
     "small-page-004.json": "0b594615d78e35b6fe7834a11a968fb914d45bc9dbbd803892da47d4ee450de8"
-  }
+  },
+  "save_attempt_audit": [
+    {
+      "role": "reviewer",
+      "attempt": 0,
+      "save_calls": {
+        "save_source_observation": 3,
+        "save_review": 1
+      },
+      "save_failures": {
+        "save_source_observation": 2
+      },
+      "failure_categories": {
+        "save_source_observation:validation_errors": 1,
+        "save_source_observation:context_errors": 1
+      },
+      "load_skill_delivery": [
+        {
+          "bytes_received": 12305,
+          "truncated": false
+        }
+      ],
+      "helper_activation_calls": 0
+    },
+    {
+      "role": "reviewer",
+      "attempt": 1,
+      "save_calls": {
+        "save_source_observation": 3,
+        "correct_source_observation": 2,
+        "save_review": 3
+      },
+      "save_failures": {
+        "save_source_observation": 2,
+        "correct_source_observation": 1,
+        "save_review": 2
+      },
+      "failure_categories": {
+        "save_source_observation:validation_errors": 1,
+        "save_source_observation:context_errors": 1,
+        "correct_source_observation:context_errors": 1,
+        "save_review:validation_errors": 2
+      },
+      "load_skill_delivery": [
+        {
+          "bytes_received": 12305,
+          "truncated": false
+        }
+      ],
+      "helper_activation_calls": 0
+    }
+  ],
+  "remaining_limitations": "Source observation needed3save attempts per reviewer context; final review needed3save attempts. Format/region-evidence refusals remain and all recorded retries are included in time/tokens. Accepted semantic correctness does not imply zero tool-format retries."
 }
