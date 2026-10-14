@@ -27,7 +27,9 @@ async def generate_until_saved(agent,task,request_params,completed,deadline=None
         if task is not None and task.cancelling():raise asyncio.CancelledError()
         if deadline is not None and time.monotonic()>=deadline:raise TimeoutError('Native deliverable deadline expired')
         stop=getattr(response,'stop_reason',None)
-        if str(getattr(stop,'value',stop)).lower().split('.')[-1] in {'cancelled','canceled'}:raise RuntimeError('Native generation cancelled before confirmed delivery')
+        reason=str(getattr(stop,'value',stop)).lower().split('.')[-1]
+        if reason in {'cancelled','canceled'}:raise RuntimeError('Native generation cancelled before confirmed delivery')
+        if reason=='error':raise RuntimeError('Native generation failed before confirmed delivery; see retained fast-agent-error channel. Provider errors are not artifact repair turns.')
         if completed():return response
         prompt='В этой попытке ещё нет успешного source-bound save. Продолжи смысловую проверку исходной задачи в текущем контексте, исправь замечания инструмента и сохрани результат catalog tools. Обычная реплика не заменяет артефакт. Не повторяй длинный пересказ.'
 

@@ -409,6 +409,22 @@ def test_end_turn_without_file_continues_until_confirmed_tool_save():
     assert all('save' in p for p in model.calls[1:])
 
 
+def test_sdk_error_response_is_not_an_artifact_repair_turn():
+    """Fast unit: retained1510 quota stop_reason=error; expected1s/emergency10s."""
+    from catalog_json.agents import generate_until_saved
+    from types import SimpleNamespace
+    class Model:
+        calls=0
+        async def generate(self,*args,**kwargs):
+            self.calls+=1
+            if self.calls>1:raise AssertionError('Provider error incorrectly retried as missing artifact')
+            return SimpleNamespace(stop_reason='error',channels={'fast-agent-error':[]})
+    model=Model()
+    with pytest.raises(RuntimeError,match='Native generation failed'):
+        asyncio.run(generate_until_saved(model,'source',object(),lambda:False))
+    assert model.calls==1
+
+
 def test_missing_deliverable_continuation_still_respects_timeout():
     """Fast unit: no repair count cap, outer finite deadline remains effective; expected1s/max5s."""
     from catalog_json.agents import generate_until_saved
