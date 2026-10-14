@@ -290,8 +290,8 @@ def test_cell_wrap_is_layout_without_relaxing_product_identifiers():
     assert not same_value('М10-1','М10 1',identity=True)
 
 
-def test_native_review_tools_start_small_and_expand_without_losing_validation(tmp_path):
-    """Focused integration: native MCP tool-list change; expected2s/max20s; no LLM."""
+def test_native_review_helpers_exist_in_initial_generation_snapshot(tmp_path):
+    """Focused integration: prevent native enable-loop; expected2s/max20s; no LLM."""
     source=pdf(tmp_path)
     async def run():
         changed=asyncio.Event()
@@ -304,18 +304,20 @@ def test_native_review_tools_start_small_and_expand_without_losing_validation(tm
         async with stdio_client(params) as (reader,writer):
             async with ClientSession(reader,writer,message_handler=message_handler) as client:
                 await client.initialize();initial=await client.list_tools();names={t.name for t in initial.tools}
-                assert len(names)==10 and {'view_page','view_region','save_review','enable_helpers'}<=names
-                assert 'inspect_drawing_geometry' not in names and 'record_dimension_reviews' not in names
+                assert {'view_page','view_region','save_review','enable_helpers','inspect_drawing_geometry',
+                        'inspect_dimension_review_targets','record_dimension_reviews','read_source_table',
+                        'read_source_layout','trace_dimension_candidates'}<=names
+                assert 'open_catalog' not in names and 'read_review' not in names
                 helper=next(t for t in initial.tools if t.name=='enable_helpers');assert 'ctx' not in helper.input_schema['properties']
                 bad=await client.call_tool('enable_helpers',{'group':'invalid'});assert not data(bad)['enabled']
                 result=await client.call_tool('enable_helpers',{'group':'labels'});assert data(result)['enabled']
                 await asyncio.wait_for(changed.wait(),2)
                 expanded={t.name for t in (await client.list_tools()).tools}
-                assert 'record_dimension_reviews'in expanded and 'inspect_drawing_geometry'not in expanded
+                assert expanded==names
                 await client.call_tool('view_page',{'page':1})
                 # Optional visibility never allows skipping blind observation and candidate inspection.
                 refused=await client.call_tool('save_review',{'page':1,'json_text':review().model_dump_json()})
                 assert not data(refused)['saved']
                 await client.call_tool('enable_helpers',{'group':'drawings'})
-                expanded={t.name for t in (await client.list_tools()).tools};assert 'inspect_drawing_geometry'in expanded
+                expanded={t.name for t in (await client.list_tools()).tools};assert expanded==names
     asyncio.run(asyncio.wait_for(run(),20))

@@ -131,6 +131,23 @@ def test_pure_demo_cannot_publish_sample_table_as_catalogue_data():
         PageContent.model_validate(a)
 
 
+def test_demo_scope_error_precedes_irrelevant_cell_format_repairs():
+    a=content().model_dump();a['page_context']=context().model_dump()
+    a['tables'][0]['rows'][0]['cells'][0].pop('value',None)
+    with pytest.raises(ValidationError,match='do not repair the formatting') as error:
+        PageContent.model_validate(a)
+    assert not any(e['type']=='missing' for e in error.value.errors())
+
+
+def test_reviewer_instruction_arrives_without_sdk_middle_truncation():
+    from catalog_json.agents import SKILLS
+    payload='Exact review schema and structural example (available before the first save):\n'+json.dumps(review_contract(),ensure_ascii=False,separators=(',',':'))+'\n\n'+(SKILLS/'catalog-review/SKILL.md').read_text()
+    # Actual FastAgent native history demonstrated a16000-byte tool envelope.
+    # Retain every semantic rule inline instead of hiding it in a spilled file.
+    assert len(json.dumps({'result':payload},ensure_ascii=False).encode())<16000
+    PageContent.model_validate(review_contract()['source_observation_example'])
+
+
 @pytest.mark.parametrize('kind',['catalogue_product_data','project_specification','supporting_material','unknown'])
 def test_summary_mode_cannot_reclassify_real_data(kind):
     value=context().model_dump();value['kind']=kind
@@ -146,8 +163,11 @@ def test_context_requires_visible_evidence_and_valid_boxes():
     with pytest.raises(ValidationError):context(box=[0,.2,1,2])
 
 
-def test_source_bound_summary_save_and_blind_review_gate(tmp_path):
+@pytest.mark.parametrize('context_kind',['software_demonstration','mixed'])
+def test_source_bound_summary_save_and_blind_review_gate(tmp_path,context_kind):
     source=pdf(tmp_path);out=tmp_path/'out';a=demonstration()
+    a.page_context=context(context_kind)
+    a.figures=[Figure(title='Illustrative CAD view',description='Example UI drawing',labels=['Ø13'])]
     extractor=CatalogTools(source,out);extractor.render(1);extractor.direct(1)
     assert not extractor.save(1,a.model_dump_json(),'page')['saved']
     extractor.render(1,a.page_context.source_evidence[0].box)
@@ -160,8 +180,10 @@ def test_source_bound_summary_save_and_blind_review_gate(tmp_path):
     assert not auditor.read(1,'page')['independent_comparison']
     r=review();r.observed_table_count=0;r.observed_row_counts=[];r.observed_column_counts=[]
     r.context_review=semantic_review()
-    assert auditor.save(1,r.model_dump_json(),'review')['saved']
-    assert json.loads((auditor.work(1)/'source-observation-0.json').read_text())['page_context']['kind']=='software_demonstration'
+    result=auditor.save(1,r.model_dump_json(),'review')
+    if context_kind=='software_demonstration':assert result['saved']
+    else:assert not result['saved'] and result['missing_dimension_relations']
+    assert json.loads((auditor.work(1)/'source-observation-0.json').read_text())['page_context']['kind']==context_kind
 
 
 def test_context_pass_requires_explicit_complete_semantic_verdict(tmp_path):
@@ -233,6 +255,8 @@ def test_native_reviewer_gets_review_schema_before_first_save(tmp_path):
                 text=skill.content[0].text
                 assert text.index('"observed_table_count"')<text.index('# Независимая инженерная проверка')
                 assert '"example"' in text and 'page_context' in text
+                assert len(text.encode())<16000
+                assert 'project_specification/mixed' in text and 'context_review' in text
     asyncio.run(asyncio.wait_for(run(),30))
 
 

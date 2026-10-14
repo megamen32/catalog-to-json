@@ -202,6 +202,12 @@ def context_differences(observed,candidate):
     return differences
 
 
+def independent_software_demonstration(observed,candidate):
+    return all(page.page_context is not None and page.page_context.kind=='software_demonstration'
+               and all(e.kind=='software_demonstration' for e in page.page_context.source_evidence)
+               for page in (observed,candidate))
+
+
 def compare_source(observed: PageContent,candidate: PageContent,branding_figure_quotes=None):
     differences=context_differences(observed,candidate)
     semantic_narrative=observed.page_context is not None and candidate.page_context is not None and not differences
@@ -259,7 +265,7 @@ def compare_source(observed: PageContent,candidate: PageContent,branding_figure_
         # A pure software demonstration is described and semantically reviewed,
         # not certified by matching every tiny UI label. Mixed pages and actual
         # engineering drawings retain the complete strict label checks below.
-        if semantic_narrative and observed.page_context.kind=='software_demonstration':continue
+        if semantic_narrative and independent_software_demonstration(observed,candidate):continue
         for label in sf.labels:
             key=figure_key(label)
             if key not in labels and not any(re.search(figure_pattern(label),d) for d in labels+descriptions):

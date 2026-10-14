@@ -11,7 +11,7 @@ from mcp.server.mcpserver import MCPServer, Image
 from mcp.types import TextContent
 from .schema import PageContent, Review, Issue, CHECKS
 from .direct import inspect_page
-from .audit import compare_source,align_tables
+from .audit import compare_source,align_tables,independent_software_demonstration
 from .observation_quotes import branding_quote_evidence
 from .review_consistency import structural_disagreements
 from .dimension_review import DimensionReview,dimension_targets,missing_dimension_evidence
@@ -61,6 +61,11 @@ def source_chunk(text,offset,length):
 
 def review_contract():
     return {'schema':Review.model_json_schema(),'required_review_checks':sorted(CHECKS),
+            'source_observation_example':{'title':'[actual source title]',
+                'page_context':{'kind':'software_demonstration','summary':'[actual demonstrated software function, not example product offers]',
+                    'source_evidence':[{'kind':'software_demonstration','box':[.1,.1,.9,.9],'observation':'[actual visible contextual evidence]','transcription':'contextual_summary'}]},
+                'printed_page':None,'text_blocks':[],'tables':[],'figures':[],'source_notes':[],'uncertainties':[]},
+            'source_observation_instruction':'Это только пример ФОРМЫ для подтверждённой демонстрации ПО. Самостоятельно выберите назначение реальной страницы; не копируйте классификацию, рамки и заглушки. page_context должен быть объектом. Для настоящей таблицы получите get_json_schema(page), заполните все реальные ячейки; blank требует value:null. Для pure software_demonstration сохраняйте tables=[], а не OCR таблицу примера.',
             'example':{'verdict':'uncertain','checks':[{'category':c,'passed':False,'evidence':'Replace with concrete original-image comparison'} for c in sorted(CHECKS)],
                        'context_review':{'page_purpose_verified':False,'summary_meaning_verified':False,'actual_vs_demo_verified':False,'technical_facts_verified':False,'relations_verified':False,'evidence':'Замените независимым обоснованием по оригиналу: назначение страницы, смысл пересказа, реальные данные/демонстрация, технические факты и связи изделия, параметра, единицы, условия и элемента чертежа.'},
                        'issues':[{'severity':'error','path':'replace_with_actual_path','message':'Replace with source-grounded finding'}],
@@ -374,7 +379,7 @@ class CatalogTools:
                              candidate_content_sha256=hashlib.sha256(json.dumps(disclosed['candidate'],sort_keys=True).encode()).hexdigest())
                     return {'saved':False,'error':'Final review contradicts its independent source observation. Do NOT tell the extractor to delete tables or duplicate table rows into figure labels. Reinspect the original region; correct_source_observation with source evidence if the observation classified a table as a figure, or correct the final counts/checks if they were wrong. Then save_review again. No candidate data was changed.',
                             'review_disagreements':conflicts}
-                if model.verdict=='pass' or any(c.category=='figures' and c.passed for c in model.checks):
+                if (model.verdict=='pass' or any(c.category=='figures' and c.passed for c in model.checks)) and not independent_software_demonstration(observation,candidate):
                     candidate=PageContent.model_validate(disclosed['candidate']);candidate_file=work/f'candidate-{self.attempt}.json'
                     candidate_sha=hashlib.sha256(candidate_file.read_bytes()).hexdigest() if candidate_file.exists() else None
                     records=list(self.dimension_reviews.get(page,{}).values())
@@ -529,6 +534,12 @@ def server(context):
                         'read_source_layout','read_source_artifact','inspect_dimension_review_targets',
                         'record_dimension_review','record_dimension_reviews'}}
     exposed=set(basic)
+    if context.role=='reviewer':
+        # FastAgent snapshots tool schemas for one generate() call. MCP's list
+        # changed notification refreshes its cache, not that running snapshot.
+        # Advertise usable native helpers from the first turn instead of
+        # claiming to unlock schemas the model cannot actually call yet.
+        exposed.update(name for names in groups.values() for name in names)
     class FocusedCatalogServer(MCPServer):
         async def list_tools(self):
             tools=await super().list_tools()
@@ -544,7 +555,7 @@ def server(context):
             exposed.update(additions)
             if context.page is not None:context.log(context.page,'enable_helpers',group=group)
             await ctx.session.send_tool_list_changed()
-            return {'enabled':True,'group':group,'available_tools':sorted(exposed),'instruction':'Optional helpers are now advertised. Choose only the evidence needed; full original-image and save validation rules are unchanged.'}
+            return {'enabled':True,'group':group,'available_tools':sorted(exposed),'instruction':'Evidence helpers are already callable from the initial tool list. Call the needed tool directly; do not repeat activation. Choose only the evidence needed; full original-image and save validation rules are unchanged.'}
     @mcp.tool()
     def open_catalog(source_path: str,output_directory: str) -> dict:
         """Open a user-specified local PDF and separate output folder. Not needed in an assigned CLI job."""

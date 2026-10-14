@@ -94,6 +94,16 @@ class PageContent(Model):
     source_notes: list[str] = Field(default_factory=list,description="Visible source typos/ambiguities copied literally, not an extraction failure")
     uncertainties: list[str] = Field(default_factory=list,description="Only unresolved missing/illegible extraction evidence; do not put faithful source typos here")
 
+    @model_validator(mode="before")
+    @classmethod
+    def demonstration_scope_before_cell_format(cls,value):
+        if isinstance(value,dict):
+            context=value.get('page_context')
+            kind=context.get('kind') if isinstance(context,dict) else getattr(context,'kind',None)
+            if kind=='software_demonstration' and value.get('tables'):
+                raise ValueError("Software demonstration rows are examples, not catalogue tables. Keep tables=[] and summarize the demonstrated function/report in page_context; do not repair the formatting of example cells. Use mixed only for independently evidenced actual project/product data.")
+        return value
+
     @model_validator(mode="after")
     def demonstration_is_not_an_offer(self):
         if self.page_context and self.page_context.kind=="software_demonstration" and self.tables:
