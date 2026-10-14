@@ -1,0 +1,82 @@
+{
+  "observed_unix": 1791940595.7787971,
+  "coordinator_program": {
+    "package_version": "1.5.4",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "03d94c1397ffd39d50a89db0b4d9ae29d17f13e5293b2fcbda6e8b4ec34d8c0c",
+    "python_version": "3.12.13"
+  },
+  "counts": [
+    {
+      "id": "opn",
+      "pages": 60,
+      "accepted": 60
+    },
+    {
+      "id": "isolators",
+      "pages": 162,
+      "accepted": 161
+    },
+    {
+      "id": "small",
+      "pages": 228,
+      "accepted": 227
+    },
+    {
+      "id": "innovations",
+      "pages": 216,
+      "accepted": 56
+    },
+    {
+      "id": "armature",
+      "pages": 314,
+      "accepted": 3
+    }
+  ],
+  "accepted": 507,
+  "source_draft_pages_preserved": 980,
+  "pretransition_artifacts_verified": 1486,
+  "pretransition_artifacts_changed": 0,
+  "accepted_current_receipts_reusable": 507,
+  "new_native154_acceptances": [
+    {
+      "catalogue": "innovations",
+      "physical_page": 102,
+      "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+      "candidate_sha256": "74081bf92ed27e44c761abc2d4b691b864141896cbf04f4a3787c1deb3ea5674",
+      "extractor_program": {
+        "package_version": "1.5.3",
+        "git_revision": null,
+        "dirty": null,
+        "source_code_sha256": "531e9bea963ef7592a9a09035761b155f81fbf1ba43027dc5c7017c55e9693fe",
+        "python_version": "3.12.13"
+      },
+      "review_sha256": "570e75c91340c8da8e1ebb9c79cf3d43af2f749fcf448f7ab12f4f11b8510f03",
+      "reviewer_program": {
+        "package_version": "1.5.4",
+        "git_revision": null,
+        "dirty": null,
+        "source_code_sha256": "03d94c1397ffd39d50a89db0b4d9ae29d17f13e5293b2fcbda6e8b4ec34d8c0c",
+        "python_version": "3.12.13"
+      },
+      "verdict": "pass"
+    }
+  ],
+  "active_job": "catalog-worker@full-semantic154.service",
+  "old_job_active": false,
+  "large_model_benchmark_run": false,
+  "known_pending_cases": [
+    "innovations physical4 false ШАСТ→ЩАСТ: source audit installed, current native resolution not yet proven",
+    "isolators physical47: document metadata falsely required geometry; current154 source still mixed, supporting-only exception not yet demonstrated on this page"
+  ],
+  "scheduler": {
+    "timer": "catalog-review-watch.timer",
+    "calendar": "*-*-* *:00,30:00 Europe/Moscow",
+    "next_local": "2026-10-14 04:30:00 MSK",
+    "producer_service_test": "success, active owner skipped",
+    "native_metadata_transport_probe": "success, read-only MCP roundtrip",
+    "idle_wake_receipt": "not yet observed; next scheduled idle tick must prove admission"
+  },
+  "accuracy_note": "Production progress and focused source/tool fixes only; no new global accuracy percentage."
+}
