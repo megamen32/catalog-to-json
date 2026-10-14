@@ -1,0 +1,11 @@
+[Unit]
+Description=Review catalogue progress every30minutes
+
+[Timer]
+OnCalendar=*-*-* *:00,30:00 Europe/Moscow
+Persistent=true
+AccuracySec=10s
+Unit=catalog-review-watch.service
+
+[Install]
+WantedBy=timers.target

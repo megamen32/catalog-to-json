@@ -1,0 +1,19 @@
+[Unit]
+Description=Wake catalogue review owner when idle
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/apps/catalog-to-json
+EnvironmentFile=%h/.config/catalog-to-json/review-watch.env
+ExecStart=/usr/bin/python3 %h/apps/catalog-to-json/ops/catalog-review-watch.py
+MemoryHigh=128M
+MemoryMax=256M
+MemorySwapMax=0
+CPUQuota=100%
+TasksMax=32
+TimeoutStartSec=45
+IOWeight=10
+Nice=10
+UMask=0077
+LimitFSIZE=16M
+KillMode=control-group
