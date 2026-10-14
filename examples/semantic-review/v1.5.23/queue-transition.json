@@ -1,0 +1,122 @@
+{
+  "observed_at": "2026-10-14T17:46:23.885342+03:00",
+  "unit": "catalog-worker@full-semantic1523.service",
+  "version": "1.5.23",
+  "accepted_total": 470,
+  "independently_verified_revision_total": 242,
+  "completed_total": 712,
+  "catalogues": {
+    "opn": {
+      "accepted_pages": 60,
+      "independently_verified_revision_pages": 0,
+      "completed_pages": 60,
+      "draft_pages": 60,
+      "pages": 60
+    },
+    "isolators": {
+      "accepted_pages": 120,
+      "independently_verified_revision_pages": 0,
+      "completed_pages": 120,
+      "draft_pages": 162,
+      "pages": 162
+    },
+    "small": {
+      "accepted_pages": 195,
+      "independently_verified_revision_pages": 0,
+      "completed_pages": 195,
+      "draft_pages": 228,
+      "pages": 228
+    },
+    "armature": {
+      "accepted_pages": 25,
+      "independently_verified_revision_pages": 232,
+      "completed_pages": 257,
+      "draft_pages": 314,
+      "pages": 314
+    },
+    "innovations": {
+      "accepted_pages": 70,
+      "independently_verified_revision_pages": 10,
+      "completed_pages": 80,
+      "draft_pages": 216,
+      "pages": 216
+    }
+  },
+  "manual_source_review": {
+    "total_distinct_pages": 377,
+    "cells_checked": 43773,
+    "by_catalogue": {
+      "armature": 293,
+      "innovations": 78,
+      "isolators": 6
+    },
+    "independent_passed": 247,
+    "independent_revise": 9,
+    "root_next_physical_page": 18
+  },
+  "transition": {
+    "status": "started_awaiting_manual_and_native_consumer_proof",
+    "finished_unix": 1791988603.6509135,
+    "elapsed_seconds": 194.067,
+    "new_version": "1.5.23",
+    "unit": "catalog-worker@full-semantic1523.service",
+    "old_unit": "catalog-worker@full-semantic1521.service",
+    "accepted_before": 469,
+    "retained_native_artifact_hashes_unchanged": 3766,
+    "native_calls_interrupted": 0,
+    "manual_completions_expected_minimum": 208,
+    "owner": "root-manual-completion23-transfer-1791988409"
+  },
+  "manual_work_this_cycle": [
+    "Revised own armature42/38/34/30/26/22/66 as separate authored versions;545 table cells unchanged.",
+    "Independently reviewed95/91/87/83/79/75:418 cells; PASS95/91/83/79, revise87 dimension95 and75 contradictory figure captions."
+  ],
+  "next_step": "Root own18/14/10/6/2, then innovations modulo2; three workers continue actual pages and independent acceptance. Integrate latest exact-SHA corrections. Cosmetic prose spacing alone no longer blocks semantic acceptance.",
+  "known_limits": [
+    "All980 are not yet accepted/delivered as final.",
+    "Native accepted and manual-author revisions are separate outcomes; completed is the disjoint actual queue sum.",
+    "Public654 snapshot predates latest fixes and must be refreshed."
+  ],
+  "actual_completed_calls_23": [
+    {
+      "catalog": "small",
+      "pdf_page": 40,
+      "role": "extractor",
+      "artifact_sha256": "5e110b7963e3d5fefcdeb565c256b5b4c33575feeba65b633a1f6395e266daec",
+      "status": "awaiting_review",
+      "finished_at": 1791989000.4534917
+    },
+    {
+      "catalog": "small",
+      "pdf_page": 40,
+      "role": "reviewer",
+      "artifact_sha256": "1730e9c2ab6f3cc3b2ee2c499ff89cc35922d0e27de94c2970a0d5cb69694764",
+      "status": "awaiting_review",
+      "finished_at": 1791988909.4747572
+    },
+    {
+      "catalog": "armature",
+      "pdf_page": 34,
+      "role": "extractor",
+      "artifact_sha256": "d62979463bb51624f04a888e1bbf355a91c9ccf70ec2a5c28237a8538e475704",
+      "status": "awaiting_review",
+      "finished_at": 1791988921.2437682
+    },
+    {
+      "catalog": "armature",
+      "pdf_page": 34,
+      "role": "reviewer",
+      "artifact_sha256": "8c9149f544a61b9510c002bce4d50807742958f04e88a1c36854f4a32f119d5c",
+      "status": "awaiting_review",
+      "finished_at": 1791988824.086551
+    },
+    {
+      "catalog": "innovations",
+      "pdf_page": 150,
+      "role": "reviewer",
+      "artifact_sha256": "22bb796d3e67923993455d4b2d9cb1d441aec13a77984596c46ff15393570dea",
+      "status": "accepted",
+      "finished_at": 1791988921.0516374
+    }
+  ]
+}
