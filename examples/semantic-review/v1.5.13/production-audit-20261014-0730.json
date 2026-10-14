@@ -1,5 +1,5 @@
 {
-  "observed_local": "2026-10-14T07:54:53.365212+03:00",
+  "observed_local": "2026-10-14T07:58:52.795073+03:00",
   "counts": {
     "opn": {
       "accepted": 60,
@@ -24,11 +24,11 @@
       "original_draft_pages_preserved": 162,
       "native_completed": {
         "extractor": 388,
-        "reviewer": 343
+        "reviewer": 344
       },
       "native_completed_delta": {
         "extractor": 0,
-        "reviewer": 0
+        "reviewer": 1
       }
     },
     "small": {
@@ -47,18 +47,18 @@
       }
     },
     "innovations": {
-      "accepted": 61,
+      "accepted": 62,
       "pages": 216,
-      "accepted_delta": 1,
+      "accepted_delta": 2,
       "compatible_drafts": 216,
       "original_draft_pages_preserved": 216,
       "native_completed": {
         "extractor": 462,
-        "reviewer": 156
+        "reviewer": 157
       },
       "native_completed_delta": {
         "extractor": 0,
-        "reviewer": 5
+        "reviewer": 6
       }
     },
     "armature": {
@@ -77,8 +77,8 @@
       }
     }
   },
-  "accepted": 517,
-  "accepted_delta": 1,
+  "accepted": 518,
+  "accepted_delta": 2,
   "fixes_published": [
     "cfb9d14/v1.5.12 unchanged post-comparison branding receipt cache and targeted errors",
     "0fb81dd/v1.5.13 exact header-clause partition equivalence"
@@ -172,5 +172,11 @@
     "python_version": "3.12.13"
   },
   "native_model_throughput_gain": "Not established. Native201 reviewed on1511 in97.257s and independently checked16rows/80cells; no1513 native PASS claim yet.",
-  "handoff_status": "waiting_for_admitted_GLM_only"
+  "handoff_status": "waiting_for_admitted_GLM_only",
+  "native96_accepted": {
+    "extractor_version": "1.5.3",
+    "reviewer_version": "1.5.12",
+    "candidate_and_review_sha256_verified": true,
+    "root_original_visual_check_this_turn": false
+  }
 }
