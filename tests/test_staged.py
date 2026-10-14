@@ -99,7 +99,8 @@ def test_live_review_repair_enters_fresh_extraction_lane(tmp_path):
     assert result['complete'] and admissions==['fresh_repair']
 
 
-def test_explicit_retained_extraction_gets_current_review_and_resumes_with_real_producers(tmp_path):
+@pytest.mark.parametrize('native_omits_optional_fields',[False,True])
+def test_explicit_retained_extraction_gets_current_review_and_resumes_with_real_producers(tmp_path,native_omits_optional_fields):
     """Focused integration: no token-expensive re-extraction or old-output relabelling;1s/max10s."""
     from types import SimpleNamespace
     from catalog_json.staged import role_contract
@@ -120,7 +121,7 @@ def test_explicit_retained_extraction_gets_current_review_and_resumes_with_real_
     async def call(agents,role,source,out,page,attempt):
         calls.append((role,page));work=out/f'page-{page:04d}'
         value=PageContent(title=str(page),text_blocks=[],tables=[],figures=[]) if role=='extractor' else passed()
-        path=work/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json');write_json(path,value.model_dump())
+        path=work/(f'candidate-{attempt}.json' if role=='extractor' else f'review-{attempt}.json');write_json(path,value.model_dump(exclude_none=native_omits_optional_fields))
         sha=hashlib.sha256(source.read_bytes()).hexdigest();artifact_sha=hashlib.sha256(path.read_bytes()).hexdigest()
         event={'tool':'save_page_json' if role=='extractor' else 'save_review','role':role,'page':page,'attempt':attempt,
             'source_sha256':sha,'model':getattr(agents,role),'contract_sha256':role_contract(agents,role),'sha256':artifact_sha,'time':10}

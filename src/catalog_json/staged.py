@@ -184,7 +184,10 @@ def compatible_reviewed_profile(work,old,agents,source_sha256,page,attempt):
     if candidate_hash is None and old.get('candidate_producer')==origins['extractor']:
         candidate_hash=origins['extractor']['artifact_sha256']
     if candidate_hash!=origins['extractor']['artifact_sha256'] or old.get('review_sha256')!=origins['reviewer']['artifact_sha256']:return False
-    if json.loads(candidate.read_text())!=old.get('content'):return False
+    # Optional schema defaults (for example absent page_context versus null)
+    # do not change a receipt-bound historical extraction. Raw artifact hashes
+    # and the actual paired native receipts are still checked above.
+    if PageContent.model_validate_json(candidate.read_bytes()).model_dump()!=PageContent.model_validate(old.get('content')).model_dump():return False
     events=[json.loads(l) for l in (work/'tools.jsonl').read_text().splitlines()]
     observed=[e for e in events if e.get('tool')=='read_external_audit' and e.get('role')=='reviewer'
               and e.get('page')==page and e.get('attempt')==attempt and e.get('source_sha256')==source_sha256

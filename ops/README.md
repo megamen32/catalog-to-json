@@ -218,3 +218,13 @@ different-author PASS; real source uncertainties still prevent closure. Cached
 validation expires when any bound input changes. Focused integration checks use
 one process, expected30s/emergency300s, without provider calls. The existing
 full-worker budget and explicit provider routes are reused.
+
+
+Delivery1.5.23 also retains already accepted historical artifacts when the only
+JSON difference is a defaulted optional schema field, such as absent page_context
+versus explicit null. Native artifact hashes, actual role receipts, source/page,
+program/contract profiles, current audit and real field values remain mandatory.
+The retained isolators50 acceptance exposed this needless re-review on handover;
+the two-variant resume integration covers old outputs with and without optional
+fields.1.5.22 was published as a prepared release and never activated on the full
+queue; the planned handover proceeds directly from21 to23.
