@@ -443,11 +443,18 @@ class CatalogTools:
                     candidate=PageContent.model_validate(disclosed['candidate']);candidate_file=work/f'candidate-{self.attempt}.json'
                     candidate_sha=hashlib.sha256(candidate_file.read_bytes()).hexdigest() if candidate_file.exists() else None
                     records=list(self.dimension_reviews.get(page,{}).values())
-                    supporting_annotations=bool(model.context_review and model.context_review.accepts() and model.context_review.supporting_annotations_verified
-                        and all(c.page_context is not None and c.page_context.kind=='supporting_material' and not c.tables
+                    supporting_context=all(c.page_context is not None and c.page_context.kind=='supporting_material' and not c.tables
                                 and all(e.kind=='supporting_material' and e.transcription=='literal' for e in c.page_context.source_evidence)
-                                for c in (observation,candidate)))
+                                for c in (observation,candidate))
+                    supporting_annotations=bool(model.context_review and model.context_review.accepts()
+                        and model.context_review.supporting_annotations_verified and supporting_context)
                     missing=missing_dimension_evidence(candidate,records,candidate_sha,observation,hashlib.sha256(observation_file.read_bytes()).hexdigest(),supporting_annotations=supporting_annotations)
+                    if missing and supporting_context and not supporting_annotations:
+                        geometric=missing_dimension_evidence(candidate,records,candidate_sha,observation,hashlib.sha256(observation_file.read_bytes()).hexdigest(),supporting_annotations=True)
+                        if len(geometric)<len(missing):
+                            return {'saved':False,'error':'Both independently inspected inventories classify this page as supporting documents. Confirm document metadata, not drawing geometry, with context_review.supporting_annotations_verified:true and concrete original-image evidence. Do not fabricate arrows or rewrite label inventories to match dates, document identifiers or title text. Actual drawings require mixed/product/project context and per-dimension evidence; geometric labels remain strict.',
+                                    'required_context_review_fields':{'supporting_annotations_verified':True},
+                                    'missing_dimension_relations':missing,'remaining_geometric_targets':geometric}
                     if missing:return {'saved':False,'error':'A blanket figures PASS cannot certify dimension ownership. Enable labels helpers to record already inspected relationships in a batch; enable drawings only for ambiguous engineering geometry. Inspect each source view/variant and its own tips/contour. False or unresolved relationships require figures failed. Never borrow a label from another view.', 'missing_dimension_relations':missing}
             if kind=='review' and model.verdict!='pass':
                 existing={issue.path for issue in model.issues}

@@ -39,7 +39,14 @@ def dimension_targets(content,supporting_annotations=False):
                 # Only a separately confirmed supporting-document context can
                 # classify metadata as annotations. Bare numbers, tolerances,
                 # engineering units and geometric signs remain strict targets.
-                if supporting_annotations and not re.search(r'[Øø⌀∅φΦ±]|\d\s*[xх×]\s*\d|\d\s*[+−]\s*\d|\b(?:мм|см|кН|МПа|mm|cm|kN|MPa)\b|^\s*[+−-]?\d+(?:[.,]\d+)?(?:\s*[/+−-]\s*\d+(?:[.,]\d+)?)*\s*$',inspected_label):
+                # Source47's independently read title lists the same year as
+                # both "2023" and "Корректировка 2023 г.". A bare year is
+                # metadata only in an explicitly confirmed document figure.
+                document_year=bool(re.fullmatch(r'(?:19|20)\d{2}',inspected_label.strip())
+                    and re.search(r'\b(?:титульн\w*|сертификат\w*|протокол\w*|заключени\w*|certificate|title\s+page)\b',figure.title,re.I))
+                if supporting_annotations and document_year:
+                    continue
+                if supporting_annotations and not re.search(r'[Øø⌀∅φΦ±]|\d\s*[xх×]\s*\d|\d\s*[+−]\s*\d|\b(?:мм|см|кН|МПа|mm|cm|kN|MPa)\b|^\s*[DFHLRSTV]\d*\s*$|^\s*[+−-]?\d+(?:[.,]\d+)?(?:\s*[/+−-]\s*\d+(?:[.,]\d+)?)*\s*$',inspected_label):
                     continue
                 targets.append({'figure_index':fi,'label_index':li,'figure_title':figure.title,'label':label})
     return targets
