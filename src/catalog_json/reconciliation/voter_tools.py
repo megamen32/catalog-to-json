@@ -1,4 +1,4 @@
-"""Only the four adjudication tools; PDF contents are untrusted data."""
+"""Only five bounded adjudication tools; PDF contents are untrusted data."""
 from __future__ import annotations
 
 import argparse
@@ -53,7 +53,11 @@ VoteData = Annotated[dict, WithJsonSchema(_inline_schema(VerdictBatch.model_json
 
 class VoterTools:
     def __init__(self, *, pack_path, sources_path, identity, output_dir, round_number=1):
+        self.pack_path = Path(pack_path).resolve()
+        self.sources_path = Path(sources_path).resolve()
         self.pack = validate_pack(json.loads(Path(pack_path).read_text(encoding="utf-8")))
+        self.pack_sha256 = case_sha256(self.pack)
+        self._layout = None
         self.sources = load_sources(sources_path)
         self.identity = validate_identity(identity)
         self.output_dir = Path(output_dir)
@@ -86,6 +90,22 @@ class VoterTools:
             new = Path(self.sources[digest]["path"]).stat()
             if (new.st_dev, new.st_ino, new.st_size, new.st_mtime_ns) != (old.st_dev, old.st_ino, old.st_size, old.st_mtime_ns):
                 raise ValueError("Whitelisted source changed after SHA verification")
+
+    def inspect_layout(self, source_sha256, page, bbox=None):
+        """Native layout is read-only evidence and never marks an image as viewed."""
+        if type(source_sha256) is not str or type(page) is not int or (source_sha256, page) not in self.allowed:
+            raise ValueError("Source/page is outside this pack")
+        self._unchanged_sources()
+        if self._layout is None:
+            from .source_layout import SourceLayout
+            candidate = SourceLayout(pack_path=self.pack_path, sources_path=self.sources_path)
+            if case_sha256(candidate.pack) != self.pack_sha256 or candidate.sources != self.sources:
+                raise ValueError("Lazy layout pack/whitelist differs from the immutable voter inputs")
+            self._unchanged_sources()
+            self._layout = candidate
+        if case_sha256(self.pack) != self.pack_sha256 or case_sha256(self._layout.pack) != self.pack_sha256:
+            raise ValueError("Layout pack differs from the immutable voter pack")
+        return self._layout.inspect_layout(source_sha256, page, bbox)
 
     def render(self, source_sha256, page, bbox=None, rotation=0):
         import pymupdf
@@ -142,6 +162,9 @@ class VoterTools:
             for verdict in data["verdicts"]:
                 if "case_sha256" not in verdict:
                     verdict["case_sha256"] = case_sha256(cases[verdict["case_id"]])
+                case = cases[verdict["case_id"]]
+                if not any((case["source_sha256"], page) in self.viewed for page in case["physical_pages"]):
+                    raise ValueError("View the original evidence image for each case before saving; native layout does not replace image review")
             for verdict in data.get("verdicts", []):
                 for ev in verdict.get("source_evidence", []):
                     if (ev.get("source_sha256"), ev.get("page")) not in self.viewed:
@@ -176,6 +199,12 @@ def server(context):
     def zoom_page(source_sha256: str, page: int, bbox: list[float], rotation: int = 0):
         """View an original crop using normalized bbox[x0,y0,x1,y1]; rotation0/90/180/270, no reconstruction."""
         return context.render(source_sha256, page, bbox, rotation)
+
+    @mcp.tool()
+    def inspect_layout(source_sha256: str, page: Annotated[int, Field(strict=True)],
+                       bbox: list[Annotated[float, Field(strict=True)]]):
+        """Inspect native PDF words and axis-aligned vector segments in normalized bbox[x0,y0,x1,y1]. No OCR or inferred cells. Follow the whole merged cell across model rows; no text in one model band does not prove a blank cell. Use smaller crops if limits are exceeded. Layout never replaces viewing the original image."""
+        return context.inspect_layout(source_sha256, page, bbox)
 
     @mcp.tool()
     def save_verdict(data: VoteData) -> dict:

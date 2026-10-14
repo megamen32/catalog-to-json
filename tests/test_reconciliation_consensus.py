@@ -152,9 +152,9 @@ def test_mcp_tools_deliver_source_then_validate_complete_save(inputs, tmp_path):
     assert context.receipt.read_bytes() == before
     native = json.loads(before)
     assert native["identity"] == identity("glm")
-    # MCP advertises exactly four tools; parser/plugin/server discovery never runs.
+    # MCP advertises exactly five tools; parser/plugin/server discovery never runs.
     tools = asyncio.run(server(context).list_tools())
-    assert {t.name for t in tools} == {"get_cases", "view_page", "zoom_page", "save_verdict"}
+    assert {t.name for t in tools} == {"get_cases", "view_page", "zoom_page", "inspect_layout", "save_verdict"}
 
 
 @pytest.mark.parametrize("page", [True, "1", 1.0])
@@ -216,6 +216,47 @@ def test_duplicate_zoom_feedback_allows_new_pixel_detail_and_repairs(inputs, tmp
     for _ in range(8):
         assert not context.save_verdict(partial)["saved"]
     assert context.save_verdict(payload)["saved"]
+
+
+def test_lazy_layout_never_replaces_original_image_gate(inputs, tmp_path):
+    pack, payload, _, pack_file, sources_file = inputs
+    context = VoterTools(pack_path=pack_file, sources_path=sources_file, identity=identity("glm"), output_dir=tmp_path / "votes")
+    digest = pack["cases"][0]["source_sha256"]
+    assert context._layout is None
+    context.get_cases()
+    assert context._layout is None
+    result = context.inspect_layout(digest, 1, [0., 0., 1., 1.])
+    assert result["complete"] and result["words"] and result["pack_sha256"] == case_sha256(pack)
+    helper = context._layout
+    assert context.inspect_layout(digest, 1)["complete"] and context._layout is helper
+    assert not context.viewed
+    assert not context.save_verdict(payload)["saved"]
+    # Even an unresolved case cannot substitute layout for seeing the source image.
+    unresolved = copy.deepcopy(payload)
+    for verdict in unresolved["verdicts"]:
+        verdict["decision"] = "unresolved"; verdict["source_evidence"] = []
+    assert not context.save_verdict(unresolved)["saved"]
+    context.render(digest, 1)
+    assert context.save_verdict(unresolved)["saved"]
+
+
+@pytest.mark.parametrize("mutation", ["pack", "whitelist", "source"])
+def test_lazy_layout_checks_exact_pack_whitelist_and_source_snapshot(inputs, tmp_path, mutation):
+    pack, _, sources, pack_file, sources_file = inputs
+    context = VoterTools(pack_path=pack_file, sources_path=sources_file, identity=identity("glm"), output_dir=tmp_path / "votes")
+    digest = pack["cases"][0]["source_sha256"]
+    if mutation == "pack":
+        changed = copy.deepcopy(pack); changed["pack_id"] += "-changed"
+        pack_file.write_text(json.dumps(changed))
+    if mutation == "whitelist":
+        copied = tmp_path / "same-bytes-other-path.pdf"
+        copied.write_bytes(Path(sources[digest]["path"]).read_bytes())
+        sources_file.write_text(json.dumps([{"sha256": digest, "path": str(copied)}]))
+    if mutation == "source":
+        context.inspect_layout(digest, 1)
+        original = Path(sources[digest]["path"])
+        original.write_bytes(original.read_bytes() + b"\n% changed")
+    with pytest.raises(ValueError): context.inspect_layout(digest, 1)
 
 
 def test_runtime_configuration_rejects_non_coding_endpoint(tmp_path):
@@ -368,9 +409,20 @@ def test_real_stdio_consumer_saves_only_a_complete_bound_vote(inputs, tmp_path):
         async with stdio_client(params) as (reader, writer):
             async with ClientSession(reader, writer) as session:
                 await session.initialize()
-                assert {t.name for t in (await session.list_tools()).tools} == {"get_cases", "view_page", "zoom_page", "save_verdict"}
+                assert {t.name for t in (await session.list_tools()).tools} == {"get_cases", "view_page", "zoom_page", "inspect_layout", "save_verdict"}
                 cases = await session.call_tool("get_cases", {})
                 assert not cases.is_error and pack["cases"][0]["case_id"] in str(cases)
+                layout = await session.call_tool("inspect_layout", {"source_sha256": pack["cases"][0]["source_sha256"],
+                    "page": 1, "bbox": [0., 0., 1., 1.]})
+                assert not layout.is_error
+                layout_data = json.loads(next(c.text for c in layout.content if c.type == "text"))
+                assert layout_data["complete"] and layout_data["words"]
+                for invalid in (True, "1"):
+                    refused_layout = await session.call_tool("inspect_layout", {"source_sha256": pack["cases"][0]["source_sha256"],
+                        "page": invalid, "bbox": [0., 0., 1., 1.]})
+                    assert refused_layout.is_error
+                layout_only = await session.call_tool("save_verdict", {"data": payload})
+                assert json.loads(next(c.text for c in layout_only.content if c.type == "text"))["saved"] is False
                 viewed = await session.call_tool("view_page", {"source_sha256": pack["cases"][0]["source_sha256"], "page": 1})
                 assert not viewed.is_error and any(c.type == "image" for c in viewed.content)
                 partial = copy.deepcopy(payload); partial["verdicts"].pop()
@@ -416,16 +468,18 @@ def test_native_fastagent_boots_only_adjudication_tools_without_network(inputs, 
         async with fast.run() as app:
             await app.attach_mcp_server(role, "adjudication", options=MCPAttachOptions(startup_timeout_seconds=20))
             result = await app[role].list_tools()
-            assert len(result.tools) == 4
-            assert all(any(name in t.name for name in ("get_cases", "view_page", "zoom_page", "save_verdict")) for t in result.tools)
+            assert len(result.tools) == 5
+            assert all(any(name in t.name for name in ("get_cases", "view_page", "zoom_page", "inspect_layout", "save_verdict")) for t in result.tools)
     with deny_http_requests() as attempts:
         asyncio.run(boot())
     assert attempts == []
 
 
-def test_actual_installed_runtime_cli_env_cwd_limits_without_http(inputs, tmp_path):
+@pytest.mark.parametrize("role", ["glm", "minimax"])
+def test_actual_installed_runtime_cli_env_cwd_limits_without_http(inputs, tmp_path, role):
     """Regression for real pilot: installed1524 package lacks reconciliation."""
     import yaml
+    from catalog_json.reconciliation.voter import ENDPOINTS
     root = Path(__file__).resolve().parents[1]
     python = root / ".tmp/full-digitization/semantic-v1.5.24/env/bin/python"
     if not python.exists():
@@ -435,10 +489,11 @@ def test_actual_installed_runtime_cli_env_cwd_limits_without_http(inputs, tmp_pa
     runtime.mkdir()
     (runtime / "pack.json").write_bytes(pack_file.read_bytes())
     (runtime / "sources.json").write_bytes(sources_file.read_bytes())
-    (runtime / "identity.json").write_text(json.dumps(identity("glm")))
-    (runtime / "claim.json").write_text(json.dumps({"role": "glm", "round_number": 1, "pack_sha256": case_sha256(pack)}))
-    (runtime / "provider.yaml").write_text(yaml.safe_dump({"zai": {
-        "base_url": "https://api.z.ai/api/coding/paas/v4/", "api_key": "fixture"}}))
+    (runtime / "identity.json").write_text(json.dumps(identity(role)))
+    (runtime / "claim.json").write_text(json.dumps({"role": role, "round_number": 1, "pack_sha256": case_sha256(pack)}))
+    provider, endpoint = ENDPOINTS[role]
+    (runtime / "provider.yaml").write_text(yaml.safe_dump({provider: {
+        "base_url": endpoint, "api_key": "fixture"}}))
     legacy = adjudication_server_config(runtime, tmp_path / "votes", 1, python=str(python))
     legacy.pop("env"); legacy.pop("cwd")
     (runtime / "fast-agent.yaml").write_text(yaml.safe_dump({"mcp": {"servers": {"adjudication": legacy}}}))
@@ -458,7 +513,10 @@ def test_actual_installed_runtime_cli_env_cwd_limits_without_http(inputs, tmp_pa
         assert proof["actual_address_space_limit"] == [2 * 1024**3] * 2
         assert len(proof["actual_cpu_affinity"]) == 1
         assert proof["status"] == ("startup_failed" if saved else "passed")
-        assert len(proof["tools"]) == (0 if saved else 4)
+        assert len(proof["tools"]) == (0 if saved else 5)
+        if not saved:
+            assert proof["layout_probe"]["status"] == "ok" and proof["layout_probe"]["word_count"] > 0
+            assert set(proof["layout_probe"]["input_schema"]["required"]) == {"source_sha256", "page", "bbox"}
     assert all((runtime / name).read_bytes() == value for name, value in frozen.items())
 
 
