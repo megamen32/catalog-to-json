@@ -1,0 +1,133 @@
+{
+  "tested_program": {
+    "package_version": "1.5.3",
+    "git_revision": null,
+    "dirty": null,
+    "source_code_sha256": "531e9bea963ef7592a9a09035761b155f81fbf1ba43027dc5c7017c55e9693fe",
+    "python_version": "3.12.13"
+  },
+  "implementation_commit": "37aaaf6c0181d184cd88789aede361647f7e8f93",
+  "wheel_sha256": "1fe33e597c3c7798dee596420f54f16338cf5001b919d72e64ae02e52bfe0a6d",
+  "source": {
+    "filename": "Malyj-katalog.pdf",
+    "sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+    "page_count": 228
+  },
+  "physical_page": 4,
+  "printed_page": "3",
+  "models": {
+    "extractor": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+    "reviewer": "zai.glm-5.3-flash?reasoning=low"
+  },
+  "test_method": {
+    "stage": "reviewed_conversion",
+    "extractor": "anthropic.MiniMax-M3.1-Flash-Preview?reasoning=medium",
+    "reviewer": "zai.glm-5.3-flash?reasoning=low",
+    "call_timeout_seconds": 600,
+    "max_tokens": 16384,
+    "max_repairs": null,
+    "deadline_seconds": 1200,
+    "resume": false,
+    "contract_sha256": "3b4165e5e56d3a8455b883aea55738aa0e06f3159a60ba01bc9d5ccabf1f6d10",
+    "agent_plugins": [
+      {
+        "name": "catalog-parsers",
+        "version": "0.2.2",
+        "sha256": "5d5b5b3915d829106a2d261b091243bb90e241577a4f04d3708363877632dc0e"
+      }
+    ]
+  },
+  "started_at": "2026-10-14T00:10:34.192547+00:00",
+  "finished_at": "2026-10-14T00:19:57.466997+00:00",
+  "elapsed_seconds": 563.26,
+  "outcome": "accepted_after_one_native_repair",
+  "purpose": "Independent semantic source review, not mechanical OCR; software demonstration distinguished from actual product/project data",
+  "scope_limit": "One source page. This is not a new engineering/drawing accuracy estimate or a repeated full benchmark.",
+  "manual_original_and_independent_visual_review": "No blocking semantic defects after repair; ВЛ and voltage-category meaning checked against original.",
+  "metrics": [
+    {
+      "role": "extractor",
+      "attempt": 0,
+      "first_message_at": "2026-10-14T00:10:39.261339Z",
+      "last_message_at": "2026-10-14T00:11:43.215346Z",
+      "tool_calls": 12,
+      "recorded_usage": {
+        "completed_provider_responses": 11,
+        "prompt_uncached": 34027,
+        "prompt_cache_read": 210703,
+        "completion_total": 5900,
+        "completion_reasoning": 825
+      }
+    },
+    {
+      "role": "extractor",
+      "attempt": 1,
+      "first_message_at": "2026-10-14T00:14:32.920011Z",
+      "last_message_at": "2026-10-14T00:15:39.136606Z",
+      "tool_calls": 14,
+      "recorded_usage": {
+        "completed_provider_responses": 11,
+        "prompt_uncached": 34439,
+        "prompt_cache_read": 209689,
+        "completion_total": 7666,
+        "completion_reasoning": 420
+      }
+    },
+    {
+      "role": "reviewer",
+      "attempt": 0,
+      "first_message_at": "2026-10-14T00:11:46.586287Z",
+      "last_message_at": "2026-10-14T00:14:30.466440Z",
+      "tool_calls": 19,
+      "recorded_usage": {
+        "completed_provider_responses": 12,
+        "prompt_total": 322108,
+        "prompt_cache_read": 277568,
+        "completion_total": 6452,
+        "completion_reasoning": 761
+      }
+    },
+    {
+      "role": "reviewer",
+      "attempt": 1,
+      "first_message_at": "2026-10-14T00:15:41.643416Z",
+      "last_message_at": "2026-10-14T00:19:56.793686Z",
+      "tool_calls": 22,
+      "recorded_usage": {
+        "completed_provider_responses": 17,
+        "prompt_total": 569671,
+        "prompt_cache_read": 521792,
+        "completion_total": 12303,
+        "completion_reasoning": 939
+      }
+    }
+  ],
+  "tool_event_counts": {
+    "extractor:load_skill": 2,
+    "extractor:view_page": 2,
+    "extractor:extract_direct": 2,
+    "extractor:view_region": 9,
+    "extractor:read_source_layout": 1,
+    "extractor:save_page_json": 2,
+    "reviewer:load_skill": 2,
+    "reviewer:view_page": 2,
+    "reviewer:view_region": 21,
+    "reviewer:save_source_observation": 2,
+    "reviewer:read_page_json": 4,
+    "reviewer:save_review": 2,
+    "extractor:read_review": 1,
+    "extractor:read_page_json": 1,
+    "reviewer:repeat_region": 3,
+    "reviewer:correct_source_observation": 1
+  },
+  "usage_notes": "Recorded completed provider responses only. Prompt total may include cached tokens; cache_read/write are not extra totals. Missing provider fields remain absent, never treated as zero. Reasoning is a completion subset. Raw native histories remain private.",
+  "retained_previous_failures": [
+    "1.5.0 framing mismatch and invented program identity",
+    "1.5.1 project/demo misclassification:54 crops/600.581s/no candidate",
+    "1.5.2 independently detected unsupported ВИМ; instruction truncation and helper snapshot activation loop"
+  ],
+  "outputs": {
+    "review.json": "a0f2f9acb9b61102cadef1b189c025ac6521f4c15a080a6647cc2a6bc6606135",
+    "small-page-004.json": "0b594615d78e35b6fe7834a11a968fb914d45bc9dbbd803892da47d4ee450de8"
+  }
+}

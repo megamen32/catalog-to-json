@@ -91,6 +91,68 @@
       "summary": "audit compares literal branding independently of block order and normalizes only whitespace runs inside cell strings; IDs/numeric boundaries remain exact. FairWorkQueue gives fresh repairs a fair lane and seeded random first passes. tools.server reviewer starts with10 core tools; enable_helpers advertises extra groups via native notification. Save coverage/source validation unchanged. tools.record_dimensions batches same per-relation checks.",
       "verified_at": "2026-10-14T01:07:26.172099+03:00"
     },
+    "native-review-contract-delivery": {
+      "confidence": "verified",
+      "evidence": [
+        "31 affected checks8.96s; native small4 MiniMax→blind GLM CodingEndpoint pass; independent final visual and code delta review no blocking findings; examples/semantic-review/v1.5.3/run.json"
+      ],
+      "git_head": "37aaaf6c0181d184cd88789aede361647f7e8f93",
+      "key": "native-review-contract-delivery",
+      "kind": "failure-shield",
+      "locations": [
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "a17929ec091c996e97739a445a008b84334c9b96535b27b421ae37307c65ec2a",
+          "path": "src/catalog_json/tools.py",
+          "symbol": "server"
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "a17929ec091c996e97739a445a008b84334c9b96535b27b421ae37307c65ec2a",
+          "path": "src/catalog_json/tools.py",
+          "symbol": "review_contract"
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "283adc9523e10fb23379e779cfe42da76db50c5f5b1d2d8464eff547c48e11c2",
+          "path": "src/catalog_json/schema.py",
+          "symbol": "PageContent"
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "17ea22162ae2eba694156b1a15f3351a4e71e318710e64a114f19a96aed7626a",
+          "path": "src/catalog_json/audit.py",
+          "symbol": "independent_software_demonstration"
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "6d7405fbe9429ef950a3a8b3038f711efc179d82bbf5557e4e2a2ba684262373",
+          "path": "skills/catalog-review/SKILL.md",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "915b0dd6b671bb97e0d005dff1c942d43e1c2116f53d0fc9edf0680e94b8abc8",
+          "path": "tests/test_page_context.py",
+          "symbol": ""
+        },
+        {
+          "exists_at_verification": true,
+          "observed_kind": "file",
+          "observed_sha256": "822af2ed64c9980815cc6e9d258393dfa30bf19326da1fa5f40d60af6c921916",
+          "path": "tests/test_tools.py",
+          "symbol": ""
+        }
+      ],
+      "summary": "FastAgent0.10.43 snapshots schemas for generate: MCP list_changed refreshes aggregator cache only. Expose20 reviewer core/helper tools initially; never rely on enable to expose schemas in the running generation. Full skill+contract must fit16k bytes: current12915 avoids native24371-byte payload truncation/lost8371 middle bytes. Typed source-observation example and before-cell pure-demo scope validation prevent irrelevant example-cell repair. Geometry exemption requires independently agreed exclusive software-demo scopes; mixed/real figures remain strict. Native installed1.5.3 small4 pass after one repair563.26s, no enable loops; real semantic defects ВЛ→ВИМ and voltage-category adverb retained in benchmark, no global accuracy claim.",
+      "verified_at": "2026-10-14T03:21:46.152424+03:00"
+    },
     "review-conflicts-fair-admission-dimension-evidence": {
       "confidence": "verified",
       "evidence": [
