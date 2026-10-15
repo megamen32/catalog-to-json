@@ -461,6 +461,8 @@ def test_keep_ours_still_exports_the_rejected_oleg_decision(env):
     page = result['catalogs'][0]['pages'][0]
     assert page['owner_merge_decisions'] == receipt
     assert digest(page['owner_merge_decisions']) == receipt['work_sha256']
+    assert page['owner_typed_facts_pointer'] == '/owner_typed_facts/small-0007.json/facts'
+    assert result['owner_typed_facts']['small-0007.json']['facts'][0]['value'] == '999'
     from openpyxl import load_workbook
     book = load_workbook(env / 'out/small.xlsx', read_only=True)
     rows = list(book['Решения сведения'].iter_rows(values_only=True))

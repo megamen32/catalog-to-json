@@ -523,6 +523,7 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
         # Keep the exact validated decisions, including rejected Oleg differences
         # that leave the baseline cells unchanged. Indices address owner_typed_facts.
         page['owner_merge_decisions'] = copy.deepcopy(receipt)
+        page['owner_typed_facts_pointer'] = f'/owner_typed_facts/{path}/facts'
         page['merged_primary'] = {
             'owner': record['owner'],
             'packet_sha256': record['packet_sha256'],
@@ -735,7 +736,9 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
                              'типизированные значения.\n'
                              'owner_merge_decisions на каждой сведённой странице сохраняет точный receipt: '
                              'все решения, причины, source evidence, модель, сессию и SHA. Индексы фактов '
-                             'относятся к owner_typed_facts той же страницы. Лист Excel «Решения сведения» '
+                             'относятся к массиву facts в верхнем owner_typed_facts[ключ страницы]; '
+                             'owner_typed_facts_pointer на странице указывает на этот массив. '
+                             'Лист Excel «Решения сведения» '
                              'содержит причины и JSON-указатели, включая отклонённые варианты Олега.\n'),
         }
         for nm, value in reports.items():
