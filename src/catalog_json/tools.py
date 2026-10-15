@@ -143,7 +143,13 @@ class CatalogTools:
             p=doc[page-1]
             clip=None if box is None else pymupdf.Rect(box[0]*p.rect.width,box[1]*p.rect.height,box[2]*p.rect.width,box[3]*p.rect.height)
             # Images remain bounded even with malformed or very large PDF media boxes.
-            rect=clip or p.rect;scale=min(6 if box else 2.5,2400/max(rect.width,rect.height))
+            rect=clip or p.rect
+            longest=max(rect.width,rect.height)
+            # A fixed6x matrix makes a narrow label crop smaller than a page
+            # thumbnail. Render vector detail at a readable size, bounded by
+            # the existing2400px image ceiling and a finite96x PDF matrix.
+            scale=(min(96,max(6,960/longest),2400/longest) if box
+                   else min(2.5,2400/longest))
             pix=p.get_pixmap(matrix=pymupdf.Matrix(scale,scale).prerotate(rotation),clip=clip)
             data=pix.tobytes('png')
         name='source.png' if box is None else 'region-'+hashlib.sha256(json.dumps([box,rotation]).encode()).hexdigest()[:12]+'.png'

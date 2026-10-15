@@ -52,3 +52,18 @@ def test_real_tool_registry_exposes_evidence_without_verdict_writers(context):
     assert {'view_page', 'view_region', 'inspect_layout', 'read_source_table',
             'read_source_layout', 'read_source_artifact', 'inspect_drawing_geometry',
             'read_drawing_paths', 'trace_dimension_candidates', 'extract_direct', 'list_catalogs'} == names
+
+
+def test_fine_region_is_a_readable_zoom(context):
+    """Focused integration: narrow labels must enlarge, not remain a tiny crop.
+
+    Detected on armature46: repeated 116px crops could not distinguish6/8.
+    Expected2s, emergency20s; no model/provider calls.
+    """
+    import struct
+    tools, digest, _ = context
+    image = tools.run(digest, 1, lambda c: c.region(1, [.12, .15, .18, .21]))
+    width, height = struct.unpack('>II', image.data[16:24])
+    assert 900 <= max(width, height) <= 2402
+    rotated = tools.run(digest, 1, lambda c: c.region(1, [.12, .15, .18, .21], 90))
+    assert rotated.data.startswith(b'\x89PNG')

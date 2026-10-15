@@ -120,7 +120,9 @@ def run_batch(manifest,sources,output,provider_config,task_root,*,max_pages=None
         runtime.mkdir(parents=True)
         identity={'role':'minimax','session_id':'page-owner-'+str(uuid.uuid4()),'model':MODELS['minimax'],
             'runtime':'FastAgent0.10.43:'+sys.executable,'phase':'disjoint-owner-final-audit-pending',
-            'program_version':'1.5.25',
+            'program_version':'1.5.26',
+            'source_tools_sha256':hashlib.sha256(Path(__file__).parents[1].joinpath('tools.py').read_bytes()).hexdigest(),
+            'operator_tools_sha256':hashlib.sha256(Path(__file__).parents[1].joinpath('operator_tools.py').read_bytes()).hexdigest(),
             'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=Path(__file__).resolve().parents[3],text=True).strip(),
             'contract_sha256':hashlib.sha256(b''.join(Path(__file__).with_name(n).read_bytes()
                 for n in ('page_owner.py','page_work_tools.py','page_work.py','consensus.py','voter.py'))).hexdigest()}

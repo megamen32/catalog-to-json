@@ -56,3 +56,21 @@ Fresh2026-10-14T22:23Z measurements:34,373,308,416bytes available RAM,
 This leaves the20GiB host reserve; no cgroup limits or sibling workers are
 changed. The additional disk allowance covers full980-page packets and owner
 work, not a new benchmark. Admission stops before4GiB or on UNKNOWN/429.
+
+
+## Fine-label zoom,1.5.26
+
+A narrow crop previously retained a fixed6x PDF matrix: a real armature46
+label request produced only116x81pixels. The live owner repeatedly inspected
+the same ambiguous6/8 label. Region rendering now aims for960pixels on its
+long side, retaining the2400pixel image ceiling and a finite96x PDF matrix;
+full-page rendering is unchanged. The same original request now returns
+960x674pixels. This increases readable presentation, not source resolution:
+blurred raster labels may remain unresolved and must never be guessed.
+
+Focused integration plus page-work validation:15 checks passed in1.50s,
+expected10s/emergency100s, no provider calls. The real original46 crop was
+rendered and visually inspected; raw transcripts remain private. New owner
+identities additionally pin source-tools and operator-tools SHA256. A live
+page retains its original1.5.25 producer; new admissions use1.5.26 only after
+the controlled handover. Existing results and UNKNOWN calls are never replayed.
