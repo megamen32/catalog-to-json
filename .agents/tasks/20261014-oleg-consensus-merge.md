@@ -424,3 +424,55 @@ anthropicendpoint, без истории/скиллов/инструментов
 Это проверка понятности, не новая оценка точности каталогов. Сырые транскрипты
 не публиковались; компактный receipt: examples/catalogs/canonical-merged-2026-10-15/
 source-conflicts-readable-report.json. Никому из компании не отправлено.
+
+## Уточнение владельца: закрыть всё проверяемое по оригиналам, 15.10.2026
+
+Снять устаревшие пометки из текущего unresolved, исправить подтверждённые ошибки
+сведения, не спрашивать Олега о том, что видно в PDF. Старые42 wrapper остаются
+неизменными в исторической выдаче и отдельном журнале закрытий; текущий список
+только действительные открытые вопросы. Два независимых source-review:
+close_armature_sources владеет только .tmp/source-closure-20261015/armature*,
+close_other_sources только other*. Root владеет кодом применения точных review,
+интеграцией, экспортом и публикацией. Все5/980, реальный producer/version/page,
+source_conflict22 без угадывания, чужие WIP/page117 сохраняются.
+План: визуальные source-review -> sealed before/after amendments с историей ->
+минимальные failure shields -> независимая критика -> JSON/Excel/export/readback ->
+версионная выдача на Яндекс.Диск с публичным скачиванием. Без новых больших
+бенчмарков и API-модельных вызовов. Бюджет .tmp/source-closure-20261015/budget.json:
+общие6GiB/2CPU/swap0, source-review до1.5GiB каждый, один export до3GiB, новый
+temp<=1GiB, measured host available30045MiB, reserve20480MiB. Export после
+освобождения source-review Python, один тяжёлый процесс. Сроки аварийного
+ограничения1200с export и600с readback, ожидаемые120с/60с.
+
+## Закрытие старых пометок по оригиналам: доставлено 15.10.2026
+
+Новая выдача: https://yadi.sk/d/X3TxfJJaUrTUqg . Все5каталогов/980страниц,
+109318записей в одномJSON и точно совпадающемExcel. История отдельно:
+https://yadi.sk/d/DLnYBKCWCHYqcA . Старые ссылки/архивы не перезаписывались,
+чужиеWIP/page117 не изменены. Никаких новых отправок Олегу или компании.
+
+Все42старые wrapper-пометки закрыты после source-review16PDFстраниц; точные
+исходные42 и before/after сохранены в отдельномledger. Это НЕзначит отсутствие
+неопределённости: неизменны22source_conflict поля из10групп прежнихPDF; SCT6-14
+остаётся одиннадцатойгруппой, диаметр и нагрузкаunknown, printed6,0–14,0сохранён
+отдельно. Итого24открытых инженерныхполя,0старыхwrapper,0unreadable.
+
+24измененияrecord:18восстановлений/добавлений,3исправления,3удаленияложных
+записей. Восстановлены3figure, designation3ПГН-5-1, Ø46/47/60/1211 и6адресных
+ячеек. Ошибка1121отклоненапооригиналу1211; три«толщинаизоляции5» заменены
+корректнымиразмерамиперемычки; missingпозиция5иCLзаметки удалены.
+После независимой критики исправлена оставшаясяпривязкаL3вfigure108.
+
+Сборщикcanonical-source-review1.1.0, исходный07a3535; tag
+canonical-source-review-v1.1.0. Историческиепроизводители сохранены, новые
+source-observationsимеютреальныхCodexreviewers иссылкинапредыдущихproducer.
+Применениеправок требуетexactbase/beforehash/sourcepage; readbackпроверяет
+целыйrecordsethash/count, exact42closurepartition иJSON/XLSX/ZIP. Найденный
+critiqueHIGH(незаявленноеудалениевнеtableIDs) исправлен ивоспроизведёнкакRED.
+28focusedtests1.33s;35независимыхпроверокданных; finalorderdeltaне меняет
+id→record; экспорт70.872с/readback41.713с/peak429192KiB,0ошибок.
+Оба публичныхZIPскачаны, SHA/CRCсовпали; finalZIPтолькоJSON/XLSX/README/manifest.
+В benchmark5a73720зарегистрировано16pendingстраниц сточнымистарымиартефактами,
+реальнымиproducer/sourceSHA/page; API0, frozen500/520иaccuracyпроценты неизменны.
+Публичный компактныйreceipt/ledger/readback итекущие11вопросов:
+examples/catalogs/source-reviewed-2026-10-15/.

@@ -68,3 +68,22 @@ artifacts. Independent verifier reopens all outputs and proves types, identities
 980-page coverage, selected whole-table fields, unchanged42 and concrete bug
 cases. Publish owned source, then run one final build/readback and deliver clean
 artifact. User-facing completion is the actual files, not a code/test report.
+
+## Уточнение владельца: закрыть всё проверяемое по оригиналам, 15.10.2026
+
+Снять устаревшие пометки из текущего unresolved, исправить подтверждённые ошибки
+сведения, не спрашивать Олега о том, что видно в PDF. Старые42 wrapper остаются
+неизменными в исторической выдаче и отдельном журнале закрытий; текущий список
+только действительные открытые вопросы. Два независимых source-review:
+close_armature_sources владеет только .tmp/source-closure-20261015/armature*,
+close_other_sources только other*. Root владеет кодом применения точных review,
+интеграцией, экспортом и публикацией. Все5/980, реальный producer/version/page,
+source_conflict22 без угадывания, чужие WIP/page117 сохраняются.
+План: визуальные source-review -> sealed before/after amendments с историей ->
+минимальные failure shields -> независимая критика -> JSON/Excel/export/readback ->
+версионная выдача на Яндекс.Диск с публичным скачиванием. Без новых больших
+бенчмарков и API-модельных вызовов. Бюджет .tmp/source-closure-20261015/budget.json:
+общие6GiB/2CPU/swap0, source-review до1.5GiB каждый, один export до3GiB, новый
+temp<=1GiB, measured host available30045MiB, reserve20480MiB. Export после
+освобождения source-review Python, один тяжёлый процесс. Сроки аварийного
+ограничения1200с export и600с readback, ожидаемые120с/60с.

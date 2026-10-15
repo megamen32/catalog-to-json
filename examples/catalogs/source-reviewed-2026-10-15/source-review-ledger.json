@@ -1,0 +1,3329 @@
+{
+  "schema": "canonical-source-review-ledger/1",
+  "input_sha256": "c1f6f703e14801ba545283369d484255966d438d74c835b477f1709f40fe35ba",
+  "review_pack_sha256": "e5c33a7b95d0d24f083f41f6d39616bef994d6f78c3a75b9622506e0e63907e5",
+  "original_unresolved": [
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-ffc8d1e85cddb0cffdc0f6bd",
+        "kind": "model_parameter",
+        "name": "Диаметр",
+        "owner": "У2-7-16",
+        "pointer": "characteristics.jsonl:1115/raw",
+        "provenance": {
+          "input_fact_sha256": "4cac6d610ab7b1b07320518a9d3b9cd73711067ec53e0489eb374aae46aebf83",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "bb4254784cab7139914658518ee62d4abe852675961bb0b7ff1b4de7b7dae097"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "Ø14",
+        "value_state": null
+      },
+      "physical_page": 25
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-deedc7bb16a0312d4d19aa3a",
+        "kind": "model_parameter",
+        "name": "Диаметр",
+        "owner": "У2-12-16",
+        "pointer": "characteristics.jsonl:1128/raw",
+        "provenance": {
+          "input_fact_sha256": "5743031339fe01ff0ff7b9ee0c6db23157d0098107aabd3f1ec68254fd3042e0",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "bb4254784cab7139914658518ee62d4abe852675961bb0b7ff1b4de7b7dae097"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "Ø14",
+        "value_state": null
+      },
+      "physical_page": 25
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-39ea513b508b426cf321b225",
+        "kind": "model_parameter",
+        "name": "Ø48",
+        "owner": "СК-120-1Б",
+        "pointer": "characteristics.jsonl:5324/raw",
+        "provenance": {
+          "input_fact_sha256": "53b0d2b60699b8ae35aa49df5954a1703a42900b746eef52624d0936de585fef",
+          "kept": "unresolved",
+          "selected_by_role": "codex",
+          "work_sha256": "520ad818cf43badbdf2448901cea8d136afddbd79e99225a5842f83905322176"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "Ø48",
+        "value_state": null
+      },
+      "physical_page": 46
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "O-bbf05f61f031480719f26687",
+        "kind": "figure",
+        "name": "",
+        "owner": "",
+        "pointer": "/catalogs/4/pages/45/content/figures/1",
+        "provenance": {
+          "input_fact_sha256": "4c6fd0a79d92c6cf548f32a62d13fb769a06dc8cab242dc4145bd46ee956c8d6",
+          "kept": "unresolved",
+          "selected_by_role": "codex",
+          "work_sha256": "520ad818cf43badbdf2448901cea8d136afddbd79e99225a5842f83905322176"
+        },
+        "side": "ours",
+        "source_unresolved": true,
+        "unit": "",
+        "value": {
+          "description": "Две проекции скобы СК-120-1Б: Ø18 — диаметр стержня изогнутой скобы, показанного ребром; Ø46 — наружный диаметр нижней проушины в этой проекции. 111 — полный наружный вертикальный габарит. В развёрнутом виде Ø22 — диаметр поперечного соединительного пальца, 23 — внутренний просвет между лапками; 94 — полный поперечный габарит с крепежом. 70 — от внутренней верхней границы изгиба до оси нижнего соединительного пальца, а не от наружной вершины и не высота лап над осью.",
+          "labels": [
+            "РИС. 2",
+            "111",
+            "Ø18",
+            "Ø46",
+            "70",
+            "Ø22",
+            "23",
+            "94"
+          ],
+          "title": "РИС. 2 — Скоба типа СК-120-1Б"
+        },
+        "value_state": null
+      },
+      "physical_page": 46
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-2206c2aac86c9f2f6054d401",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-150/19",
+        "pointer": "characteristics.jsonl:9925/raw",
+        "provenance": {
+          "input_fact_sha256": "1ad9bffe08320990c24c202fc665d37304bef0881bac18cf83ec0b84bec5aef7",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-150/19",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-e9a6308468c78d08d7274bad",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-150/24",
+        "pointer": "characteristics.jsonl:9929/raw",
+        "provenance": {
+          "input_fact_sha256": "0c794fa46661ee7dd7494293dfc018e31758bc9aa91d64a559a2db0472d93c0d",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-150/24",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-2623f62497b52c60a45c207b",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-150/34",
+        "pointer": "characteristics.jsonl:9933/raw",
+        "provenance": {
+          "input_fact_sha256": "7461c19b74576e77727bd989b79de31ae8cec37df73b5e80f9116384567a4a71",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-150/34",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-bb6476b1918694ca40a85627",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-185/24",
+        "pointer": "characteristics.jsonl:9937/raw",
+        "provenance": {
+          "input_fact_sha256": "c9aaf1ea5ac95d168a26312147c2388c6020a75ad02685c4235c2671a1634a1b",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-185/24",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-7602cf63a08869f3f4e8d195",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-185/29",
+        "pointer": "characteristics.jsonl:9941/raw",
+        "provenance": {
+          "input_fact_sha256": "4870dc5785a32e575a643c7856b633c9bfea0536f423e937c55c84cf5a771e6f",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-185/29",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-4ecdd7a454605dfc752cb476",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-185/43",
+        "pointer": "characteristics.jsonl:9945/raw",
+        "provenance": {
+          "input_fact_sha256": "9319213c9785622fdf4d19e1392057814cb722be9e31d8ad8728612b63fd7049",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-185/43",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-f7e09a0946d548692f84dc61",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-240/32",
+        "pointer": "characteristics.jsonl:9949/raw",
+        "provenance": {
+          "input_fact_sha256": "f7d9be14229a82ab98b982996e53dfd02bc9095f2f6d31022cda3b282b7585f4",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-240/32",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-5adf3bc6dcda74212c88f0c7",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-240/39",
+        "pointer": "characteristics.jsonl:9953/raw",
+        "provenance": {
+          "input_fact_sha256": "2636f770c92e611f91eafafd87604ed3acb2ed93a4ef35c6284d3cd840da7abc",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-240/39",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-14cfc17fc653201ba456330f",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-240/56",
+        "pointer": "characteristics.jsonl:9958/raw",
+        "provenance": {
+          "input_fact_sha256": "2bf4e2d432e64081cfaec6411ab25e5cef8f88970c423f883530ae3883024b31",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-240/56",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-cf3790871816fbe7f39c5e35",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-300/39",
+        "pointer": "characteristics.jsonl:9963/raw",
+        "provenance": {
+          "input_fact_sha256": "fd04c270c46e551a399b694a88f0aee9e46eb9b7e5c95ef273b4bdfa1f02cfed",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-300/39",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-d6b3baf13dd0142875d32436",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-300/66",
+        "pointer": "characteristics.jsonl:9967/raw",
+        "provenance": {
+          "input_fact_sha256": "fcaf4db9ab787fdcc7ec67135e9a159d4f6797700bf24d70a80129c38f75d38f",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-300/66",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-70ddadfa8328f848a7679d22",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-330/43",
+        "pointer": "characteristics.jsonl:9971/raw",
+        "provenance": {
+          "input_fact_sha256": "e9c709bcc357ceac0e7a0ae6e776aee83a0813dd708dcb15c26b8a709158ebb0",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-330/43",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-4ffd13c52e9669f6a6609df3",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-400/51",
+        "pointer": "characteristics.jsonl:9975/raw",
+        "provenance": {
+          "input_fact_sha256": "bd1c87ed94898428f16c3394c213605b411b9792a963512eb2d213fd3a90efef",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-400/51",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-df1d9ca9b1779f924c6fe81f",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-400/93",
+        "pointer": "characteristics.jsonl:9979/raw",
+        "provenance": {
+          "input_fact_sha256": "75bf0f5a85ade1eb14489090ee2f30255a1a752eaad5230df99ad81b95f818ce",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-400/93",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-dd6f3915a9de43ef196e06d2",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "ПГН-5-3КП-500/64",
+        "pointer": "characteristics.jsonl:9983/raw",
+        "provenance": {
+          "input_fact_sha256": "b41381adc87471fe08e277582cf1b68e970256b5165d87dd73d5a871287a002d",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "fa27ab2443da0437f2205320a189ae8c4f561b0742fd33fd4e4c927d7d135a15"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "ПГН-5-3КП-500/64",
+        "value_state": null
+      },
+      "physical_page": 64
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-de58d6f91d7b4eeda7dc579d",
+        "kind": "model_designation",
+        "name": "designation",
+        "owner": "3ПГН-5-1",
+        "pointer": "products.jsonl:1674/raw/designation",
+        "provenance": {
+          "input_fact_sha256": "c34e1dee507a6bcd7155cbb330246de08bebdd2c310ccfa45b05848e906bd9c8",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "7d228453847261d1cb4f46953b36a5762c8c3d7a733fcd464a87c0100c83e1fb"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "3ПГН-5-1",
+        "value_state": null
+      },
+      "physical_page": 72
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-c501662063258d0ca36633f3",
+        "kind": "model_parameter",
+        "name": "",
+        "owner": "4ПГН-5-2А",
+        "pointer": "characteristics.jsonl:12397/raw",
+        "provenance": {
+          "input_fact_sha256": "ad43e334639c4b059e2a1e852a5e15dc8f580d71659664cb76dbda9716294ff0",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "02dd8ae27a0ae04ac10931b2c54c08e2a6fc7d8d609815f7acb0911fe3ed523b"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "47",
+        "value_state": null
+      },
+      "physical_page": 76
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-357543baed284382597f0ad6",
+        "kind": "model_parameter",
+        "name": "",
+        "owner": "4ПГН-5-2А",
+        "pointer": "characteristics.jsonl:12398/raw",
+        "provenance": {
+          "input_fact_sha256": "f906ac793831030152a433e8e85dc3548da79bb88d03c6582c993b358c23f167",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "02dd8ae27a0ae04ac10931b2c54c08e2a6fc7d8d609815f7acb0911fe3ed523b"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "60",
+        "value_state": null
+      },
+      "physical_page": 76
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-8ad9c9c8a38844e8d7d81ddb",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "4ПГН2-5-2А",
+        "pointer": "characteristics.jsonl:12406/raw",
+        "provenance": {
+          "input_fact_sha256": "ea85abb12370779037da848453c2ddca61a2ed2ec4998032dad9e600eaa16010",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "02dd8ae27a0ae04ac10931b2c54c08e2a6fc7d8d609815f7acb0911fe3ed523b"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "4ПГН2-5-2А",
+        "value_state": null
+      },
+      "physical_page": 76
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-c1ba46ffb310614a5a2691c7",
+        "kind": "model_parameter",
+        "name": "Наименование",
+        "owner": "4ПГН2-8-2",
+        "pointer": "characteristics.jsonl:12419/raw",
+        "provenance": {
+          "input_fact_sha256": "ac8012478c62f722e64b2bd430436c6f01cfe8706371441f7beb9a60f2373ef1",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "02dd8ae27a0ae04ac10931b2c54c08e2a6fc7d8d609815f7acb0911fe3ed523b"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "4ПГН2-8-2",
+        "value_state": null
+      },
+      "physical_page": 76
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "не более",
+        "fact_id": "L-f7ff9d23a3c96eb2e7dd6fd4",
+        "kind": "model_parameter",
+        "name": "Масса, кг, не более",
+        "owner": "4ПГН2-5-2А",
+        "pointer": "characteristics.jsonl:12408/raw",
+        "provenance": {
+          "input_fact_sha256": "1b1cfd4b814ad31731180ef322e28bf48cbe64a74ad613ff2d1f3a0265b6e57a",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "02dd8ae27a0ae04ac10931b2c54c08e2a6fc7d8d609815f7acb0911fe3ed523b"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "кг",
+        "value": "63,0",
+        "value_state": null
+      },
+      "physical_page": 76
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "не менее",
+        "fact_id": "L-c15104a9e4ea178f42cb9eeb",
+        "kind": "model_parameter",
+        "name": "Разрушающая нагрузка, кН, не менее",
+        "owner": "4ПГН2-5-2А",
+        "pointer": "characteristics.jsonl:12409/raw",
+        "provenance": {
+          "input_fact_sha256": "b13f9f8742f8a8753a3cd49e672092d161246639eb08be026857199868f105e0",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "02dd8ae27a0ae04ac10931b2c54c08e2a6fc7d8d609815f7acb0911fe3ed523b"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "кН",
+        "value": "300",
+        "value_state": null
+      },
+      "physical_page": 76
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-93b973b6eceb146eac9aa069",
+        "kind": "model_parameter",
+        "name": "1121",
+        "owner": "3П6Р-30-1",
+        "pointer": "characteristics.jsonl:14783/raw",
+        "provenance": {
+          "input_fact_sha256": "87b0e8c06a5176aec9e6d55aedf6665050b2e0c8247a1fce88d835b49add9021",
+          "kept": "unresolved",
+          "selected_by_role": "minimax",
+          "work_sha256": "ae754d0eaff9814ed0f412171312d246eb482ea61e872fab8655ca325ab70c0e"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "1121",
+        "value_state": null
+      },
+      "physical_page": 87
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": null,
+        "fact_id": "O-1c3510fe659c5a218bf1f646",
+        "kind": "model_designation",
+        "name": "designation",
+        "owner": "457040, г. Южноуральск",
+        "pointer": "/catalogs/4/pages/313/content/tables/0/rows/0/cells/0",
+        "provenance": {
+          "input_fact_sha256": "55c7956462317fe579939021269dcb956870548ac7cde1ecf0f6995fa7cde658",
+          "kept": "unresolved",
+          "selected_by_role": "codex",
+          "work_sha256": "88bd3b9a2c2fee7c54b766b4e849f88083efb2b3d400f839fb409a87192659f8"
+        },
+        "side": "ours",
+        "source_unresolved": true,
+        "unit": null,
+        "value": "457040, г. Южноуральск",
+        "value_state": null
+      },
+      "physical_page": 314
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": null,
+        "fact_id": "O-dcfe2e9009f5f2d6aaad1007",
+        "kind": "model_parameter",
+        "name": "ООО «ФОРЭНЕРГО-ЮИК»",
+        "owner": "457040, г. Южноуральск",
+        "pointer": "/catalogs/4/pages/313/content/tables/0/rows/0/cells/1",
+        "provenance": {
+          "input_fact_sha256": "4b1218cf915cebe8b777c9e8fabaca767c33a1dfc5daffcf07d637d76d3aa994",
+          "kept": "unresolved",
+          "selected_by_role": "codex",
+          "work_sha256": "88bd3b9a2c2fee7c54b766b4e849f88083efb2b3d400f839fb409a87192659f8"
+        },
+        "side": "ours",
+        "source_unresolved": true,
+        "unit": null,
+        "value": "457040, г. Южноуральск",
+        "value_state": null
+      },
+      "physical_page": 314
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": null,
+        "fact_id": "O-903509077180cdc769496128",
+        "kind": "model_parameter",
+        "name": "ООО «ФОРЭНЕРГО-ТРЕЙД»",
+        "owner": "457040, г. Южноуральск",
+        "pointer": "/catalogs/4/pages/313/content/tables/0/rows/0/cells/2",
+        "provenance": {
+          "input_fact_sha256": "b39b2a9897dabd3f82614e380882a11380ab4559a4f06e361e4b651886ce7848",
+          "kept": "unresolved",
+          "selected_by_role": "codex",
+          "work_sha256": "88bd3b9a2c2fee7c54b766b4e849f88083efb2b3d400f839fb409a87192659f8"
+        },
+        "side": "ours",
+        "source_unresolved": true,
+        "unit": null,
+        "value": "111398, г. Москва",
+        "value_state": null
+      },
+      "physical_page": 314
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": null,
+        "fact_id": "O-760e6e041ed816fa8e291ffb",
+        "kind": "model_designation",
+        "name": "designation",
+        "owner": "ул. Заводская д. 3",
+        "pointer": "/catalogs/4/pages/313/content/tables/0/rows/1/cells/0",
+        "provenance": {
+          "input_fact_sha256": "42c46f08a4ded6dbddcb80cb54e2e2b3bd9c6fd646fa75610f2ff8b38d1d53a7",
+          "kept": "unresolved",
+          "selected_by_role": "codex",
+          "work_sha256": "88bd3b9a2c2fee7c54b766b4e849f88083efb2b3d400f839fb409a87192659f8"
+        },
+        "side": "ours",
+        "source_unresolved": true,
+        "unit": null,
+        "value": "ул. Заводская д. 3",
+        "value_state": null
+      },
+      "physical_page": 314
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": null,
+        "fact_id": "O-16cbb361a9892674632cbf29",
+        "kind": "model_parameter",
+        "name": "ООО «ФОРЭНЕРГО-ЮИК»",
+        "owner": "ул. Заводская д. 3",
+        "pointer": "/catalogs/4/pages/313/content/tables/0/rows/1/cells/1",
+        "provenance": {
+          "input_fact_sha256": "4be5e1909a7d7b9f2e626ea2eeaed9134ac06e58446c3575135c005d55bff075",
+          "kept": "unresolved",
+          "selected_by_role": "codex",
+          "work_sha256": "88bd3b9a2c2fee7c54b766b4e849f88083efb2b3d400f839fb409a87192659f8"
+        },
+        "side": "ours",
+        "source_unresolved": true,
+        "unit": null,
+        "value": "ул. Заводская д. 3",
+        "value_state": null
+      },
+      "physical_page": 314
+    },
+    {
+      "catalog": "armature",
+      "fact": {
+        "condition": null,
+        "fact_id": "O-1745b69f7fdda5800bcb3142",
+        "kind": "model_parameter",
+        "name": "ООО «ФОРЭНЕРГО-ТРЕЙД»",
+        "owner": "ул. Заводская д. 3",
+        "pointer": "/catalogs/4/pages/313/content/tables/0/rows/1/cells/2",
+        "provenance": {
+          "input_fact_sha256": "323310751102b99d525f77a8180103a07e95a977cff5de3606f3d671f9222640",
+          "kept": "unresolved",
+          "selected_by_role": "codex",
+          "work_sha256": "88bd3b9a2c2fee7c54b766b4e849f88083efb2b3d400f839fb409a87192659f8"
+        },
+        "side": "ours",
+        "source_unresolved": true,
+        "unit": null,
+        "value": "ул. Лазо, д. 9",
+        "value_state": null
+      },
+      "physical_page": 314
+    },
+    {
+      "catalog": "innovations",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-3ed85a5fec598c053a179337",
+        "kind": "group_parameter",
+        "name": "Толщина изоляции",
+        "owner": "",
+        "pointer": "group_characteristics.jsonl:3203/raw",
+        "provenance": {
+          "input_fact_sha256": "b1e98575ef31f517086bd673a9b9b695d4e09c33a7fb08ab521a7ccd7e47e627",
+          "kept": "unresolved",
+          "selected_by_role": "zcode",
+          "work_sha256": "8b41c92c54b11a0e87ea845f8c19830b81a9b85d5141eb9be3b1d870f2a9700c"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "5",
+        "value_state": null
+      },
+      "physical_page": 107
+    },
+    {
+      "catalog": "innovations",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-ffe9f94d8fb46398ea7b7529",
+        "kind": "group_parameter",
+        "name": "Толщина изоляции",
+        "owner": "",
+        "pointer": "group_characteristics.jsonl:3211/raw",
+        "provenance": {
+          "input_fact_sha256": "06d6f5818d8f9b2d4d51c7f0f09010033cf3e93628bf303b458c3eae0722b143",
+          "kept": "unresolved",
+          "selected_by_role": "zcode",
+          "work_sha256": "0b6b559099aec9066cf02a5143d0f51c747d54bb9ea53d308d4c913f5de7248d"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "5",
+        "value_state": null
+      },
+      "physical_page": 108
+    },
+    {
+      "catalog": "innovations",
+      "fact": {
+        "condition": "",
+        "fact_id": "L-cb5f43e0ea844d2799a0df76",
+        "kind": "group_parameter",
+        "name": "Толщина изоляции",
+        "owner": "",
+        "pointer": "group_characteristics.jsonl:3222/raw",
+        "provenance": {
+          "input_fact_sha256": "51cbdce6cbe973aa70d4791c0d9dde8958de383db9f6c0a45b902fd72d69d421",
+          "kept": "unresolved",
+          "selected_by_role": "zcode",
+          "work_sha256": "84df062d3e9d57bee973594038c9cb8aea974241a998f920fe6e137f58aa52cc"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "5",
+        "value_state": null
+      },
+      "physical_page": 110
+    },
+    {
+      "catalog": "innovations",
+      "fact": {
+        "condition": "Сечение, мм²: 300/48",
+        "fact_id": "L-96f3818272044be96382de51",
+        "kind": "model_parameter",
+        "name": "Наименование зажима, с которым применяется шлейф",
+        "owner": "ШСИП-220-(24-25,5)-2-L",
+        "pointer": "characteristics.jsonl:31450/raw",
+        "provenance": {
+          "input_fact_sha256": "cad5a44c77c37d6d54597753882c0ecb99e1b2a8fd19167b28430cf9ae603dfc",
+          "kept": "unresolved",
+          "selected_by_role": "zcode",
+          "work_sha256": "5dd92d5fd8818245a5da731bb1c1511ef79b2fca992e69a4627ea07cb9d78a14"
+        },
+        "side": "oleg",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "",
+        "value_state": null
+      },
+      "physical_page": 126
+    },
+    {
+      "catalog": "isolators",
+      "fact": {
+        "condition": "",
+        "fact_id": "O-f5393c2f2ac6ba62e4f855c6",
+        "kind": "source_note",
+        "name": "source_note",
+        "owner": "",
+        "pointer": "/catalogs/1/pages/42/content/source_notes/2",
+        "provenance": {
+          "input_fact_sha256": "8aa7359850195b68276868437838d7bd6ec92bca148f24521e36b1fc796217a2",
+          "kept": "unresolved",
+          "selected_by_role": "codex",
+          "work_sha256": "0c23b5b08e6b86822b800a118a2445c81bb7c22561322336db452099339f437f"
+        },
+        "side": "ours",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "В шапке таблицы «30 мкCм» содержит латинскую заглавную C (U+0043), в то время как в текстовом абзаце блока условных обозначений тот же параметр набран как «30 мкСм» (кириллическая С). Различие букв сохранено как в источнике.",
+        "value_state": null
+      },
+      "physical_page": 43
+    },
+    {
+      "catalog": "isolators",
+      "fact": {
+        "condition": "",
+        "fact_id": "O-5673a4e346040cbae11277f2",
+        "kind": "figure",
+        "name": "",
+        "owner": "",
+        "pointer": "/catalogs/1/pages/43/content/figures/0",
+        "provenance": {
+          "input_fact_sha256": "dde1e464f75e8c5af94aba0fbcfa65e3f96e82b947d1635ea7192f6a93ba32ad",
+          "kept": "unresolved",
+          "selected_by_role": "codex",
+          "work_sha256": "c98c34f9208796c7a2f3a5599f122e141afb725061f7c7eb2663c5abca366642"
+        },
+        "side": "ours",
+        "source_unresolved": true,
+        "unit": "",
+        "value": {
+          "description": "Чертеж изолирующей полимерной консольной траверсы с тягой на 110 кВ, два вида: верхний — положение траверсы под наклоном, нижний — горизонтальное положение; угол между видами 31°, уклон нижнего вида 5°. Слева показаны металлические опорные кронштейны (консоли) на стойке, справа — узел шарнирного крепления тяги. Вертикальный размер 1000 с подписью «Ось ствола опоры». Изолятор показан с полимерным покрытием (ребра) на стержне. Размеры на верхнем виде: 1775, 1215, Ø120, 1265; на нижнем виде: Ø170, 1360; общая установочная длина 1865±5; Ø23 и Ø33,3 — крепление тяги.",
+          "labels": [
+            "ТФТ 110-G90Т12,5R60C60-4Ж 420",
+            "Ось ствола опоры",
+            "1000",
+            "1775",
+            "1215",
+            "Ø120",
+            "1265",
+            "31°",
+            "Ø170",
+            "5°",
+            "1360",
+            "1865±5",
+            "Ø23",
+            "Ø33,3"
+          ],
+          "title": "ТФТ 110-G90Т12,5R60C60-4Ж 420"
+        },
+        "value_state": null
+      },
+      "physical_page": 44
+    },
+    {
+      "catalog": "isolators",
+      "fact": {
+        "condition": "",
+        "fact_id": "O-a686f9414fda7b601365cc75",
+        "kind": "figure",
+        "name": "",
+        "owner": "",
+        "pointer": "/catalogs/1/pages/43/content/figures/1",
+        "provenance": {
+          "input_fact_sha256": "7aa4130dc64684ffbc6c454261ac1d0963e71071cc90695bcbb03faddb6fbc49",
+          "kept": "unresolved",
+          "selected_by_role": "codex",
+          "work_sha256": "c98c34f9208796c7a2f3a5599f122e141afb725061f7c7eb2663c5abca366642"
+        },
+        "side": "ours",
+        "source_unresolved": true,
+        "unit": "",
+        "value": {
+          "description": "Чертеж изолирующей полимерной консольной траверсы с тягой увеличенной строительной длины на 110 кВ, два вида: верхний — положение траверсы под наклоном, нижний — горизонтальное положение; угол между видами 40°, уклон нижнего вида 5°. Видна тяга увеличенной длины с телескопическими звеньями и шарнирами; опорные консоли стойки справа. Вертикальный размер 2000 с подписью «Ось ствола опоры». Размеры на верхнем виде: 2970±5, 1190, Ø120, 1265; на нижнем виде: Ø170, 1360, 1600; общая установочная длина 2730±5; Ø23 и Ø33,3 — крепление тяги.",
+          "labels": [
+            "ТФТУ 110-G70Т12,5R60C60-4Ж 460",
+            "Ось ствола опоры",
+            "2000",
+            "2970±5",
+            "1190",
+            "Ø120",
+            "1265",
+            "40°",
+            "Ø170",
+            "1360",
+            "1600",
+            "2730±5",
+            "5°",
+            "Ø23",
+            "Ø33,3"
+          ],
+          "title": "ТФТУ 110-G70Т12,5R60C60-4Ж 460"
+        },
+        "value_state": null
+      },
+      "physical_page": 44
+    },
+    {
+      "catalog": "isolators",
+      "fact": {
+        "condition": "",
+        "fact_id": "O-b4f768f89ea0f5ebd1352cb6",
+        "kind": "source_note",
+        "name": "source_note",
+        "owner": "",
+        "pointer": "/catalogs/1/pages/43/content/source_notes/1",
+        "provenance": {
+          "input_fact_sha256": "d4d566d4cb082410a19d6d7ac8463336c290cf44a4f49392ea4626a2a4e488c3",
+          "kept": "unresolved",
+          "selected_by_role": "codex",
+          "work_sha256": "c98c34f9208796c7a2f3a5599f122e141afb725061f7c7eb2663c5abca366642"
+        },
+        "side": "ours",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "Источник смешивает кириллическую Т (U+0422) и латинскую T (U+0044) в позиции группы горизонтальной изгибающей. По текстовому слою: в строке таблицы «ТК 110-G12,5Т12,5R50C50-4» стоит кириллическая Т, а в строках «ТФТ 110-G90Т12,5R60C60-4», «ТФТУ 110-G70Т12,5R60C60-4» — латинская T. Строки сохранены буквально как в источнике.",
+        "value_state": null
+      },
+      "physical_page": 44
+    },
+    {
+      "catalog": "isolators",
+      "fact": {
+        "condition": "",
+        "fact_id": "O-b673b590de34583e8774c6fc",
+        "kind": "source_note",
+        "name": "source_note",
+        "owner": "",
+        "pointer": "/catalogs/1/pages/44/content/source_notes/0",
+        "provenance": {
+          "input_fact_sha256": "2f545990c84fa2281f6ff888c3daefb9b41d140882a6e3261506e1fbec1d53c1",
+          "kept": "unresolved",
+          "selected_by_role": "codex",
+          "work_sha256": "e13300fe40e6af525ef0658366813e1ab9c14f869b79cb9751502f7c7a9cdc18"
+        },
+        "side": "ours",
+        "source_unresolved": true,
+        "unit": "",
+        "value": "В обозначениях диаметра стойки на обоих чертежах в исходном текстовом слое стоит латинская буква O (U+004F) с точкой в качестве десятичного разделителя: «O33.3» — сохранено буквально (подтверждено read_source_layout).",
+        "value_state": null
+      },
+      "physical_page": 45
+    }
+  ],
+  "closures": [
+    {
+      "fact_id": "L-ffc8d1e85cddb0cffdc0f6bd",
+      "before_sha256": "7c109fa45d5655f71487a7c9b4bd0168e310925032d993cff8da7bd2a98de131",
+      "disposition": "closed",
+      "reason": "Ø14 относится только к двум малым отверстиям рис.2; У2-7-16 и У2-12-16 имеют ссылку рис.1 в таблице. Удалять Ø14 у моделей рис.2 нельзя.",
+      "classification": "close_rejected_false_attachment",
+      "record_ids": [
+        "C-7e208e7b1ab5de0fbbbd93f6",
+        "C-a109201dc2d438935b34cdee",
+        "C-86d15274c26ca3ba7597b9e1",
+        "C-ada72181cb975ba8e835c0aa",
+        "C-c6f093f4620ccb4f3beebb79"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 25,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            220,
+            180,
+            558,
+            800
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-deedc7bb16a0312d4d19aa3a",
+      "before_sha256": "0de299e02cab09f7ec96e41d42012d45ac321750bfbbec74dbd823ef0b3a1260",
+      "disposition": "closed",
+      "reason": "Ø14 относится только к двум малым отверстиям рис.2; У2-7-16 и У2-12-16 имеют ссылку рис.1 в таблице. Удалять Ø14 у моделей рис.2 нельзя.",
+      "classification": "close_rejected_false_attachment",
+      "record_ids": [
+        "C-7e208e7b1ab5de0fbbbd93f6",
+        "C-a109201dc2d438935b34cdee",
+        "C-86d15274c26ca3ba7597b9e1",
+        "C-ada72181cb975ba8e835c0aa",
+        "C-c6f093f4620ccb4f3beebb79"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 25,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            220,
+            180,
+            558,
+            800
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-39ea513b508b426cf321b225",
+      "before_sha256": "0b68a37e1561147da38e97dabc7c990b56beb4a81bfddc9e098e83db6c987b26",
+      "disposition": "closed",
+      "reason": "На увеличенном оригинале нижняя выноска рис.2 читается Ø46, а не Ø48. Ошибочное Ø48 не включать; добавить подтверждённый Ø46.",
+      "classification": "close_rejected_misread",
+      "record_ids": [
+        "C-SR-9106e8de24be3a46b52e4f23",
+        "C-SR-a025ffd7660bb66cbde0c6eb"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 46,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            385,
+            155,
+            557,
+            282
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "O-bbf05f61f031480719f26687",
+      "before_sha256": "04e05ded377612cbb8cf98f195375b49cfae5369fe0229338848ac7d118207ab",
+      "disposition": "closed",
+      "reason": "Описание рис.2 подтверждено двумя проекциями; оно сейчас отсутствует в selected и должно быть возвращено. Ø18 стержень скобы, Ø46 наружный диаметр проушины, 111 общий вертикальный размер; Ø22 палец,23 просвет,94 поперечный габарит;70 от внутренней верхней границы изгиба до оси пальца.",
+      "classification": "close_promote_confirmed",
+      "record_ids": [
+        "C-SR-9106e8de24be3a46b52e4f23"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 46,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            385,
+            155,
+            557,
+            282
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-2206c2aac86c9f2f6054d401",
+      "before_sha256": "8a1ca777db4922a8eec9ab70dbe44ab7cf01f910e0cddb83706b9f70d1c38fec",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-ea6374205721c3c8f043de14"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-e9a6308468c78d08d7274bad",
+      "before_sha256": "cfeb373b77533c6168b47008ff85c8cb6b33b5ab77a98ffbcf5f70aad345d8e7",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-461b84474ec3c3ea4898cd28"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-2623f62497b52c60a45c207b",
+      "before_sha256": "b5e52fb9fc165f1f8761ad34c19523d48645e59c0525cf962f786e3f55aaf665",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-fda1de22a19e067e69934bbc"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-bb6476b1918694ca40a85627",
+      "before_sha256": "2dbab94fa876056ed7bb5aab457eb5f4ec6bb87bd7bd22b49f4a76b4f4a17695",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-25289eb2b3b38627a259c1f7"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-7602cf63a08869f3f4e8d195",
+      "before_sha256": "3640707f4b03d7b7f852e6345e7136d76b29217796cea516154cbab74b3de042",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-1091e2fc115faf2756ee5d75"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-4ecdd7a454605dfc752cb476",
+      "before_sha256": "b85ce02a63988bab73277eecfc9d754ceecd313c9c476ff84534f9f60cd04eea",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-e19dd93fbd1e1273e55764ea"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-f7e09a0946d548692f84dc61",
+      "before_sha256": "35e59556344bbe6f52810677201e210408320d7d01558a7ade22b55907d2ead7",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-0e373befb4c0cd5746fb54fb"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-5adf3bc6dcda74212c88f0c7",
+      "before_sha256": "2dc8404957b5209f2c0e3f3b792342ed5752f7340b5ababa5f296a2ef2995bbe",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-f19cc297344b1380e35d8ec1"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-14cfc17fc653201ba456330f",
+      "before_sha256": "fb4bbf20ca5081d37629cd68d4eef6368875b9d406573015702acf0169b60c61",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-3ffeebccfe963a25387dec1d"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-cf3790871816fbe7f39c5e35",
+      "before_sha256": "8f228eaeebefcf81ef43d6f8b09e5356055e997837047aaa6adaa9a2f195ab91",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-241b1f97e1ff26ebd5df17ea"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-d6b3baf13dd0142875d32436",
+      "before_sha256": "ec667c215837e92aa859b02d2d4fdf28895650dafbc778f96b66360d038474de",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-b1307c731b3ddfabc95fb113"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-70ddadfa8328f848a7679d22",
+      "before_sha256": "17fc8f2f6d53c9ec2c2382e1952b660bac9bbb4b2ec6dcc28dfe8925bb990aa6",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-4dbc6f92f22cb520c54b38fb"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-4ffd13c52e9669f6a6609df3",
+      "before_sha256": "c9386979cf62994fea2f46bcc3dc0b1a1e5b3bbf94c2edbcf3bbe285039645ef",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-ca0f888fa7be0321948bd189"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-df1d9ca9b1779f924c6fe81f",
+      "before_sha256": "9a1fd728ab5f5f6d1509619b4c345b139f4960d0ab511834412d3af475419a70",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-9b76e17ca18eaca73b580ad0"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-dd6f3915a9de43ef196e06d2",
+      "before_sha256": "fa2d54bb58f4affd8c45ab8071a6f2842cea177cb27b235c4a8e941f01e886d7",
+      "disposition": "closed",
+      "reason": "Название однозначно читается в первой колонке таблицы и уже сохранено отдельной model_designation. Повтор Наименование не нужен.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-47ccdd90cc43e9f4f668b935"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 64,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            56,
+            510,
+            558,
+            811
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-de58d6f91d7b4eeda7dc579d",
+      "before_sha256": "e5846ee33efe6800475fcd6364f3f0caa4ecb2c1b69cc63456085e3e11170fa9",
+      "disposition": "closed",
+      "reason": "Подпись верхнего чертежа явно содержит две марки: 3ПГН-5-1,3ПГН-5-1м. Первая отсутствует в selected model_designation, хотя её размеры и общее описание уже сохранены. Вернуть самостоятельную марку, не сливать с м.",
+      "classification": "close_promote_confirmed",
+      "record_ids": [
+        "C-9f0d117ea8005c2b32651d27",
+        "C-SR-4dffcb94e767434c6971f9b9"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 72,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            210,
+            245,
+            555,
+            458
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-c501662063258d0ca36633f3",
+      "before_sha256": "40492205a75db44f4a2bf79aa20c34973cc7b42f4597217f6ca9ace1dca19c7b",
+      "disposition": "closed",
+      "reason": "Число читается, привязка подтверждена размерными линиями:47 ширина прямоугольного отверстия;60 вертикальный отступ от верхнего выносного уровня до верхней границы отверстия. В selected есть в figure, но отдельной drawing_annotation для 4ПГН-5-2А нет. Единицу не подставлять: на чертеже не напечатана.",
+      "classification": "close_retype_confirmed",
+      "record_ids": [
+        "C-7490fb67f55a9edceb0e2523",
+        "C-SR-518979eecbcf7d0e3323d4f3"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 76,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            215,
+            70,
+            558,
+            791
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-357543baed284382597f0ad6",
+      "before_sha256": "2b74a108edf63109a936f296303b57faf3b5c4ccc9324fe392e99824189239b8",
+      "disposition": "closed",
+      "reason": "Число читается, привязка подтверждена размерными линиями:47 ширина прямоугольного отверстия;60 вертикальный отступ от верхнего выносного уровня до верхней границы отверстия. В selected есть в figure, но отдельной drawing_annotation для 4ПГН-5-2А нет. Единицу не подставлять: на чертеже не напечатана.",
+      "classification": "close_retype_confirmed",
+      "record_ids": [
+        "C-7490fb67f55a9edceb0e2523",
+        "C-SR-0d7542c102dbe3a887165699"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 76,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            215,
+            70,
+            558,
+            791
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-8ad9c9c8a38844e8d7d81ddb",
+      "before_sha256": "f002437e5022a1268d0a4cb33855bd208f6527b7c0701494cb5c812741af8159",
+      "disposition": "closed",
+      "reason": "Марка явно напечатана под чертежом и в таблице, уже сохранена как model_designation.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-99e304b51d6fc8b1bfb83c0e"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 76,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            215,
+            70,
+            558,
+            791
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-c1ba46ffb310614a5a2691c7",
+      "before_sha256": "e5d6fefebbb74d9820aac43469489bea2def3f9a681058af075308275e1ea50f",
+      "disposition": "closed",
+      "reason": "Марка явно напечатана под чертежом и в таблице, уже сохранена как model_designation.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-f225d76f386974e79eb64dee"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 76,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            215,
+            70,
+            558,
+            791
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-f7ff9d23a3c96eb2e7dd6fd4",
+      "before_sha256": "7250f0fd86c1126a55f39faff297ec2156f35ede1ff93e4b4b32d76ac9ba62ac",
+      "disposition": "closed",
+      "reason": "Строка 4ПГН2-5-2А таблицы однозначна: масса63,0кг не более; нагрузка300кН не менее. Оба факта уже есть в selected с правильными единицами и условиями.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-7c40425dbb7e6678b6984010"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 76,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            215,
+            70,
+            558,
+            791
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-c15104a9e4ea178f42cb9eeb",
+      "before_sha256": "b05706ddd0e8821d39dfbb8d00dfbf4f07a1902a5faebc7b888153b2203161cf",
+      "disposition": "closed",
+      "reason": "Строка 4ПГН2-5-2А таблицы однозначна: масса63,0кг не более; нагрузка300кН не менее. Оба факта уже есть в selected с правильными единицами и условиями.",
+      "classification": "close_duplicate",
+      "record_ids": [
+        "C-da7c7aab768785ab57afbc04"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 76,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            215,
+            70,
+            558,
+            791
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-93b973b6eceb146eac9aa069",
+      "before_sha256": "e2a2c9cadc9c5d8bdab93d087d57b14081d8abc0b8f102797ba75d8a13381aa3",
+      "disposition": "closed",
+      "reason": "На увеличенном оригинале вертикальная выноска ЧЁТКО1211, а не1121. В существующем figure уже указано1211. Ошибочное1121 сохранить только как rejected history; числовую характеристику1211 добавить с пустой единицей, так как единица не напечатана.",
+      "classification": "close_rejected_misread",
+      "record_ids": [
+        "C-2fee0c7143724cad27bf14e8",
+        "C-SR-9760fd12e52459b467a8d37d"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 87,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            430,
+            620,
+            555,
+            770
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "O-1c3510fe659c5a218bf1f646",
+      "before_sha256": "19a99c791d0c6967683e71fdea963b30c809acdd6b71e1fa0a74c680de722d83",
+      "disposition": "closed",
+      "reason": "Это адрес соответствующей компании в колонке контактов, не марка и не параметр товара. Все6 адресных ячеек сейчас отсутствуют в selected; их нужно вернуть как contact_address, привязав к своей колонке. Телефоны и сайты трёх компаний уже сохранены.",
+      "classification": "close_retype_contact",
+      "record_ids": [
+        "C-ebcb6a3b45509de9bac4f665",
+        "C-f812f5ccd333f49c7496a051",
+        "C-SR-3539194b0a9b0d8f58f91203"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 314,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            30,
+            680,
+            570,
+            750
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "O-dcfe2e9009f5f2d6aaad1007",
+      "before_sha256": "efa25ad52a6bcce002321def36291e702c27e6519483050570c1f3b602de086d",
+      "disposition": "closed",
+      "reason": "Это адрес соответствующей компании в колонке контактов, не марка и не параметр товара. Все6 адресных ячеек сейчас отсутствуют в selected; их нужно вернуть как contact_address, привязав к своей колонке. Телефоны и сайты трёх компаний уже сохранены.",
+      "classification": "close_retype_contact",
+      "record_ids": [
+        "C-3734cf41586cfcae6dd528e2",
+        "C-9e072bfeba078431b55cefbc",
+        "C-SR-10ada8936705079460e39e1e"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 314,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            30,
+            680,
+            570,
+            750
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "O-903509077180cdc769496128",
+      "before_sha256": "e279b8fc3379186a6c43457ef897faa4e704cd244001f7f5c261d0c8bb14ca06",
+      "disposition": "closed",
+      "reason": "Это адрес соответствующей компании в колонке контактов, не марка и не параметр товара. Все6 адресных ячеек сейчас отсутствуют в selected; их нужно вернуть как contact_address, привязав к своей колонке. Телефоны и сайты трёх компаний уже сохранены.",
+      "classification": "close_retype_contact",
+      "record_ids": [
+        "C-8285d7f1bf0cec3e3015974e",
+        "C-a5484390d9d5021a5e4e320e",
+        "C-SR-0e01f57ca959a294a8845c0c"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 314,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            30,
+            680,
+            570,
+            750
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "O-760e6e041ed816fa8e291ffb",
+      "before_sha256": "951e55841966c8bf29102dc98f3a74352b7fa15c512aa82eeea8b1de5b8ae3e1",
+      "disposition": "closed",
+      "reason": "Это адрес соответствующей компании в колонке контактов, не марка и не параметр товара. Все6 адресных ячеек сейчас отсутствуют в selected; их нужно вернуть как contact_address, привязав к своей колонке. Телефоны и сайты трёх компаний уже сохранены.",
+      "classification": "close_retype_contact",
+      "record_ids": [
+        "C-ebcb6a3b45509de9bac4f665",
+        "C-f812f5ccd333f49c7496a051",
+        "C-SR-c3695a518c15402577e677b4"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 314,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            30,
+            680,
+            570,
+            750
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "O-16cbb361a9892674632cbf29",
+      "before_sha256": "6b0d84812e5dcc2bb7d06bacdb5b7b6dd5d7dcb89f161048dc2d1332015faf86",
+      "disposition": "closed",
+      "reason": "Это адрес соответствующей компании в колонке контактов, не марка и не параметр товара. Все6 адресных ячеек сейчас отсутствуют в selected; их нужно вернуть как contact_address, привязав к своей колонке. Телефоны и сайты трёх компаний уже сохранены.",
+      "classification": "close_retype_contact",
+      "record_ids": [
+        "C-3734cf41586cfcae6dd528e2",
+        "C-9e072bfeba078431b55cefbc",
+        "C-SR-c0d1888de1c02538437f7d60"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 314,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            30,
+            680,
+            570,
+            750
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "O-1745b69f7fdda5800bcb3142",
+      "before_sha256": "db0e089df552a1b6da0458ad22834c00e437c517f93d066fb3fc22077c2655c1",
+      "disposition": "closed",
+      "reason": "Это адрес соответствующей компании в колонке контактов, не марка и не параметр товара. Все6 адресных ячеек сейчас отсутствуют в selected; их нужно вернуть как contact_address, привязав к своей колонке. Телефоны и сайты трёх компаний уже сохранены.",
+      "classification": "close_retype_contact",
+      "record_ids": [
+        "C-8285d7f1bf0cec3e3015974e",
+        "C-a5484390d9d5021a5e4e320e",
+        "C-SR-316322a4608a2777198676c8"
+      ],
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 314,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            30,
+            680,
+            570,
+            750
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-3ed85a5fec598c053a179337",
+      "before_sha256": "9409e8970509a75fb036995e90ceeb1585adc9393fc3a8e939b168e7a0bca156",
+      "disposition": "closed",
+      "reason": "5 is a measured axial dimension of the hatched transverse separator at the conductor termination in a longitudinal cutaway, not radial insulation thickness and not item number 5. Existing primary figure retains the glyph; scope is the shown modification drawing, not all individual models. No unit printed next to 5, so do not invent a unit.",
+      "classification": "correct",
+      "record_ids": [
+        "C-87ab426bcfb329d7b2ee702e",
+        "C-SR-c32e022f3e81f4d11d45c704"
+      ],
+      "evidence": [
+        {
+          "catalog": "innovations",
+          "page": 107,
+          "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "region": [
+            0.5,
+            0.3,
+            0.76,
+            0.47
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-ffe9f94d8fb46398ea7b7529",
+      "before_sha256": "02cd2c25303ea410008fc67228c44f94d364841be131396d276cb299faaeabf6",
+      "disposition": "closed",
+      "reason": "5 is a measured axial dimension of the hatched transverse separator at the conductor termination in a longitudinal cutaway, not radial insulation thickness and not item number 5. Existing primary figure retains the glyph; scope is the shown modification drawing, not all individual models. No unit printed next to 5, so do not invent a unit.",
+      "classification": "correct",
+      "record_ids": [
+        "C-SR-7977e9318ee02e36b71a8531",
+        "C-e0e012efd19fea0677df69f1"
+      ],
+      "evidence": [
+        {
+          "catalog": "innovations",
+          "page": 108,
+          "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "region": [
+            0.49,
+            0.3,
+            0.78,
+            0.46
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-cb5f43e0ea844d2799a0df76",
+      "before_sha256": "4b53704bdabf3562a98a3fcb8bbcd97eb9dda5087feaf06520e818c423cf20e4",
+      "disposition": "closed",
+      "reason": "5 is a measured axial dimension of the hatched transverse separator at the conductor termination in a longitudinal cutaway, not radial insulation thickness and not item number 5. Existing primary figure retains the glyph; scope is the shown modification drawing, not all individual models. No unit printed next to 5, so do not invent a unit.",
+      "classification": "correct",
+      "record_ids": [
+        "C-9eee75bdaba07bd02227ef41",
+        "C-SR-3fa6f8056d3f1bc1d46e6359"
+      ],
+      "evidence": [
+        {
+          "catalog": "innovations",
+          "page": 110,
+          "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "region": [
+            0.49,
+            0.29,
+            0.77,
+            0.49
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "L-96f3818272044be96382de51",
+      "before_sha256": "6f87bf43cd43d0d0adc9d8c0789bb0b73117fca086d774922f2e7dfaca41b373",
+      "disposition": "closed",
+      "reason": "The original has physically separate blank clamp cells for wire sections 300/48 and 300/67. Canonical primary already records both state=blank. This is confirmed source omission, not unreadable extraction and no automatic fill from neighboring rows.",
+      "classification": "close_stale",
+      "record_ids": [
+        "C-1b69fae20ccbad08936fdcd4",
+        "C-9d814854495179611639e215"
+      ],
+      "evidence": [
+        {
+          "catalog": "innovations",
+          "page": 126,
+          "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "region": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "O-f5393c2f2ac6ba62e4f855c6",
+      "before_sha256": "e54cc8f5249da66420bb99e3e904eb2bb6ec5a326bac1dd5b262abb838207ffb",
+      "disposition": "closed",
+      "reason": "Latin/Cyrillic C in conductance unit is typography only; the same 30 value is visible and there are no competing engineering values. Preserve source spelling in archive, remove from active unresolved.",
+      "classification": "close_stale",
+      "record_ids": [],
+      "evidence": [
+        {
+          "catalog": "isolators",
+          "page": 43,
+          "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+          "region": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "O-5673a4e346040cbae11277f2",
+      "before_sha256": "d0302b5bed6d88a6b0a8185879aac54473e82a546e35122cbfc9865aaa350522",
+      "disposition": "closed",
+      "reason": "Figure absent from primary. Original is one assembly of upper stay and lower arm, not two positions of same product. Restore all visible dimensions with their geometric ownership; correct unsupported multi-position narrative.",
+      "classification": "correct",
+      "record_ids": [
+        "C-SR-0d56d7f705f4cd85363b0fe1"
+      ],
+      "evidence": [
+        {
+          "catalog": "isolators",
+          "page": 44,
+          "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+          "region": [
+            0.45,
+            0.08,
+            0.98,
+            0.31
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "O-a686f9414fda7b601365cc75",
+      "before_sha256": "3901ef85610aa2ea3032c4bf244bdb7dac2ee7745c76dde1a7580312093f56b2",
+      "disposition": "closed",
+      "reason": "Figure absent from primary. Original is one assembly of upper stay and lower arm, not two positions of same product. Restore all visible dimensions with their geometric ownership; correct unsupported multi-position narrative.",
+      "classification": "correct",
+      "record_ids": [
+        "C-SR-83eba30167417106010c01b7"
+      ],
+      "evidence": [
+        {
+          "catalog": "isolators",
+          "page": 44,
+          "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+          "region": [
+            0.45,
+            0.3,
+            0.98,
+            0.58
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "O-b4f768f89ea0f5ebd1352cb6",
+      "before_sha256": "b49eadfe68d461e320f36a7a208691a0567629b971365592e1bb32f5439ba050",
+      "disposition": "closed",
+      "reason": "Latin/Cyrillic T is typography with identical force group and numeric values; source spellings remain archived. Note also incorrectly calls Latin T U+0044 (actual U+0054). No manufacturer engineering question.",
+      "classification": "close_stale",
+      "record_ids": [
+        "C-10e2f8dcbc5c5e3a0616ca2f",
+        "C-2a5d6cfb36a6563573bba4ff",
+        "C-5a08223dc3872c32e374a31e",
+        "C-b49363d0a762dec585724479"
+      ],
+      "evidence": [
+        {
+          "catalog": "isolators",
+          "page": 44,
+          "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+          "region": [
+            0.45,
+            0.08,
+            0.98,
+            0.31
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "fact_id": "O-b673b590de34583e8774c6fc",
+      "before_sha256": "9e778e17e06aa58397850956cdbdb2925ea0ccaff0e85d98cffbfd76b5d494de",
+      "disposition": "closed",
+      "reason": "Original glyph at the lower line node is diameter sign with 33.3. Both primary drawing annotations already contain Ø33.3; text-layer O vs visual diameter is extraction typography, not two values. No normalization needed in numeric values.",
+      "classification": "close_stale",
+      "record_ids": [
+        "C-b028ec7142b002c6dde82841",
+        "C-c11b3a765c896247c624cde3"
+      ],
+      "evidence": [
+        {
+          "catalog": "isolators",
+          "page": 45,
+          "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+          "region": [
+            0.37,
+            0.12,
+            0.96,
+            0.37
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        },
+        {
+          "catalog": "isolators",
+          "page": 45,
+          "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+          "region": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    }
+  ],
+  "record_changes": [
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "armature",
+        "page": 46,
+        "kind": "figure",
+        "model": null,
+        "parameter": null,
+        "part": null,
+        "condition": null,
+        "value": {
+          "description": "Две проекции скобы СК-120-1Б: Ø18 — диаметр стержня изогнутой скобы, показанного ребром; Ø46 — наружный диаметр нижней проушины в этой проекции. 111 — полный наружный вертикальный габарит. В развёрнутом виде Ø22 — диаметр поперечного соединительного пальца, 23 — внутренний просвет между лапками; 94 — полный поперечный габарит с крепежом. 70 — от внутренней верхней границы изгиба до оси нижнего соединительного пальца, а не от наружной вершины и не высота лап над осью.",
+          "labels": [
+            "РИС. 2",
+            "111",
+            "Ø18",
+            "Ø46",
+            "70",
+            "Ø22",
+            "23",
+            "94"
+          ],
+          "title": "РИС. 2 — Скоба типа СК-120-1Б"
+        },
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-9106e8de24be3a46b52e4f23",
+        "source_fact_ids": [
+          "O-bbf05f61f031480719f26687"
+        ],
+        "producer_ref": "P-SR-235e2c55d99ac1e4a366"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 46,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            385,
+            155,
+            557,
+            282
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "armature",
+        "page": 46,
+        "kind": "drawing_annotation",
+        "model": "СК-120-1Б",
+        "parameter": "Наружный диаметр нижней проушины",
+        "part": "Рис. 2; вид слева, нижняя проушина",
+        "condition": null,
+        "value": "Ø46",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-a025ffd7660bb66cbde0c6eb",
+        "source_fact_ids": [
+          "V-6f45607441e92b6cd9591ddd"
+        ],
+        "producer_ref": "P-SR-235e2c55d99ac1e4a366"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 46,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            385,
+            155,
+            557,
+            282
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "armature",
+        "page": 72,
+        "kind": "model_designation",
+        "model": "3ПГН-5-1",
+        "parameter": "designation",
+        "part": null,
+        "condition": null,
+        "value": "3ПГН-5-1",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-4dffcb94e767434c6971f9b9",
+        "source_fact_ids": [
+          "L-de58d6f91d7b4eeda7dc579d"
+        ],
+        "producer_ref": "P-SR-fbb2415dffdcfc56efe3"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 72,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            210,
+            245,
+            555,
+            458
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "armature",
+        "page": 76,
+        "kind": "drawing_annotation",
+        "model": "4ПГН-5-2А",
+        "parameter": "Ширина прямоугольного отверстия",
+        "part": "Верхний чертёж, левое прямоугольное отверстие",
+        "condition": null,
+        "value": "47",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-518979eecbcf7d0e3323d4f3",
+        "source_fact_ids": [
+          "L-c501662063258d0ca36633f3"
+        ],
+        "producer_ref": "P-SR-7d897fa911c30e46aa2d"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 76,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            215,
+            70,
+            558,
+            791
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "armature",
+        "page": 76,
+        "kind": "drawing_annotation",
+        "model": "4ПГН-5-2А",
+        "parameter": "Вертикальный отступ до верхней границы прямоугольного отверстия",
+        "part": "Верхний чертёж; от верхнего выносного уровня центрального ушка",
+        "condition": null,
+        "value": "60",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-0d7542c102dbe3a887165699",
+        "source_fact_ids": [
+          "L-357543baed284382597f0ad6"
+        ],
+        "producer_ref": "P-SR-7d897fa911c30e46aa2d"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 76,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            215,
+            70,
+            558,
+            791
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "armature",
+        "page": 87,
+        "kind": "drawing_annotation",
+        "model": "3П6Р-30-1",
+        "parameter": "Общий вертикальный габарит",
+        "part": "Правая проекция нижней сборки; от верхней наружной границы балки до нижних концов крепежа",
+        "condition": null,
+        "value": "1211",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-9760fd12e52459b467a8d37d",
+        "source_fact_ids": [
+          "V-6bdb1df1b5032271eee048dc"
+        ],
+        "producer_ref": "P-SR-adda199831c075656275"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 87,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            430,
+            620,
+            555,
+            770
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "armature",
+        "page": 314,
+        "kind": "contact_address",
+        "model": null,
+        "parameter": "ООО «ФОРЭНЕРГО СПЕЦ КОМПЛЕКТ»",
+        "part": "Индекс и город",
+        "condition": null,
+        "value": "457040, г. Южноуральск",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-3539194b0a9b0d8f58f91203",
+        "source_fact_ids": [
+          "O-1c3510fe659c5a218bf1f646"
+        ],
+        "producer_ref": "P-SR-e9904366b62ef1688d28"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 314,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            30,
+            680,
+            570,
+            750
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "armature",
+        "page": 314,
+        "kind": "contact_address",
+        "model": null,
+        "parameter": "ООО «ФОРЭНЕРГО-ЮИК»",
+        "part": "Индекс и город",
+        "condition": null,
+        "value": "457040, г. Южноуральск",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-10ada8936705079460e39e1e",
+        "source_fact_ids": [
+          "O-dcfe2e9009f5f2d6aaad1007"
+        ],
+        "producer_ref": "P-SR-e9904366b62ef1688d28"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 314,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            30,
+            680,
+            570,
+            750
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "armature",
+        "page": 314,
+        "kind": "contact_address",
+        "model": null,
+        "parameter": "ООО «ФОРЭНЕРГО-ТРЕЙД»",
+        "part": "Индекс и город",
+        "condition": null,
+        "value": "111398, г. Москва",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-0e01f57ca959a294a8845c0c",
+        "source_fact_ids": [
+          "O-903509077180cdc769496128"
+        ],
+        "producer_ref": "P-SR-e9904366b62ef1688d28"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 314,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            30,
+            680,
+            570,
+            750
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "armature",
+        "page": 314,
+        "kind": "contact_address",
+        "model": null,
+        "parameter": "ООО «ФОРЭНЕРГО СПЕЦ КОМПЛЕКТ»",
+        "part": "Улица и дом",
+        "condition": null,
+        "value": "ул. Заводская д. 3",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-c3695a518c15402577e677b4",
+        "source_fact_ids": [
+          "O-760e6e041ed816fa8e291ffb"
+        ],
+        "producer_ref": "P-SR-e9904366b62ef1688d28"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 314,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            30,
+            680,
+            570,
+            750
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "armature",
+        "page": 314,
+        "kind": "contact_address",
+        "model": null,
+        "parameter": "ООО «ФОРЭНЕРГО-ЮИК»",
+        "part": "Улица и дом",
+        "condition": null,
+        "value": "ул. Заводская д. 3",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-c0d1888de1c02538437f7d60",
+        "source_fact_ids": [
+          "O-16cbb361a9892674632cbf29"
+        ],
+        "producer_ref": "P-SR-e9904366b62ef1688d28"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 314,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            30,
+            680,
+            570,
+            750
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "armature",
+        "page": 314,
+        "kind": "contact_address",
+        "model": null,
+        "parameter": "ООО «ФОРЭНЕРГО-ТРЕЙД»",
+        "part": "Улица и дом",
+        "condition": null,
+        "value": "ул. Лазо, д. 9",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-316322a4608a2777198676c8",
+        "source_fact_ids": [
+          "O-1745b69f7fdda5800bcb3142"
+        ],
+        "producer_ref": "P-SR-e9904366b62ef1688d28"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "armature",
+          "page": 314,
+          "source_sha256": "c8cb0bf124607d1f5f9de18fc48d467033262b9f43c205a582b01521e5aaab4e",
+          "region": [
+            30,
+            680,
+            570,
+            750
+          ],
+          "region_units": "pdf_points",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "innovations",
+        "page": 107,
+        "kind": "drawing_annotation",
+        "model": null,
+        "parameter": "Осевой размер заштрихованной перемычки в продольном разрезе",
+        "part": "ШСИП модификации «2»; стык окончания и изолированного проводника",
+        "condition": null,
+        "value": "5",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-c32e022f3e81f4d11d45c704",
+        "source_fact_ids": [
+          "L-3ed85a5fec598c053a179337"
+        ],
+        "producer_ref": "P-SR-eeb7e48c3956dc111b81"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "innovations",
+          "page": 107,
+          "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "region": [
+            0.5,
+            0.3,
+            0.76,
+            0.47
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "innovations",
+        "page": 108,
+        "kind": "drawing_annotation",
+        "model": null,
+        "parameter": "Осевой размер заштрихованной перемычки в продольном разрезе",
+        "part": "ШСИП модификации «3»; стык окончания и изолированного проводника",
+        "condition": null,
+        "value": "5",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-7977e9318ee02e36b71a8531",
+        "source_fact_ids": [
+          "L-ffe9f94d8fb46398ea7b7529"
+        ],
+        "producer_ref": "P-SR-bcdaed3feddf608902a6"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "innovations",
+          "page": 108,
+          "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "region": [
+            0.49,
+            0.3,
+            0.78,
+            0.46
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "innovations",
+        "page": 110,
+        "kind": "drawing_annotation",
+        "model": null,
+        "parameter": "Осевой размер заштрихованной перемычки в продольном разрезе",
+        "part": "ШСИП модификации «5»; стык окончания и изолированного проводника",
+        "condition": null,
+        "value": "5",
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-3fa6f8056d3f1bc1d46e6359",
+        "source_fact_ids": [
+          "L-cb5f43e0ea844d2799a0df76"
+        ],
+        "producer_ref": "P-SR-9123e7f4d147c8b3003e"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "innovations",
+          "page": 110,
+          "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "region": [
+            0.49,
+            0.29,
+            0.77,
+            0.49
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "isolators",
+        "page": 44,
+        "kind": "figure",
+        "model": "ТФТ 110-G90T12,5R60C60-4Ж 420",
+        "parameter": null,
+        "part": "Только явно названное исполнение",
+        "condition": null,
+        "value": {
+          "title": "ТФТ 110-G90T12,5R60C60-4Ж 420: сборка траверсы с наклонной тягой",
+          "description": "Один сборочный чертёж, а не два положения одной траверсы. Два узла крепления на стойке слева и общий линейный узел справа соединены верхней наклонной тягой и нижним изолированным плечом. 1000 — вертикальное расстояние между уровнями узлов крепления на оси ствола опоры. На верхней тяге: 1775 — общая длина между крайними узлами по оси тяги; 1215 — вдоль ребристой части между отмеченными внутренними плоскостями; 1265 — между отмеченными концевыми плоскостями изолятора; Ø120 — поперёк ребер верхнего изолятора. Угол 31° нанесён между верхней тягой и нижним плечом. На нижнем плече: Ø170 — поперёк ребер; 1360 — вдоль изолятора между отмеченными плоскостями; 5° — наклон у левого узла крепления. 1865±5 — нижний горизонтальный установочный размер между осью ствола опоры и вертикальной линией правого узла. Ø23 указывает на отверстие правой вилки; Ø33.3 — поперечный размер нижнего элемента правого линейного узла. Единицы линейных размеров рядом с чертежом не напечатаны.",
+          "labels": [
+            "1000",
+            "Ось ствола опоры",
+            "1775",
+            "1215",
+            "Ø120",
+            "1265",
+            "31°",
+            "Ø170",
+            "1360",
+            "5°",
+            "1865±5",
+            "Ø23",
+            "Ø33.3"
+          ]
+        },
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-0d56d7f705f4cd85363b0fe1",
+        "source_fact_ids": [
+          "O-5673a4e346040cbae11277f2"
+        ],
+        "producer_ref": "P-SR-8202a233c00fab08da99"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "isolators",
+          "page": 44,
+          "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+          "region": [
+            0.45,
+            0.08,
+            0.98,
+            0.31
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "isolators",
+        "page": 44,
+        "kind": "figure",
+        "model": "ТФТУ 110-G70T12,5R60C60-4Ж 460",
+        "parameter": null,
+        "part": "Только явно названное исполнение",
+        "condition": null,
+        "value": {
+          "title": "ТФТУ 110-G70T12,5R60C60-4Ж 460: сборка траверсы увеличенной длины",
+          "description": "Один сборочный чертёж, а не два положения одной траверсы. Два узла крепления на стойке справа и общий линейный узел слева соединены верхней наклонной тягой с удлинителем и нижним изолированным плечом с удлинителем. 2000 — вертикальное расстояние между уровнями узлов крепления на оси ствола опоры. На верхней тяге: 2970±5 — общая длина по оси от левого линейного узла к правому креплению; 1190 — вдоль ребристой части между отмеченными внутренними плоскостями; 1265 — между отмеченными концевыми плоскостями изолятора; Ø120 — поперёк ребер. Угол 40° нанесён между верхней тягой и нижним плечом. На нижнем плече: Ø170 — поперёк ребер; 1360 — между отмеченными плоскостями изолятора, 1600 — между отмеченными плоскостями более длинной сборки; 5° — наклон у правого узла крепления. 2730±5 — нижний горизонтальный установочный размер между вертикальной линией левого линейного узла и осью ствола опоры. Ø23 указывает на отверстие левой вилки; Ø33.3 — поперечный размер нижнего элемента левого линейного узла. Единицы линейных размеров рядом с чертежом не напечатаны.",
+          "labels": [
+            "2000",
+            "Ось ствола опоры",
+            "2970±5",
+            "1190",
+            "Ø120",
+            "1265",
+            "40°",
+            "Ø170",
+            "1360",
+            "1600",
+            "5°",
+            "2730±5",
+            "Ø23",
+            "Ø33.3"
+          ]
+        },
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-83eba30167417106010c01b7",
+        "source_fact_ids": [
+          "O-a686f9414fda7b601365cc75"
+        ],
+        "producer_ref": "P-SR-8202a233c00fab08da99"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "isolators",
+          "page": 44,
+          "source_sha256": "7bd35242d89d74193cf46986b3a0692c982e1629c855ce558d0445c0f0e41d35",
+          "region": [
+            0.45,
+            0.3,
+            0.98,
+            0.58
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "before": null,
+      "after": {
+        "catalog": "small",
+        "page": 218,
+        "kind": "supporting_context",
+        "model": "SCT 6-14",
+        "parameter": "Печатное значение в спорной колонке",
+        "part": "FEMAN",
+        "condition": null,
+        "value": {
+          "printed_value": "6,0-14,0",
+          "printed_column_heading": "Рабочая нагрузка, кН",
+          "diameter_cell": "blank",
+          "interpretation": "Не отождествлять ни с подтверждённым диаметром, ни с подтверждённой нагрузкой; требуется паспорт производителя."
+        },
+        "unit": null,
+        "state": "value",
+        "id": "C-SR-2f8e3fc6450c241bc0f00a36",
+        "source_fact_ids": [
+          "L-c1c57cb2d3fb4ff4cf3b76be",
+          "L-abd1ac73a5d99c5f5c417b3c"
+        ],
+        "producer_ref": "P-SR-8556ff524ca5b022ddde"
+      },
+      "reason": "Source-bound restoration or correction after independent visual review; original observation retained in history",
+      "evidence": [
+        {
+          "catalog": "small",
+          "page": 218,
+          "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+          "region": [
+            0.63,
+            0.09,
+            0.96,
+            0.48
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        },
+        {
+          "catalog": "small",
+          "page": 218,
+          "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+          "region": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "replace",
+      "before": {
+        "catalog": "innovations",
+        "condition": null,
+        "id": "C-e0e012efd19fea0677df69f1",
+        "kind": "figure",
+        "model": null,
+        "page": 108,
+        "parameter": null,
+        "part": null,
+        "producer_ref": "P-8bf48c0e149e2132e575",
+        "source_fact_ids": [
+          "O-0abe2b605104363088459cf4"
+        ],
+        "state": "value",
+        "unit": null,
+        "value": {
+          "description": "Чертёж шлейфа с двумя зеркальными половинами: слева — общий вид одного конца с зажимом типа «разъёмный ответвительный», справа — вид второго конца с зажимом с «лапкой». Над каждой половиной стрелка «В пролёт» (влево и вправо соответственно), внутри зажимов указано «Направление опрессования». Выноска «Зажимы входят в комплект поставки шлейфа» относится к концевым зажимам обеих сторон; между половинами — двусторонняя стрелка «К натяжным зажимам изолирующих подвесок», указывающая, к какой стороне подводятся натяжные зажимы подвесок. Размер L₁ отмеряется вдоль оси концевого участка от торца зажима. Экспликация: 1 — корпус зажима типа «разъёмный ответвительный», 2 — корпус зажима с «лапкой», 3 — вкладыш, 4 — проводник изолированный (позиция 5 вынесена на чертеже у шарнирного узла, но в экспликации на этой странице отсутствует). По правой половине нанесены размеры s и S₁ в зоне зажима с «лапкой», L₃ вдоль всего изгиба, Б со стрелкой, задающей направление вида, и обозначение дуги изгиба «CL». Справа расположены срез А-А (выносные линии с буквами А, подпись «А - А») и вид Б. В сечении А-А круглый узел имеет размеры D (вертикально), L₂ (горизонтально) и выноску d на диаметр проводника, а также выноски позиций 1 и 3. Вид Б показывает пластину зажима с «лапкой» с четырьмя шестигранными отверстиями по сетке 2×2, размерами 80 (ширина пластины), 60 (высота), 45 (межосевое расстояние по горизонтали) и 45 (по вертикали), и выносным значением 17,5; ниже пластина переходит в цилиндрический корпус зажима и далее в изогнутый проводник.",
+          "labels": [
+            "В пролёт",
+            "Зажимы входят в комплект поставки шлейфа",
+            "К натяжным зажимам изолирующих подвесок",
+            "Направление опрессования",
+            "L₁",
+            "L₂",
+            "L₃",
+            "Б",
+            "CL",
+            "s",
+            "S₁",
+            "D",
+            "d",
+            "А",
+            "А",
+            "А - А",
+            "Б",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "80",
+            "60",
+            "45",
+            "45",
+            "17,5"
+          ],
+          "title": "Шлейф изолированный ШСИП модификации «3»"
+        }
+      },
+      "after": {
+        "catalog": "innovations",
+        "condition": null,
+        "id": "C-e0e012efd19fea0677df69f1",
+        "kind": "figure",
+        "model": null,
+        "page": 108,
+        "parameter": null,
+        "part": null,
+        "producer_ref": "P-SR-bcdaed3feddf608902a6",
+        "source_fact_ids": [
+          "O-0abe2b605104363088459cf4"
+        ],
+        "state": "value",
+        "unit": null,
+        "value": {
+          "description": "Чертёж шлейфа с двумя зеркальными половинами: слева — общий вид одного конца с зажимом типа «разъёмный ответвительный», справа — вид второго конца с зажимом с «лапкой». Над каждой половиной стрелка «В пролёт» (влево и вправо соответственно), внутри зажимов указано «Направление опрессования». Выноска «Зажимы входят в комплект поставки шлейфа» относится к концевым зажимам обеих сторон; между половинами — двусторонняя стрелка «К натяжным зажимам изолирующих подвесок», указывающая, к какой стороне подводятся натяжные зажимы подвесок. Размер L₁ отмеряется вдоль оси концевого участка от торца зажима. Экспликация: 1 — корпус зажима типа «разъёмный ответвительный», 2 — корпус зажима с «лапкой», 3 — вкладыш, 4 — проводник изолированный (число 5 на правом продольном разрезе является осевым размером заштрихованной перемычки между концами проводников, а не позицией детали). По правой половине нанесены размеры s и S₁ в зоне зажима с «лапкой», L₃ — осевой размер наклонного окончания от отмеченного верхнего уровня до верхней плоскости перемычки размера 5, Б со стрелкой, задающей направление вида, и дуговое обозначение длины «L». Справа расположены срез А-А (выносные линии с буквами А, подпись «А - А») и вид Б. В сечении А-А круглый узел имеет размеры D (вертикально), L₂ (горизонтально) и выноску d на диаметр проводника, а также выноски позиций 1 и 3. Вид Б показывает пластину зажима с «лапкой» с четырьмя крепежами с шестигранными головками по сетке 2×2, размерами 80 (ширина пластины), 60 (высота), 45 (межосевое расстояние по горизонтали) и 45 (по вертикали), и выносным значением 17,5; ниже пластина переходит в цилиндрический корпус зажима и далее в изогнутый проводник.",
+          "labels": [
+            "В пролёт",
+            "Зажимы входят в комплект поставки шлейфа",
+            "К натяжным зажимам изолирующих подвесок",
+            "Направление опрессования",
+            "L₁",
+            "L₂",
+            "L₃",
+            "Б",
+            "L",
+            "s",
+            "S₁",
+            "D",
+            "d",
+            "А",
+            "А",
+            "А - А",
+            "Б",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "80",
+            "60",
+            "45",
+            "45",
+            "17,5"
+          ],
+          "title": "Шлейф изолированный ШСИП модификации «3»"
+        }
+      },
+      "reason": "False item-5 interpretation and hexagonal-hole interpretation contradicted by original longitudinal section/fasteners. Independent tester also corrected L3 ownership from whole bend to the inclined termination ending at upper face of the 5 separator; all original dimension labels preserved.",
+      "evidence": [
+        {
+          "catalog": "innovations",
+          "page": 108,
+          "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "region": [
+            0.49,
+            0.3,
+            0.78,
+            0.46
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        },
+        {
+          "catalog": "innovations",
+          "page": 108,
+          "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "region": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        },
+        {
+          "catalog": "innovations",
+          "page": 108,
+          "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "region": [
+            0.07,
+            0.06,
+            0.93,
+            0.52
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "remove",
+      "before": {
+        "catalog": "small",
+        "condition": null,
+        "id": "C-ae7f456962c72767b4b057d9",
+        "kind": "drawing_annotation",
+        "model": "НЗ-60/11-17",
+        "page": 111,
+        "parameter": "Размер",
+        "part": "НЗ-60/11-17",
+        "producer_ref": "P-8286be9864a3534d4dc0",
+        "source_fact_ids": [
+          "L-293d01c035201879b9ad261b",
+          "L-6645e7808a84a9521ed1aa9a",
+          "L-678e3833c52939b4ebb82f7d",
+          "L-6828f1b5dcf233921b7012d6",
+          "L-ffcf720afc0909a4ed512418"
+        ],
+        "state": "unreadable",
+        "unit": null,
+        "value": ""
+      },
+      "after": null,
+      "reason": "All seven visible dimension labels are preserved in primary figure (267,292,92,70.5,152.5,Ø16,17); empty unreadable annotation has no unique dimension or position and is a duplicate extraction artifact.",
+      "evidence": [
+        {
+          "catalog": "small",
+          "page": 111,
+          "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+          "region": [
+            0.3,
+            0.36,
+            0.94,
+            0.7
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "replace",
+      "before": {
+        "catalog": "small",
+        "condition": null,
+        "id": "C-1a1e3973fabdbbfba598f059",
+        "kind": "figure",
+        "model": null,
+        "page": 111,
+        "parameter": null,
+        "part": null,
+        "producer_ref": "P-8286be9864a3534d4dc0",
+        "source_fact_ids": [
+          "O-45da2f30e2da192c384860f6"
+        ],
+        "state": "value",
+        "unit": null,
+        "value": {
+          "description": "Чертёж из трёх изображений. (1) Главный вид: корпус зажима с заделанным проводом, штриховыми линиями показаны скрытые контуры; габаритные размеры: 267 (верхняя горизонтальная размерная линия), 292 (нижняя горизонтальная), 92 (расстояние между центрами отверстий); два знака «А» с указателями направления взгляда. (2) Вид сбоку: ширина 70,5, высота 152,5 (подпись повёрнута на 90°); видны паз корпуса, клин и штифт. (3) Сечение «А-А» с двумя шевронами-указателями над видом: размеры Ø16 (диаметр штифта) и 17 (длина выступа). Допуски и посадки на чертеже не указаны; на главном виде два отверстия.",
+          "labels": [
+            "267",
+            "92",
+            "292",
+            "А",
+            "А",
+            "70,5",
+            "152,5",
+            "А-А",
+            "Ø16",
+            "17"
+          ],
+          "title": "Чертёж зажима НЗ-60/11-17 (главный вид, вид сбоку, сечение А-А)"
+        }
+      },
+      "after": {
+        "catalog": "small",
+        "condition": null,
+        "id": "C-1a1e3973fabdbbfba598f059",
+        "kind": "figure",
+        "model": null,
+        "page": 111,
+        "parameter": null,
+        "part": null,
+        "producer_ref": "P-SR-d0833884973863f34548",
+        "source_fact_ids": [
+          "O-45da2f30e2da192c384860f6"
+        ],
+        "state": "value",
+        "unit": null,
+        "value": {
+          "description": "Чертёж из трёх изображений. (1) Главный вид: корпус зажима с заделанным проводом, штриховыми линиями показаны скрытые контуры; габаритные размеры: 267 (верхняя горизонтальная размерная линия), 292 (нижняя горизонтальная), 92 (расстояние между центрами отверстий); два знака «А» с указателями направления взгляда. (2) Вид сбоку: ширина 70,5, высота 152,5 (подпись повёрнута на 90°); видны паз корпуса, клин и штифт. (3) Сечение «А-А» с двумя шевронами-указателями над видом: размеры Ø16 (диаметр штифта) и 17 (поперечный размер выступа в сечении между верхней и нижней образующими, не его осевая длина). Допуски и посадки на чертеже не указаны; на главном виде два отверстия.",
+          "labels": [
+            "267",
+            "92",
+            "292",
+            "А",
+            "А",
+            "70,5",
+            "152,5",
+            "А-А",
+            "Ø16",
+            "17"
+          ],
+          "title": "Чертёж зажима НЗ-60/11-17 (главный вид, вид сбоку, сечение А-А)"
+        }
+      },
+      "reason": "Original dimension 17 is drawn vertically across the protruding element, not along its horizontal axis.",
+      "evidence": [
+        {
+          "catalog": "small",
+          "page": 111,
+          "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+          "region": [
+            0.3,
+            0.36,
+            0.94,
+            0.7
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "replace",
+      "before": {
+        "catalog": "small",
+        "condition": null,
+        "id": "C-640599827912d2e3915b9e43",
+        "kind": "model_parameter",
+        "model": "SCT 6-14",
+        "page": 218,
+        "parameter": "Диаметр провода",
+        "part": "FEMAN",
+        "producer_ref": "P-5fc14d72749d0e09af6c",
+        "source_fact_ids": [
+          "L-c1c57cb2d3fb4ff4cf3b76be"
+        ],
+        "state": "value",
+        "unit": "мм",
+        "value": "6,0-14,0"
+      },
+      "after": {
+        "catalog": "small",
+        "condition": null,
+        "id": "C-640599827912d2e3915b9e43",
+        "kind": "model_parameter",
+        "model": "SCT 6-14",
+        "page": 218,
+        "parameter": "Диаметр провода",
+        "part": "FEMAN",
+        "producer_ref": "P-SR-8556ff524ca5b022ddde",
+        "source_fact_ids": [
+          "L-c1c57cb2d3fb4ff4cf3b76be"
+        ],
+        "state": "unknown",
+        "unit": "мм",
+        "value": null
+      },
+      "reason": "The source layout does not prove diameter. A plausible interpretation must not be a known engineering value.",
+      "evidence": [
+        {
+          "catalog": "small",
+          "page": 218,
+          "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+          "region": [
+            0.63,
+            0.09,
+            0.96,
+            0.48
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        },
+        {
+          "catalog": "small",
+          "page": 218,
+          "source_sha256": "25b5c21bcc88bfc7c40d707a5907bbed77ba115195fa174e6e1b568d2a5f8e49",
+          "region": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "remove",
+      "before": {
+        "catalog": "innovations",
+        "condition": null,
+        "id": "C-494b0a0c152e9164de782b7b",
+        "kind": "source_note",
+        "model": null,
+        "page": 108,
+        "parameter": "source_note",
+        "part": null,
+        "producer_ref": "P-8bf48c0e149e2132e575",
+        "source_fact_ids": [
+          "O-a9bc168d1aa6a648aea18d23"
+        ],
+        "state": "value",
+        "unit": null,
+        "value": "Подписи чертежа, включая обозначение дуги изгиба «CL», выполнены контурным шрифтом; текстовый слой PDF в этой области отсутствует. Различие начертания C/С для этой вспомогательной подписи на технический факт не влияет."
+      },
+      "after": null,
+      "reason": "False parser commentary: 5 is a dimension, not a missing item; the curved length is L, not CL. Original source image rechecked.",
+      "evidence": [
+        {
+          "catalog": "innovations",
+          "page": 108,
+          "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "region": [
+            0.49,
+            0.3,
+            0.78,
+            0.46
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    },
+    {
+      "op": "remove",
+      "before": {
+        "catalog": "innovations",
+        "condition": null,
+        "id": "C-92cb8c014a0d8ee9a237a92d",
+        "kind": "source_note",
+        "model": null,
+        "page": 108,
+        "parameter": "source_note",
+        "part": null,
+        "producer_ref": "P-8bf48c0e149e2132e575",
+        "source_fact_ids": [
+          "O-6378e5ee5928bbf158f9c3bd"
+        ],
+        "state": "value",
+        "unit": null,
+        "value": "На чертеже вынесена позиция 5 (шарнирный узел в зоне зажима с «лапкой»), однако в экспликации на этой странице позиции 1–4 перечислены без 5 — особенность источника."
+      },
+      "after": null,
+      "reason": "False parser commentary: 5 is a dimension, not a missing item; the curved length is L, not CL. Original source image rechecked.",
+      "evidence": [
+        {
+          "catalog": "innovations",
+          "page": 108,
+          "source_sha256": "4542d9a0146122e5d2dc4d8d73895baa2bb4eb1349d3b439076efe5c2af4a6ee",
+          "region": [
+            0.49,
+            0.3,
+            0.78,
+            0.46
+          ],
+          "region_units": "normalized",
+          "review_method": "Original PDF image and enlarged region personally inspected by source reviewer; root second visual review"
+        }
+      ]
+    }
+  ],
+  "metadata_changes": [
+    {
+      "key": "new_audit_issues",
+      "before": [
+        {
+          "catalog": "small",
+          "id": "SOURCE-LAYOUT-SCT-218",
+          "message": "В PDF диапазон 6,0–14,0 физически напечатан в колонке нагрузки. Интерпретация диаметра соответствует имени SCT6–14 и соседним монтажным зажимам, но внешний паспорт не проверялся. Диаметр выбран из существующего Олегова факта, нагрузка оставлена неизвестной. Это отдельная неоднозначность разметки источника, исходные42 не меняются.",
+          "model": "SCT 6-14",
+          "page": 218,
+          "source_fact_ids": [
+            "L-c1c57cb2d3fb4ff4cf3b76be",
+            "L-abd1ac73a5d99c5f5c417b3c",
+            "O-4f1f35d0f0bf82d5f9c02633",
+            "O-fcda9674d01f9b074f8c6183"
+          ],
+          "status": "interpretation_with_unresolved_load"
+        }
+      ],
+      "after": [
+        {
+          "catalog": "small",
+          "id": "SOURCE-LAYOUT-SCT-218",
+          "message": "Диапазон 6,0–14,0 напечатан в колонке рабочей нагрузки, ячейка диаметра пуста. По PDF нельзя подтвердить ни перенос в диаметр, ни техническую рабочую нагрузку. Оба параметра неизвестны до проверки паспорта; печатная строка сохранена отдельно.",
+          "model": "SCT 6-14",
+          "page": 218,
+          "source_fact_ids": [
+            "L-c1c57cb2d3fb4ff4cf3b76be",
+            "L-abd1ac73a5d99c5f5c417b3c",
+            "O-4f1f35d0f0bf82d5f9c02633",
+            "O-fcda9674d01f9b074f8c6183"
+          ],
+          "status": "source_ambiguity_diameter_and_load_unknown"
+        }
+      ],
+      "reason": "Remove contradicted diameter inference from current issue description; immutable previous metadata retained in ledger"
+    }
+  ],
+  "output_records_sha256": "f1478ce83169330e904e630d730972767c562e84eca43a94bc57befdf922fbd1",
+  "output_record_count": 109318,
+  "reviewers": [
+    {
+      "harness": "codex",
+      "session_id": "01a12c30-e58f-7861-8a2d-966c92630163",
+      "role": "integration and second original-image review"
+    },
+    {
+      "harness": "codex",
+      "agent": "/root/close_armature_sources",
+      "role": "independent original-image review of armature"
+    },
+    {
+      "harness": "codex",
+      "agent": "/root/close_other_sources",
+      "role": "independent original-image review of other catalogues"
+    }
+  ],
+  "review_scope": "42 retained legacy unresolved observations and two additional defects, on 16 original PDF pages; not a new 980-page audit",
+  "builder": {
+    "name": "canonical-source-review",
+    "version": "1.1.0",
+    "git_revision": "07a3535c8f362089951500b023f9778c16a4e9a8",
+    "source_sha256": "07f5b63ea72ea3c7754223c102385e6f0ae2e003164cf6c6b89adfae83a1908c"
+  }
+}

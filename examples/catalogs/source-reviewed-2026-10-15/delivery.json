@@ -1,0 +1,75 @@
+{
+  "schema": "source-reviewed-catalogue-delivery/1",
+  "revision_program": "canonical-source-review",
+  "revision_version": "1.1.0",
+  "revision_git": "07a3535",
+  "catalogues": 5,
+  "pages": 980,
+  "records": 109318,
+  "closed_legacy_uncertainty_observations": 42,
+  "closed_legacy_by_catalogue": {
+    "armature": 33,
+    "innovations": 4,
+    "isolators": 5
+  },
+  "record_changes": 24,
+  "added_records": 18,
+  "replaced_records": 3,
+  "removed_records": 3,
+  "open_legacy_uncertainties": 0,
+  "remaining_source_conflict_records": 22,
+  "remaining_unknown_records": 2,
+  "remaining_unreadable_records": 0,
+  "remaining_question_groups": 11,
+  "source_review_pages": 16,
+  "full_980_page_source_audit_claimed": false,
+  "new_model_api_calls": 0,
+  "previous_delivery_url": "https://disk.yandex.ru/d/U2xANTDqv6a0Mw",
+  "old_42_preserved_in_separate_history": true,
+  "files": {
+    "catalogue.json": {
+      "sha256": "d68143d43e4e9d2f135439f9067b905d74cde7b787226a9d52ffc4616e20be5e",
+      "bytes": 48598306
+    },
+    "catalogue.xlsx": {
+      "sha256": "cde5575f181ed32e95e019203132fb591d9d296b78a5f2844ecc8bab736532fe",
+      "bytes": 12757190
+    },
+    "README.txt": {
+      "sha256": "c927a09e11d38d9aeec80b2f7da1c833ca871614a91fec910a88b527cdef4b43",
+      "bytes": 2342
+    }
+  },
+  "tests": {
+    "focused_tests_passed": 28,
+    "independent_full_data_checks": 35,
+    "json_excel_readback_ok": true,
+    "final_record_order_delta_check_ok": true
+  },
+  "source_conflicts_exactly_preserved": true,
+  "revision_tag": "canonical-source-review-v1.1.0",
+  "public_files": [
+    {
+      "name": "Каталоги Форэнерго - сведение 1.1.0.zip",
+      "url": "https://yadi.sk/d/X3TxfJJaUrTUqg",
+      "sha256": "f399649ab355dd4aee53e4af721fb671bd310801660b1e6552c65cf5129f596b",
+      "bytes": 19621006,
+      "public_download_matches": true,
+      "zip_crc_ok": true
+    },
+    {
+      "name": "История исправлений 1.1.0.zip",
+      "url": "https://yadi.sk/d/DLnYBKCWCHYqcA",
+      "sha256": "267c5fa42185353072a274fe04166ffbacd154555ae2d89bc0c3df039f700f7b",
+      "bytes": 45545,
+      "public_download_matches": true,
+      "zip_crc_ok": true
+    }
+  ],
+  "regression_capture": {
+    "pending_source_pages": 16,
+    "model_calls": 0,
+    "benchmark_git_revision": "5a7372042f922ac26446537ec621d4a3d2de8728",
+    "frozen_500_520_unchanged": true
+  }
+}
