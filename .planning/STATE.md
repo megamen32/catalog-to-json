@@ -1,3 +1,17 @@
+## Latest delta-only owner merge,2026-10-15T00:58UTC
+
+519/980saved owner merges,461pending; no new extraction and no new benchmark. Exact agreements reused. Three newly human-authorized nativeZCode workers (MiniMaxM3.1FlashPreview + two GLM5.3FlashCodingPlan contexts) own178disjoint unfinished innovations pages. Root retains22isolators; original exporter and FastAgentMM continue. Native model responses confirmed; first completed new-shard receipt still pending. Root merged43/44/45/48 against retained source, capturing4pending regressions with no score changes. No final unified ZIP yet. Current task remains .agents/tasks/20261014-oleg-consensus-merge.md; later user corrections supersede historical three-context/full-page-review wording below.
+
+## Прямое расширение исполнителей —15.10.2026,03:55МСК
+
+Владелец прямо попросил MiniMax в ZCode и две отдельные GLM5.3Flash сессии. Это расширение прежнего split-work, без нового извлечения, бенчмарка или кворума. Исходные два готовых разбора не меняются; физическая страница — только непересекающийся ключ распределения existing facts/contexts/ledger. Для спорных связей используется исходный PDF, не новый OCR/LLM extraction.
+
+Запущены nativeZCode: flash-a sess_f0c7faa3-9bf2-4254-9136-d8a1cb06ead6, flash-b sess_7539aef4-3a59-41fb-b357-e565d9d5cff7, обе account:zai-individual-coding-plan/GLM-5.3-Flash$high через CodingPlan. По60 незавершённых страниц innovations: a15–79,b82–150 с исключением уже готовых. Native MiniMax sess_692985f1-6e5c-4adc-9c01-0b27bd33f29e, 4cc673aa-6c6a-418b-8b91-9e601fef99f6/MiniMax-M3.1-Flash-Preview$enabled,58оставшихся151–215. У MiniMax runtime принимает enabled, не medium/high/max; эти отказы были до создания сессии и до модельных вызовов. Никакого скрытого fallback. Фактические identity/model сохраняются; role=zcode у новых трёх означает native harness, а не модельGLM. Первые native model/tool outputs ещё проверяются; создание/admitted не выдавать за законченный merge.
+
+Source-preserving transfers в .tmp/oleg-consensus-20261014/ownership-transfers/index.json: прежние4ARM плюс178innovations Codex→zcode. Каждый старый input/contexts/facts/ledger/source неизменен; изменён owner в отдельной копии packet. Манифесты и WORKER.md: .tmp/oleg-consensus-20261014/parallel-native-20261015/. Новые outputs только reviews/zcode/full-work/{flash-a,flash-b,minimax-native}, не пересекаются с прежними288/sem2/exporter. Root сохраняет26isolators. Прежний ZCode исправляет MATERIALIZED exporter и уже уведомлён о recursive receipts+182transfers; прежняя FastAgentMMARM-очередь не прерывалась. Единый бюджет14GiB/CPU2/swap0/tasks512/tasktemp4GiB сохраняется: каждому новому native context1.5GiB/CPU0.25,один bounded1GiB sourceworker,220MiB scratch. На старте MemAvailable36.5GiB; новые178packetкопии добавлены в пределах4GiB.
+
+Последний строгий census00:52:57UTC —515saved/465remaining, Codex178/ZCode288/FastAgentMM49; это охват рабочего сведения, НЕточность/финальнаянезависимаяпроверка. После третьего transfer assigned Codex204/ZCode466/MM310, готовые работы не переименованы. Итоговый980ZIPещёне завершён. Следующий шаг: реальный первый PNG+save каждого нового worker, root43/44/45/48, затем всеоставшиеся.
+
 На00:30:10UTC:501/980savedowner-pages,479remaining; Codex167/382,ZCode288/288,MiniMax46/310; latestreceipt validation invalid=[]. ОбщийGPTAdminview_regionреально вернул960x674nativePNG вэтойсессии(job e7fdfb3428254a03c1d892182d17d910); дополнительныйrestartсервиса не нужен. См.нижеосновнойhandover/задачу.
 
 ## Актуальная рабочая очередь15.10.2026,03:30МСК
