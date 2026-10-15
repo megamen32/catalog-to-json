@@ -1,0 +1,913 @@
+{
+  "schema": "catalogue-source-clarification-report/1",
+  "created_at": "2026-10-15T10:43:48.671284+00:00",
+  "pdf": {
+    "public_url": "https://yadi.sk/i/YqbIzmvoHQ8hNg",
+    "bytes": 1603622,
+    "sha256": "2e1d26f7489fa232b83eb1d24a461194777b002c671851d31e049eecfe52d89d",
+    "pages_reopened_from_public_download": 14,
+    "download_matches_verified_pdf": true
+  },
+  "canonical_builder": "602a9515485da958b700969234792cbcaf951512",
+  "canonical_sha256": "c1f6f703e14801ba545283369d484255966d438d74c835b477f1709f40fe35ba",
+  "field_count": 22,
+  "question_groups": 10,
+  "by_catalog": {
+    "armature": 5,
+    "small": 10,
+    "innovations": 7,
+    "opn": 0,
+    "isolators": 0
+  },
+  "all_current_values": null,
+  "all_current_states": "source_conflict",
+  "source_fragments": 16,
+  "source_pages_visually_checked": 16,
+  "canonical_data_changed": false,
+  "company_send_requested": false,
+  "cases": [
+    {
+      "number": 1,
+      "canonical_record": {
+        "catalog": "armature",
+        "condition": null,
+        "id": "C-211d45d57e54abbcf41bb8c3",
+        "kind": "model_parameter",
+        "model": "ПГН-5-6",
+        "page": 62,
+        "parameter": "L",
+        "part": "Размеры, мм",
+        "producer_ref": "P-2fef920288b5d861a797",
+        "source_fact_ids": [
+          "L-b596d6cb93a3628f0f57906f",
+          "L-d5882ec733d41cae58c91255",
+          "O-5b561b19337e01580df5646d",
+          "O-c9a86bcc86ce5d244bc798a4"
+        ],
+        "state": "source_conflict",
+        "unit": "мм",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            62
+          ],
+          "value": "250",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "L-b596d6cb93a3628f0f57906f"
+        },
+        {
+          "pdf_pages": [
+            62
+          ],
+          "value": "300",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "L-d5882ec733d41cae58c91255"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "canonical_record": {
+        "catalog": "armature",
+        "condition": "не более",
+        "id": "C-879da3a19d4e1b339a56f430",
+        "kind": "model_parameter",
+        "model": "ПГН-5-6",
+        "page": 62,
+        "parameter": "Масса",
+        "part": null,
+        "producer_ref": "P-2fef920288b5d861a797",
+        "source_fact_ids": [
+          "L-49a275050af381e0b787ec38",
+          "L-f316220a6b925b9e4a462a33",
+          "O-83be4f7b0ddd0d60d45a1987",
+          "O-e5a0146fdf1113afde0477ab"
+        ],
+        "state": "source_conflict",
+        "unit": "кг",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            62
+          ],
+          "value": "4,80",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "L-49a275050af381e0b787ec38"
+        },
+        {
+          "pdf_pages": [
+            62
+          ],
+          "value": "5,10",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "L-f316220a6b925b9e4a462a33"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "canonical_record": {
+        "catalog": "armature",
+        "condition": "не менее; Марки и сечение провода: АСк2у 500/64",
+        "id": "C-c109d9529f8b6c9215adde74",
+        "kind": "model_parameter",
+        "model": "2ПГН-5-7КП-500/64",
+        "page": 70,
+        "parameter": "Разрушающая нагрузка",
+        "part": null,
+        "producer_ref": "P-6ee6fbfeba64e08acb96",
+        "source_fact_ids": [
+          "O-61e0e1731da45adcb7fe31c3",
+          "O-cdb897d458fcfe396723779f"
+        ],
+        "state": "source_conflict",
+        "unit": "кН",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            70
+          ],
+          "value": "120,0",
+          "unit_as_extracted": "кН",
+          "source_fact_id": "O-61e0e1731da45adcb7fe31c3"
+        },
+        {
+          "pdf_pages": [
+            71
+          ],
+          "value": "200,0",
+          "unit_as_extracted": "кН",
+          "source_fact_id": "O-cdb897d458fcfe396723779f"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "canonical_record": {
+        "catalog": "armature",
+        "condition": "АСк2у 500/64",
+        "id": "C-db51faccb1d8d6fe9081bb5e",
+        "kind": "model_parameter",
+        "model": "2ПГН-5-7КП-500/64",
+        "page": 70,
+        "parameter": "Масса",
+        "part": null,
+        "producer_ref": "P-6ee6fbfeba64e08acb96",
+        "source_fact_ids": [
+          "L-33e04fd7cc50f6ba48b0d017",
+          "L-3d2a7f685e71a6c9cd28b26e",
+          "L-c631adf1b420c39dd319552d",
+          "O-5bb53ab3854a7a7babfa7d97",
+          "O-9219a1893a97b13cf958c953"
+        ],
+        "state": "source_conflict",
+        "unit": "кг",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            71
+          ],
+          "value": "28,95",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "L-33e04fd7cc50f6ba48b0d017"
+        },
+        {
+          "pdf_pages": [
+            70
+          ],
+          "value": "20,20",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "L-3d2a7f685e71a6c9cd28b26e"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "canonical_record": {
+        "catalog": "armature",
+        "condition": "Марка провода по ГОСТ 839-80; А, АКП: 650; Марка провода по ГОСТ 839-80; АС, АСКС, АСКП, АСК: 550/71, 600/72",
+        "id": "C-a9fe5aa5e1ff1f8f91fddb42",
+        "kind": "model_parameter",
+        "model": "3А4А-600-3Т (Д)",
+        "page": 215,
+        "parameter": "Масса",
+        "part": null,
+        "producer_ref": "P-43e4f90b98b069265435",
+        "source_fact_ids": [
+          "O-3b60690dbbbe43c66077714c",
+          "O-ed9c4042fad0cc6ea754b0d3"
+        ],
+        "state": "source_conflict",
+        "unit": "кг",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            215
+          ],
+          "value": "7,3",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "O-3b60690dbbbe43c66077714c"
+        },
+        {
+          "pdf_pages": [
+            215
+          ],
+          "value": "9,1",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "O-ed9c4042fad0cc6ea754b0d3"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "canonical_record": {
+        "catalog": "small",
+        "condition": "не более",
+        "id": "C-4e0f09ce66cdc1a9f7e6c97a",
+        "kind": "model_parameter",
+        "model": "ПС-1-1А",
+        "page": 58,
+        "parameter": "Масса",
+        "part": null,
+        "producer_ref": "P-162e7b06e3e286bd176c",
+        "source_fact_ids": [
+          "O-4a4e38866f72a8b09987a350",
+          "O-56562515d30e13a00290b7f5"
+        ],
+        "state": "source_conflict",
+        "unit": "кг",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            58
+          ],
+          "value": "0,20",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "O-4a4e38866f72a8b09987a350"
+        },
+        {
+          "pdf_pages": [
+            117
+          ],
+          "value": "0,15",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "O-56562515d30e13a00290b7f5"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "canonical_record": {
+        "catalog": "small",
+        "condition": "не более",
+        "id": "C-599626a8be28330a823f1530",
+        "kind": "model_parameter",
+        "model": "ПС-2-1А",
+        "page": 58,
+        "parameter": "Масса",
+        "part": null,
+        "producer_ref": "P-162e7b06e3e286bd176c",
+        "source_fact_ids": [
+          "O-a8a87b3a7d9b4f19b5677a98",
+          "O-bc7ab6354870ee7f29ccccc4"
+        ],
+        "state": "source_conflict",
+        "unit": "кг",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            58
+          ],
+          "value": "0,25",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "O-a8a87b3a7d9b4f19b5677a98"
+        },
+        {
+          "pdf_pages": [
+            117
+          ],
+          "value": "0,22",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "O-bc7ab6354870ee7f29ccccc4"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "canonical_record": {
+        "catalog": "small",
+        "condition": "не более",
+        "id": "C-7dcf7f7bdfd4d3e5f7913801",
+        "kind": "model_parameter",
+        "model": "ПС-3-1А",
+        "page": 58,
+        "parameter": "Масса",
+        "part": null,
+        "producer_ref": "P-162e7b06e3e286bd176c",
+        "source_fact_ids": [
+          "O-246b39647504924a516b38e9",
+          "O-85a5d0effd4181afea1a8fad"
+        ],
+        "state": "source_conflict",
+        "unit": "кг",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            58
+          ],
+          "value": "0,37",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "O-246b39647504924a516b38e9"
+        },
+        {
+          "pdf_pages": [
+            117
+          ],
+          "value": "0,35",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "O-85a5d0effd4181afea1a8fad"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "canonical_record": {
+        "catalog": "small",
+        "condition": null,
+        "id": "C-8447b80784de4f9fbaefcde1",
+        "kind": "model_parameter",
+        "model": "ЭДР-20",
+        "page": 202,
+        "parameter": "Габариты",
+        "part": null,
+        "producer_ref": "P-e64bb6b3c4a7b36b8b24",
+        "source_fact_ids": [
+          "O-295a42b3a61a23edc55ce400",
+          "O-e500624680058ca147249495"
+        ],
+        "state": "source_conflict",
+        "unit": "мм",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            202
+          ],
+          "value": "142х60х18",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "O-295a42b3a61a23edc55ce400"
+        },
+        {
+          "pdf_pages": [
+            216
+          ],
+          "value": "142х80х18",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "O-e500624680058ca147249495"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "canonical_record": {
+        "catalog": "small",
+        "condition": null,
+        "id": "C-50e04e3a71f79b197946fe6f",
+        "kind": "model_parameter",
+        "model": "ЭДР-20М",
+        "page": 202,
+        "parameter": "Масса",
+        "part": null,
+        "producer_ref": "P-e64bb6b3c4a7b36b8b24",
+        "source_fact_ids": [
+          "O-1377116feb906071c9a4d6e7",
+          "O-3255e228f729f425db74c039"
+        ],
+        "state": "source_conflict",
+        "unit": "кг",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            202
+          ],
+          "value": "0,55",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "O-1377116feb906071c9a4d6e7"
+        },
+        {
+          "pdf_pages": [
+            216
+          ],
+          "value": "0,5",
+          "unit_as_extracted": "кг",
+          "source_fact_id": "O-3255e228f729f425db74c039"
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "canonical_record": {
+        "catalog": "small",
+        "condition": null,
+        "id": "C-fbe29e1f1f9a0215d3ec7267",
+        "kind": "model_parameter",
+        "model": "PS 2000",
+        "page": 59,
+        "parameter": "Сечение / Диаметр",
+        "part": "МЗВА-ЧЭМЗ",
+        "producer_ref": "P-7c37b288bc128ebfbb6d",
+        "source_fact_ids": [
+          "L-2600303d6f392a85ada43630",
+          "L-d66529fc876f85c24c14b897",
+          "L-df8065feb468451ea04b375b"
+        ],
+        "state": "source_conflict",
+        "unit": "мм²; мм",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            59
+          ],
+          "value": "16–120",
+          "unit_as_extracted": "мм²; мм",
+          "source_fact_id": "L-2600303d6f392a85ada43630"
+        },
+        {
+          "pdf_pages": [
+            60
+          ],
+          "value": "25-120",
+          "unit_as_extracted": "",
+          "source_fact_id": "L-d66529fc876f85c24c14b897"
+        },
+        {
+          "pdf_pages": [
+            60
+          ],
+          "value": "25-120",
+          "unit_as_extracted": "мм²; мм",
+          "source_fact_id": "L-df8065feb468451ea04b375b"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "canonical_record": {
+        "catalog": "small",
+        "condition": null,
+        "id": "C-772ff8350740f126b4fb1b34",
+        "kind": "model_parameter",
+        "model": "EA 2200",
+        "page": 59,
+        "parameter": "Сечение / Диаметр",
+        "part": "МЗВА-ЧЭМЗ",
+        "producer_ref": "P-7c37b288bc128ebfbb6d",
+        "source_fact_ids": [
+          "O-55beb58f9a80bbad814c1b11",
+          "O-ce5e8a12c1b00d8f29ad13be"
+        ],
+        "state": "source_conflict",
+        "unit": "мм2",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            59
+          ],
+          "value": "70–120",
+          "unit_as_extracted": null,
+          "source_fact_id": "O-55beb58f9a80bbad814c1b11"
+        },
+        {
+          "pdf_pages": [
+            60
+          ],
+          "value": "95–120",
+          "unit_as_extracted": "мм², мм",
+          "source_fact_id": "O-ce5e8a12c1b00d8f29ad13be"
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "canonical_record": {
+        "catalog": "small",
+        "condition": null,
+        "id": "C-041fe4c43b44bda83fb0f0a2",
+        "kind": "model_parameter",
+        "model": "KM 39",
+        "page": 59,
+        "parameter": "Разрушающая нагрузка, кН",
+        "part": "МЗВА-ЧЭМЗ",
+        "producer_ref": "P-7c37b288bc128ebfbb6d",
+        "source_fact_ids": [
+          "O-e0f7c765d4f6a464e0038694",
+          "O-ec004b96f6d0a3bdd406d7d9"
+        ],
+        "state": "source_conflict",
+        "unit": "кН",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            59
+          ],
+          "value": "27,7 /17,7",
+          "unit_as_extracted": null,
+          "source_fact_id": "O-e0f7c765d4f6a464e0038694"
+        },
+        {
+          "pdf_pages": [
+            60
+          ],
+          "value": "17,7/27,7",
+          "unit_as_extracted": "кН",
+          "source_fact_id": "O-ec004b96f6d0a3bdd406d7d9"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "canonical_record": {
+        "catalog": "small",
+        "condition": null,
+        "id": "C-0e11496bdf3bf589b3d04f90",
+        "kind": "model_parameter",
+        "model": "PA 2200(S)",
+        "page": 61,
+        "parameter": "Сечение, мм²\nДиаметр, мм",
+        "part": "МЗВА-ЧЭМЗ",
+        "producer_ref": "P-7fde1f77639a6d4d3b44",
+        "source_fact_ids": [
+          "L-4c704415dc0d558ad8346c43",
+          "L-cb4560748db20842cebad37b",
+          "L-fb96f1acfee83ef23b597f00"
+        ],
+        "state": "source_conflict",
+        "unit": "мм²; мм",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            61
+          ],
+          "value": "70–120",
+          "unit_as_extracted": "мм²; мм",
+          "source_fact_id": "L-4c704415dc0d558ad8346c43"
+        },
+        {
+          "pdf_pages": [
+            61
+          ],
+          "value": "70–120",
+          "unit_as_extracted": "",
+          "source_fact_id": "L-cb4560748db20842cebad37b"
+        },
+        {
+          "pdf_pages": [
+            62
+          ],
+          "value": "95–120",
+          "unit_as_extracted": "",
+          "source_fact_id": "L-fb96f1acfee83ef23b597f00"
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "canonical_record": {
+        "catalog": "small",
+        "condition": null,
+        "id": "C-9531ba5953cd869eaec99c35",
+        "kind": "model_parameter",
+        "model": "CI 25-150",
+        "page": 65,
+        "parameter": "Сечение, мм²\nДиаметр, мм",
+        "part": "МЗВА-ЧЭМЗ",
+        "producer_ref": "P-ec613c5f085fe8ef46a0",
+        "source_fact_ids": [
+          "L-9b71ba6c20ff74e817c625e9",
+          "L-b404e0b7fb085738f951497b"
+        ],
+        "state": "source_conflict",
+        "unit": "мм²",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            65
+          ],
+          "value": "16–150",
+          "unit_as_extracted": "",
+          "source_fact_id": "L-9b71ba6c20ff74e817c625e9"
+        },
+        {
+          "pdf_pages": [
+            66
+          ],
+          "value": "25–150",
+          "unit_as_extracted": "",
+          "source_fact_id": "L-b404e0b7fb085738f951497b"
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "canonical_record": {
+        "catalog": "innovations",
+        "condition": "При напряжении 40 кВ",
+        "id": "C-2762a06af3f0bfd4e244da32",
+        "kind": "model_parameter",
+        "model": "ПСВ210Д Р 212/112",
+        "page": 26,
+        "parameter": "Уровень радиопомех",
+        "part": "Уровень радиопомех",
+        "producer_ref": "P-6611a83eec37e41c9c27",
+        "source_fact_ids": [
+          "O-bcd880406472c35a10c4c004",
+          "O-ed3b1a6c9fafc483271330bb"
+        ],
+        "state": "source_conflict",
+        "unit": "дБ",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            26
+          ],
+          "value": 75,
+          "unit_as_extracted": "дБ",
+          "source_fact_id": "O-bcd880406472c35a10c4c004"
+        },
+        {
+          "pdf_pages": [
+            26
+          ],
+          "value": 80,
+          "unit_as_extracted": "дБ",
+          "source_fact_id": "O-ed3b1a6c9fafc483271330bb"
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "canonical_record": {
+        "catalog": "innovations",
+        "condition": "При напряжении 40 кВ",
+        "id": "C-995a0ed26cfe1970b81031b6",
+        "kind": "model_parameter",
+        "model": "ПСВ210С Р 212/112",
+        "page": 26,
+        "parameter": "Уровень радиопомех",
+        "part": "Уровень радиопомех",
+        "producer_ref": "P-6611a83eec37e41c9c27",
+        "source_fact_ids": [
+          "O-3a26c339cd63dc74b450461a",
+          "O-ca634e48aea447919400b42f"
+        ],
+        "state": "source_conflict",
+        "unit": "дБ",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            26
+          ],
+          "value": 75,
+          "unit_as_extracted": "дБ",
+          "source_fact_id": "O-ca634e48aea447919400b42f"
+        },
+        {
+          "pdf_pages": [
+            26
+          ],
+          "value": 80,
+          "unit_as_extracted": "дБ",
+          "source_fact_id": "O-3a26c339cd63dc74b450461a"
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "canonical_record": {
+        "catalog": "innovations",
+        "condition": null,
+        "id": "C-a18441ebffbf111f96e0ba3a",
+        "kind": "model_parameter",
+        "model": "ОСК 20-35-Б06-2",
+        "page": 74,
+        "parameter": "D1",
+        "part": "Верхний фланец",
+        "producer_ref": "P-8b800ea378e1ba27a326",
+        "source_fact_ids": [
+          "O-43afdd54da416277df05dcf7",
+          "O-9d9bb84fe66e6c045fa0ca26"
+        ],
+        "state": "source_conflict",
+        "unit": "мм",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            74
+          ],
+          "value": "Ø198",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "O-43afdd54da416277df05dcf7"
+        },
+        {
+          "pdf_pages": [
+            74
+          ],
+          "value": "Ø254",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "O-9d9bb84fe66e6c045fa0ca26"
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "canonical_record": {
+        "catalog": "innovations",
+        "condition": null,
+        "id": "C-0d629e1816c29e5d8d55c748",
+        "kind": "model_parameter",
+        "model": "ОСК 20-35-Б06-2",
+        "page": 74,
+        "parameter": "В 1",
+        "part": "Верхний фланец",
+        "producer_ref": "P-8b800ea378e1ba27a326",
+        "source_fact_ids": [
+          "O-155c6ef0922e2c9c02417a6c",
+          "O-83c023151b5c121693d41c6d"
+        ],
+        "state": "source_conflict",
+        "unit": "мм",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            74
+          ],
+          "value": "□140",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "O-83c023151b5c121693d41c6d"
+        },
+        {
+          "pdf_pages": [
+            74
+          ],
+          "value": "□180",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "O-155c6ef0922e2c9c02417a6c"
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "canonical_record": {
+        "catalog": "innovations",
+        "condition": null,
+        "id": "C-3b91e5ae6250bdcd485cc335",
+        "kind": "model_parameter",
+        "model": "ОСК 20-35-Б06-2",
+        "page": 74,
+        "parameter": "d1",
+        "part": "Верхний фланец",
+        "producer_ref": "P-8b800ea378e1ba27a326",
+        "source_fact_ids": [
+          "O-545811b8b61b8edbd6b062d9",
+          "O-ef9f7b3103cc28f4595c7dd3"
+        ],
+        "state": "source_conflict",
+        "unit": "мм",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            74
+          ],
+          "value": "4М16",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "O-ef9f7b3103cc28f4595c7dd3"
+        },
+        {
+          "pdf_pages": [
+            74
+          ],
+          "value": "4Ø18",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "O-545811b8b61b8edbd6b062d9"
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "canonical_record": {
+        "catalog": "innovations",
+        "condition": null,
+        "id": "C-6d95e5c92bcc1d81adb6b5ad",
+        "kind": "model_parameter",
+        "model": "ОСК 20-35-Б06-2",
+        "page": 74,
+        "parameter": "D2",
+        "part": "Нижний фланец",
+        "producer_ref": "P-8b800ea378e1ba27a326",
+        "source_fact_ids": [
+          "O-6e87de8b96a6ec06805b1046",
+          "O-bc47935a281403321dc3a0ec"
+        ],
+        "state": "source_conflict",
+        "unit": "мм",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            74
+          ],
+          "value": "Ø198",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "O-6e87de8b96a6ec06805b1046"
+        },
+        {
+          "pdf_pages": [
+            74
+          ],
+          "value": "Ø254",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "O-bc47935a281403321dc3a0ec"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "canonical_record": {
+        "catalog": "innovations",
+        "condition": null,
+        "id": "C-c29965a2c3293682685d4ddc",
+        "kind": "model_parameter",
+        "model": "ОСК 20-35-Б06-2",
+        "page": 74,
+        "parameter": "В 2",
+        "part": "Нижний фланец",
+        "producer_ref": "P-8b800ea378e1ba27a326",
+        "source_fact_ids": [
+          "O-143702a2da271a7ec8e8312f",
+          "O-c4075f64d3487c1b8df2c6b6"
+        ],
+        "state": "source_conflict",
+        "unit": "мм",
+        "value": null
+      },
+      "source_alternatives": [
+        {
+          "pdf_pages": [
+            74
+          ],
+          "value": "□140",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "O-c4075f64d3487c1b8df2c6b6"
+        },
+        {
+          "pdf_pages": [
+            74
+          ],
+          "value": "□180",
+          "unit_as_extracted": "мм",
+          "source_fact_id": "O-143702a2da271a7ec8e8312f"
+        }
+      ]
+    }
+  ]
+}
