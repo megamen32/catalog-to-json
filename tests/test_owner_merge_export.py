@@ -469,3 +469,36 @@ def test_keep_ours_still_exports_the_rejected_oleg_decision(env):
     assert rows[1][0:4] == (7, 0, 'same_fact', 'ours')
     assert rows[1][5:7] == (1, 1)
     book.close()
+
+
+def test_selected_designation_binds_retained_parameters_to_same_row(tmp_path):
+    """A merged-cell continuation must not export its dimensions under owner=None."""
+    designation = make_fact('ours', 0, None, owner=None, name='designation')
+    designation.update(kind='model_designation', pointer=CELL_PTR, unit=None)
+    dimension = make_fact('ours', 1, '17,1', owner=None, name='Диаметр')
+    dimension.update(pointer=CELL_PTR.rsplit('/', 1)[0] + '/1', unit='мм')
+    replacement = make_fact('oleg', 2, 'ШСИП-110-(16-17,5)-8-L',
+                            owner='ШСИП-110-(16-17,5)-8-L', name='designation')
+    replacement.update(kind='model_designation', unit=None)
+    neighbour = make_fact('ours', 3, '22', owner=None, name='Диаметр')
+    neighbour.update(pointer=dimension['pointer'].replace('/rows/0/', '/rows/1/'), unit='мм')
+    packet, _, _ = make_packet(tmp_path, 7, [designation, dimension, replacement, neighbour])
+    receipt = make_receipt(packet, groups=[
+        {'fact_indices': [0, 2], 'relation': 'same_fact', 'keep': 'oleg'},
+        {'fact_indices': [1, 3], 'relation': 'ours_only', 'keep': 'ours'},
+    ])
+    page = {'content': {'tables': [{'columns': [
+        {'id': 'name'}, {'id': 'diameter', 'unit': 'мм'}], 'rows': [{'cells': [
+            {'column_id': 'name', 'value': None, 'state': 'blank'},
+            {'column_id': 'diameter', 'value': '17,1', 'state': 'value'}]}]}]}}
+    primary, _, archived, _ = bom.apply_receipt(
+        {'packet': packet, 'catalog': 'small', 'physical_page': 7}, page, receipt, [])
+    retained = next(f for f in primary if f['fact_id'] == dimension['fact_id'])
+    assert page['content']['tables'][0]['rows'][0]['cells'][0]['value'] == replacement['value']
+    assert retained['owner'] == replacement['value']
+    assert retained['provenance']['source_owner'] is None
+    assert retained['provenance']['owner_from_selected_designation_fact_id'] == replacement['fact_id']
+    assert retained['value'] == dimension['value']
+    assert next(f for f in primary if f['fact_id'] == neighbour['fact_id'])['owner'] is None
+    assert archived[0]['value'] is None
+    assert packet['facts'][1]['owner'] is None

@@ -364,6 +364,21 @@ def apply_receipt(record, page, receipt, corrections):
     packet = record['packet']
     facts = packet['facts']
     primary, unresolved, archived, removals = [], [], [], []
+    row_owners = {}
+    for group in receipt['groups']:
+        if group['keep'] != 'oleg':
+            continue
+        members = [facts[i] for i in group['fact_indices']]
+        designations = [f for f in members if f['side'] == 'oleg'
+                        and f.get('kind') == 'model_designation'
+                        and isinstance(f.get('value'), str) and f['value']]
+        if len({f['value'] for f in designations}) != 1:
+            continue
+        selected_model = designations[0]
+        for f in members:
+            cp = cell_pointer_parts(f.get('pointer', ''))
+            if f['side'] == 'ours' and f.get('kind') == 'model_designation' and cp:
+                row_owners[(cp['table'], cp['row'])] = selected_model
     replaced_tables = whole_table_replacements(facts, page, receipt)
     removals.extend({'kind': 'tables', 'index': i} for i in sorted(replaced_tables))
     written = set()
@@ -459,6 +474,13 @@ def apply_receipt(record, page, receipt, corrections):
                 removals.append(sec)
             archived.append({**entry, 'archived_reason':
                              f'rejected as canonical: keep={keep} chose {chosen}'})
+    for entry in primary:
+        cp = cell_pointer_parts(entry.get('pointer', ''))
+        model = row_owners.get((cp['table'], cp['row'])) if cp and entry['side'] == 'ours' else None
+        if model and entry.get('owner') != model['value']:
+            entry['provenance']['source_owner'] = entry.get('owner')
+            entry['provenance']['owner_from_selected_designation_fact_id'] = model.get('fact_id')
+            entry['owner'] = model['value']
     return primary, unresolved, archived, removals
 
 
