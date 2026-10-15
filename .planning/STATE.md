@@ -1,3 +1,11 @@
+На00:30:10UTC:501/980savedowner-pages,479remaining; Codex167/382,ZCode288/288,MiniMax46/310; latestreceipt validation invalid=[]. ОбщийGPTAdminview_regionреально вернул960x674nativePNG вэтойсессии(job e7fdfb3428254a03c1d892182d17d910); дополнительныйrestartсервиса не нужен. См.нижеосновнойhandover/задачу.
+
+## Актуальная рабочая очередь15.10.2026,03:30МСК
+
+Root167saved/382assigned,ZCode288/288,MM45/310:500/980savedownerpages/480remainingна00:27UTC,НЕaccuracy. ActualMiniMaxexec89523на1.5.26/M3.1FlashPreview:реальные47/48completedпослеcontrolledhandover,безповтораUNKNOWN46/49. Root46самсвёлсчестнымsource_unresolvedØ46/48;49уrootследующей. Все4transfers5/36/46/49вindex, оригинальныезначения/claimsсохранены. Исправленnarrowzoom116x81→960x674;15focusedchecks;releasev1.5.26published. Pin45модулей, controllerпроверяетпередновымдопуском. Старыйexec31640закрыт, не возобновлять.
+
+ZCodeinitialexport399ad81НЕматериализуетownerвыборы, неготовыйитог;реальныйновыйturn212aa298получилкоррекциюprimaryJSON/Excel. Ownerпишет2своифайла,rootнепереписывает. Rootследующее49/isolators54,55,56,58,59,60/всеостальные, безкворумаибольшогомодельногобенчмарка. См.верхtask .agents/tasks/20261014-oleg-consensus-merge.md, liveaudit/census. Все980/latestreceipts+выходJSON/Excel/исправленияв одном проверенномZIPпо-прежнемутребуются;goalactive.
+
 ## Текущий этап: полное сведение двух готовых разборов,15.10.2026,02:56МСК
 
 Безкворума: rootCodex380(armature5/36переданыпослеterminalMM), nativeZCode288 и MiniMax312. На23:53UTC141/288/40saved, всего469/980,511безreceipts; livecensus .tmp/oleg-consensus-20261014/full-owner-progress-latest.json. Rootдобавил30страницвэтомпродолжении, следующиeisolators77–84. MiniMaxстарыйexec20502terminalна36; новаянеповторяющаясвежаяочередьexec31640на37..314живареальнымиrecеipts37/38/39/40+, исходныйworker1.5.25/явныйM3.1FlashPreview. Root36сведенабезповтораUNKNOWN. Контроллер/ошибка/transferполностьювверхнемtaskrecord. Новогобольшогобенчмарка/отдельногоGLM/повторнойэкстракциинет.
