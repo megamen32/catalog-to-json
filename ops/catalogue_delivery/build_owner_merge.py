@@ -18,15 +18,19 @@ len(selected)+len(unresolved).
 Materialization builds the PRIMARY delivery from the groups:
   keep=ours  -> ours facts primary (baseline cells unchanged), oleg facts
                 archived (rejected as canonical);
-  keep=oleg  -> oleg facts primary; the ours cell pointed to by the SAME group
-                is rewritten with the Oleg value (verified before/after); ours
+  keep=oleg  -> oleg facts primary; every ours cell bound by the SAME group
+                is rewritten with the selected typed value and explicit unit /
+                condition (verified before/after); ours
                 figures/texts/notes in the same group are REMOVED from content
                 (they live only in the archive);
   keep=both  -> both sides primary, ours cell stays canonical;
-  keep=unresolved -> every fact of the group stays explicitly marked.
+  keep=unresolved -> source facts stay in the unresolved archive; affected
+                baseline cells become unknown and figures leave usable content.
 Oleg-only selected facts (no ours counterpart in the group) are materialised
 into the per-page ``merged_primary`` section with full provenance. null / blank
 / dash / 0 remain distinct typed values end to end.
+An owner merge invalidates baseline approval for the changed page; the original
+review proof remains in history and is never presented as a new final review.
 
 Final delivery hard-requires all 980 pages with a validated receipt; snapshots
 below full coverage are explicit ``--allow-partial`` runs and never final.
@@ -329,6 +333,26 @@ def apply_receipt(record, page, receipt, corrections):
                 e = primary_entry(f, 'unresolved', receipt)
                 e['source_unresolved'] = True
                 unresolved.append(e)
+                # An unresolved figure is retained here, never as usable content.
+                if f['side'] == 'ours':
+                    sec = section_pointer_parts(f.get('pointer', ''))
+                    if sec:
+                        removals.append(sec)
+                    cp = cell_pointer_parts(f.get('pointer', ''))
+                    if cp:
+                        cell = page['content']['tables'][cp['table']]['rows'][cp['row']]['cells'][cp['cell']]
+                        before = copy.deepcopy(cell)
+                        cell.update(value=None, state='unknown')
+                        if not exact_json_equal(before, cell):
+                            corrections.append({'catalog': record['catalog'],
+                                                'physical_page': record['physical_page'],
+                                                'json_pointer': f['pointer'],
+                                                'owner': f.get('owner'), 'name': f.get('name'),
+                                                'before': before, 'after': copy.deepcopy(cell),
+                                                'source_unresolved': True,
+                                                'archived_fact_id': f.get('fact_id'),
+                                                'selected_by_role': receipt['identity']['role'],
+                                                'work_sha256': receipt['work_sha256']})
             continue
         if keep == 'both':
             for f in members:
@@ -337,37 +361,54 @@ def apply_receipt(record, page, receipt, corrections):
         chosen = keep
         ours_cells = [f for f in members
                       if f['side'] == 'ours' and cell_pointer_parts(f.get('pointer', ''))]
+        if chosen == 'oleg' and ours_cells:
+            selected = [f for f in members if f['side'] == 'oleg']
+            signatures = {(norm(f.get('value')), norm(f.get('unit')) or None,
+                           norm(f.get('condition')) or None) for f in selected}
+            if len(signatures) != 1:
+                raise ValueError('Ambiguous keep=oleg group: multiple selected values/units/conditions '
+                                 f'for baseline cells on {record["catalog"]}:{record["physical_page"]}')
+            selected_fact = selected[0]
+            for target in ours_cells:
+                if target['pointer'] in written:
+                    continue
+                cp = cell_pointer_parts(target['pointer'])
+                table = page['content']['tables'][cp['table']]
+                cell = table['rows'][cp['row']]['cells'][cp['cell']]
+                column = next(c for c in table['columns'] if c['id'] == cell['column_id'])
+                if norm(cell.get('value')) != norm(target.get('value')):
+                    raise ValueError(f'Baseline drift at {target["pointer"]}: '
+                                     f'{cell.get("value")!r} != ours fact {target.get("value")!r}')
+                before = {**copy.deepcopy(cell), 'unit': column.get('unit'),
+                          'condition': column.get('qualifier')}
+                cell['value'] = selected_fact.get('value')
+                state = (selected_fact.get('raw', {}) or {}).get('value_state') or \
+                        (selected_fact.get('raw_semantic_context', {}) or {}).get('value_state')
+                cell['state'] = ('blank' if state == 'source_blank' and cell['value'] in (None, '')
+                                 else 'value')
+                # Empty Oleg metadata is absence, not an instruction to erase the header.
+                if selected_fact.get('unit'):
+                    column['unit'] = selected_fact['unit']
+                if selected_fact.get('condition'):
+                    column['qualifier'] = selected_fact['condition']
+                after = {**copy.deepcopy(cell), 'unit': column.get('unit'),
+                         'condition': column.get('qualifier')}
+                written.add(target['pointer'])
+                if not exact_json_equal(before, after):
+                    corrections.append({'catalog': record['catalog'],
+                                        'physical_page': record['physical_page'],
+                                        'json_pointer': target['pointer'],
+                                        'owner': selected_fact.get('owner'),
+                                        'name': selected_fact.get('name'),
+                                        'before': before, 'after': after,
+                                        'selected_fact_id': selected_fact.get('fact_id'),
+                                        'archived_fact_id': target.get('fact_id'),
+                                        'selected_by_role': receipt['identity']['role'],
+                                        'work_sha256': receipt['work_sha256']})
         for f in members:
             entry = primary_entry(f, keep, receipt)
             if f['side'] == chosen:
                 primary.append(entry)
-                if f['side'] == 'oleg' and ours_cells and f.get('pointer') not in written:
-                    target = ours_cells[0]
-                    cp = cell_pointer_parts(target['pointer'])
-                    cell = (page['content']['tables'][cp['table']]['rows'][cp['row']]
-                            ['cells'][cp['cell']])
-                    before = copy.deepcopy(cell)
-                    if norm(cell.get('value')) != norm(target.get('value')):
-                        raise ValueError(f'Baseline drift at {target["pointer"]}: '
-                                         f'{cell.get("value")!r} != ours fact {target.get("value")!r}')
-                    if not exact_json_equal(norm(f.get('value')), norm(target.get('value'))):
-                        after = copy.deepcopy(cell)
-                        after['value'] = f.get('value')
-                        state = (f.get('raw', {}) or {}).get('value_state') or \
-                                (f.get('raw_semantic_context', {}) or {}).get('value_state')
-                        after['state'] = 'blank' if state == 'source_blank' and f.get('value') in (None, '') else 'value'
-                        cell['value'] = after['value']
-                        cell['state'] = after['state']
-                        written.add(f.get('pointer'))
-                        corrections.append({'catalog': record['catalog'],
-                                            'physical_page': record['physical_page'],
-                                            'json_pointer': target['pointer'],
-                                            'owner': f.get('owner'), 'name': f.get('name'),
-                                            'before': before, 'after': after,
-                                            'selected_fact_id': f.get('fact_id'),
-                                            'archived_fact_id': target.get('fact_id'),
-                                            'selected_by_role': receipt['identity']['role'],
-                                            'work_sha256': receipt['work_sha256']})
                 continue
             sec = section_pointer_parts(f.get('pointer', ''))
             if sec:
@@ -382,6 +423,19 @@ def _report_with_transfers(summary, uncovered, inflight, transfers, manifest):
     matching = [t for k, t in sorted(transfers.items()) if k in keys]
     return {'summary': summary, 'uncovered_pages': uncovered,
             'in_flight_pages': inflight, 'ownership_transfers': matching}
+
+
+def invalidate_baseline_review(page):
+    """A saved owner merge is not a new independent approval of its primary data."""
+    keys = ('status', 'reviewed_current_content', 'review_producer', 'review_sha256',
+            'review', 'reviewer', 'content_canonical_sha256')
+    page['baseline_review'] = {key: copy.deepcopy(page[key]) for key in keys if key in page}
+    page['status'] = 'owner_merged_awaiting_independent_review'
+    page['reviewed_current_content'] = False
+    page['independent_final_review_complete'] = False
+    for key in ('review_producer', 'review_sha256', 'review', 'reviewer'):
+        page.pop(key, None)
+    page['content_canonical_sha256'] = case_sha256(page['content'])
 
 
 def export(root, task, out, *, allow_partial=False, only_pages=None):
@@ -442,6 +496,7 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
             page['content'][kind] = [item for k, item in enumerate(page['content'][kind])
                                      if k not in drop]
         PageContent.model_validate(page['content'])
+        invalidate_baseline_review(page)
         materialized += 1
         primary_total += len(primary)
         unresolved_total += len(unresolved)
@@ -473,6 +528,21 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
                'in_flight_pages': inflight,
                'uncovered_pages_first': uncovered[:20]}
     bundle['baseline_independently_accepted_pages'] = bundle.get('independently_accepted_pages')
+    bundle['baseline_review_counts'] = {
+        key: bundle.pop(key) for key in (
+            'root_source_checked_pages_awaiting_independent_review',
+            'manual_pages_independently_source_verified', 'native_queue_accepted_pages')
+        if key in bundle}
+    bundle['independently_accepted_pages'] = sum(
+        p.get('status') == 'accepted' and p.get('reviewed_current_content', False)
+        for c in bundle['catalogs'] for p in c['pages'])
+    bundle['owner_merge_independently_reviewed_pages'] = 0
+    bundle['independent_final_review_complete'] = False
+    bundle['baseline_exporter_program'] = bundle.get('exporter_program')
+    bundle['exporter_program'] = {
+        'name': 'owner-merge-exporter', 'git_commit': summary['builder_git_commit'],
+        'source_sha256': summary['builder_source_sha256'],
+        'source_modified': summary['builder_source_modified']}
     bundle['snapshot_stage'] = 'owner_merge_complete' if full else 'owner_merge_partial'
     bundle['owner_merge_summary'] = summary
     out.mkdir(parents=True, exist_ok=False)
@@ -484,7 +554,8 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
         tab = book.create_sheet('Первичные данные')
         tab.append(['Страница PDF', 'Сторона', 'Владелец', 'Параметр',
                     'Значение (типизировано; структуры — строкой JSON)', 'Единица', 'Условие',
-                    'kept', 'work_sha256'])
+                    'kept', 'work_sha256', 'Сводил', 'Модель сведения', 'Версия сведения',
+                    'Сессия сведения', 'SHA исходного PDF'])
 
         def xlsx_value(v):
             if isinstance(v, (dict, list)):
@@ -497,25 +568,33 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
             page = baseline_by_page.get((record['catalog'], record['physical_page']))
             if page is None or 'merged_primary' not in page:
                 continue
+            identity = record['receipt']['identity']
+            merge_provenance = [identity['role'], identity.get('model'),
+                                identity.get('program_version'), identity.get('session_id'),
+                                record['packet']['source_sha256']]
             for entry in page['merged_primary']['primary_facts']:
                 tab.append([record['physical_page'], entry['side'], entry.get('owner'),
                             entry.get('name'), xlsx_value(entry.get('value')), entry.get('unit'),
                             xlsx_value(entry.get('condition')), entry['provenance']['kept'],
-                            entry['provenance']['work_sha256']])
+                            entry['provenance']['work_sha256'], *merge_provenance])
             for entry in page['merged_primary']['source_unresolved_facts']:
                 tab.append([record['physical_page'], 'SOURCE_UNRESOLVED', entry.get('owner'),
                             entry.get('name'), xlsx_value(entry.get('value')), entry.get('unit'),
                             'SOURCE_UNRESOLVED', 'unresolved',
-                            entry['provenance']['work_sha256']])
+                            entry['provenance']['work_sha256'], *merge_provenance])
         tab2 = book.create_sheet('Исправления до-после')
         tab2.append(['Страница PDF', 'Владелец', 'Параметр', 'JSON-указатель', 'До', 'После',
-                     'Сторона решения', 'work_sha256'])
+                     'Сторона решения', 'work_sha256', 'Единица до', 'Единица после',
+                     'Условие до', 'Условие после', 'Нерешённость источника'])
         for ch in corrections:
             if ch['catalog'] != catalog['id']:
                 continue
             tab2.append([ch['physical_page'], ch.get('owner'), ch.get('name'), ch['json_pointer'],
                          ch['before'].get('value'), ch['after'].get('value'),
-                         ch['selected_by_role'], ch['work_sha256']])
+                         ch['selected_by_role'], ch['work_sha256'],
+                         ch['before'].get('unit'), ch['after'].get('unit'),
+                         xlsx_value(ch['before'].get('condition')),
+                         xlsx_value(ch['after'].get('condition')), bool(ch.get('source_unresolved'))])
         book.save(file)
         del book
         gc.collect()

@@ -301,3 +301,96 @@ def test_real_canary_on_saved_pages():
     assert receipt['final_delivery'] is False
     assert receipt['model_calls'] == 0
     assert receipt['owner_typed_facts_roundtrip'] > 0
+
+
+def test_unresolved_figure_is_removed_from_primary_content():
+    """Fast unit: unresolved source topology must not survive as usable content."""
+    fact = {'side': 'ours', 'kind': 'figure', 'pointer':
+            '/catalogs/0/pages/0/content/figures/0',
+            'value': {'title': 'Wrong', 'description': 'two positions', 'labels': []}}
+    record = {'packet': {'facts': [fact]}, 'catalog': 'small', 'physical_page': 7}
+    receipt = {'identity': {'role': 'codex'}, 'work_sha256': 'x', 'groups': [
+        {'fact_indices': [0], 'keep': 'unresolved'}]}
+    page = {'content': {'figures': [fact['value']]}}
+    primary, unresolved, archived, removals = bom.apply_receipt(record, page, receipt, [])
+    assert not primary
+    assert unresolved[0]['value'] == fact['value']
+    assert any(s['kind'] == 'figures' and s['index'] == 0 for s in removals)
+
+
+def test_same_value_selected_unit_reaches_canonical_column():
+    """Fast unit: ARM283 frequency unit must survive equal scalar selection."""
+    ours = make_fact('ours', 0, 50, name='Номинальная частота ГЦ')
+    oleg = make_fact('oleg', 1, '50', name='Номинальная частота ГЦ')
+    ours.update(pointer=CELL_PTR, unit=None)
+    oleg['unit'] = 'ГЦ'
+    record = {'packet': {'facts': [ours, oleg]}, 'catalog': 'small', 'physical_page': 7}
+    receipt = {'identity': {'role': 'codex'}, 'work_sha256': 'x', 'groups': [
+        {'fact_indices': [0, 1], 'keep': 'oleg'}]}
+    import copy
+    page = copy.deepcopy(BASELINE['catalogs'][0]['pages'][0])
+    page['content']['tables'][0]['rows'][0]['cells'][0]['value'] = 50
+    changes = []
+    bom.apply_receipt(record, page, receipt, changes)
+    assert page['content']['tables'][0]['columns'][0]['unit'] == 'ГЦ'
+    assert changes and changes[0]['after']['unit'] == 'ГЦ'
+
+
+def test_materialized_owner_page_does_not_reuse_baseline_independent_acceptance(env, monkeypatch):
+    """Focused integration: mutated content needs a new review, old proof stays history."""
+    import copy
+    import zipfile
+    baseline = copy.deepcopy(BASELINE)
+    baseline['independently_accepted_pages'] = 1
+    page = baseline['catalogs'][0]['pages'][0]
+    page.update(reviewed_current_content=True,
+                review_producer={'model': 'old-model', 'artifact_sha256': 'old-proof'})
+    zp = env / bom.BASELINE_ZIP
+    with zipfile.ZipFile(zp, 'w') as z:
+        z.writestr(BASELINE_MEMBER, json.dumps(baseline))
+    monkeypatch.setattr(bom, 'BASELINE_SHA256', sha_bytes(zp.read_bytes()))
+    bom.export(env, env, env / 'out', allow_partial=True)
+    result = read_primary(env)
+    page = result['catalogs'][0]['pages'][0]
+    assert page['reviewed_current_content'] is False
+    assert page['status'] != 'accepted'
+    assert page['baseline_review']['review_producer']['artifact_sha256'] == 'old-proof'
+    assert result['independently_accepted_pages'] == 0
+    assert result['baseline_independently_accepted_pages'] == 1
+
+
+def test_shared_selected_value_updates_every_group_bound_cell():
+    """Fast unit: one shared source property applies to every explicitly bound row."""
+    import copy
+    page = copy.deepcopy(BASELINE['catalogs'][0]['pages'][0])
+    table = page['content']['tables'][0]
+    table['rows'].append(copy.deepcopy(table['rows'][0]))
+    ours1 = make_fact('ours', 0, '999')
+    ours2 = make_fact('ours', 1, '999', owner='РТ-2')
+    ours1['pointer'] = CELL_PTR
+    ours2['pointer'] = CELL_PTR.replace('/rows/0/', '/rows/1/')
+    oleg = make_fact('oleg', 2, '123')
+    record = {'packet': {'facts': [ours1, ours2, oleg]}, 'catalog': 'small', 'physical_page': 7}
+    receipt = {'identity': {'role': 'codex'}, 'work_sha256': 'x', 'groups': [
+        {'fact_indices': [0, 1, 2], 'keep': 'oleg'}]}
+    changes = []
+    bom.apply_receipt(record, page, receipt, changes)
+    assert [row['cells'][0]['value'] for row in table['rows']] == ['123', '123']
+    assert len(changes) == 2
+
+
+def test_unresolved_table_cell_is_unknown_and_original_is_preserved():
+    """Fast unit: unresolved engineering values cannot remain asserted in primary tables."""
+    import copy
+    page = copy.deepcopy(BASELINE['catalogs'][0]['pages'][0])
+    fact = make_fact('ours', 0, '999')
+    fact['pointer'] = CELL_PTR
+    record = {'packet': {'facts': [fact]}, 'catalog': 'small', 'physical_page': 7}
+    receipt = {'identity': {'role': 'codex'}, 'work_sha256': 'x', 'groups': [
+        {'fact_indices': [0], 'keep': 'unresolved'}]}
+    changes = []
+    primary, unresolved, _, _ = bom.apply_receipt(record, page, receipt, changes)
+    assert not primary and unresolved[0]['value'] == '999'
+    assert page['content']['tables'][0]['rows'][0]['cells'][0]['state'] == 'unknown'
+    assert page['content']['tables'][0]['rows'][0]['cells'][0]['value'] is None
+    assert changes[0]['source_unresolved'] is True
