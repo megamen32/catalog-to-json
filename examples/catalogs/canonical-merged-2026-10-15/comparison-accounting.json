@@ -1,0 +1,55 @@
+{
+  "schema": "independent-comparison-accounting/1",
+  "scope": "Coverage of retained observations and typed original payloads, not error counts or extraction accuracy",
+  "canonical_sha256": "c1f6f703e14801ba545283369d484255966d438d74c835b477f1709f40fe35ba",
+  "input_page_files": 980,
+  "input_observation_occurrences": 195880,
+  "input_unique_observations": 195701,
+  "comparison_rows": 125677,
+  "comparison_unique_observations": 195701,
+  "unpaired_comparison_rows": 16372,
+  "missing_observations": 0,
+  "extra_observations": 0,
+  "missing_sample": [],
+  "extra_sample": [],
+  "inconsistent_original_payload_ids": [],
+  "changed_original_payload_ids": [],
+  "canonical_result_rows": 109303,
+  "missing_canonical_results": 0,
+  "extra_canonical_results": 0,
+  "changed_canonical_result_ids": [],
+  "by_catalog": {
+    "isolators": {
+      "original": 35266,
+      "comparison": 35266,
+      "missing": 0,
+      "extra": 0
+    },
+    "armature": {
+      "original": 70626,
+      "comparison": 70626,
+      "missing": 0,
+      "extra": 0
+    },
+    "innovations": {
+      "original": 45507,
+      "comparison": 45507,
+      "missing": 0,
+      "extra": 0
+    },
+    "small": {
+      "original": 34263,
+      "comparison": 34263,
+      "missing": 0,
+      "extra": 0
+    },
+    "opn": {
+      "original": 10039,
+      "comparison": 10039,
+      "missing": 0,
+      "extra": 0
+    }
+  },
+  "ok": true,
+  "elapsed_seconds": 13.222
+}

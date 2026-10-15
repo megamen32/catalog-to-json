@@ -1,0 +1,43 @@
+{
+  "schema": "canonical-readback-verification/1",
+  "ok": true,
+  "scope": "merge selection and JSON/XLSX representation; not PDF accuracy",
+  "failure_count": 0,
+  "failures": [],
+  "failures_truncated": false,
+  "coverage": {
+    "sources": 5,
+    "pages": 980,
+    "pages_with_records": 980,
+    "records": 109303,
+    "records_by_catalog": {
+      "opn": 6276,
+      "isolators": 18387,
+      "small": 21907,
+      "innovations": 25151,
+      "armature": 37582
+    },
+    "xlsx_records": 109303,
+    "unresolved": 42,
+    "source_fact_ids": 118344
+  },
+  "sha256": {
+    "catalogue.json": "c1f6f703e14801ba545283369d484255966d438d74c835b477f1709f40fe35ba",
+    "catalogue.xlsx": "3c6c9e226ae0838d6870d694c730d0629292b66f6cbfdda17756fc7d757f43d7"
+  },
+  "elapsed_seconds": 43.155,
+  "export_receipt": {
+    "phase": "export",
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "ops.catalogue_delivery.canonical_export",
+      "--input",
+      ".tmp/canonical-merge-20261015/build-final-002/catalogue.json",
+      "--output",
+      ".tmp/canonical-merge-20261015/delivery-final-20261015-602a951"
+    ],
+    "elapsed_seconds": 103.842,
+    "returncode": 0
+  }
+}

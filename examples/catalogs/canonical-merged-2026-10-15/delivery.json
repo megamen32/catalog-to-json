@@ -1,0 +1,82 @@
+{
+  "schema": "canonical-delivery-public-record/1",
+  "created_at": "2026-10-15T10:23:10.540218+00:00",
+  "builder": {
+    "name": "canonical-merge",
+    "version": "1.0.0",
+    "git_revision": "602a9515485da958b700969234792cbcaf951512",
+    "source_modified": false
+  },
+  "canonical_schema": "canonical-catalogue/1",
+  "catalogue_archive": {
+    "public_url": "https://yadi.sk/d/U2xANTDqv6a0Mw",
+    "bytes": 19625513,
+    "sha256": "26d07c8e2aa6eef3a418396f5c1978ebfa45ac25e32a57cc5f15c1d9e14bed65",
+    "matches_final_archive": true,
+    "zip_crc_ok": true,
+    "elapsed_seconds": 1.228
+  },
+  "comparison_archive": {
+    "public_url": "https://yadi.sk/d/CoONSgTohC3cgw",
+    "bytes": 47718118,
+    "sha256": "41f5cef8acf4035831d04afd4fca2777ebc9c57a4c5fda58a8d214dc41e0af22",
+    "matches_final_archive": true,
+    "elapsed_seconds": 8.113
+  },
+  "record_count": 109303,
+  "records_by_catalog": {
+    "armature": 37582,
+    "innovations": 25151,
+    "isolators": 18387,
+    "opn": 6276,
+    "small": 21907
+  },
+  "records_by_kind": {
+    "drawing_annotation": 1933,
+    "figure": 1963,
+    "group_parameter": 512,
+    "index_entry": 163,
+    "model_designation": 8392,
+    "model_parameter": 74154,
+    "page_text": 12118,
+    "source_note": 4672,
+    "supporting_context": 4595,
+    "table_context": 434,
+    "test_condition": 351,
+    "uncertainty": 16
+  },
+  "source_pages": {
+    "opn": 60,
+    "isolators": 162,
+    "small": 228,
+    "innovations": 216,
+    "armature": 314
+  },
+  "canonical_conflicts_unexplained": 0,
+  "original_unresolved_facts": 42,
+  "explicit_conflicting_source_characteristics": 22,
+  "source_observation_occurrences": 195880,
+  "unique_source_observations_accounted": 195701,
+  "unpaired_source_observations": 16372,
+  "scope": "Rechecked retained merge and known source-bound defects. No new independent PDF-wide accuracy measurement. Unpaired observations and representation changes are not error counts.",
+  "tests": {
+    "command": ".venv/bin/python -m pytest -q tests/test_canonical_merge.py tests/test_canonical_export.py tests/test_verify_canonical.py",
+    "passed": 26,
+    "elapsed_seconds": 1.28
+  },
+  "pending_regressions_commit": "60d0fffea0a6a3c0f5467a8d0436615a4e30dfbb",
+  "files": {
+    "catalogue.json": {
+      "sha256": "c1f6f703e14801ba545283369d484255966d438d74c835b477f1709f40fe35ba",
+      "bytes": 48606657
+    },
+    "catalogue.xlsx": {
+      "sha256": "3c6c9e226ae0838d6870d694c730d0629292b66f6cbfdda17756fc7d757f43d7",
+      "bytes": 12760072
+    },
+    "README.txt": {
+      "sha256": "b1e12b15476fea3029b0acfafddc0e276d63c1379f7954d54267aa1e2784e637",
+      "bytes": 2348
+    }
+  }
+}

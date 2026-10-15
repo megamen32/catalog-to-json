@@ -1,0 +1,330 @@
+{
+  "schema": "focused-canonical-source-readback/2",
+  "canonical_sha256": "c1f6f703e14801ba545283369d484255966d438d74c835b477f1709f40fe35ba",
+  "checks": [
+    {
+      "case": "innovations126 exact amendments",
+      "ok": true,
+      "actions": 5,
+      "issues": []
+    },
+    {
+      "case": "small174 exact amendments",
+      "ok": true,
+      "actions": 20,
+      "issues": []
+    },
+    {
+      "case": "small218 exact amendments",
+      "ok": true,
+      "actions": 3,
+      "issues": []
+    },
+    {
+      "case": "No Mass+ on small174",
+      "ok": true
+    },
+    {
+      "case": "Original42 full wrappers unchanged",
+      "ok": true,
+      "count": 42
+    },
+    {
+      "case": "INNOV186 source-bounded22 model rowspans",
+      "ok": true,
+      "count": 22,
+      "details": [
+        {
+          "source_fact_id": "O-577d86c4fd5350a6db1d7a5b",
+          "expected_model": "ОАБ 70-120",
+          "record_ids": [
+            "C-b905d2bef9b47501fcbe88a5"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-eed6c7c205c9f853c6a07c62",
+          "expected_model": "ОАБ 70-120",
+          "record_ids": [
+            "C-4fe3aa5cd6b0018d5fd40ce0"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-55c4f9e1362c01d4e859c8ab",
+          "expected_model": "ОАБ 70-120",
+          "record_ids": [
+            "C-513b024d408cea23a0656ee9"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-81b9de59568696debe64e48c",
+          "expected_model": "ОАБ 70-120",
+          "record_ids": [
+            "C-da0c96359b5ddc683ee4532f"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-36c110c8c740a129ae96d592",
+          "expected_model": "ОАБ 70-120",
+          "record_ids": [
+            "C-a6a9dd54243b2a1e484b70c8"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-397b171432994dc42baec6fc",
+          "expected_model": "ОАБ 70-120",
+          "record_ids": [
+            "C-c15a6b73eeb9d4111066da3f"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-a3924dc2cea170ecfd96986a",
+          "expected_model": "ОАБ 150-185",
+          "record_ids": [
+            "C-aecdbe463b0055de6dc32cd9"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-86720c568a16f03b7418450b",
+          "expected_model": "ОАБ 150-185",
+          "record_ids": [
+            "C-241641ae5cdf21b1a0f3fcaf"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-3fdb617b8fa478a6f861bfce",
+          "expected_model": "ОАБ 150-185",
+          "record_ids": [
+            "C-a41a3c122193116ae2dfdd2c"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-a6b662030b64705585b7238f",
+          "expected_model": "ОАБ 150-185",
+          "record_ids": [
+            "C-6186ecbd84abbeb9a88c0aa5"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-3d730feb570d2fe37ef0267c",
+          "expected_model": "ОАБ 150-185",
+          "record_ids": [
+            "C-437f61cc4f9ab97e9eded7da"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-73e53d2593d06ca4f5f40c6f",
+          "expected_model": "ОАБ 150-185",
+          "record_ids": [
+            "C-1ffe8651fb08cb9a115e70ae"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-e63bceb2825a342198b1490b",
+          "expected_model": "ОАБ 150-185",
+          "record_ids": [
+            "C-d29c5f0fa25b68dd1acb204c"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-076b3f31cbb81fb0421f2102",
+          "expected_model": "ОАБ 150-185",
+          "record_ids": [
+            "C-3a5bbb47dbc706f0ff71510b"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-4f795dabb4abb6e838120987",
+          "expected_model": "ОАБ 150-185",
+          "record_ids": [
+            "C-930e2cfd4a29cdbc8d2d5082"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-0372f02918332a46a65d729d",
+          "expected_model": "ОАБ 150-185",
+          "record_ids": [
+            "C-bc1b27c1e27bc8d600342626"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-ba72f358c1621017b54a4ed5",
+          "expected_model": "ОАБ 205-240",
+          "record_ids": [
+            "C-399e32653b975dad2417a179"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-40baa3a5a39c0e8590d7dd8a",
+          "expected_model": "ОАБ 205-240",
+          "record_ids": [
+            "C-d1d7629db4fc5d0f0ef37fef"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-27731f2bf285a433256c2f54",
+          "expected_model": "ОАБ 205-240",
+          "record_ids": [
+            "C-b7c3572d64489edfbb92c877"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-c9b34b5de0ff16c643d37eb1",
+          "expected_model": "ОАБ 205-240",
+          "record_ids": [
+            "C-ac05305cc03c6931059ab69f"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-622e29ed6fae74f622eebe22",
+          "expected_model": "ОАБ 205-240",
+          "record_ids": [
+            "C-a37b2c495167cb055752af33"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "O-12fd6a01059e418680ec8e07",
+          "expected_model": "ОАБ 205-240",
+          "record_ids": [
+            "C-0240bb379251708157495aed"
+          ],
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case": "OAB70-120 AS95/16 diameter13.5mm",
+      "ok": true,
+      "record_ids": [
+        "C-4fe3aa5cd6b0018d5fd40ce0"
+      ]
+    },
+    {
+      "case": "PGAST8 actual wire-conditioned masses on199/67",
+      "ok": true,
+      "count": 8,
+      "details": [
+        {
+          "source_fact_id": "L-1c297a50bc3fa0def523aedf",
+          "catalog": "innovations",
+          "page": 199,
+          "expected_wire": "205/27",
+          "expected_mass": "5,64",
+          "record_ids": [
+            "C-f83e96d147fff41403e39018"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "L-c72ace1c475395c3cc8825ac",
+          "catalog": "innovations",
+          "page": 199,
+          "expected_wire": "95/141",
+          "expected_mass": "5,60",
+          "record_ids": [
+            "C-9a949a606bbd462ccfade2d4"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "L-e1382d61d71b3c45a7f5de02",
+          "catalog": "innovations",
+          "page": 199,
+          "expected_wire": "70/72",
+          "expected_mass": "5,52",
+          "record_ids": [
+            "C-502b80c1d6fa8c9171abccc2"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "L-e2428519839874d27b20d635",
+          "catalog": "innovations",
+          "page": 199,
+          "expected_wire": "120/27",
+          "expected_mass": "5,54",
+          "record_ids": [
+            "C-4124138874506ae4112695fe"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "L-0a146d1567243a07f4d178cf",
+          "catalog": "armature",
+          "page": 67,
+          "expected_wire": "95/141",
+          "expected_mass": "5,60",
+          "record_ids": [
+            "C-b2bac1ebf22abafbc901418f"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "L-3266f3d557e54ddbf185e78f",
+          "catalog": "armature",
+          "page": 67,
+          "expected_wire": "205/27",
+          "expected_mass": "5,64",
+          "record_ids": [
+            "C-15a5ec716a6084eb42d5feeb"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "L-39d8e41faa2eef862e8c3086",
+          "catalog": "armature",
+          "page": 67,
+          "expected_wire": "70/72",
+          "expected_mass": "5,52",
+          "record_ids": [
+            "C-52db7f11dcb7e3ee1180ab20"
+          ],
+          "ok": true
+        },
+        {
+          "source_fact_id": "L-bacd2d5022547fc81d336d71",
+          "catalog": "armature",
+          "page": 67,
+          "expected_wire": "120/27",
+          "expected_mass": "5,54",
+          "record_ids": [
+            "C-6530a0bf7fd6c205938b654d"
+          ],
+          "ok": true
+        }
+      ]
+    },
+    {
+      "case": "Final builder records published source",
+      "ok": true,
+      "builder": {
+        "git_revision": "602a9515485da958b700969234792cbcaf951512",
+        "name": "canonical-merge",
+        "source_modified": false,
+        "source_sha256": "aa6557f79d277fb9db5c08429bed59fab5420397e05e5db92eea2a20eac3481d",
+        "version": "1.0.0"
+      }
+    }
+  ],
+  "ok": true
+}
