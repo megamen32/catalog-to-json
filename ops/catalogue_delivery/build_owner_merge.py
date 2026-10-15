@@ -269,11 +269,16 @@ def collect_pages(task, reviews, manifest, transfers, only_pages=None):
         if packet.get('physical_page') != entry['physical_page'] or packet.get('catalog') != entry['catalog']:
             raise ValueError(f'Packet identity mismatch for {key}')
         candidates = discovered.get((owner, entry['catalog'], entry['physical_page']), {})
+        assignment = transfers.get(key, {})
         binding = [(saved, (p, r)) for saved, (p, r) in candidates.items()
-                   if r.get('work_packet_sha256') == packet_sha]
+                   if r.get('work_packet_sha256') == packet_sha
+                   and (not assignment.get('assigned_native_session')
+                        or r.get('identity', {}).get('session_id') == assignment['assigned_native_session'])
+                   and (not assignment.get('assigned_model')
+                        or r.get('identity', {}).get('model') == assignment['assigned_model'])]
         if not binding:
             inflight.append({'page': entry['path'],
-                             'reason': f'no {owner} receipt binds current packet sha {packet_sha[:12]}'})
+                             'reason': f'no assigned {owner} session/model receipt binds current packet sha {packet_sha[:12]}'})
             continue
         saved_at, (path, receipt) = max(binding, key=lambda kv: kv[0])
         validate_receipt(receipt, path, packet, packet_sha, owner)

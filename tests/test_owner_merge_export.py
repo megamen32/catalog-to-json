@@ -423,3 +423,26 @@ def test_partial_ambiguous_table_replacement_is_refused():
         {'fact_indices': [0, 1, 2], 'keep': 'oleg'}]}
     with pytest.raises(ValueError, match='Ambiguous'):
         bom.apply_receipt(record, page, receipt, [])
+
+
+def test_transferred_shard_uses_only_its_assigned_native_session_and_model(env):
+    """Fast unit: an old exporter cannot count automatic drafts for another shard."""
+    manifest = bom.load(env / 'full-alignment-work-v2/manifest.json')
+    entry = manifest['pages'][0]
+    transfer = {'owner': 'zcode', 'packet': str(env / 'full-alignment-work-v2' / entry['path']),
+                'packet_sha256': entry['sha256'], 'fact_store_unchanged': True,
+                'assigned_native_session': 'assigned-native', 'assigned_model': 'assigned-model'}
+    transfers = {(entry['catalog'], entry['physical_page']): transfer}
+    records, pending = bom.collect_pages(env, env / 'reviews', manifest, transfers)
+    assert records == {} and len(pending) == 1
+    original = bom.load(env / 'reviews/zcode/full-work/small-0007-page-work.json')
+    original['identity'].update(session_id='assigned-native', model='wrong-model')
+    original['work_sha256'] = digest(original)
+    path = env / 'reviews/zcode/full-work/assigned/author-revision.json'
+    write(path, original)
+    assert not bom.collect_pages(env, env / 'reviews', manifest, transfers)[0]
+    original['identity']['model'] = 'assigned-model'
+    original['work_sha256'] = digest(original)
+    write(path, original)
+    records, pending = bom.collect_pages(env, env / 'reviews', manifest, transfers)
+    assert len(records) == 1 and not pending
