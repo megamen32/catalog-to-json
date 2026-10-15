@@ -1,21 +1,27 @@
-"""Whole-owner exporter: latest authored page-work receipts of all three roles.
+"""Whole-owner exporter that MATERIALIZES the latest authored page-work.
 
-Reads the immutable full-alignment packets, the actual owner receipts written
-through ``page_work.save_page_work`` (identical ``catalogue-single-owner-page-work/1``
-schema for codex/zcode/minimax) and the recorded ownership transfers, validates
-packet/owner/work hashes and exact index coverage, then materialises one
-lossless delivery: canonical JSON (baseline pages + per-page owner reconciliation
-with full typed facts and raw alternatives), five Excel workbooks, and a
-corrections/dispositions report. Canonical cells are never rewritten by this
-stage; owner selections are exported as explicit dispositions for the deferred
-independent final review.
+The latest page-work receipt of every role selects typed input facts. This
+exporter builds the PRIMARY delivery from the selected facts: values chosen by
+the page owner (including Oleg-side values and Oleg-only facts) become the
+canonical content, with verified before/after corrections on the baseline
+cells; Oleg-only selected facts are materialised into a new canonical per-page
+fact section with full provenance. Facts that were neither selected nor marked
+unresolved go to the archive section only; source-unresolved facts stay
+explicitly visible and marked. null / blank / dash / 0 stay distinct typed
+values end to end.
 
-A snapshot below full coverage is emitted only with ``--allow-partial`` and is
-explicitly marked as not final. No model calls, no extraction, no benchmark.
+Inputs: immutable full-alignment packets, actual owner receipts written through
+``page_work.save_page_work`` (one shared schema for codex/zcode/minimax) and
+recorded ownership transfers. Every packet/owner/work hash and the exact index
+coverage are validated before anything is exported. The final delivery
+hard-requires all 980 pages with receipts; a snapshot below full coverage is
+emitted only with ``--allow-partial`` and is explicitly marked not final.
+No model calls, no extraction, no benchmark.
 """
 from __future__ import annotations
 
 import argparse
+import copy
 import datetime
 import gc
 import hashlib
@@ -35,6 +41,7 @@ from openpyxl import load_workbook
 
 from catalog_json.reconciliation.consensus import case_sha256
 from catalog_json.export import to_xlsx
+from catalog_json.reconciliation.formats import exact_json_equal
 from catalog_json.schema import PageContent
 
 ROLES = ('codex', 'zcode', 'minimax')
@@ -71,6 +78,10 @@ def receipt_candidates(reviews, catalog, page, role):
     if role == 'codex':
         return [reviews / 'codex' / 'full-work' / f'{stem}.json']
     return [reviews / 'minimax' / 'full-work' / f'{stem}' / 'result.json']
+
+
+def norm(v):
+    return re.sub(r'\s+', ' ', str(v)).strip() if v is not None else None
 
 
 def latest_receipt(reviews, catalog, page, role):
@@ -150,6 +161,8 @@ def collect_receipts(task, reviews, manifest, transfers, only_pages=None):
         packet_path = transfer['packet_path'] if transfer else task / 'full-alignment-work-v2' / entry['path']
         packet_sha = transfer['packet_sha256'] if transfer else entry['sha256']
         packet = load(packet_path)
+        if sha(packet_path) != packet_sha:
+            raise ValueError(f'Immutable packet changed for {key}')
         if packet.get('physical_page') != entry['physical_page'] or packet.get('catalog') != entry['catalog']:
             raise ValueError(f'Packet identity mismatch for {key}')
         roles = {}
@@ -173,25 +186,93 @@ def collect_receipts(task, reviews, manifest, transfers, only_pages=None):
     return pages
 
 
-def page_dispositions(record):
-    """Per-fact dispositions from every role receipt on this page."""
-    dispositions = []
-    for role, receipt in sorted(record['receipts'].items()):
-        for i in receipt['selected_fact_indices']:
-            dispositions.append({'fact_index': i, 'side': record['facts'][i]['side'],
-                                 'fact_id': record['facts'][i].get('fact_id'),
-                                 'fact_sha256': record['facts'][i].get('input_fact_sha256'),
-                                 'disposition': 'selected', 'role': role,
-                                 'work_sha256': receipt['work_sha256']})
-        for i in receipt['source_unresolved_fact_indices']:
-            dispositions.append({'fact_index': i, 'side': record['facts'][i]['side'],
-                                 'fact_id': record['facts'][i].get('fact_id'),
-                                 'fact_sha256': record['facts'][i].get('input_fact_sha256'),
-                                 'disposition': 'source_unresolved', 'role': role,
-                                 'work_sha256': receipt['work_sha256']})
-    dispositions.sort(key=lambda d: (d['fact_index'], d['role']))
-    return dispositions
+def resolve_cell_pointer(fact, packet_facts, baseline_page):
+    """Canonical cell pointer for a selected OLEG fact: the unique OURS fact
+    with the same owner+name provides the verified pointer; the baseline cell
+    must still hold exactly the ours typed value."""
+    if fact.get('pointer', '').startswith('/catalogs/') and '/cells/' in fact.get('pointer', ''):
+        return fact['pointer']
+    candidates = [f for f in packet_facts
+                  if f['side'] == 'ours' and f.get('owner') == fact.get('owner')
+                  and norm(f.get('name')) == norm(fact.get('name'))
+                  and f.get('pointer', '').startswith('/catalogs/')]
+    if len(candidates) != 1:
+        return None
+    return candidates[0]['pointer']
 
+
+def materialize_page(record, baseline_page):
+    """Build primary/archive/corrections for one page from its latest receipt.
+
+    Returns (page_primary, archived_facts, corrections). Canonical cells on the
+    baseline page are updated only for selected OLEG facts with a unique
+    verified pointer whose baseline value still equals the OURS typed value.
+    """
+    packet_facts = record['facts']
+    receipt = next(r for r in sorted(record['receipts'].values(), key=lambda r: r['saved_at'], reverse=True))
+    selected = set(receipt['selected_fact_indices'])
+    unresolved_idx = set(receipt['source_unresolved_fact_indices'])
+    # A selected OLEG fact claims its cell: the OURS fact at the same pointer
+    # becomes an archived alternative (both were selected by keep=oleg/both).
+    claimed_pointers = set()
+    for i in selected:
+        f = packet_facts[i]
+        if f['side'] == 'oleg':
+            p = resolve_cell_pointer(f, packet_facts, None)
+            if p:
+                claimed_pointers.add(p)
+    primary, unresolved, archived, corrections = [], [], [], []
+    for i, fact in enumerate(packet_facts):
+        entry = {'fact_id': fact.get('fact_id'), 'side': fact['side'], 'kind': fact.get('kind'),
+                 'owner': fact.get('owner'), 'name': fact.get('name'),
+                 'unit': fact.get('unit'), 'condition': fact.get('condition'),
+                 'value': fact.get('value'),
+                 'value_state': (fact.get('raw', {}) or {}).get('value_state')
+                 or (fact.get('raw_semantic_context', {}) or {}).get('value_state'),
+                 'pointer': fact.get('pointer'),
+                 'provenance': {'input_fact_sha256': fact.get('input_fact_sha256'),
+                                'selected_by_role': receipt['identity']['role'],
+                                'work_sha256': receipt['work_sha256']}}
+        if i in selected and fact['side'] == 'ours' and fact.get('pointer') in claimed_pointers:
+            archived.append({**entry, 'archived_reason': 'alternative: oleg-side value materialized for this cell'})
+            continue
+        if i in selected:
+            primary.append(entry)
+            if fact['side'] == 'oleg':
+                pointer = resolve_cell_pointer(fact, packet_facts, baseline_page)
+                counterpart = next((f for f in packet_facts
+                                    if f['side'] == 'ours' and f.get('pointer') == pointer), None) if pointer else None
+                if pointer and counterpart is not None:
+                    parts = pointer.strip('/').split('/')
+                    cell = (baseline_page['content']['tables'][int(parts[6])]['rows'][int(parts[8])]
+                            ['cells'][int(parts[10])])
+                    before = copy.deepcopy(cell)
+                    if norm(cell.get('value')) != norm(counterpart.get('value')):
+                        raise ValueError(f'Baseline drift at {pointer}: '
+                                         f'{cell.get("value")!r} != ours fact {counterpart.get("value")!r}')
+                    if not exact_json_equal(norm(cell.get('value')), norm(fact.get('value'))):
+                        after = copy.deepcopy(cell)
+                        after['value'] = fact.get('value')
+                        state = (fact.get('raw', {}) or {}).get('value_state') or                                 (fact.get('raw_semantic_context', {}) or {}).get('value_state')
+                        after['state'] = 'blank' if state == 'source_blank' and fact.get('value') in (None, '') else 'value'
+                        cell['value'] = after['value']
+                        cell['state'] = after['state']
+                        corrections.append({'catalog': record['catalog'],
+                                            'physical_page': record['physical_page'],
+                                            'json_pointer': pointer,
+                                            'owner': fact.get('owner'), 'name': fact.get('name'),
+                                            'before': before, 'after': after,
+                                            'selected_fact_id': fact.get('fact_id'),
+                                            'archived_fact_id': counterpart.get('fact_id'),
+                                            'selected_by_role': receipt['identity']['role'],
+                                            'work_sha256': receipt['work_sha256']})
+        elif i in unresolved_idx:
+            e = dict(entry)
+            e['source_unresolved'] = True
+            unresolved.append(e)
+        else:
+            archived.append(entry)
+    return primary, unresolved, archived, corrections
 
 
 def _git(root, args, check=True):
@@ -237,7 +318,6 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
     manifest = load(task / 'full-alignment-work-v2' / 'manifest.json')
     transfers = load_transfers(task)
     records = collect_receipts(task, task / 'reviews', manifest, transfers, only_pages)
-    covered = {page: any(r['receipts'] for r in [rec]) for page, rec in records.items()}
     covered_pages = sum(1 for rec in records.values() if rec['receipts'])
     uncovered = sorted(path for path, rec in records.items() if not rec['receipts'])
     full = covered_pages == TOTAL_PAGES and not uncovered
@@ -256,28 +336,38 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
     for catalog in bundle['catalogs']:
         for page in catalog['pages']:
             baseline_by_page[(catalog['id'], page['pdf_page'])] = page
-    # Attach per-page owner reconciliation. Canonical cells are NOT rewritten:
-    # owner selections are exported as explicit dispositions; raw typed facts and
-    # alternatives of both sides are embedded losslessly for the final review.
-    attached = 0
+    # Materialize: selected typed facts become primary; selected Oleg-side
+    # values are written into verified baseline cells with before/after;
+    # Oleg-only selected facts form the new canonical per-page fact section;
+    # unselected facts go to the per-page archive; unresolved stay explicit.
+    corrections = []
+    materialized = 0
     for path, record in sorted(records.items()):
         if not record['receipts']:
             continue
         key = (record['catalog'], record['physical_page'])
         page = baseline_by_page.get(key)
-        if page is None:
-            # Canary/partial baselines may not carry every synthetic page;
-            # the reconciliation record still goes into the streamed JSON.
-            continue
-        page['owner_reconciliation'] = {
-            'owner': record['owner'],
-            'packet_sha256': record['packet_sha256'],
-            'receipts': record['receipts'],
-            'dispositions': page_dispositions(record),
-            'typed_facts': record['facts'],
-        }
-        PageContent.model_validate(page['content'])
-        attached += 1
+        primary, unresolved, archived, page_corrections = materialize_page(record, page) if page else             ([], [], [], [])
+        corrections.extend(page_corrections)
+        record['primary_facts'] = primary
+        record['unresolved_facts'] = unresolved
+        record['archived_facts'] = archived
+        if page is not None:
+            page['merged_primary'] = {
+                'owner': record['owner'],
+                'packet_sha256': record['packet_sha256'],
+                'receipts': {role: {'saved_at': r['saved_at'], 'work_sha256': r['work_sha256'],
+                                    'identity': r['identity'],
+                                    'selected_fact_indices': r['selected_fact_indices'],
+                                    'source_unresolved_fact_indices': r['source_unresolved_fact_indices']}
+                             for role, r in record['receipts'].items()},
+                'primary_facts': primary,
+                'source_unresolved_facts': unresolved,
+            }
+            page['owner_archive'] = {'archived_facts': archived,
+                                     'note': 'Не отобранные владельцем исходные факты; только архив, не первичные данные.'}
+            PageContent.model_validate(page['content'])
+            materialized += 1
     per_role = {role: sum(1 for rec in records.values() if role in rec['receipts']) for role in ROLES}
     summary = {'schema_version': 'owner-reconciliation-snapshot/1',
                'created_at': datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -285,18 +375,13 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
                'required_roles': list(ROLES),
                'total_pages': TOTAL_PAGES, 'pages_with_owner_receipts': covered_pages,
                'pages_without_receipts': len(uncovered),
+               'pages_materialized': materialized,
                'receipts_per_role': per_role,
                'facts_total': sum(len(rec['facts']) for rec in records.values()),
-               'facts_with_selected_disposition': sum(1 for rec in records.values()
-                                                      for r in rec['receipts'].values()
-                                                      for _ in r['selected_fact_indices']),
-               'facts_marked_source_unresolved': sum(1 for rec in records.values()
-                                                     for r in rec['receipts'].values()
-                                                     for _ in r['source_unresolved_fact_indices']),
-               'canonical_cells_changed': 0,
-               'canonical_write_policy': 'Не выполняется на этом этапе: выбор владельца экспортируется как явная '
-                                         'диспозиция; запись в канонические ячейки возможна только после отложенной '
-                                         'независимой финальной проверки.',
+               'primary_facts': sum(len(rec.get('primary_facts', [])) for rec in records.values()),
+               'source_unresolved_facts': sum(len(rec.get('unresolved_facts', [])) for rec in records.values()),
+               'archived_facts': sum(len(rec.get('archived_facts', [])) for rec in records.values()),
+               'canonical_corrections_applied': len(corrections),
                'baseline_zip_sha256': BASELINE_SHA256,
                'oleg_input_zip_sha256': sha(task / 'input' / 'forenergo-our-extraction.zip'),
                'builder_source_sha256': sha(__file__),
@@ -305,34 +390,48 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
                'model_calls_during_export': 0,
                'uncovered_pages_first': uncovered[:20]}
     bundle['baseline_independently_accepted_pages'] = bundle.get('independently_accepted_pages')
-    bundle['snapshot_stage'] = 'owner_reconciliation_complete' if full else 'owner_reconciliation_partial'
-    bundle['owner_reconciliation_summary'] = summary
+    bundle['snapshot_stage'] = 'owner_merge_complete' if full else 'owner_merge_partial'
+    bundle['owner_merge_summary'] = summary
     out.mkdir(parents=True, exist_ok=False)
-    # Five standard workbooks, texts/drawings/producers preserved by the exporter.
     workbook_paths = []
     for catalog in bundle['catalogs']:
         file = out / (catalog['id'] + '.xlsx')
         to_xlsx(catalog, file, allow_unverified=True)
         book = load_workbook(file)
-        tab = book.create_sheet('Сведение владельцев')
-        tab.append(['Страница PDF', 'Роль', 'saved_at', 'Выбрано фактов', 'source_unresolved', 'work_sha256'])
+        tab = book.create_sheet('Первичные данные')
+        tab.append(['Страница PDF', 'Сторона', 'Владелец', 'Параметр', 'Значение (типизировано; '
+                    'структуры — строкой JSON)', 'Единица', 'Условие', 'Источник решения', 'work_sha256'])
+
+        def xlsx_value(v):
+            if isinstance(v, (dict, list)):
+                return json.dumps(v, ensure_ascii=False, separators=(',', ':'))
+            return v
+
         for path, record in sorted(records.items()):
-            if record['catalog'] != catalog['id'] or not record['receipts']:
+            if record['catalog'] != catalog['id']:
                 continue
-            for role, receipt in sorted(record['receipts'].items()):
-                tab.append([record['physical_page'], role, receipt['saved_at'],
-                            len(receipt['selected_fact_indices']),
-                            len(receipt['source_unresolved_fact_indices']), receipt['work_sha256']])
+            for entry in record.get('primary_facts', []):
+                tab.append([record['physical_page'], entry['side'], entry.get('owner'),
+                            entry.get('name'), xlsx_value(entry.get('value')), entry.get('unit'),
+                            xlsx_value(entry.get('condition')), entry['provenance']['selected_by_role'],
+                            entry['provenance']['work_sha256']])
+            for entry in record.get('unresolved_facts', []):
+                tab.append([record['physical_page'], 'SOURCE_UNRESOLVED', entry.get('owner'),
+                            entry.get('name'), xlsx_value(entry.get('value')), entry.get('unit'),
+                            'SOURCE_UNRESOLVED', '—', '—'])
+        tab2 = book.create_sheet('Исправления до-после')
+        tab2.append(['Страница PDF', 'Владелец', 'Параметр', 'JSON-указатель', 'До', 'После',
+                     'Сторона решения', 'work_sha256'])
+        for ch in corrections:
+            if ch['catalog'] != catalog['id']:
+                continue
+            tab2.append([ch['physical_page'], ch.get('owner'), ch.get('name'), ch['json_pointer'],
+                         ch['before'].get('value'), ch['after'].get('value'),
+                         ch['selected_by_role'], ch['work_sha256']])
         book.save(file)
         del book
         gc.collect()
         workbook_paths.append(file)
-    corrections = []
-    for path, record in sorted(records.items()):
-        if not record['receipts']:
-            continue
-        for d in page_dispositions(record):
-            corrections.append({'catalog': record['catalog'], 'physical_page': record['physical_page'], **d})
     archive = out / 'catalogues-unified.zip'
     manifest_files = {}
     with zipfile.ZipFile(archive, 'x', compression=zipfile.ZIP_DEFLATED, compresslevel=6) as z:
@@ -379,22 +478,23 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
                                             'owner_typed_fact_pages': sum(1 for rec in records.values() if rec['receipts']),
                                             'owner_typed_facts': facts_written}
         reports = {
-            'corrections.json': {'schema_version': 'owner-dispositions/1',
-                                 'note': 'Диспозиции владельцев по каждому факту; канонические ячейки на этом этапе не переписываются.',
-                                 'dispositions': corrections},
-            'reconciliation-report.json': {'summary': summary,
-                                           'uncovered_pages': uncovered,
+            'corrections.json': {'schema_version': 'owner-merge-corrections/1',
+                                 'note': 'Фактические before/after канонических ячеек из selected typed facts; '
+                                         'не выбранные факты — только в архиве (owner_archive/owner_typed_facts).',
+                                 'corrections': corrections},
+            'reconciliation-report.json': {'summary': summary, 'uncovered_pages': uncovered,
                                            'ownership_transfers': [t for k, t in sorted(transfers.items())
                                                                    if k in {(e['catalog'], e['physical_page'])
                                                                             for e in manifest['pages']}]},
-            'README.txt': ('Единый снимок пяти каталогов (980 физических страниц) с owner-reconciliation.\n'
-                           + ('Полное покрытие: все 980 страниц имеют авторские page-work receipts.\n'
+            'README.txt': ('Единый снимок пяти каталогов (980 физических страниц), материализованный из '
+                           'author page-work receipts.\n'
+                           + ('Полное покрытие: все 980 страниц имеют receipts; primary построен из выбранных фактов.\n'
                               if full else
-                              f'ВНИМАНИЕ: промежуточный снимок (--allow-partial): покрытие {covered_pages}/{TOTAL_PAGES}.\n')
-                           + 'catalogue.json — базовые страницы + owner_reconciliation (receipts, диспозиции) + owner_typed_facts '
-                             '(полные типизированные факты обеих сторон с исходными значениями и альтернативами).\n'
-                             'Канонические ячейки этим экспортом не переписываются; выбор владельца — явная диспозиция для '
-                             'отложенной независимой финальной проверки.\n'),
+                              f'ВНИМАНИЕ: промежуточный снимок (--allow-partial): покрытие {covered_pages}/{TOTAL_PAGES}. '
+                              'Не является финальным ZIP.\n')
+                           + 'catalogue.json — страницы с materialized primary (merged_primary), исходные typed факты '
+                             'обеих сторон (owner_typed_facts) и архив неотобранных фактов (owner_archive).\n'
+                             'null / пустая строка / прочерк / 0 сохраняются как различные типизированные значения.\n'),
         }
         for nm, value in reports.items():
             data = value.encode() if isinstance(value, str) else dump(value).encode()
@@ -434,17 +534,31 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
             # digest of catalogue.json above.
         checked = 0
         for catalog in decoded['catalogs']:
+            if not any(rec['catalog'] == catalog['id'] and rec['receipts'] for rec in records.values()):
+                continue
             book = load_workbook(io.BytesIO(z.read(catalog['id'] + '.xlsx')), read_only=True, data_only=False)
-            rows = list(book['Сведение владельцев'].iter_rows(min_row=2, values_only=True))
-            expected = sorted((rec['physical_page'], role, rec['receipts'][role]['saved_at'],
-                               len(rec['receipts'][role]['selected_fact_indices']),
-                               len(rec['receipts'][role]['source_unresolved_fact_indices']),
-                               rec['receipts'][role]['work_sha256'])
-                              for rec in records.values() if rec['catalog'] == catalog['id']
-                              for role in rec['receipts'])
-            actual = sorted(rows)
+            rows = list(book['Первичные данные'].iter_rows(min_row=2, values_only=True))
+            def xlsx_value(v):
+                if isinstance(v, (dict, list)):
+                    return json.dumps(v, ensure_ascii=False, separators=(',', ':'))
+                return v
+            expected = []
+            for rec in records.values():
+                if rec['catalog'] != catalog['id']:
+                    continue
+                for fact in rec.get('primary_facts', []):
+                    expected.append((rec['physical_page'], fact['side'],
+                                     (None if fact.get('value') in ('', None) else xlsx_value(fact.get('value')))))
+                for fact in rec.get('unresolved_facts', []):
+                    expected.append((rec['physical_page'], 'SOURCE_UNRESOLVED',
+                                     (None if fact.get('value') in ('', None) else xlsx_value(fact.get('value')))))
+            actual = [(r[0], r[1], (None if r[4] in ('', None) else str(r[4]))) for r in rows]
+            key = lambda t: (t[0], t[1], t[2] is None, t[2] or '')
+            expected.sort(key=key)
+            actual.sort(key=key)
             if actual != expected:
-                raise ValueError(f'Excel lost owner reconciliation rows for {catalog["id"]}')
+                mismatch = [(e, a) for e, a in zip(expected, actual) if e != a][:3]
+                raise ValueError(f'Excel lost materialized primary facts for {catalog["id"]}: {mismatch}')
             checked += len(actual)
             book.close()
     if full and count != TOTAL_PAGES:
