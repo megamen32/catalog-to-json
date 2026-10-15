@@ -747,6 +747,14 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
             manifest_files[nm] = {'sha256': hashlib.sha256(data).hexdigest(), 'bytes': len(data)}
         z.writestr('manifest.json', dump({'schema_version': 'owner-reconciliation-manifest/1',
                                           'summary': summary, 'files': manifest_files}))
+    # The archive is complete. Drop the materialization graphs before decoding
+    # it through the consumer path; otherwise a full catalogue is held twice.
+    correction_count = len(corrections)
+    records.clear()
+    baseline_by_page.clear()
+    reports.clear()
+    corrections.clear()
+    catalog = page = record = rec = receipt = primary = unresolved = archived = value = None
     del bundle
     gc.collect()
     with zipfile.ZipFile(archive) as z:
@@ -769,7 +777,7 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
                    'page_count': count if only_pages else TOTAL_PAGES,
                    'pages_with_owner_receipts': covered_pages, 'final_delivery': full,
                    'receipts_per_role': per_role,
-                   'canonical_corrections_applied': len(corrections),
+                   'canonical_corrections_applied': correction_count,
                    'owner_typed_facts_roundtrip': facts_written,
                    'archive_crc': 'passed', 'manifest_all_members_verified': True,
                    'elapsed_seconds': round(time.monotonic() - started, 3),
