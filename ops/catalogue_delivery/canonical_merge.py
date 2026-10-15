@@ -348,6 +348,17 @@ def write_comparison(output, records, groups, actions):
         rows.append(r)
     rows.extend(deletions.values())
     rows.extend(row for fid, row in unpaired.items() if fid not in mapped_facts and 'REMOVED-' + fid not in deletions)
+    input_ids = {obs['fact_id'] for group in groups for side in ('ours', 'oleg') for obs in group[side]}
+    output_ids = {obs['fact_id'] for row in rows for side in ('ours', 'oleg') for obs in row[side]}
+    if input_ids != output_ids:
+        raise ValueError('Comparison must account for every original observation')
+    accounting = dict(input_unique_observations=len(input_ids),
+                      compared_unique_observations=len(output_ids), missing=0, extra=0,
+                      canonical_rows=len(comparisons),
+                      unpaired_observations=sum(r['classification'] == 'unpaired_source_observation' for r in rows),
+                      independently_rejected_observations=len(deletions),
+                      scope='Observation accounting, not a semantic error or accuracy total.')
+    (output / 'comparison-accounting.json').write_text(js(accounting) + '\n')
     with (output / 'comparison.jsonl').open('w') as f, (output / 'comparison.csv').open('w', newline='') as c:
         fields = ['catalog', 'page', 'model', 'parameter', 'part', 'condition', 'ours', 'oleg', 'result', 'classification', 'corrected_selection', 'reason', 'id']
         writer = csv.DictWriter(c, fields); writer.writeheader()
@@ -574,6 +585,7 @@ def build(pages_dir, packets_dir, archive, amendments_path, unresolved_path, out
     if conflicts:
         raise ValueError(f'{len(conflicts)} unresolved canonical conflicts; see conflicts.jsonl')
     report['comparison'] = write_comparison(output, records, comparisons, actions)
+    report['comparison_accounting'] = json.loads((output / 'comparison-accounting.json').read_text())
     (output / 'catalogue.json').write_text(js(data) + '\n')
     (output / 'build-report.json').write_text(js(report) + '\n')
     return report

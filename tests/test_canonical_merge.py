@@ -63,3 +63,6 @@ def test_comparison_accounts_for_unpaired_observations_without_claiming_absence(
     assert rows[1]['classification'] == 'unpaired_source_observation'
     assert rows[1]['result'] is None and rows[1]['original_decision'] == 'ours'
     assert {x['fact_id'] for row in rows for side in ('ours', 'oleg') for x in row[side]} == {'O-a', 'L-a'}
+    accounting = json.loads((tmp_path / 'comparison-accounting.json').read_text())
+    assert accounting['input_unique_observations'] == accounting['compared_unique_observations'] == 2
+    assert accounting['missing'] == accounting['extra'] == 0
