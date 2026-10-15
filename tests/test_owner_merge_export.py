@@ -446,3 +446,24 @@ def test_transferred_shard_uses_only_its_assigned_native_session_and_model(env):
     write(path, original)
     records, pending = bom.collect_pages(env, env / 'reviews', manifest, transfers)
     assert len(records) == 1 and not pending
+
+
+def test_keep_ours_still_exports_the_rejected_oleg_decision(env):
+    """Focused integration: source corrections are auditable from either input side."""
+    path = env / 'reviews/zcode/full-work/small-0007-page-work.json'
+    receipt = bom.load(path)
+    receipt['groups'][0]['keep'] = 'ours'
+    receipt['selected_fact_indices'] = [0, 2, 3, 5, 6]
+    receipt['work_sha256'] = digest(receipt)
+    write(path, receipt)
+    bom.export(env, env, env / 'out', allow_partial=True)
+    result = read_primary(env)
+    page = result['catalogs'][0]['pages'][0]
+    assert page['owner_merge_decisions'] == receipt
+    assert digest(page['owner_merge_decisions']) == receipt['work_sha256']
+    from openpyxl import load_workbook
+    book = load_workbook(env / 'out/small.xlsx', read_only=True)
+    rows = list(book['Решения сведения'].iter_rows(values_only=True))
+    assert rows[1][0:4] == (7, 0, 'same_fact', 'ours')
+    assert rows[1][5:7] == (1, 1)
+    book.close()

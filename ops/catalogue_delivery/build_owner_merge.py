@@ -520,6 +520,9 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
             continue
         receipt = record['receipt']
         primary, unresolved, archived, removals = apply_receipt(record, page, receipt, corrections)
+        # Keep the exact validated decisions, including rejected Oleg differences
+        # that leave the baseline cells unchanged. Indices address owner_typed_facts.
+        page['owner_merge_decisions'] = copy.deepcopy(receipt)
         page['merged_primary'] = {
             'owner': record['owner'],
             'packet_sha256': record['packet_sha256'],
@@ -591,7 +594,7 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
     bundle['owner_merge_summary'] = summary
     out.mkdir(parents=True, exist_ok=False)
     workbook_paths = []
-    for catalog in bundle['catalogs']:
+    for catalog_index, catalog in enumerate(bundle['catalogs']):
         file = out / (catalog['id'] + '.xlsx')
         to_xlsx(catalog, file, allow_unverified=True)
         book = load_workbook(file)
@@ -600,6 +603,12 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
                     'Значение (типизировано; структуры — строкой JSON)', 'Единица', 'Условие',
                     'kept', 'work_sha256', 'Сводил', 'Модель сведения', 'Версия сведения',
                     'Сессия сведения', 'SHA исходного PDF'])
+        decisions = book.create_sheet('Решения сведения')
+        decisions.append(['Страница PDF', 'Группа', 'Отношение', 'Выбрано', 'Причина',
+                          'Фактов Никиты', 'Фактов Олега', 'Первичных фактов',
+                          'Сводил', 'Модель', 'Версия', 'Сессия', 'SHA исходного PDF',
+                          'work_sha256', 'Полное решение в catalogue.json'])
+        page_indices = {p['pdf_page']: i for i, p in enumerate(catalog['pages'])}
 
         def xlsx_value(v):
             if isinstance(v, (dict, list)):
@@ -614,8 +623,21 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
                 continue
             identity = record['receipt']['identity']
             merge_provenance = [identity['role'], identity.get('model'),
-                                identity.get('program_version'), identity.get('session_id'),
+                                identity.get('program_version') or 'not recorded', identity.get('session_id'),
                                 record['packet']['source_sha256']]
+            for gi, group in enumerate(record['receipt']['groups']):
+                members = [record['packet']['facts'][i] for i in group['fact_indices']]
+                ours_count = sum(f['side'] == 'ours' for f in members)
+                oleg_count = len(members) - ours_count
+                selected_count = (len(members) if group['keep'] == 'both'
+                                  else ours_count if group['keep'] == 'ours'
+                                  else oleg_count if group['keep'] == 'oleg' else 0)
+                pointer = (f'/catalogs/{catalog_index}/pages/'
+                           f'{page_indices[record["physical_page"]]}/owner_merge_decisions/groups/{gi}')
+                decisions.append([record['physical_page'], gi, group['relation'], group['keep'],
+                                  group['reason'], ours_count, oleg_count, selected_count,
+                                  *merge_provenance[:2], identity.get('program_version') or 'not recorded',
+                                  *merge_provenance[3:], record['receipt']['work_sha256'], pointer])
             for entry in page['merged_primary']['primary_facts']:
                 tab.append([record['physical_page'], entry['side'], entry.get('owner'),
                             entry.get('name'), xlsx_value(entry.get('value')), entry.get('unit'),
@@ -693,7 +715,10 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
             'corrections.json': {'schema_version': 'owner-merge-corrections/1',
                                  'note': 'Фактические before/after канонических ячеек: keep=oleg записывает '
                                          'значение Олега; отклонённые наши фигуры/тексты удалены из content '
-                                         'и живут только в owner_archive.',
+                                         'и живут только в owner_archive. Полный журнал решений по обеим '
+                                         'сторонам, включая keep=ours без изменения нашей ячейки: '
+                                         'catalogue.json → pages[].owner_merge_decisions; в Excel лист '
+                                         '«Решения сведения». Это решения сведения, не новый процент точности.',
                                  'corrections': corrections},
             'reconciliation-report.json': _report_with_transfers(summary, uncovered, inflight, transfers, manifest),
             'README.txt': ('Единый снимок пяти каталогов (980 физических страниц), материализованный из '
@@ -707,7 +732,11 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
                              'факты обеих сторон (owner_typed_facts) и архив неотобранных/отклонённых фактов '
                              '(owner_archive). Отклонённые наши фигуры/тексты удалены из content и живут только '
                              'в архиве. null / пустая строка / прочерк / 0 сохраняются как различные '
-                             'типизированные значения.\n'),
+                             'типизированные значения.\n'
+                             'owner_merge_decisions на каждой сведённой странице сохраняет точный receipt: '
+                             'все решения, причины, source evidence, модель, сессию и SHA. Индексы фактов '
+                             'относятся к owner_typed_facts той же страницы. Лист Excel «Решения сведения» '
+                             'содержит причины и JSON-указатели, включая отклонённые варианты Олега.\n'),
         }
         for nm, value in reports.items():
             data = value.encode() if isinstance(value, str) else dump(value).encode()
