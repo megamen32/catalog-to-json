@@ -837,7 +837,7 @@ def main():
         resource.setrlimit(resource.RLIMIT_AS, (2 * 1024 ** 3, 2 * 1024 ** 3))
         os.sched_setaffinity(0, {min(os.sched_getaffinity(0))})
     print(dump(export(Path.cwd(), args.task, args.output,
-                      allow_partial=args.allow_partial, only_pages=set(args.pages) or None)))
+                      allow_partial=args.allow_partial, only_pages=set(args.pages or []) or None)))
 
 
 if __name__ == '__main__':

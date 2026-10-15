@@ -198,6 +198,17 @@ def test_final_archive_recovers_both_immutable_inputs(env, monkeypatch):
             assert manifest['files'][name]['bytes'] == len(data)
 
 
+def test_cli_without_page_subset_exports_manifest(env, monkeypatch, capsys):
+    monkeypatch.chdir(env)
+    monkeypatch.setattr(sys, 'argv', ['build_owner_merge.py', '--task', str(env),
+                                    '--output', str(env / 'out'), '--allow-partial',
+                                    '--no-limits'])
+    bom.main()
+    result = json.loads(capsys.readouterr().out)
+    assert result['pages_with_owner_receipts'] == 1
+    assert read_primary(env)['catalogs'][0]['pages'][0]['content']['tables'][0]['rows'][0]['cells'][0]['value'] == '123'
+
+
 def test_null_blank_dash_zero_distinct(env):
     bom.export(env, env, env / 'out', allow_partial=True)
     data = read_primary(env)
