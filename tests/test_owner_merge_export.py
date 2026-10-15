@@ -209,6 +209,25 @@ def test_cli_without_page_subset_exports_manifest(env, monkeypatch, capsys):
     assert read_primary(env)['catalogs'][0]['pages'][0]['content']['tables'][0]['rows'][0]['cells'][0]['value'] == '123'
 
 
+def test_stream_verifier_consumes_json_after_catalogues(env):
+    import zipfile
+    bom.export(env, env, env / 'out', allow_partial=True)
+    original = env / 'out/catalogues-unified.zip'
+    broken = env / 'out/invalid-tail.zip'
+    with zipfile.ZipFile(original) as z:
+        members = {name: z.read(name) for name in z.namelist()}
+    members['catalogue.json'] += b' invalid-tail'
+    manifest = json.loads(members['manifest.json'])
+    manifest['files']['catalogue.json'].update(
+        sha256=sha_bytes(members['catalogue.json']), bytes=len(members['catalogue.json']))
+    members['manifest.json'] = json.dumps(manifest).encode()
+    with zipfile.ZipFile(broken, 'w') as z:
+        for name, data in members.items():
+            z.writestr(name, data)
+    with pytest.raises(bom.ijson.JSONError):
+        bom.verify_archive(broken, expected_pages=1)
+
+
 def test_null_blank_dash_zero_distinct(env):
     bom.export(env, env, env / 'out', allow_partial=True)
     data = read_primary(env)

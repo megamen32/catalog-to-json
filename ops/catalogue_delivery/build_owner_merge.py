@@ -58,6 +58,7 @@ import time
 import zipfile
 from pathlib import Path
 
+import ijson
 from openpyxl import load_workbook
 
 from catalog_json.reconciliation.consensus import case_sha256
@@ -504,6 +505,43 @@ def invalidate_baseline_review(page):
     page['content_canonical_sha256'] = case_sha256(page['content'])
 
 
+def verify_archive(archive, expected_pages=None):
+    """Read every member and the complete JSON without buffering its UTF-8 text."""
+    archive = Path(archive)
+    with zipfile.ZipFile(archive) as z:
+        if z.testzip() is not None:
+            raise ValueError('ZIP CRC failure')
+        manifest = json.loads(z.read('manifest.json'))
+        for name, info in manifest['files'].items():
+            digest = hashlib.sha256()
+            observed = 0
+            with z.open(name) as f:
+                for block in iter(lambda: f.read(1024 * 1024), b''):
+                    digest.update(block)
+                    observed += len(block)
+            if digest.hexdigest() != info['sha256'] or observed != info['bytes']:
+                raise ValueError(f'Archive manifest mismatch for {name}')
+        # items consumes the JSON through EOF, including typed facts after
+        # catalogs, but retains only one catalogue at a time. A 355MB UTF-8
+        # document otherwise needs both the bytes and decoded text in memory.
+        with z.open('catalogue.json') as stream:
+            count = sum(len(c['pages']) for c in
+                        ijson.items(stream, 'catalogs.item', use_float=True))
+        summary = manifest['summary']
+        expected = expected_pages if expected_pages is not None else summary['total_pages']
+        if count != expected:
+            raise ValueError('Consumer JSON page coverage failed')
+    return {'archive': str(archive.resolve()), 'sha256': sha(archive),
+            'bytes': archive.stat().st_size, 'page_count': count,
+            'pages_with_owner_receipts': summary['pages_with_owner_receipts'],
+            'final_delivery': summary['final_delivery'],
+            'receipts_per_role': summary['receipts_per_role'],
+            'canonical_corrections_applied': summary['canonical_corrections_applied'],
+            'owner_typed_facts_roundtrip': summary['facts_total'],
+            'archive_crc': 'passed', 'manifest_all_members_verified': True,
+            'model_calls': 0}
+
+
 def export(root, task, out, *, allow_partial=False, only_pages=None):
     started = time.monotonic()
     out = Path(out)
@@ -793,23 +831,10 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
     reports.clear()
     corrections.clear()
     catalog = page = record = rec = receipt = primary = unresolved = archived = value = None
+    tab = tab2 = decisions = members = group = None
     del bundle
     gc.collect()
-    with zipfile.ZipFile(archive) as z:
-        if z.testzip() is not None:
-            raise ValueError('ZIP CRC failure')
-        for nm, info in manifest_files.items():
-            with z.open(nm) as f:
-                hh = hashlib.sha256()
-                observed = 0
-                for block in iter(lambda: f.read(1024 * 1024), b''):
-                    hh.update(block)
-                    observed += len(block)
-            if hh.hexdigest() != info['sha256'] or observed != info['bytes']:
-                raise ValueError(f'Archive manifest mismatch for {nm}')
-        decoded = json.loads(z.read('catalogue.json'))
-        if sum(len(c['pages']) for c in decoded['catalogs']) != count:
-            raise ValueError('Consumer JSON page coverage failed')
+    verify_archive(archive, count)
     receipt_out = {'archive': str(archive.resolve()), 'sha256': sha(archive),
                    'bytes': archive.stat().st_size,
                    'page_count': count if only_pages else TOTAL_PAGES,
@@ -828,7 +853,9 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', type=Path, default=Path('.tmp/oleg-consensus-20261014'))
-    parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--output', type=Path)
+    parser.add_argument('--verify-existing', type=Path,
+                        help='verify a retained completed archive without rematerializing it')
     parser.add_argument('--allow-partial', action='store_true')
     parser.add_argument('--pages', nargs='*', help='canary subset of packet paths')
     parser.add_argument('--no-limits', action='store_true', help='tests only')
@@ -836,6 +863,19 @@ def main():
     if not args.no_limits:
         resource.setrlimit(resource.RLIMIT_AS, (2 * 1024 ** 3, 2 * 1024 ** 3))
         os.sched_setaffinity(0, {min(os.sched_getaffinity(0))})
+    if args.verify_existing:
+        if args.output or args.pages or args.allow_partial:
+            parser.error('--verify-existing cannot be combined with export options')
+        started = time.monotonic()
+        result = verify_archive(args.verify_existing)
+        result.update(elapsed_seconds=round(time.monotonic() - started, 3),
+                      peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+                      verifier_git_commit=_git(Path.cwd(), ['rev-parse', 'HEAD']))
+        args.verify_existing.with_name('verification.json').write_text(dump(result))
+        print(dump(result))
+        return
+    if args.output is None:
+        parser.error('--output is required for export')
     print(dump(export(Path.cwd(), args.task, args.output,
                       allow_partial=args.allow_partial, only_pages=set(args.pages or []) or None)))
 
