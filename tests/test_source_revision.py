@@ -81,3 +81,23 @@ def test_readback_requires_unchanged_closure_ledger(tmp_path):
     result = verify(delivery["catalogue.json"], delivery["catalogue.xlsx"], **kwargs)
     assert not result["ok"]
     assert "closure_ledger_identity" in {x["code"] for x in result["failures"]}
+
+
+def test_readback_detects_undeclared_deletion_outside_selected_tables(tmp_path):
+    doc, pack = fixture()
+    doc["records"].append({**doc["records"][0], "id": "C-unlisted",
+                           "source_fact_ids": ["O-unlisted"]})
+    out, ledger = revise(doc, pack, input_sha256="base", builder={"version": "test"})
+    out["records"] = [r for r in out["records"] if r["id"] != "C-unlisted"]
+    source = tmp_path / "tampered.json"
+    source.write_text(json.dumps(out))
+    ref = tmp_path / "original42.json"
+    ref.write_text(json.dumps(doc["unresolved"]))
+    led = tmp_path / "review.json"
+    led.write_text(json.dumps(ledger))
+    delivery = export(source, tmp_path / "delivery")
+    result = verify(delivery["catalogue.json"], delivery["catalogue.xlsx"],
+                    unresolved_reference=ref, closure_ledger=led,
+                    expected_table_ids=["O-1"], expected_page_counts={"test": 1})
+    assert not result["ok"]
+    assert "reviewed_recordset_mismatch" in {x["code"] for x in result["failures"]}

@@ -115,11 +115,25 @@ def revise(doc, pack, *, input_sha256, builder):
             if ident not in records:
                 raise ValueError("Closure references an absent final record")
     out["records"] = sorted(records.values(), key=lambda r: r["id"])
+    metadata_changes = []
+    for change in pack.get("metadata_changes", []):
+        key = change["key"]
+        if key != "new_audit_issues":
+            raise ValueError("Cannot rewrite historical producer/input metadata")
+        before = out["metadata"].get(key)
+        if digest(before) != change.get("before_sha256") or not change.get("reason"):
+            raise ValueError("Metadata before/reason mismatch")
+        out["metadata"][key] = copy.deepcopy(change["value"])
+        metadata_changes.append({"key": key, "before": before,
+                                 "after": change["value"], "reason": change["reason"]})
     ledger = {"schema": "canonical-source-review-ledger/1",
               "input_sha256": input_sha256, "review_pack_sha256": digest(pack),
               "original_unresolved": copy.deepcopy(doc["unresolved"]),
               "closures": copy.deepcopy(pack["closures"]),
-              "record_changes": changed, "reviewers": pack["reviewers"],
+              "record_changes": changed, "metadata_changes": metadata_changes,
+              "output_records_sha256": digest(out["records"]),
+              "output_record_count": len(out["records"]),
+              "reviewers": pack["reviewers"],
               "review_scope": pack["review_scope"], "builder": builder}
     out["metadata"]["source_review"] = {
         "input_sha256": input_sha256, "ledger_content_sha256": digest(ledger),

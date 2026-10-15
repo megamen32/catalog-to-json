@@ -199,6 +199,9 @@ def verify(canonical_json, xlsx, *, unresolved_reference=None, manifest=None,
                     fail("closure_ledger_identity")
                 if ledger.get("input_sha256") != review.get("input_sha256"):
                     fail("closure_input_identity")
+                if (hashlib.sha256(encoded(records).encode()).hexdigest() != ledger.get("output_records_sha256")
+                        or len(records) != ledger.get("output_record_count")):
+                    fail("reviewed_recordset_mismatch")
                 if encoded(ledger.get("original_unresolved")) != encoded(original_unresolved):
                     fail("closure_original_history_changed")
                 old = {u["fact"]["fact_id"]: u for u in original_unresolved}
@@ -234,6 +237,9 @@ def verify(canonical_json, xlsx, *, unresolved_reference=None, manifest=None,
                             fail("reviewed_record_mismatch", id=after["id"])
                     elif change.get("before", {}).get("id") in by_id:
                         fail("reviewed_removal_still_present")
+                for change in ledger.get("metadata_changes", []):
+                    if encoded(doc.get("metadata", {}).get(change["key"])) != encoded(change["after"]):
+                        fail("reviewed_metadata_mismatch", key=change["key"])
             if isinstance(original, dict) and original.get("source_archive_sha256"):
                 if doc.get("metadata", {}).get("input_archive_sha256") != original["source_archive_sha256"]:
                     fail("input_archive_identity")
