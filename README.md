@@ -65,6 +65,10 @@ Independent evaluation: [Catalog Extraction Benchmark](https://github.com/megame
 
 В1.4.4 parser-plugin0.2.2 выдаёт JSON порциями до12000байт, чтобы FastAgent не вырезал середину длинных ответов. Переход выполняется по возвращённому next_offset. Native MCP/SDK-проверка восстановила весь Docling JSON страницы30 без потери байтов; точность1.4.4 на полном бенчмарке пока не измерена. [Результаты выбора инструментов](https://github.com/megamen32/catalog-extraction-benchmark/tree/main/examples/agent-routing/2026-10-12-body-routing-v1.4.2).
 
+## Catalog Vision Backend
+
+[Catalog Vision Backend](https://github.com/megamen32/catalog-vision-backend) — наша закрытая адаптация обработчика документов, подготовленная как отдельный необязательный компонент. Репозиторий приватный; планируем предоставлять доступ бесплатно по запросу у [владельца в GitHub](https://github.com/megamen32). `catalog-to-json` работает самостоятельно и не зависит от этого приватного репозитория; компонент пока не подключён к его коду или текущей очереди. [Режимы и сохранённые испытания](https://github.com/megamen32/catalog-extraction-benchmark/blob/main/docs/CATALOG-VISION-BACKEND.md).
+
 ## Выгрузки каталогов
 
 [Последняя частичная выгрузка:219/980 страниц](examples/catalogs/checkpoint-2026-10-13T030723Z-mixed-guarded15-review148) содержит JSON с фактическими версиями производителей и Excel с широкими таблицами. Принятие моделями и независимый визуальный аудит указаны отдельно; весь набор ещё не завершён. [Прежние версии](examples/catalogs) сохранены.
