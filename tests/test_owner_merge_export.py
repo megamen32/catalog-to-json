@@ -394,3 +394,32 @@ def test_unresolved_table_cell_is_unknown_and_original_is_preserved():
     assert page['content']['tables'][0]['rows'][0]['cells'][0]['state'] == 'unknown'
     assert page['content']['tables'][0]['rows'][0]['cells'][0]['value'] is None
     assert changes[0]['source_unresolved'] is True
+
+
+def test_whole_rejected_table_is_replaced_by_selected_structured_facts():
+    """Fast unit: isolators64 structure replacement must not broadcast one scalar."""
+    import copy
+    page = copy.deepcopy(BASELINE['catalogs'][0]['pages'][0])
+    ours = make_fact('ours', 0, '999'); ours['pointer'] = CELL_PTR
+    left = make_fact('oleg', 1, 'Ball'); right = make_fact('oleg', 2, 'D=33.3 d=17')
+    record = {'packet': {'facts': [ours, left, right]}, 'catalog': 'small', 'physical_page': 7}
+    receipt = {'identity': {'role': 'codex'}, 'work_sha256': 'x', 'groups': [
+        {'fact_indices': [0, 1, 2], 'keep': 'oleg'}]}
+    primary, _, archived, removals = bom.apply_receipt(record, page, receipt, [])
+    assert [entry['value'] for entry in primary] == ['Ball', 'D=33.3 d=17']
+    assert archived[0]['value'] == '999'
+    assert {'kind': 'tables', 'index': 0} in removals
+
+
+def test_partial_ambiguous_table_replacement_is_refused():
+    """Fast unit: a multi-value group cannot erase a table with accepted rows."""
+    import copy
+    page = copy.deepcopy(BASELINE['catalogs'][0]['pages'][0])
+    page['content']['tables'][0]['rows'].append(copy.deepcopy(page['content']['tables'][0]['rows'][0]))
+    ours = make_fact('ours', 0, '999'); ours['pointer'] = CELL_PTR
+    left = make_fact('oleg', 1, 'Ball'); right = make_fact('oleg', 2, 'D=33.3 d=17')
+    record = {'packet': {'facts': [ours, left, right]}, 'catalog': 'small', 'physical_page': 7}
+    receipt = {'identity': {'role': 'codex'}, 'work_sha256': 'x', 'groups': [
+        {'fact_indices': [0, 1, 2], 'keep': 'oleg'}]}
+    with pytest.raises(ValueError, match='Ambiguous'):
+        bom.apply_receipt(record, page, receipt, [])

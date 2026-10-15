@@ -29,6 +29,9 @@ Materialization builds the PRIMARY delivery from the groups:
 Oleg-only selected facts (no ours counterpart in the group) are materialised
 into the per-page ``merged_primary`` section with full provenance. null / blank
 / dash / 0 remain distinct typed values end to end.
+A grouped structure replacement removes a legacy table only if every old cell
+is explicitly rejected; the selected records become primary without a guessed
+scalar mapping. Partial ambiguous replacements are refused.
 An owner merge invalidates baseline approval for the changed page; the original
 review proof remains in history and is never presented as a new final review.
 
@@ -313,6 +316,38 @@ def primary_entry(fact, kept, receipt):
                            'work_sha256': receipt['work_sha256']}}
 
 
+def whole_table_replacements(facts, page, receipt):
+    """Allow a structure replacement only when every old cell is rejected.
+
+    A whole type/geometry block (isolators64) has no one-to-one scalar mapping.
+    Its selected records live in merged_primary; the completely rejected legacy
+    table must leave content. Partial ambiguous groups still fail below.
+    """
+    rejected, preserved, candidates = set(), set(), set()
+    for group in receipt['groups']:
+        members = [facts[i] for i in group['fact_indices']]
+        cells = [cp for f in members if f['side'] == 'ours'
+                 and (cp := cell_pointer_parts(f.get('pointer', '')))]
+        targets = {(cp['table'], cp['row'], cp['cell']) for cp in cells}
+        if group['keep'] != 'oleg':
+            preserved.update(targets)
+            continue
+        rejected.update(targets)
+        signatures = {(norm(f.get('value')), norm(f.get('unit')) or None,
+                       norm(f.get('condition')) or None)
+                      for f in members if f['side'] == 'oleg'}
+        if len(signatures) > 1:
+            candidates.update(cp['table'] for cp in cells)
+    result = set()
+    for table_index in candidates:
+        table = page['content']['tables'][table_index]
+        expected = {(table_index, ri, ci) for ri, row in enumerate(table['rows'])
+                    for ci, _ in enumerate(row['cells'])}
+        if expected and expected <= rejected and not expected.intersection(preserved):
+            result.add(table_index)
+    return result
+
+
 def apply_receipt(record, page, receipt, corrections):
     """Materialize one receipt over the baseline page.
 
@@ -324,6 +359,8 @@ def apply_receipt(record, page, receipt, corrections):
     packet = record['packet']
     facts = packet['facts']
     primary, unresolved, archived, removals = [], [], [], []
+    replaced_tables = whole_table_replacements(facts, page, receipt)
+    removals.extend({'kind': 'tables', 'index': i} for i in sorted(replaced_tables))
     written = set()
     for group in receipt['groups']:
         keep = group['keep']
@@ -360,7 +397,9 @@ def apply_receipt(record, page, receipt, corrections):
             continue
         chosen = keep
         ours_cells = [f for f in members
-                      if f['side'] == 'ours' and cell_pointer_parts(f.get('pointer', ''))]
+                      if f['side'] == 'ours'
+                      and (cp := cell_pointer_parts(f.get('pointer', '')))
+                      and cp['table'] not in replaced_tables]
         if chosen == 'oleg' and ours_cells:
             selected = [f for f in members if f['side'] == 'oleg']
             signatures = {(norm(f.get('value')), norm(f.get('unit')) or None,
