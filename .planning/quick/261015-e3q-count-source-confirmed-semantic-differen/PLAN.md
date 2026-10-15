@@ -57,3 +57,14 @@ whole-table selections, and the already identified disagreements in merge
 receipts. Distinguish rejected alternatives from erroneous alternatives kept
 as primary. A confirmed merge defect must be reported and repaired using
 source-bound selection, without changing source values or the original42 list.
+
+## Implementation resumed by direct owner request
+
+Build one canonical record set from immutable packets and existing decisions,
+apply source-bound amendments, collapse compatible observations and fail on
+conflicting physical keys. Keep figures/supporting context typed. Generate
+JSON and Excel from this exact set; comparison and decisions are separate audit
+artifacts. Independent verifier reopens all outputs and proves types, identities,
+980-page coverage, selected whole-table fields, unchanged42 and concrete bug
+cases. Publish owned source, then run one final build/readback and deliver clean
+artifact. User-facing completion is the actual files, not a code/test report.
