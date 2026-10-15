@@ -49,6 +49,13 @@ def test_changed_value_and_original_facts_remain_in_separate_history():
     assert out["producers"] == before["producers"]
 
 
+def test_page_order_is_readable_instead_of_random_hash_id_order():
+    doc, pack = fixture()
+    doc["records"] = [{**doc["records"][0], "id": "C-z", "page": 2}, doc["records"][0]]
+    out, _ = revise(doc, pack, input_sha256="base", builder={})
+    assert [r["page"] for r in out["records"]] == [1, 2]
+
+
 @pytest.mark.parametrize("failure", ["stale_base", "dropped_fact", "duplicate_fact", "wrong_page", "wrong_before"])
 def test_unreviewed_or_mismatched_closure_is_rejected(failure):
     doc, pack = fixture()

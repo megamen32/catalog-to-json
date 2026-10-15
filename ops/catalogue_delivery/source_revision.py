@@ -114,7 +114,12 @@ def revise(doc, pack, *, input_sha256, builder):
         for ident in d.get("record_ids", []):
             if ident not in records:
                 raise ValueError("Closure references an absent final record")
-    out["records"] = sorted(records.values(), key=lambda r: r["id"])
+    # Keep the workbook readable and compressible: catalogue/page order, with
+    # existing source order retained within each page. Hash IDs are not a useful
+    # display order and would interleave all 980 pages in Excel.
+    catalogue_order = {s["id"]: i for i, s in enumerate(doc["sources"])}
+    out["records"] = sorted(records.values(),
+                            key=lambda r: (catalogue_order[r["catalog"]], r["page"]))
     metadata_changes = []
     for change in pack.get("metadata_changes", []):
         key = change["key"]
