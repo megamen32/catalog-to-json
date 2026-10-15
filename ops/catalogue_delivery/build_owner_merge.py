@@ -694,6 +694,16 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
         for file in workbook_paths:
             z.write(file, file.name)
             manifest_files[file.name] = {'sha256': sha(file), 'bytes': file.stat().st_size}
+        # Final delivery includes the immutable inputs as well as the merged
+        # typed facts. A reader can recover either original without this host's
+        # private context store. Partial canaries do not copy these archives.
+        if full:
+            for name, file in (
+                ('originals/nikita-original.zip', original),
+                ('originals/oleg-original.zip', task / 'input' / 'forenergo-our-extraction.zip'),
+            ):
+                z.write(file, name, compress_type=zipfile.ZIP_STORED)
+                manifest_files[name] = {'sha256': sha(file), 'bytes': file.stat().st_size}
         h = hashlib.sha256()
         size = 0
         facts_written = 0
@@ -763,6 +773,12 @@ def export(root, task, out, *, allow_partial=False, only_pages=None):
                              'Лист Excel «Решения сведения» '
                              'содержит причины и JSON-указатели, включая отклонённые варианты Олега.\n'),
         }
+        if full:
+            reports['README.txt'] += (
+                'originals/nikita-original.zip и originals/oleg-original.zip — оба исходных '
+                'варианта без изменений; их SHA и размеры указаны в manifest.json.\n'
+                'Сведение завершено. Независимая итоговая проверка отложена по решению '
+                'владельца; полное покрытие не является оценкой точности.\n')
         for nm, value in reports.items():
             data = value.encode() if isinstance(value, str) else dump(value).encode()
             z.writestr(nm, data)

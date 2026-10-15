@@ -181,6 +181,23 @@ def test_keep_oleg_materializes_123_and_archives_999(env):
     assert any(f['value'] == 'только-у-Олега' for f in page['merged_primary']['primary_facts'])
 
 
+def test_final_archive_recovers_both_immutable_inputs(env, monkeypatch):
+    import zipfile
+    monkeypatch.setattr(bom, 'TOTAL_PAGES', 1)
+    result = bom.export(env, env, env / 'out')
+    assert result['final_delivery'] is True
+    with zipfile.ZipFile(env / 'out/catalogues-unified.zip') as z:
+        manifest = json.loads(z.read('manifest.json'))
+        for name, path in (
+            ('originals/nikita-original.zip', env / bom.BASELINE_ZIP),
+            ('originals/oleg-original.zip', env / 'input/forenergo-our-extraction.zip'),
+        ):
+            data = z.read(name)
+            assert data == path.read_bytes()
+            assert manifest['files'][name]['sha256'] == sha_bytes(data)
+            assert manifest['files'][name]['bytes'] == len(data)
+
+
 def test_null_blank_dash_zero_distinct(env):
     bom.export(env, env, env / 'out', allow_partial=True)
     data = read_primary(env)
