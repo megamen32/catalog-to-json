@@ -61,7 +61,8 @@ def _sheet_for(record):
 
 
 def verify(canonical_json, xlsx, *, unresolved_reference=None, manifest=None,
-           archive=None, expected_table_ids=None, expected_page_counts=None):
+           archive=None, expected_table_ids=None, expected_page_counts=None,
+           closure_ledger=None):
     """Return a bounded report; ``ok`` requires every requested proof to pass.
 
     expected_table_ids is an independently retained JSON list of selected source
@@ -183,8 +184,56 @@ def verify(canonical_json, xlsx, *, unresolved_reference=None, manifest=None,
             original_unresolved = original["facts"] if isinstance(original, dict) else original
             if len(original_unresolved) != 42:
                 fail("reference_unresolved_count", count=len(original_unresolved))
-            if encoded(doc.get("unresolved")) != encoded(original_unresolved):
-                fail("retained_unresolved_mismatch")
+            if closure_ledger is None:
+                if doc.get("metadata", {}).get("source_review"):
+                    fail("closure_ledger_required")
+                if encoded(doc.get("unresolved")) != encoded(original_unresolved):
+                    fail("retained_unresolved_mismatch")
+            else:
+                ledger = _json_load(closure_ledger)
+                review = doc.get("metadata", {}).get("source_review", {})
+                if ledger.get("schema") != "canonical-source-review-ledger/1":
+                    fail("closure_ledger_schema")
+                sha = hashlib.sha256(encoded(ledger).encode()).hexdigest()
+                if sha != review.get("ledger_content_sha256"):
+                    fail("closure_ledger_identity")
+                if ledger.get("input_sha256") != review.get("input_sha256"):
+                    fail("closure_input_identity")
+                if encoded(ledger.get("original_unresolved")) != encoded(original_unresolved):
+                    fail("closure_original_history_changed")
+                old = {u["fact"]["fact_id"]: u for u in original_unresolved}
+                decisions = ledger.get("closures", [])
+                decision_ids = [c["fact_id"] for c in decisions]
+                if len(set(decision_ids)) != len(decision_ids) or set(decision_ids) != set(old):
+                    fail("closure_partition")
+                closed = set()
+                for c in decisions:
+                    if c.get("disposition") not in {"closed", "retained"}:
+                        fail("closure_disposition")
+                    if not c.get("reason") or not c.get("evidence"):
+                        fail("closure_evidence")
+                    u = old.get(c["fact_id"])
+                    if u is None:
+                        continue
+                    if hashlib.sha256(encoded(u).encode()).hexdigest() != c.get("before_sha256"):
+                        fail("closure_before_identity")
+                    if c["disposition"] == "closed":
+                        closed.add(c["fact_id"])
+                    for ident in c.get("record_ids", []):
+                        if ident not in by_id:
+                            fail("closure_result_missing", id=ident)
+                remaining = [u for u in original_unresolved if u["fact"]["fact_id"] not in closed]
+                if encoded(doc.get("unresolved")) != encoded(remaining):
+                    fail("closure_remaining_mismatch")
+                if review.get("closed_count") != len(closed) or review.get("retained_count") != len(remaining):
+                    fail("closure_counts")
+                for change in ledger.get("record_changes", []):
+                    after = change.get("after")
+                    if after is not None:
+                        if encoded(by_id.get(after["id"])) != encoded(after):
+                            fail("reviewed_record_mismatch", id=after["id"])
+                    elif change.get("before", {}).get("id") in by_id:
+                        fail("reviewed_removal_still_present")
             if isinstance(original, dict) and original.get("source_archive_sha256"):
                 if doc.get("metadata", {}).get("input_archive_sha256") != original["source_archive_sha256"]:
                     fail("input_archive_identity")
@@ -377,10 +426,12 @@ def main():
     parser.add_argument("--expected-table-ids", type=Path, required=True)
     parser.add_argument("--manifest", type=Path)
     parser.add_argument("--archive", type=Path)
+    parser.add_argument("--closure-ledger", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     report = verify(args.canonical_json, args.xlsx, unresolved_reference=args.unresolved_reference,
-                    expected_table_ids=args.expected_table_ids, manifest=args.manifest, archive=args.archive)
+                    expected_table_ids=args.expected_table_ids, manifest=args.manifest,
+                    archive=args.archive, closure_ledger=args.closure_ledger)
     result = json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
     if args.output:
         args.output.write_text(result, encoding="utf-8")
