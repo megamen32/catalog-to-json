@@ -1,0 +1,57 @@
+{
+  "schema_version": "catalogue-delivery-summary/1",
+  "status": "delivered",
+  "archive_filename": "catalogues-nikita-oleg-final.zip",
+  "download": "https://yadi.sk/d/vG15arblr9saTQ",
+  "archive_sha256": "0f4f272a4cc55407ae767b41694fc5f4d822986e8eb84dbe3008049a20aa2726",
+  "archive_bytes": 98191023,
+  "program_version": "1.5.26",
+  "archive_builder_commit": "3191c424a166bcf39949ca330b7a924a2258fff4",
+  "verifier_commit": "7187d4606ff9df9e0b69d18700aacac68a138cfe",
+  "pages": 980,
+  "per_catalog": {
+    "opn": {
+      "pages": 60,
+      "primary_excel_rows": 6472,
+      "decision_excel_rows": 6472
+    },
+    "isolators": {
+      "pages": 162,
+      "primary_excel_rows": 18669,
+      "decision_excel_rows": 17100
+    },
+    "small": {
+      "pages": 228,
+      "primary_excel_rows": 23873,
+      "decision_excel_rows": 23267
+    },
+    "innovations": {
+      "pages": 216,
+      "primary_excel_rows": 28150,
+      "decision_excel_rows": 12575
+    },
+    "armature": {
+      "pages": 314,
+      "primary_excel_rows": 41273,
+      "decision_excel_rows": 24630
+    }
+  },
+  "typed_input_facts": 195880,
+  "decision_groups": 84044,
+  "primary_facts": 118395,
+  "source_unresolved_facts": 42,
+  "archived_facts": 77443,
+  "canonical_cell_or_header_corrections": 113,
+  "both_original_archives_retained": true,
+  "independent_final_review_complete": false,
+  "owner_merge_complete": true,
+  "checks": {
+    "zip_crc": true,
+    "all_member_sha256": true,
+    "both_original_zip_crc": true,
+    "all_excel_primary_rows_and_decisions_match_json": true,
+    "public_download_sha256_matches_local": true,
+    "streaming_verifier_peak_rss_kib": 433320
+  },
+  "model_calls_during_export_or_verification": 0
+}
