@@ -23,6 +23,7 @@ from openpyxl.worksheet._writer import ALL_TEMP_FILES, WorksheetWriter
 
 
 SCHEMA = "canonical-catalogue/1"
+VERSION = "1.1.1"
 FIELDS = (
     "id", "catalog", "page", "kind", "model", "parameter", "part",
     "condition", "value", "unit", "state", "source_fact_ids", "producer_ref",
@@ -35,14 +36,23 @@ LONG_MARKER = "[Полное значение: Длинные значения]"
 CELL_UNITS = 30_000
 TEXT_ALIGNMENT = Alignment(vertical="top", wrap_text=True)
 HEADER_FONT = Font(bold=True)
+OPEN_STATES = ("source_conflict", "unknown")
+ISSUE_FIELDS = ("catalog", "page", "model", "parameter", "state", "id")
+ISSUE_HEADERS = ("Каталог", "Страница", "Модель", "Параметр", "state", "id")
+CATALOG_NAMES = {"armature": "Арматура", "small": "Малый каталог",
+                 "innovations": "Инновационные изделия 2021-2022",
+                 "isolators": "Изоляторы", "opn": "ОПН"}
 WORKBOOK_ENCODING = {
-    "schema": "canonical-workbook/1",
+    "schema": "canonical-workbook/2",
     "data_sheets": list(DATA_SHEETS),
     "headers": list(HEADERS),
     "raw_fields": list(RAW_FIELDS),
     "json_fields": list(JSON_FIELDS),
     "display_only_fields": ["value_display"],
-    "unresolved_sheet": {"name": "Неоднозначные", "headers": ["index", "value"]},
+    "unresolved_sheet": {"name": "Неоднозначные", "headers": list(ISSUE_HEADERS),
+                         "fields": list(ISSUE_FIELDS), "states": list(OPEN_STATES),
+                         "catalog_names": CATALOG_NAMES,
+                         "source": "records; legacy unresolved retained in Метаданные"},
     "envelope_sheet": {"name": "Метаданные", "headers": ["key", "value"]},
     "continuation_sheet": {
         "name": "Длинные значения",
@@ -156,7 +166,7 @@ def export(canonical_json_path, output_dir):
     row_numbers = {}
     for name, headers in [
         *((name, HEADERS) for name in DATA_SHEETS),
-        ("Неоднозначные", ("index", "value")),
+        ("Неоднозначные", ISSUE_HEADERS),
         ("Метаданные", ("key", "value")),
         ("Длинные значения", tuple(WORKBOOK_ENCODING["continuation_sheet"]["headers"])),
     ]:
@@ -166,6 +176,11 @@ def export(canonical_json_path, output_dir):
             sheet.column_dimensions["A"].width = 24
             for column in ("E", "F", "G", "H", "I", "N"):
                 sheet.column_dimensions[column].width = 36
+        elif name == "Неоднозначные":
+            for column in ("A", "C", "D"):
+                sheet.column_dimensions[column].width = 40
+            sheet.column_dimensions["E"].width = 22
+            sheet.column_dimensions["F"].width = 30
         # openpyxl defaults worksheet scratch files to system /tmp. Keep all
         # transient catalogue data inside this project output directory instead.
         scratch = tempfile.NamedTemporaryFile(prefix=".xlsx-", suffix=".xml", dir=output, delete=False)
@@ -201,7 +216,7 @@ def export(canonical_json_path, output_dir):
             cells.append(_text_cell(sheets[name], value))
         sheets[name].append(cells)
 
-    ids, counts, kinds = set(), Counter(), Counter()
+    ids, counts, kinds, open_counts = set(), Counter(), Counter(), Counter()
     with paths["catalogue.json"].open("rb") as stream:
         for record in streaming_json.items(stream, "records.item", use_float=True):
             if not isinstance(record, dict) or set(record) != set(FIELDS):
@@ -229,11 +244,18 @@ def export(canonical_json_path, output_dir):
             append(sheet_for(record["kind"]), record["id"], values)
             counts[record["catalog"]] += 1
             kinds[record["kind"]] += 1
-    for index, item in enumerate(unresolved):
-        append("Неоднозначные", f"unresolved:{index}", (("index", index), ("value", dumps(item))))
+            if record["state"] in OPEN_STATES:
+                open_counts[record["state"]] += 1
+                issue = {field: record[field] for field in ISSUE_FIELDS}
+                issue["catalog"] = CATALOG_NAMES.get(record["catalog"], record["catalog"])
+                append("Неоднозначные", record["id"], tuple(
+                    (field, value if value is None or isinstance(value, (str, int, float))
+                     else dumps(value)) for field, value in issue.items()))
     for key, value in envelope.items():
-        if key != "unresolved":
-            append("Метаданные", key, (("key", key), ("value", dumps(value))))
+        append("Метаданные", key, (("key", key), ("value", dumps(value))))
+    for name in (*DATA_SHEETS, "Неоднозначные"):
+        width = "N" if name in DATA_SHEETS else "F"
+        sheets[name].auto_filter.ref = f"A1:{width}{row_numbers[name]}"
     book.save(paths["catalogue.xlsx"])
     review_scope = envelope.get("metadata", {}).get("review_scope", "не указан")
     readme = (
@@ -247,10 +269,16 @@ def export(canonical_json_path, output_dir):
         "Перепроверялось сведение двух сохранённых оцифровок. Новая независимая\n"
         "проверка всех исходных страниц PDF не выполнялась. Неизвестные и\n"
         "противоречивые значения помечены явно и не равны нулю.\n\n"
-        f"Записей: {len(ids)}. Открытых записей в списке неоднозначностей: {len(unresolved)}.\n"
+        f"Записей: {len(ids)}. Открытых противоречий (source_conflict): {open_counts['source_conflict']}.\n"
+        f"Неизвестных значений (unknown): {open_counts['unknown']}. "
+        f"Всего нерешённых характеристик на листе «Неоднозначные»: {sum(open_counts.values())}.\n"
+        "Лист «Неоднозначные» содержит каталог, страницу, модель, параметр, state и id.\n"
+        "На листе «Характеристики» включён фильтр; отберите state=source_conflict.\n"
+        f"Отдельных старых пометок в JSON unresolved: {len(unresolved)}; "
+        "это не счётчик противоречий и неизвестных значений.\n"
         "Закрытые замечания и прежние значения сохранены в отдельной истории проверки.\n"
         "Неизвестные значения и ограничения интерпретации отдельных записей дополнительно\n"
-        "отмечены их полями state и metadata; этот список не является оценкой точности.\n"
+        "отмечены их полями state и metadata; эти числа не являются оценкой точности.\n"
         f"Объём проверки: {dumps(review_scope)}\n\n"
         "Excel: nullable/составные поля записаны как JSON, чтобы различать null, пустую\n"
         "строку, прочерк, ноль и тип значения. value_display — только удобное отображение.\n"
@@ -261,7 +289,12 @@ def export(canonical_json_path, output_dir):
     paths["README.txt"].write_text(readme, encoding="utf-8")
     manifest = {
         "schema": "canonical-delivery/1", "canonical_schema": SCHEMA,
-        "record_count": len(ids), "unresolved_count": len(unresolved),
+        "exporter": {"name": "canonical-export", "version": VERSION,
+                     "source_sha256": sha256(__file__)},
+        "record_count": len(ids), "unresolved_count": sum(open_counts.values()),
+        "source_conflict_count": open_counts["source_conflict"],
+        "unknown_count": open_counts["unknown"],
+        "legacy_unresolved_count": len(unresolved),
         "records_by_catalog": dict(sorted(counts.items())),
         "records_by_kind": dict(sorted(kinds.items())),
         "continuation_chunks": continuation_count,

@@ -78,6 +78,38 @@ def test_readback_preserves_types_and_empty_page(tmp_path):
     assert result["coverage"]["pages_with_records"] == 1
 
 
+@pytest.mark.parametrize("corrupt", ["sheet", "readme", "manifest"])
+def test_current_issues_and_report_counts_cannot_silently_disappear(tmp_path, corrupt):
+    from ops.catalogue_delivery.canonical_export import export
+    doc, source, _, ref = make_files(tmp_path, values=[None] * 24)
+    for n, item in enumerate(doc["records"]):
+        item["state"] = "source_conflict" if n < 22 else "unknown"
+    source.write_text(j(doc))
+    result = export(source, tmp_path / "delivery")
+    kwargs = dict(unresolved_reference=ref, expected_table_ids=["O-0"],
+                  expected_page_counts={"test": 2}, manifest=result["manifest.json"])
+    good = verify_module.verify(result["catalogue.json"], result["catalogue.xlsx"], **kwargs)
+    assert good["ok"], good
+    if corrupt == "sheet":
+        book = load_workbook(result["catalogue.xlsx"])
+        book["Неоднозначные"].delete_rows(2, 24)
+        book.save(result["catalogue.xlsx"])
+        book.close()
+        wanted = "xlsx_open_characteristics_mismatch"
+    elif corrupt == "readme":
+        p = Path(result["README.txt"])
+        p.write_text(p.read_text().replace("(source_conflict): 22.", "(source_conflict): 0."))
+        wanted = "readme_open_count"
+    else:
+        p = Path(result["manifest.json"])
+        manifest = json.loads(p.read_text())
+        manifest["unresolved_count"] = 0
+        p.write_text(j(manifest))
+        wanted = "manifest_open_count"
+    bad = verify_module.verify(result["catalogue.json"], result["catalogue.xlsx"], **kwargs)
+    assert not bad["ok"] and wanted in codes(bad), bad
+
+
 @pytest.mark.parametrize("replacement", ['""', '"0"', "false", '"—"'])
 def test_null_does_not_collapse_into_other_values(tmp_path, replacement):
     files = make_files(tmp_path)

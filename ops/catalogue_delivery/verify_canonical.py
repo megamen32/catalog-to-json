@@ -262,7 +262,10 @@ def verify(canonical_json, xlsx, *, unresolved_reference=None, manifest=None,
         except (OSError, ValueError, KeyError, TypeError) as exc:
             fail("selected_table_reference", error=str(exc))
 
+    open_counts = collections.Counter(r.get("state") for r in records
+                                     if r.get("state") in {"source_conflict", "unknown"})
     xlsx_seen, xlsx_unresolved, xlsx_metadata = set(), [], {}
+    current_issue_sheet = False
     try:
         from openpyxl import load_workbook
         book = load_workbook(xlsx, read_only=True, data_only=False)
@@ -339,12 +342,28 @@ def verify(canonical_json, xlsx, *, unresolved_reference=None, manifest=None,
                     for field in CORE:
                         if encoded(reconstructed[field]) != encoded(expected[field]):
                             fail("xlsx_field_mismatch", id=ident, field=field)
+        issue_fields = ("catalog", "page", "model", "parameter", "state", "id")
+        issue_headers = ["Каталог", "Страница", "Модель", "Параметр", "state", "id"]
+        catalog_names = {"armature": "Арматура", "small": "Малый каталог",
+                         "innovations": "Инновационные изделия 2021-2022",
+                         "isolators": "Изоляторы", "opn": "ОПН"}
+        actual_issues = []
         for sheet, headers in (("Неоднозначные", ["index", "value"]), ("Метаданные", ["key", "value"])):
             if sheet not in book.sheetnames:
                 fail("missing_envelope_sheet", sheet=sheet)
                 continue
             iterator = book[sheet].iter_rows()
-            if [c.value for c in next(iterator)] != headers:
+            actual_headers = [c.value for c in next(iterator)]
+            if sheet == "Неоднозначные" and actual_headers == issue_headers:
+                current_issue_sheet = True
+                for number, row in enumerate(iterator, 2):
+                    if not any(c.value is not None for c in row):
+                        continue
+                    ident = row[5].value
+                    actual_issues.append([cell_text(cell, sheet, number, field, ident)
+                                          for field, cell in zip(issue_fields, row)])
+                continue
+            if actual_headers != headers:
                 raise ValueError("Unexpected envelope headers: " + sheet)
             for number, row in enumerate(iterator, 2):
                 if not any(c.value is not None for c in row):
@@ -369,9 +388,27 @@ def verify(canonical_json, xlsx, *, unresolved_reference=None, manifest=None,
         book.close()
         if xlsx_seen != set(by_id):
             fail("xlsx_record_coverage", missing=len(set(by_id)-xlsx_seen), extra=len(xlsx_seen-set(by_id)))
-        if encoded(xlsx_unresolved) != encoded(doc.get("unresolved")):
-            fail("xlsx_unresolved_mismatch")
-        envelope = {k: v for k, v in doc.items() if k not in {"records", "unresolved"}}
+        if current_issue_sheet:
+            expected_issues = []
+            for record in records:
+                if record["state"] not in {"source_conflict", "unknown"}:
+                    continue
+                values = []
+                for field in issue_fields:
+                    value = record[field]
+                    if field == "catalog":
+                        value = catalog_names.get(value, value)
+                    elif value is not None and not isinstance(value, (str, int, float)):
+                        value = json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+                    values.append(value)
+                expected_issues.append(values)
+            if encoded(actual_issues) != encoded(expected_issues):
+                fail("xlsx_open_characteristics_mismatch", actual=len(actual_issues), expected=len(expected_issues))
+            envelope = {k: v for k, v in doc.items() if k != "records"}
+        else:
+            if encoded(xlsx_unresolved) != encoded(doc.get("unresolved")):
+                fail("xlsx_unresolved_mismatch")
+            envelope = {k: v for k, v in doc.items() if k not in {"records", "unresolved"}}
         if encoded(xlsx_metadata) != encoded(envelope):
             fail("xlsx_metadata_mismatch", actual_keys=sorted(xlsx_metadata), expected_keys=sorted(envelope))
     except (OSError, ValueError, KeyError, TypeError, StopIteration, zipfile.BadZipFile) as exc:
@@ -381,6 +418,22 @@ def verify(canonical_json, xlsx, *, unresolved_reference=None, manifest=None,
     if manifest is not None:
         try:
             manifest_doc = _json_load(manifest)
+            if current_issue_sheet:
+                wanted = {"source_conflict_count": open_counts["source_conflict"],
+                          "unknown_count": open_counts["unknown"],
+                          "unresolved_count": sum(open_counts.values()),
+                          "legacy_unresolved_count": len(doc.get("unresolved", []))}
+                for key, expected in wanted.items():
+                    if manifest_doc.get(key) != expected:
+                        fail("manifest_open_count", field=key, expected=expected)
+                readme = (Path(manifest).parent / "README.txt").read_text(encoding="utf-8")
+                for expected in (
+                    f"Открытых противоречий (source_conflict): {open_counts['source_conflict']}.",
+                    f"Неизвестных значений (unknown): {open_counts['unknown']}.",
+                    f"Всего нерешённых характеристик на листе «Неоднозначные»: {sum(open_counts.values())}.",
+                ):
+                    if expected not in readme:
+                        fail("readme_open_count", expected=expected)
             entries = manifest_doc["files"]
             if set(entries) != {"catalogue.json", "catalogue.xlsx", "README.txt"}:
                 fail("manifest_file_set")
@@ -419,6 +472,9 @@ def verify(canonical_json, xlsx, *, unresolved_reference=None, manifest=None,
                          "pages_with_records": len(record_pages), "records": len(records),
                          "records_by_catalog": dict(catalog_counts), "xlsx_records": len(xlsx_seen),
                          "unresolved": len(doc.get("unresolved", [])),
+                         "source_conflict": open_counts["source_conflict"],
+                         "unknown": open_counts["unknown"],
+                         "open_characteristics": sum(open_counts.values()),
                          "source_fact_ids": len(source_facts)},
             "sha256": {"catalogue.json": digest(canonical_json),
                        "catalogue.xlsx": digest(xlsx) if Path(xlsx).is_file() else None}}

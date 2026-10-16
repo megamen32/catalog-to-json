@@ -476,3 +476,14 @@ id→record; экспорт70.872с/readback41.713с/peak429192KiB,0ошибок
 реальнымиproducer/sourceSHA/page; API0, frozen500/520иaccuracyпроценты неизменны.
 Публичный компактныйreceipt/ledger/readback итекущие11вопросов:
 examples/catalogs/source-reviewed-2026-10-15/.
+## Согласованность выдачи: поручение владельца 16.10.2026
+
+Следующий результат: один новый штатно собранный ZIP с неизменным canonical JSON,
+24 строками на листе «Неоднозначные» (22 source_conflict, 2 unknown), точными
+README/manifest и проверкой полного JSON/Excel плюс файлов из самого ZIP.
+План: .planning/quick/261016-consistent-open-issues/PLAN.md.
+Root владеет exporter/verifier и их focused tests; чужие code-map/page117/WIP
+сохраняются. Счётчик legacy unresolved не является текущим количеством открытых
+инженерных полей: это подтверждённая причина исходного дефекта отображения.
+Новых моделей/бенчмарков/отправок третьим лицам нет. Исторические выдачи не менять.
+

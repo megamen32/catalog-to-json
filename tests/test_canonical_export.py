@@ -68,12 +68,42 @@ def reconstruct(workbook_path):
     envelope = {}
     for row_number, (key, value) in enumerate(book["Метаданные"].iter_rows(min_row=2, values_only=True), 2):
         envelope[key] = json.loads(complete("Метаданные", row_number, "value", value))
-    envelope["unresolved"] = [json.loads(complete("Неоднозначные", row_number, "value", value))
-                              for row_number, (index, value) in enumerate(
-                                  book["Неоднозначные"].iter_rows(min_row=2, values_only=True), 2)]
     envelope["records"] = sorted(records, key=lambda item: item["id"])
     book.close()
     return envelope
+
+
+def test_current_open_characteristics_are_visible_not_legacy_wrappers(tmp_path):
+    records = [record(i, None) for i in range(25)]
+    for item in records[:22]:
+        item.update(catalog="small", state="source_conflict")
+    for item in records[22:24]:
+        item.update(catalog="small", page=218, model="SCT 6-14", state="unknown")
+    data = fixture(records)
+    data["unresolved"] = []  # All historical wrappers closed; engineering issues remain.
+    source = tmp_path / "input.json"
+    source.write_text(json.dumps(data), encoding="utf-8")
+    result = exporter.export(source, tmp_path / "delivery")
+    book = load_workbook(result["catalogue.xlsx"], read_only=False)
+    issues = list(book["Неоднозначные"].values)
+    assert issues[0] == ("Каталог", "Страница", "Модель", "Параметр", "state", "id")
+    assert len(issues[1:]) == 24
+    assert sum(row[4] == "source_conflict" for row in issues[1:]) == 22
+    assert sum(row[4] == "unknown" for row in issues[1:]) == 2
+    assert all(row[0] == "Малый каталог" for row in issues[1:])
+    assert {row[5] for row in issues[1:]} == {r["id"] for r in records[:24]}
+    assert book["Характеристики"].auto_filter.ref == "A1:N26"
+    assert book["Неоднозначные"].auto_filter.ref == "A1:F25"
+    book.close()
+    manifest = result["manifest"]
+    assert (manifest["source_conflict_count"], manifest["unknown_count"],
+            manifest["unresolved_count"], manifest["legacy_unresolved_count"]) == (22, 2, 24, 0)
+    readme = Path(result["README.txt"]).read_text()
+    assert "Открытых противоречий (source_conflict): 22." in readme
+    assert "Неизвестных значений (unknown): 2." in readme
+    assert "Всего нерешённых характеристик на листе «Неоднозначные»: 24." in readme
+    assert reconstruct(result["catalogue.xlsx"])["records"] == sorted(records, key=lambda r: r["id"])
+    assert Path(result["catalogue.json"]).read_bytes() == source.read_bytes()
 
 
 def test_typed_values_source_provenance_and_formula_are_preserved(tmp_path):
