@@ -1,3 +1,17 @@
+## Исправлена согласованность финального ZIP: 16.10.2026
+
+Новый архив 1.1.1: https://yadi.sk/d/n6D9dWcubGYKew . Штатный экспортёр
+70d350f строит лист «Неоднозначные» из record.state: 22 source_conflict и
+2 unknown SCT 6-14, всего 24 строки. README и manifest считают те же поля;
+исторический unresolved=0 явно отделён и сохранён в метаданных Excel.
+Все 109318 записей/980 страниц/5 каталогов, JSON побайтово прежний.
+Проверены распакованные JSON/Excel/README/manifest, фильтр state даёт22,
+лист24, полный readback0ошибок; публичная копия скачана и SHA/CRC совпали.
+32focused tests1.71с, export74.511с, readback56.449с. Моделей/бенчмарков0.
+Чужой WIP/page117 сохранён; никаких отправок в MAX или Telegram.
+План/итог: .planning/quick/261016-consistent-open-issues/{PLAN,SUMMARY}.md.
+Receipt: examples/catalogs/source-reviewed-2026-10-16/.
+
 
 ## Закрытие старых пометок по оригиналам: доставлено 15.10.2026
 

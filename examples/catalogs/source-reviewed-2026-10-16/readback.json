@@ -1,0 +1,45 @@
+{
+  "schema": "canonical-readback-verification/1",
+  "ok": true,
+  "scope": "merge selection and JSON/XLSX representation; not PDF accuracy",
+  "failure_count": 0,
+  "failures": [],
+  "failures_truncated": false,
+  "coverage": {
+    "sources": 5,
+    "pages": 980,
+    "pages_with_records": 980,
+    "records": 109318,
+    "records_by_catalog": {
+      "opn": 6276,
+      "isolators": 18389,
+      "small": 21907,
+      "innovations": 25152,
+      "armature": 37594
+    },
+    "xlsx_records": 109318,
+    "unresolved": 0,
+    "source_conflict": 22,
+    "unknown": 2,
+    "open_characteristics": 24,
+    "source_fact_ids": 118354
+  },
+  "sha256": {
+    "catalogue.json": "d68143d43e4e9d2f135439f9067b905d74cde7b787226a9d52ffc4616e20be5e",
+    "catalogue.xlsx": "8285792117ca3a7d8bd19c9a60cd7088d26cc73cf10edc271d65c961dcabf097"
+  },
+  "archive_extracted_and_opened": true,
+  "immutable_canonical_json": true,
+  "characteristics_filter_source_conflict_rows": 22,
+  "characteristics_auto_filter": "A1:N83060",
+  "issues_sheet_rows": 24,
+  "issues_sheet_state_counts": {
+    "source_conflict": 22,
+    "unknown": 2
+  },
+  "sct_unknown_rows": 2,
+  "readme_counts_consistent": true,
+  "elapsed_seconds": 56.449,
+  "peak_rss_kib": 356044,
+  "zip_sha256": "1e6053ac7fd4bddb9e7113eb8386cef2a578fd6a1b523710017696a3265b6b8c"
+}

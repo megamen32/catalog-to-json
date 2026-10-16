@@ -1,0 +1,30 @@
+{
+  "schema": "catalogue-issues-delivery/1",
+  "exporter_version": "1.1.1",
+  "source_git": "70d350f",
+  "files": {
+    "url": "https://yadi.sk/d/n6D9dWcubGYKew",
+    "name": "Каталоги Форэнерго - сведение 1.1.1.zip",
+    "bytes": 19623432,
+    "sha256": "1e6053ac7fd4bddb9e7113eb8386cef2a578fd6a1b523710017696a3265b6b8c",
+    "public_download_matches": true,
+    "zip_crc_ok": true,
+    "version": "1.1.1",
+    "source_git": "70d350f"
+  },
+  "catalogues": 5,
+  "pages": 980,
+  "records": 109318,
+  "source_conflict": 22,
+  "unknown": 2,
+  "open_characteristics": 24,
+  "legacy_unresolved": 0,
+  "canonical_json_unchanged": true,
+  "tests_passed": 32,
+  "test_seconds": 1.71,
+  "export_seconds": 74.511,
+  "readback_seconds": 56.449,
+  "new_model_calls": 0,
+  "foreign_page117_unchanged": true,
+  "scope": "Presentation and accounting repair; no change to engineering values or previous source reviews."
+}
